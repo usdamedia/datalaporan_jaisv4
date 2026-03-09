@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-zus-900: #0a1e3b;
+  --color-zus-800: #112a52;
+  --color-zus-700: #1a3c70;
+  --color-zus-gold: #c5a065;
+  --color-zus-silver: #e2e8f0;
+
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
+  --animate-slide-in-right: slideInRight 0.4s ease-out forwards;
+  --animate-scale-in: scaleIn 0.3s ease-out forwards;
+  --animate-pop: pop 0.2s ease-in-out;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideInRight {
+    0% { opacity: 0; transform: translateX(-10px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes scaleIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900;
+  }
+}
+
+@layer utilities {
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9; 
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c5a065; 
+  }
+
+  /* --- WHATSAPP WIDGET GOLDEN RATIO & THEME OVERRIDES --- */
+  :root {
+    --rww-bg-color: #ffffff;
+    --rww-main-color: #0a1e3b;
+    --rww-accent-color: #c5a065;
+    --rww-text-color: #0f172a;
+  }
+
+  [class*="_widget_"], [class*="_modal_"] {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    z-index: 9999 !important;
+  }
+
+  [class*="_message_"], [class*="_input_"], [class*="_replyText_"] {
+    font-size: 14px !important;
+    line-height: 1.618 !important;
+  }
+  [class*="_headerTitle_"] {
+    font-size: 23px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+  }
+  [class*="_launcher_"] svg {
+    width: 28px !important; 
+    height: 28px !important;
+  }
+
+  @media (min-width: 768px) {
+    [class*="_message_"], [class*="_input_"], [class*="_replyText_"] {
+      font-size: 16px !important;
+      line-height: 1.618 !important;
+    }
+    [class*="_headerTitle_"] {
+      font-size: 26px !important;
+    }
+  }
+
+  [class*="_launcher_"] {
+    background-color: #25D366 !important;
+    box-shadow: 0 10px 20px rgba(10, 30, 59, 0.15) !important;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  }
+  [class*="_launcher_"]:hover {
+    background-color: #0a1e3b !important;
+    transform: scale(1.1) !important;
+  }
+  [class*="_header_"] {
+    background-color: #0a1e3b !important;
+  }
+  [class*="_sendButton_"] {
+    color: #c5a065 !important;
+  }
+}
+
+/* PRINT STYLES */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  body {
+    background-color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body > * {
+    display: none !important;
+  }
+  #print-container, #print-container * {
+    display: block !important;
+    visibility: visible !important;
+  }
+  #print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
