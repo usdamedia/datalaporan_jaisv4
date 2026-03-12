@@ -221,8 +221,9 @@ export interface BkkiData {
 // Data spesifik untuk BKIM (Institusi Masjid)
 export interface BkimDivisionRow {
   name: string;
+  program: number;
   guruTakmir: number;
-  lak: number; // Lembaga Amanah Khairat
+  lak: number;
 }
 
 export interface BkimData {
@@ -252,11 +253,8 @@ export interface BkimData {
   star1: number;
   star0: number;
 
-  // Pendidikan & Organisasi (Table)
+  // Data by Division
   bkimDivisions: BkimDivisionRow[];
-
-  // Aktiviti
-  bilProgram: number;
 }
 
 // Data spesifik untuk BPPS
