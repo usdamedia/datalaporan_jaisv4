@@ -22,9 +22,18 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     bpnp: {
       kajianList: [''],
       penulisan: {
-        johan: { nama: '', tajuk: '' },
-        naibJohan: { nama: '', tajuk: '' },
-        ketiga: { nama: '', tajuk: '' }
+        diploma: {
+          johan: { nama: '', tajuk: '' },
+          naibJohan: { nama: '', tajuk: '' },
+          ketiga: { nama: '', tajuk: '' },
+          pesertaLain: 0
+        },
+        sarjanaMuda: {
+          johan: { nama: '', tajuk: '' },
+          naibJohan: { nama: '', tajuk: '' },
+          ketiga: { nama: '', tajuk: '' },
+          pesertaLain: 0
+        }
       },
       statistik: {
         penapisan: 0,
@@ -57,14 +66,19 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     }));
   };
 
-  const handlePenulisanChange = (rank: string, field: string, value: string) => {
+  const handlePenulisanChange = (category: string, rank: string, field: string, value: string | number) => {
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
         ...prev.bpnp,
         penulisan: {
           ...prev.bpnp.penulisan,
-          [rank]: { ...prev.bpnp.penulisan[rank], [field]: value }
+          [category]: {
+            ...prev.bpnp.penulisan[category],
+            [rank]: typeof prev.bpnp.penulisan[category][rank] === 'object' 
+              ? { ...prev.bpnp.penulisan[category][rank], [field]: value }
+              : value
+          }
         }
       }
     }));
@@ -171,93 +185,234 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
             <Award className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold text-zus-900">Pemenang Penulisan Ilmiah 2025</h3>
+          <h3 className="text-lg font-bold text-zus-900">Penulisan Ilmiah 2025</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Johan */}
-          <div className="space-y-4 p-5 bg-yellow-50/30 border border-yellow-100 rounded-2xl">
-            <div className="flex items-center gap-2 text-yellow-700 font-black text-xs uppercase tracking-widest">
-              <Star className="w-4 h-4 fill-yellow-400" /> Johan
-            </div>
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.johan.nama}
-                  onChange={(e) => handlePenulisanChange('johan', 'nama', e.target.value)}
-                  placeholder="Nama Pemenang"
-                  className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-yellow-200"
-                />
+        <div className="space-y-12">
+          {/* Category: Diploma */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-black text-blue-600 uppercase tracking-widest border-l-4 border-blue-600 pl-3">Kategori: Diploma</h4>
+              <div className="flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-xl border border-blue-100">
+                <span className="text-[10px] font-black text-blue-700 uppercase">Bilangan Peserta Lain:</span>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => handlePenulisanChange('diploma', 'pesertaLain', '', Math.max(0, formData.bpnp.penulisan.diploma.pesertaLain - 1))}
+                    className="w-6 h-6 flex items-center justify-center bg-white border border-blue-200 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
+                  >
+                    -
+                  </button>
+                  <span className="text-sm font-black text-blue-900 w-6 text-center">{formData.bpnp.penulisan.diploma.pesertaLain}</span>
+                  <button 
+                    onClick={() => handlePenulisanChange('diploma', 'pesertaLain', '', formData.bpnp.penulisan.diploma.pesertaLain + 1)}
+                    className="w-6 h-6 flex items-center justify-center bg-white border border-blue-200 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.johan.tajuk}
-                  onChange={(e) => handlePenulisanChange('johan', 'tajuk', e.target.value)}
-                  placeholder="Tajuk Penulisan"
-                  className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-yellow-200"
-                />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Johan */}
+              <div className="space-y-4 p-5 bg-yellow-50/30 border border-yellow-100 rounded-2xl">
+                <div className="flex items-center gap-2 text-yellow-700 font-black text-xs uppercase tracking-widest">
+                  <Star className="w-4 h-4 fill-yellow-400" /> Johan
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.johan.nama}
+                      onChange={(e) => handlePenulisanChange('diploma', 'johan', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-yellow-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.johan.tajuk}
+                      onChange={(e) => handlePenulisanChange('diploma', 'johan', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-yellow-200"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Naib Johan */}
+              <div className="space-y-4 p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div className="flex items-center gap-2 text-slate-600 font-black text-xs uppercase tracking-widest">
+                  <Award className="w-4 h-4 text-slate-400" /> Naib Johan
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.naibJohan.nama}
+                      onChange={(e) => handlePenulisanChange('diploma', 'naibJohan', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-slate-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.naibJohan.tajuk}
+                      onChange={(e) => handlePenulisanChange('diploma', 'naibJohan', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-slate-200"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Ketiga */}
+              <div className="space-y-4 p-5 bg-orange-50/30 border border-orange-100 rounded-2xl">
+                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-widest">
+                  <Award className="w-4 h-4 text-orange-400" /> Tempat Ketiga
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.ketiga.nama}
+                      onChange={(e) => handlePenulisanChange('diploma', 'ketiga', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.diploma.ketiga.tajuk}
+                      onChange={(e) => handlePenulisanChange('diploma', 'ketiga', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-orange-200"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Naib Johan */}
-          <div className="space-y-4 p-5 bg-slate-50 border border-slate-200 rounded-2xl">
-            <div className="flex items-center gap-2 text-slate-600 font-black text-xs uppercase tracking-widest">
-              <Award className="w-4 h-4 text-slate-400" /> Naib Johan
-            </div>
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.naibJohan.nama}
-                  onChange={(e) => handlePenulisanChange('naibJohan', 'nama', e.target.value)}
-                  placeholder="Nama Pemenang"
-                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-slate-200"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.naibJohan.tajuk}
-                  onChange={(e) => handlePenulisanChange('naibJohan', 'tajuk', e.target.value)}
-                  placeholder="Tajuk Penulisan"
-                  className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-slate-200"
-                />
+          {/* Category: Sarjana Muda dan Keatas */}
+          <div className="space-y-6 pt-6 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-black text-indigo-600 uppercase tracking-widest border-l-4 border-indigo-600 pl-3">Kategori: Sarjana Muda dan Keatas</h4>
+              <div className="flex items-center gap-3 bg-indigo-50 px-4 py-2 rounded-xl border border-indigo-100">
+                <span className="text-[10px] font-black text-indigo-700 uppercase">Bilangan Peserta Lain:</span>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => handlePenulisanChange('sarjanaMuda', 'pesertaLain', '', Math.max(0, formData.bpnp.penulisan.sarjanaMuda.pesertaLain - 1))}
+                    className="w-6 h-6 flex items-center justify-center bg-white border border-indigo-200 rounded-lg text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors"
+                  >
+                    -
+                  </button>
+                  <span className="text-sm font-black text-indigo-900 w-6 text-center">{formData.bpnp.penulisan.sarjanaMuda.pesertaLain}</span>
+                  <button 
+                    onClick={() => handlePenulisanChange('sarjanaMuda', 'pesertaLain', '', formData.bpnp.penulisan.sarjanaMuda.pesertaLain + 1)}
+                    className="w-6 h-6 flex items-center justify-center bg-white border border-indigo-200 rounded-lg text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Ketiga */}
-          <div className="space-y-4 p-5 bg-orange-50/30 border border-orange-100 rounded-2xl">
-            <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-widest">
-              <Award className="w-4 h-4 text-orange-400" /> Tempat Ketiga
-            </div>
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.ketiga.nama}
-                  onChange={(e) => handlePenulisanChange('ketiga', 'nama', e.target.value)}
-                  placeholder="Nama Pemenang"
-                  className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-200"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Johan */}
+              <div className="space-y-4 p-5 bg-yellow-50/30 border border-yellow-100 rounded-2xl">
+                <div className="flex items-center gap-2 text-yellow-700 font-black text-xs uppercase tracking-widest">
+                  <Star className="w-4 h-4 fill-yellow-400" /> Johan
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.johan.nama}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'johan', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-yellow-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.johan.tajuk}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'johan', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-yellow-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-yellow-200"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
-                <input 
-                  type="text"
-                  value={formData.bpnp.penulisan.ketiga.tajuk}
-                  onChange={(e) => handlePenulisanChange('ketiga', 'tajuk', e.target.value)}
-                  placeholder="Tajuk Penulisan"
-                  className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-orange-200"
-                />
+
+              {/* Naib Johan */}
+              <div className="space-y-4 p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div className="flex items-center gap-2 text-slate-600 font-black text-xs uppercase tracking-widest">
+                  <Award className="w-4 h-4 text-slate-400" /> Naib Johan
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'naibJohan', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-slate-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'naibJohan', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-slate-200"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Ketiga */}
+              <div className="space-y-4 p-5 bg-orange-50/30 border border-orange-100 rounded-2xl">
+                <div className="flex items-center gap-2 text-orange-700 font-black text-xs uppercase tracking-widest">
+                  <Award className="w-4 h-4 text-orange-400" /> Tempat Ketiga
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Nama</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.ketiga.nama}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'ketiga', 'nama', e.target.value)}
+                      placeholder="Nama Pemenang"
+                      className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-200"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase">Tajuk</label>
+                    <input 
+                      type="text"
+                      value={formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk}
+                      onChange={(e) => handlePenulisanChange('sarjanaMuda', 'ketiga', 'tajuk', e.target.value)}
+                      placeholder="Tajuk Penulisan"
+                      className="w-full p-2.5 bg-white border border-orange-100 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-orange-200"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

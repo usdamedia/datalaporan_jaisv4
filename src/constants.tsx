@@ -29,7 +29,7 @@ export const DEPARTMENTS: Department[] = [
     active: true,
     subUnits: [
       { id: '4a', name: 'U Pentadbiran', active: true },
-      { id: '4b', name: 'U Kualiti', active: true },
+      { id: '4b', name: 'Inisiatif Kualiti', active: true },
       { id: '4c', name: 'U HR & Latihan', active: true },
       { id: '4d', name: 'U Akaun', active: true },
     ]
@@ -38,8 +38,8 @@ export const DEPARTMENTS: Department[] = [
   { id: '6', name: 'BPH', active: true },
   { id: '7', name: 'BKKI', active: true },
   { id: '8', name: 'BPPI', active: true },
-  { id: '9', name: 'UKOKO', active: true },
-  { id: '10', name: 'U. INTEGRITI', active: true },
+  { id: '9', name: 'UKOKO', active: true, subUnits: [{ id: '9a', name: 'Subunit Perayaan Islam', active: true }] },
+  { id: '10', name: 'Unit Integriti', active: true },
   { id: '11', name: 'BKSK', active: true },
   { id: '12', name: 'BKSPP', active: true },
   { id: '13', name: 'UPP', active: true },
@@ -204,6 +204,7 @@ export const BPNP_2024_REFERENCE = {
   }
 };
 
+
 export const HR_2024_REFERENCE = {
   ringkasan: {
     perjawatanBajet: 471,
@@ -233,6 +234,41 @@ export const HR_2024_REFERENCE = {
       takmir: 31
     },
     total: 113
+  },
+  taburan: {
+    ibuPejabat: {
+      bpps: 40,
+      bpnp: 10,
+      dakwah: 19,
+      bkim: 18,
+      bpks: 13,
+      bkki: 13,
+      bph: 20,
+      bpds: 8,
+      bksk: 10,
+      bksp: 19,
+      kaunseling: 5,
+      ukoko: 8,
+      upp: 10,
+      integriti: 3,
+      total: 196
+    },
+    daerah: [
+      { name: 'Limbang', value: 21 },
+      { name: 'Lawas', value: 11 },
+      { name: 'Miri', value: 24 },
+      { name: 'Bintulu', value: 24 },
+      { name: 'Mukah', value: 17 },
+      { name: 'Daro', value: 11 },
+      { name: 'Kapit', value: 16 },
+      { name: 'Sibu', value: 22 },
+      { name: 'Sarikei', value: 20 },
+      { name: 'Betong', value: 21 },
+      { name: 'Sri Aman', value: 22 },
+      { name: 'Serian', value: 18 },
+      { name: 'Samarahan', value: 31 },
+      { name: 'Kuching', value: 46 }
+    ]
   },
   bersara: 9
 };
@@ -326,3 +362,416 @@ export const BPDS_2024_REFERENCE = {
   ],
   aktiviti: 35
 };
+
+export const LEADERSHIP_2024_REFERENCE = {
+  jpto: 3,
+  mpj: 3,
+  pegawaiAgama: 1,
+  perhimpunan: {
+    tawjihat: 1,
+    perdana: 1,
+    bulanan: 3,
+    total: 5
+  },
+  aset: 2,
+  keselamatan: 2,
+  kader: 2,
+  kewanganPerolehan: 3,
+  panelHR: {
+    biasa: 2,
+    khas: 4,
+    total: 6
+  }
+};
+
+export const FINANCE_2024_REFERENCE = {
+  financeYears: [
+    { year: '2021', lulus: 41206385, belanja: 37661253, hasil: 224090 },
+    { year: '2022', lulus: 43932531, belanja: 43925152, hasil: 245330 },
+    { year: '2023', lulus: 48731072, belanja: 48655736, hasil: 221755 },
+    { year: '2024', lulus: 63949076, belanja: 62677064, hasil: 211630 }
+  ],
+  percentageBelanja: 98.01,
+  percentageEcsa: 98.2,
+  financeDistricts: [
+    { name: 'Kuching', naziran: true, starRating: 5 },
+    { name: 'Samarahan', naziran: true, starRating: 5 },
+    { name: 'Serian', naziran: true, starRating: 5 },
+    { name: 'Sri Aman', naziran: true, starRating: 5 },
+    { name: 'Betong', naziran: true, starRating: 5 },
+    { name: 'Sarikei', naziran: false, starRating: 5 },
+    { name: 'Sibu', naziran: true, starRating: 5 },
+    { name: 'Mukah', naziran: true, starRating: 5 },
+    { name: 'Kapit', naziran: true, starRating: 5 },
+    { name: 'Bintulu', naziran: true, starRating: 5 },
+    { name: 'Miri', naziran: true, starRating: 5 },
+    { name: 'Limbang', naziran: true, starRating: 4 },
+    { name: 'Lawas', naziran: true, starRating: 0 },
+    { name: 'Daro', naziran: true, starRating: 0 }
+  ]
+};
+
+export const BKKI_2024_REFERENCE = {
+  stats: {
+    bilPerkahwinan: 5807,
+    bilPerceraian: 2095,
+    bilRuju: 254,
+    bilKadNikah: 5152,
+    jumPesertaKursus: 10184,
+    bilProgram: 67
+  },
+  registrarTable: [
+    { region: 'Seluruh Sarawak', kpncr: 1, pncr: 2, tpncr: 0, ppncr: 0, jurunikah: 7 },
+    { region: 'Kuching', kpncr: 0, pncr: 2, tpncr: 2, ppncr: 10, jurunikah: 143 },
+    { region: 'Samarahan', kpncr: 0, pncr: 2, tpncr: 1, ppncr: 5, jurunikah: 50 },
+    { region: 'Serian', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 3, jurunikah: 18 },
+    { region: 'Sri Aman', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 6, jurunikah: 12 },
+    { region: 'Betong', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 10, jurunikah: 39 },
+    { region: 'Sarikei', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 5, jurunikah: 19 },
+    { region: 'Sibu', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 5, jurunikah: 11 },
+    { region: 'Kapit', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 5, jurunikah: 10 },
+    { region: 'Mukah/ Daro', kpncr: 0, pncr: 2, tpncr: 1, ppncr: 9, jurunikah: 45 },
+    { region: 'Bintulu', kpncr: 0, pncr: 1, tpncr: 1, ppncr: 3, jurunikah: 17 },
+    { region: 'Miri', kpncr: 0, pncr: 2, tpncr: 1, ppncr: 6, jurunikah: 17 },
+    { region: 'Limbang/ Lawas', kpncr: 0, pncr: 2, tpncr: 1, ppncr: 6, jurunikah: 24 }
+  ]
+};
+
+export const BPPI_2024_REFERENCE = {
+  institusi: {
+    mis: {
+      rendah: 10,
+      menengah: 2,
+      total: 12
+    },
+    ipip: {
+      tadika: 16,
+      kafa: 4,
+      srar: 4,
+      sra: 6,
+      sma: 6,
+      tahfizRendah: 5,
+      tahfizMenengah: 3,
+      tahfizRendahMenengah: 30,
+      pondok: 2,
+      lepasanSpm: 1,
+      dewasa: 1,
+      total: 78
+    },
+    grandTotal: 90
+  },
+  enrolmenMIS: [
+    { name: "Ma'had Tahfiz Tun Abdul Rahman Ya'kub (MATTARY)", value: 352 },
+    { name: "SK (A) Datuk Haji Abdul Kadir Hassan", value: 1225 },
+    { name: "SK (A) Ibnu Khaldun", value: 519 },
+    { name: "SK (A) MIS Sri Aman", value: 387 },
+    { name: "SK (A) MIS Sarikei", value: 428 },
+    { name: "SK (A) MIS Sibu", value: 508 },
+    { name: "SK (A) MIS Mukah", value: 278 },
+    { name: "SK (A) MIS Bintulu", value: 559 },
+    { name: "SK (A) MIS Miri", value: 658 },
+    { name: "SK (A) MIS Lawas", value: 517 },
+    { name: "SMK (A) Tun Ahmad Zaidi", value: 716 },
+    { name: "SMK Pesantren Abdul Taib Mahmud", value: 492 }
+  ],
+  kafa: {
+    pelajar: 69429,
+    guru: 2523,
+    penyelia: 36,
+    upkk: {
+      calon: 12686,
+      gps: 2.28
+    }
+  },
+  kad: {
+    kelas: 11,
+    pelajar: 491,
+    guru: {
+      lelaki: 37,
+      wanita: 14,
+      total: 51
+    },
+    pecahan: [
+      { name: "Kuching", kelas: 1, pelajar: 48 },
+      { name: "Samarahan", kelas: 1, pelajar: 43 },
+      { name: "Serian", kelas: 1, pelajar: 37 },
+      { name: "Sri Aman", kelas: 1, pelajar: 39 },
+      { name: "Betong", kelas: 1, pelajar: 29 },
+      { name: "Sarikei", kelas: 1, pelajar: 23 },
+      { name: "Sibu", kelas: 1, pelajar: 68 },
+      { name: "Mukah", kelas: 1, pelajar: 25 },
+      { name: "Kapit", kelas: 0, pelajar: 0 },
+      { name: "Bintulu", kelas: 1, pelajar: 50 },
+      { name: "Miri", kelas: 1, pelajar: 84 },
+      { name: "Limbang", kelas: 1, pelajar: 45 }
+    ]
+  }
+};
+
+export const BPH_2024_REFERENCE = {
+  sphm: {
+    permohonan: 722,
+    aktif: 935,
+    skim: {
+      rumahSembelihan: 25,
+      produk: 435,
+      premis: 439,
+      oem: 26,
+      logistik: 8,
+      barangGunaan: 2
+    }
+  },
+  trend: {
+    y2023: { permohonan: 383, aktif: 823 },
+    y2024: { permohonan: 722, aktif: 935 }
+  },
+  pemantauan: {
+    patuh: 339,
+    amaran: 107,
+    gantung: 84,
+    tarikBalik: 3,
+    lain: 11,
+    total: 544
+  },
+  penguatkuasaan: 22,
+  aduan: 37,
+  ziarahHalal: 37,
+  zonHalal: [
+    "Food Court Majma Mall, Kuching",
+    "Kubah Ria, Kuching",
+    "Medan Selera Lundu, Kuching",
+    "Taman Selera Harmoni, Sibu",
+    "Medan Selera Daro, Mukah",
+    "Medan Selera Taman Seroja, Miri",
+    "Anjung Sari dan Medan Selera Lawas, Limbang"
+  ],
+  aktiviti: {
+    taklimat: 22,
+    kursus: 48,
+    total: 57
+  }
+};
+
+export const BPKS_2024_REFERENCE = {
+  statistik: {
+    btam: 219,
+    rondaan: 279
+  },
+  pegawai: {
+    ibuPejabat: 12,
+    kuching: 39,
+    samarahan: 19,
+    serian: 15,
+    sriAman: 15,
+    betong: 11,
+    sarikei: 15,
+    sibu: 15,
+    mukah: 19,
+    kapit: 9,
+    bintulu: 13,
+    miri: 11,
+    limbang: 20,
+    total: 201
+  },
+  borang5: {
+    bahagian: {
+      kuching: 15,
+      samarahan: 133,
+      serian: 27,
+      sriAman: 6,
+      betong: 56,
+      sarikei: 22,
+      sibu: 31,
+      mukah: 13,
+      kapit: 0,
+      bintulu: 21,
+      miri: 88,
+      limbang: 37
+    },
+    kategori: {
+      matrimoni: 307,
+      jenayahSyariah: 142
+    },
+    total: 449
+  },
+  kertasSiasatan: {
+    matrimoni: 310,
+    jenayahSyariah: 94,
+    total: 404
+  },
+  aktiviti: {
+    total: 65
+  }
+};
+
+export const UKOKO_2024_REFERENCE = {
+  perayaanIslam: [
+    { nama: "Majlis Tilawah dan Menghafaz Al-Quran Peringkat Sarawak Kali ke-63", tarikh: "2024-03-06", tuanRumah: "Limbang", mesyuarat: 3 },
+    { nama: "Majlis Sambutan Ma'al Hijrah Peringkat Sarawak", tarikh: "2024-07-07", tuanRumah: "Kuching", mesyuarat: 3 },
+    { nama: "Majlis Perhimpunan dan Perarakan Sempena Sambutan Maulidur Rasul Peringkat Sarawak Tahun 1446H/2024M", tarikh: "2024-09-17", tuanRumah: "Mukah", mesyuarat: 3 }
+  ],
+  majlisKesyukuran: [
+    { nama: "Majlis Kesyukuran Nuzul Al-Quran Peringkat Sarawak Tahun 2024M/1445H", tarikh: "2024-03-27", tuanRumah: "Samarahan", mesyuarat: 3 },
+    { nama: "Majlis Kesyukuran Ma'al Hijrah Peringkat Sarawak", tarikh: "2024-07-06", tuanRumah: "Kuching", mesyuarat: 3 },
+    { nama: "Majlis Kesyukuran Sempena Sambutan Hari Sarawak 2024", tarikh: "2024-07-21", tuanRumah: "Bintulu", mesyuarat: 3 },
+    { name: "Majlis Kesyukuran Sambutan Perayaan Hari Keputeraan Rasmi KDYMM SPB YDP Agong ke-XVII Peringkat Sarawak", tarikh: "2024-09-06", tuanRumah: "Samarahan", mesyuarat: 3 },
+    { name: "Majlis Kesyukuran Sempena Sambutan Perayaan Hari Malaysia", tarikh: "2024-09-15", tuanRumah: "Sri Aman", mesyuarat: 3 },
+    { name: "Majlis Kesyukuran Sambutan Maulidur Rasul Peringkat Sarawak Tahun 1446H/2024M", tarikh: "2024-09-16", tuanRumah: "Mukah", mesyuarat: 3 },
+    { name: "Majlis Kesyukuran Sempena Sambutan Hari Lahir ke-78 TYT Yang Di-Pertua Negeri Sarawak", tarikh: "2024-10-10", tuanRumah: "Kuching", mesyuarat: 3 }
+  ],
+  total: 10
+};
+
+export const DHQC_2024_REFERENCE = {
+  pusatPemuliaan: [
+    { lokasi: "Masjid Ikhwanul Islam, Taman Sukma", bahagian: "Kuching" },
+    { lokasi: "Pejabat Agama Islam Bahagian Samarahan", bahagian: "Samarahan" },
+    { lokasi: "Masjid Assyakirin", bahagian: "Bintulu" },
+    { lokasi: "Masjid Al-Muttaqin", bahagian: "Sarikei" },
+    { lokasi: "Sekolah Kebangsaan Agama Majlis Islam Sibu", bahagian: "Sibu" }
+  ],
+  statistikDebu: {
+    berat: 12.5,
+    kekerapan: 5
+  },
+  guruAlQuran: {
+    kuching: 6,
+    samarahan: 6,
+    serian: 1,
+    sriAman: 1,
+    betong: 4,
+    sarikei: 2,
+    sibu: 0,
+    mukah: 2,
+    kapit: 0,
+    bintulu: 2,
+    miri: 2,
+    limbang: 3,
+    total: 29
+  },
+  penyelia: {
+    ibuPejabat: 3,
+    bintulu: 1,
+    total: 4
+  },
+  hakim: {
+    negeri: 19,
+    bahagian: 6,
+    daerah: 48,
+    total: 73
+  },
+  qariQariah: {
+    kuching: 11,
+    samarahan: 6,
+    serian: 7,
+    sriAman: 8,
+    betong: 11,
+    sarikei: 12,
+    sibu: 12,
+    mukah: 13,
+    kapit: 8,
+    bintulu: 14,
+    miri: 7,
+    limbang: 12,
+    total: 121
+  }
+};
+
+export const UPP_2024_REFERENCE = {
+  kpi: {
+    peratusSiap: 48.4
+  },
+  projekMasjid: [
+    { bahagian: "Kuching", perancangan: 24, pelaksanaan: 3, siap: 33, total: 60 },
+    { bahagian: "Samarahan", perancangan: 13, pelaksanaan: 1, siap: 9, total: 23 },
+    { bahagian: "Serian", perancangan: 3, pelaksanaan: 2, siap: 1, total: 6 },
+    { bahagian: "Sri Aman", perancangan: 0, pelaksanaan: 2, siap: 1, total: 3 },
+    { bahagian: "Betong", perancangan: 10, pelaksanaan: 3, siap: 2, total: 15 },
+    { bahagian: "Sarikei", perancangan: 1, pelaksanaan: 1, siap: 3, total: 5 },
+    { bahagian: "Sibu", perancangan: 0, pelaksanaan: 0, siap: 4, total: 4 },
+    { bahagian: "Kapit", perancangan: 0, pelaksanaan: 1, siap: 1, total: 2 },
+    { bahagian: "Mukah", perancangan: 4, pelaksanaan: 4, siap: 17, total: 25 },
+    { bahagian: "Bintulu", perancangan: 9, pelaksanaan: 0, siap: 2, total: 11 },
+    { bahagian: "Miri", perancangan: 6, pelaksanaan: 0, siap: 10, total: 16 },
+    { bahagian: "Limbang", perancangan: 7, pelaksanaan: 0, siap: 5, total: 12 }
+  ],
+  mesyuarat: {
+    pembangunan: 4,
+    teknikal: 4,
+    total: 8
+  },
+  statistikTahunan: {
+    dijalankan: 10,
+    siap: 4
+  },
+  projekSekolah: {
+    total: 124,
+    siap: 120,
+    senarai: [
+      { nama: "SMKA Sheikh Haji Othman Abdul Wahab", total: 13, siap: 13 },
+      { nama: "SMKA Matang", total: 3, siap: 3 },
+      { nama: "SMKA Saratok", total: 3, siap: 3 },
+      { nama: "SMKA Igan", total: 6, siap: 5 },
+      { nama: "SMKA Sibu", total: 4, siap: 8 },
+      { nama: "SMKA Miri", total: 8, siap: 8 },
+      { nama: "SMKA Limbang", total: 12, siap: 12 },
+      { nama: "SMKA Tun Ahmad Zaidi", total: 21, siap: 18 },
+      { nama: "SKA MIS Sibu", total: 1, siap: 1 },
+      { nama: "SMK Pesantren Abdul Taib", total: 21, siap: 21 },
+      { nama: "SKA (MIS) Datuk Haji Abdul Kadir Hassan", total: 22, siap: 19 },
+      { nama: "SKA (MIS) Ibnu Khaldun", total: 5, siap: 5 },
+      { nama: "SKA (MIS) Sarikei", total: 1, siap: 1 },
+      { nama: "SKA (MIS) Mukah", total: 1, siap: 1 },
+      { nama: "SKA (MIS) Bintulu", total: 1, siap: 0 },
+      { nama: "SKA (MIS) Miri", total: 1, siap: 1 },
+      { nama: "SKA (MIS) Lawas", total: 1, siap: 1 }
+    ]
+  }
+};
+
+export const INTEGRITI_2024_REFERENCE = {
+  tadbirUrus: {
+    mesyuarat: 3,
+    program: 31
+  },
+  multimedia: {
+    video: 11
+  },
+  dokumentasi: {
+    manual: 1,
+    polisi: 4,
+    total: 5
+  }
+};
+
+export const QUALITY_INITIATIVES_2024_REFERENCE = {
+  iso9001: {
+    badanAudit: "SIRIM QAS International Sdn. Bhd.",
+    tarikhAudit: "20-21 Mei 2024",
+    status: "Recommended to Continue Certification",
+    ncr: 0,
+    ofi: 2
+  },
+  iso37001: {
+    badanAudit: "SIRIM QAS International Sdn. Bhd.",
+    tarikhAudit: "23-25 Oktober 2024",
+    status: "Recommended to Continue Certification",
+    ncr: 0,
+    ofi: 2
+  },
+  frameworks: ["MBEF", "SCS Scorecard", "EKSA"]
+};
+
+export const LATIHAN_2024_REFERENCE = {
+  ringkasan: {
+    jumlah: 40,
+    generik: 2,
+    spesifik: 20
+  },
+  pencapaian: {
+    mencapai: { pp: 121, sk1: 64, sk2: 207, total: 392, ppPct: 100, sk1Pct: 100, sk2Pct: 100, totalPct: 75 },
+    tidakMencapai: { pp: 0, sk1: 0, sk2: 0, total: 0, ppPct: 0, sk1Pct: 0, sk2Pct: 0, totalPct: 0 },
+    tiadaRekod: { pp: 0, sk1: 0, sk2: 0, total: 0, ppPct: 0, sk1Pct: 0, sk2Pct: 0, totalPct: 0 }
+  }
+};
+

@@ -257,6 +257,27 @@ export interface BkimData {
   bkimDivisions: BkimDivisionRow[];
 }
 
+export interface LeadershipData {
+  jpto: number;
+  mpj: number;
+  pegawaiAgama: number;
+  perhimpunan: {
+    tawjihat: number;
+    perdana: number;
+    bulanan: number;
+    total: number;
+  };
+  aset: number;
+  keselamatan: number;
+  kader: number;
+  kewanganPerolehan: number;
+  panelHR: {
+    biasa: number;
+    khas: number;
+    total: number;
+  };
+}
+
 // Data spesifik untuk BPPS
 export interface BppsData extends ReportData {
   senaraiBersara: RetiredStaff[];
@@ -268,6 +289,7 @@ export interface BppsData extends ReportData {
   finance?: FinanceData;
   bkki?: BkkiData;
   bkim?: BkimData;
+  leadership?: LeadershipData;
 }
 
 export interface AduanCategory {

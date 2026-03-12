@@ -2,18 +2,27 @@ import React, { useState } from 'react';
 import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
+import DigitalizationPage from './components/DigitalizationPage';
+import DataManagementDashboard from './components/DataManagementDashboard';
 import { DEPARTMENTS } from './constants';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, ChevronUp } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, ChevronUp, Cpu, Database } from 'lucide-react';
 
 export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [selectedSubUnit, setSelectedSubUnit] = useState<SubUnit | null>(null);
   const [showSubUnitModal, setShowSubUnitModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showDigitalization, setShowDigitalization] = useState(false);
+  const [showDataDashboard, setShowDataDashboard] = useState(false);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
+
+    if (dept.id === 'data-dashboard') {
+      setShowDataDashboard(true);
+      return;
+    }
 
     if (dept.subUnits && dept.subUnits.length > 0) {
       setSelectedDept(dept);
@@ -35,10 +44,12 @@ export default function App() {
     setSelectedDept(null);
     setSelectedSubUnit(null);
     setShowSubUnitModal(false);
+    setShowDigitalization(false);
+    setShowDataDashboard(false);
   };
 
   // Logic: Show form if a leaf-node department/unit is selected
-  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit);
+  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit) && selectedDept.id !== 'data-dashboard';
   
   // Title for Form Entry
   const formTitle = selectedSubUnit 
@@ -47,9 +58,9 @@ export default function App() {
 
   return (
     <Layout 
-      showBack={isFormMode || showSubUnitModal} 
+      showBack={isFormMode || showSubUnitModal || showDigitalization || showDataDashboard} 
       onBack={resetSelection}
-      title={isFormMode ? 'Isi Data' : 'Utama'}
+      title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showDataDashboard ? 'Data Management' : 'Utama'}
     >
       {/* 1. Modal for Sub Units (Glassmorphism Overlay) */}
       {showSubUnitModal && selectedDept && (
@@ -71,32 +82,42 @@ export default function App() {
             </p>
             
             <div className="space-y-2 md:space-y-3">
-              {selectedDept.subUnits?.map((unit, index) => (
-                <button
-                  key={unit.id}
-                  onClick={() => handleSubUnitClick(unit)}
-                  disabled={!unit.active}
-                  className={`
-                    w-full p-3 md:p-4 rounded-xl text-left border flex items-center justify-between group transition-all duration-200
-                    ${unit.active 
-                      ? 'bg-white border-gray-200 hover:bg-zus-gold hover:border-zus-gold hover:text-white shadow-sm hover:shadow-lg text-gray-700 active:scale-[0.98]' 
-                      : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'}
-                  `}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <span className="font-medium text-sm md:text-base">{unit.name}</span>
-                  {unit.active && (
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-transform group-hover:translate-x-1" />
-                  )}
-                </button>
-              ))}
+              {selectedDept.subUnits?.map((unit, index) => {
+                const getUnitColor = (name: string) => {
+                  return 'hover:bg-zus-gold hover:border-zus-gold hover:text-white border-gray-200 bg-white';
+                };
+
+                return (
+                  <button
+                    key={unit.id}
+                    onClick={() => handleSubUnitClick(unit)}
+                    disabled={!unit.active}
+                    className={`
+                      w-full p-3 md:p-4 rounded-xl text-left border flex items-center justify-between group transition-all duration-200
+                      ${unit.active 
+                        ? `${getUnitColor(unit.name)} shadow-sm hover:shadow-lg text-gray-700 active:scale-[0.98]` 
+                        : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'}
+                    `}
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <span className="font-bold text-sm md:text-base">{unit.name}</span>
+                    {unit.active && (
+                      <ChevronRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-white transition-all group-hover:translate-x-1" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
       )}
 
       {/* 2. Main View Handling */}
-      {isFormMode ? (
+      {showDigitalization ? (
+        <DigitalizationPage />
+      ) : showDataDashboard ? (
+        <DataManagementDashboard />
+      ) : isFormMode ? (
         <FormEntry 
           deptName={formTitle || ''} 
           onBack={resetSelection} 
@@ -121,19 +142,39 @@ export default function App() {
               Sistem pengumpulan data berpusat untuk penerbitan buku laporan tahunan Jabatan Agama Islam Sarawak.
             </p>
 
-            {/* Toggle Tutorial Button */}
-            <button 
-              onClick={() => setShowTutorial(!showTutorial)}
-              className={`
-                flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all mx-auto mb-8
-                ${showTutorial 
-                  ? 'bg-zus-900 text-white shadow-lg ring-2 ring-zus-gold ring-offset-2' 
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-zus-gold hover:text-zus-900 shadow-sm'}
-              `}
-            >
-              {showTutorial ? <ChevronUp className="w-4 h-4" /> : <Info className="w-4 h-4" />}
-              {showTutorial ? 'Tutup Panduan' : 'Panduan Pengguna'}
-            </button>
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-8">
+              {/* Toggle Tutorial Button */}
+              <button 
+                onClick={() => setShowTutorial(!showTutorial)}
+                className={`
+                  flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all
+                  ${showTutorial 
+                    ? 'bg-zus-900 text-white shadow-lg ring-2 ring-zus-gold ring-offset-2' 
+                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-zus-gold hover:text-zus-900 shadow-sm'}
+                `}
+              >
+                {showTutorial ? <ChevronUp className="w-4 h-4" /> : <Info className="w-4 h-4" />}
+                {showTutorial ? 'Tutup Panduan' : 'Panduan Pengguna'}
+              </button>
+
+              {/* Data Dashboard Button */}
+              <button 
+                onClick={() => setShowDataDashboard(true)}
+                className="flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold bg-[#134E4A] text-white shadow-lg hover:bg-teal-900 transition-all active:scale-95 border border-teal-800"
+              >
+                <Database className="w-4 h-4" />
+                Data Management
+              </button>
+
+              {/* Digitalization Page Button */}
+              <button 
+                onClick={() => setShowDigitalization(true)}
+                className="flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all active:scale-95 border border-teal-500"
+              >
+                <Cpu className="w-4 h-4" />
+                Digitalisasi JAIS
+              </button>
+            </div>
 
             {/* CREATIVE INSTRUCTION CARDS (Collapsible) */}
             {showTutorial && (

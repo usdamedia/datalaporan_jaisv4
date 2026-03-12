@@ -22,6 +22,11 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           bpnp: prev.bpnp ? { ...prev.bpnp, ...parsed.bpnp } : prev.bpnp,
           hr: prev.hr ? { ...prev.hr, ...parsed.hr } : prev.hr,
           bksp: prev.bksp ? { ...prev.bksp, ...parsed.bksp } : prev.bksp,
+          ukoko: prev.ukoko ? { ...prev.ukoko, ...parsed.ukoko } : prev.ukoko,
+          dhqc: prev.dhqc ? { ...prev.dhqc, ...parsed.dhqc } : prev.dhqc,
+          upp: prev.upp ? { ...prev.upp, ...parsed.upp } : prev.upp,
+          integriti: prev.integriti ? { ...prev.integriti, ...parsed.integriti } : prev.integriti,
+          quality: prev.quality ? { ...prev.quality, ...parsed.quality } : prev.quality,
         }));
       } catch (e) {
         console.error("Error parsing saved data", e);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, HR_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 interface PrintableReportProps {
   deptName: string;
@@ -10,9 +10,19 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isBKIM = deptName.includes('BKIM');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isBPNP = deptName.includes('BPNP');
-  const isHR = deptName.includes('HR & Latihan');
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
   const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
+  const isHR = deptName.includes('HR & Latihan');
+  const isBKKI = deptName.includes('BKKI');
+  const isBPH = deptName.includes('BPH') || deptName.includes('Halal');
+  const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
+  const isBPPI = deptName.includes('BPPI');
+  const isUKOKO = deptName.includes('UKOKO');
+  const isDHQC = deptName.includes('DHQC');
+  const isUPP = deptName.includes('UPP');
+  const isIntegriti = deptName.includes('INTEGRITI');
+  const isPentadbiran = deptName.includes('Pentadbiran');
+  const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -38,6 +48,856 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           </div>
         </div>
       </div>
+
+      {/* BKKI Specific Layout */}
+      {isBKKI && formData.stats && (
+        <div className="space-y-8 mb-8">
+          <div className="grid grid-cols-3 gap-6">
+            {[
+              { label: 'Perkahwinan', value: formData.stats.bilPerkahwinan, ref: BKKI_2024_REFERENCE.stats.bilPerkahwinan, color: 'emerald' },
+              { label: 'Perceraian', value: formData.stats.bilPerceraian, ref: BKKI_2024_REFERENCE.stats.bilPerceraian, color: 'rose' },
+              { label: 'Ruju\'', value: formData.stats.bilRuju, ref: BKKI_2024_REFERENCE.stats.bilRuju, color: 'teal' },
+              { label: 'Kad Nikah', value: formData.stats.bilKadNikah, ref: BKKI_2024_REFERENCE.stats.bilKadNikah, color: 'blue' },
+              { label: 'Peserta Kursus', value: formData.stats.jumPesertaKursus, ref: BKKI_2024_REFERENCE.stats.jumPesertaKursus, color: 'indigo' },
+              { label: 'Program/Aktiviti', value: formData.stats.bilProgram, ref: BKKI_2024_REFERENCE.stats.bilProgram, color: 'amber' },
+            ].map(item => (
+              <div key={item.label} className={`p-4 bg-${item.color}-50 border border-${item.color}-100 rounded-2xl text-center`}>
+                <div className={`text-[10px] font-black text-${item.color}-900 uppercase`}>{item.label}</div>
+                <div className={`text-2xl font-black text-${item.color}-700`}>{item.value || 0}</div>
+                <div className="text-[8px] font-bold text-gray-400">REF 24: {item.ref}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+              Jadual Pendaftar & Jurunikah 2025
+            </h3>
+            <table className="w-full text-[10px] border-collapse">
+              <thead>
+                <tr className="bg-teal-50">
+                  <th className="border border-teal-100 p-2 text-left">Bahagian</th>
+                  <th className="border border-teal-100 p-2 text-center">KPNCR</th>
+                  <th className="border border-teal-100 p-2 text-center">PNCR</th>
+                  <th className="border border-teal-100 p-2 text-center">TPNCR</th>
+                  <th className="border border-teal-100 p-2 text-center">PPNCR</th>
+                  <th className="border border-teal-100 p-2 text-center">Jurunikah</th>
+                  <th className="border border-teal-100 p-2 text-center bg-teal-100">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formData.registrarTable.map((row: any, idx: number) => {
+                  const total = (parseInt(row.kpncr) || 0) + (parseInt(row.pncr) || 0) + (parseInt(row.tpncr) || 0) + (parseInt(row.ppncr) || 0) + (parseInt(row.jurunikah) || 0);
+                  return (
+                    <tr key={row.region}>
+                      <td className="border border-teal-100 p-2 font-bold">{row.region}</td>
+                      <td className="border border-teal-100 p-2 text-center">{row.kpncr || 0}</td>
+                      <td className="border border-teal-100 p-2 text-center">{row.pncr || 0}</td>
+                      <td className="border border-teal-100 p-2 text-center">{row.tpncr || 0}</td>
+                      <td className="border border-teal-100 p-2 text-center">{row.ppncr || 0}</td>
+                      <td className="border border-teal-100 p-2 text-center">{row.jurunikah || 0}</td>
+                      <td className="border border-teal-100 p-2 text-center font-black bg-teal-50">{total}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* BPH Specific Layout */}
+      {isBPH && formData.bph && (
+        <div className="space-y-8 mb-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-[#5A5A40] pl-2">
+                Statistik SPHM 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Kategori</th>
+                    <th className="border p-2 text-center">2024</th>
+                    <th className="border p-2 text-center bg-olive-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold">Permohonan Sijil</td>
+                    <td className="border p-2 text-center">{BPH_2024_REFERENCE.sphm.permohonan}</td>
+                    <td className="border p-2 text-center font-black bg-olive-50">{formData.bph.sphm.permohonan || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Pemilik Sijil Aktif</td>
+                    <td className="border p-2 text-center">{BPH_2024_REFERENCE.sphm.aktif}</td>
+                    <td className="border p-2 text-center font-black bg-olive-50">
+                      {Number(Object.values(formData.bph.sphm.skim || {}).reduce((a: any, b: any) => a + (parseInt(b) || 0), 0))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-[#5A5A40] pl-2">
+                Hasil Pemantauan 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Mematuhi Piawaian</td>
+                    <td className="border p-2 text-center">{formData.bph.pemantauan.patuh || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Diberi Amaran</td>
+                    <td className="border p-2 text-center">{formData.bph.pemantauan.amaran || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Digantung SPHM</td>
+                    <td className="border p-2 text-center">{formData.bph.pemantauan.gantung || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Ditarik Balik SPHM</td>
+                    <td className="border p-2 text-center">{formData.bph.pemantauan.tarikBalik || 0}</td>
+                  </tr>
+                  <tr className="bg-[#5A5A40] text-white">
+                    <td className="border border-[#5A5A40] p-2 font-black">JUMLAH PEMANTAUAN</td>
+                    <td className="border border-[#5A5A40] p-2 text-center font-black">
+                      {Number(Object.values(formData.bph.pemantauan || {}).reduce((a: any, b: any) => a + (parseInt(b) || 0), 0))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-[#5A5A40] pl-2">
+                Zon Halal 2025
+              </h3>
+              <div className="grid grid-cols-1 gap-1">
+                {(formData.bph.zonHalal || []).map((zon: string, idx: number) => (
+                  <div key={idx} className="p-2 border border-gray-100 rounded bg-gray-50 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-olive-500"></div>
+                    <span className="text-[9px] font-bold text-gray-700 uppercase">{zon}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-[#5A5A40] pl-2">
+                Program & Aktiviti 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Ziarah Halal</td>
+                    <td className="border p-2 text-center">{formData.bph.ziarahHalal || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Taklimat Halal</td>
+                    <td className="border p-2 text-center">{formData.bph.aktiviti.taklimat || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Kursus Kesedaran</td>
+                    <td className="border p-2 text-center">{formData.bph.aktiviti.kursus || 0}</td>
+                  </tr>
+                  <tr className="bg-zus-gold text-zus-900">
+                    <td className="border border-zus-gold p-2 font-black">JUMLAH BESAR AKTIVITI</td>
+                    <td className="border border-zus-gold p-2 text-center font-black">{formData.bph.aktiviti.total || 0}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* BPKS Specific Layout */}
+      {isBPKS && formData.bpks && (
+        <div className="space-y-8 mb-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                Statistik Operasi 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Kategori</th>
+                    <th className="border p-2 text-center">Ref 2024</th>
+                    <th className="border p-2 text-center bg-teal-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold">BTAM Diterima</td>
+                    <td className="border p-2 text-center">{BPKS_2024_REFERENCE.statistik.btam}</td>
+                    <td className="border p-2 text-center font-black bg-teal-50">{formData.bpks.statistik.btam || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Rondaan & Operasi</td>
+                    <td className="border p-2 text-center">{BPKS_2024_REFERENCE.statistik.rondaan}</td>
+                    <td className="border p-2 text-center font-black bg-teal-50">{formData.bpks.statistik.rondaan || 0}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                Sumber Manusia 2025
+              </h3>
+              <div className="p-4 bg-teal-600 text-white rounded-xl text-center">
+                <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Jumlah Pegawai</p>
+                <p className="text-2xl font-black">
+                  {Object.values(formData.bpks.pegawai).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0)}
+                </p>
+                <p className="text-[8px] mt-1 opacity-70">Ref 2024: {BPKS_2024_REFERENCE.pegawai.total}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+              Borang 5 Didaftar 2025
+            </h3>
+            <div className="grid grid-cols-2 gap-8">
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Bahagian</th>
+                    <th className="border p-2 text-center">Ref 2024</th>
+                    <th className="border p-2 text-center bg-teal-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.keys(formData.bpks.borang5.bahagian).map(div => (
+                    <tr key={div}>
+                      <td className="border p-2 font-bold uppercase">{div}</td>
+                      <td className="border p-2 text-center">{BPKS_2024_REFERENCE.borang5.bahagian[div as keyof typeof BPKS_2024_REFERENCE.borang5.bahagian] || 0}</td>
+                      <td className="border p-2 text-center font-black bg-teal-50">{formData.bpks.borang5.bahagian[div] || 0}</td>
+                    </tr>
+                  ))}
+                  <tr className="bg-teal-900 text-white">
+                    <td className="border border-teal-900 p-2 font-black">JUMLAH BESAR</td>
+                    <td className="border border-teal-900 p-2 text-center font-black">{BPKS_2024_REFERENCE.borang5.total}</td>
+                    <td className="border border-teal-900 p-2 text-center font-black">
+                      {Object.values(formData.bpks.borang5.bahagian).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-2xl border border-teal-100">
+                  <h4 className="text-[10px] font-black text-teal-900 uppercase mb-3">Pecahan Kategori</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="font-bold text-gray-600">Matrimoni</span>
+                      <span className="font-black text-teal-600">{formData.bpks.borang5.kategori.matrimoni || 0}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div 
+                        className="bg-teal-600 h-1.5 rounded-full" 
+                        style={{ width: `${(parseInt(formData.bpks.borang5.kategori.matrimoni) || 0) / (Object.values(formData.bpks.borang5.bahagian).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0) || 1) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] mt-2">
+                      <span className="font-bold text-gray-600">Jenayah Syariah</span>
+                      <span className="font-black text-teal-600">{formData.bpks.borang5.kategori.jenayahSyariah || 0}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div 
+                        className="bg-teal-400 h-1.5 rounded-full" 
+                        style={{ width: `${(parseInt(formData.bpks.borang5.kategori.jenayahSyariah) || 0) / (Object.values(formData.bpks.borang5.bahagian).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0) || 1) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-teal-50 rounded-2xl border border-teal-100">
+                  <h4 className="text-[10px] font-black text-teal-900 uppercase mb-3">Kertas Siasatan (I.P)</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center">
+                      <p className="text-[8px] font-bold text-gray-400 uppercase">Matrimoni</p>
+                      <p className="text-lg font-black text-teal-600">{formData.bpks.kertasSiasatan.matrimoni || 0}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[8px] font-bold text-gray-400 uppercase">Jenayah Syariah</p>
+                      <p className="text-lg font-black text-teal-600">{formData.bpks.kertasSiasatan.jenayahSyariah || 0}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 flex justify-between items-center">
+            <div>
+              <h4 className="text-[10px] font-black text-gray-900 uppercase">Program / Aktiviti 2025</h4>
+              <p className="text-[8px] text-gray-500">Jumlah keseluruhan program dan aktiviti kesedaran</p>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-black text-teal-600">{formData.bpks.aktiviti.total || 0}</p>
+              <p className="text-[8px] font-bold text-gray-400">REF 2024: {BPKS_2024_REFERENCE.aktiviti.total}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UKOKO Specific Layout */}
+      {isUKOKO && formData.ukoko && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-emerald-900 text-white rounded-3xl flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Perayaan Islam & Majlis Kesyukuran 2025</h3>
+              <p className="text-emerald-300 text-xs font-bold uppercase tracking-widest mt-1">Unit Komunikasi Korporat (UKOKO)</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black">{(formData.ukoko.perayaanIslam?.length || 0) + (formData.ukoko.majlisKesyukuran?.length || 0)}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Acara 2025</p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-emerald-600 pl-2 flex items-center justify-between">
+                <span>Senarai Perayaan Islam 2025</span>
+                <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-1 rounded-lg">Ref 2024: {UKOKO_2024_REFERENCE.perayaanIslam.length}</span>
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Nama Majlis</th>
+                    <th className="border p-2 text-center">Tarikh</th>
+                    <th className="border p-2 text-center">Tuan Rumah</th>
+                    <th className="border p-2 text-center">Bil. Mesyuarat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.ukoko.perayaanIslam.map((event: any, idx: number) => (
+                    <tr key={idx}>
+                      <td className="border p-2 font-bold">{event.nama}</td>
+                      <td className="border p-2 text-center">{event.tarikh}</td>
+                      <td className="border p-2 text-center font-bold text-emerald-600">{event.tuanRumah}</td>
+                      <td className="border p-2 text-center">{event.mesyuarat}</td>
+                    </tr>
+                  ))}
+                  {formData.ukoko.perayaanIslam.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="border p-4 text-center text-gray-400 italic">Tiada data dimasukkan</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2 flex items-center justify-between">
+                <span>Senarai Majlis Kesyukuran 2025</span>
+                <span className="text-[10px] bg-teal-50 text-teal-600 px-2 py-1 rounded-lg">Ref 2024: {UKOKO_2024_REFERENCE.majlisKesyukuran.length}</span>
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Nama Majlis</th>
+                    <th className="border p-2 text-center">Tarikh</th>
+                    <th className="border p-2 text-center">Tuan Rumah</th>
+                    <th className="border p-2 text-center">Bil. Mesyuarat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
+                    <tr key={idx}>
+                      <td className="border p-2 font-bold">{event.nama}</td>
+                      <td className="border p-2 text-center">{event.tarikh}</td>
+                      <td className="border p-2 text-center font-bold text-teal-600">{event.tuanRumah}</td>
+                      <td className="border p-2 text-center">{event.mesyuarat}</td>
+                    </tr>
+                  ))}
+                  {formData.ukoko.majlisKesyukuran.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="border p-4 text-center text-gray-400 italic">Tiada data dimasukkan</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DHQC Specific Layout */}
+      {isDHQC && formData.dhqc && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-[#0a1e3b] text-white rounded-3xl flex justify-between items-center border-b-4 border-[#c5a065]">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Darul Hana Quran Centre (DHQC) 2025</h3>
+              <p className="text-[#c5a065] text-xs font-bold uppercase tracking-widest mt-1">Jabatan Agama Islam Sarawak</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-[#c5a065]">{Object.values(formData.dhqc.guruAlQuran).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0)}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Guru al-Quran</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-[#0a1e3b] uppercase border-l-4 border-[#c5a065] pl-2">
+                Statistik Pemuliaan Debu & Penyelia
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Berat Debu (Tan)</p>
+                  <p className="text-xl font-black text-[#0a1e3b]">{formData.dhqc.statistikDebu.berat || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Kekerapan</p>
+                  <p className="text-xl font-black text-[#0a1e3b]">{formData.dhqc.statistikDebu.kekerapan || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {DHQC_2024_REFERENCE.statistikDebu.kekerapan}</p>
+                </div>
+              </div>
+              <div className="p-4 bg-[#0a1e3b] text-white rounded-2xl">
+                <p className="text-[8px] font-black text-[#c5a065] uppercase mb-2">Penyelia GAQMIS</p>
+                <div className="flex justify-between text-[10px] mb-1">
+                  <span>Ibu Pejabat</span>
+                  <span className="font-bold">{formData.dhqc.penyelia.ibuPejabat || 0}</span>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span>Bintulu</span>
+                  <span className="font-bold">{formData.dhqc.penyelia.bintulu || 0}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-[#0a1e3b] uppercase border-l-4 border-[#c5a065] pl-2">
+                Pusat Pemuliaan Al-Quran
+              </h3>
+              <div className="space-y-2">
+                {formData.dhqc.pusatPemuliaan.map((item: any, idx: number) => (
+                  <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-gray-700">{item.lokasi}</span>
+                    <span className="text-[8px] font-black text-[#c5a065] uppercase">{item.bahagian}</span>
+                  </div>
+                ))}
+                {formData.dhqc.pusatPemuliaan.length === 0 && (
+                  <p className="text-[10px] text-gray-400 italic text-center py-4">Tiada data lokasi</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-[#0a1e3b] uppercase border-l-4 border-[#c5a065] pl-2">
+              Pecahan Mengikut Bahagian
+            </h3>
+            <table className="w-full text-[10px] border-collapse">
+              <thead>
+                <tr className="bg-[#0a1e3b] text-white">
+                  <th className="border border-gray-200 p-2 text-left">Bahagian</th>
+                  <th className="border border-gray-200 p-2 text-center">Guru al-Quran</th>
+                  <th className="border border-gray-200 p-2 text-center">Qari/Qariah</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SARAWAK_DIVISIONS.map((div) => {
+                  const key = div.charAt(0).toLowerCase() + div.slice(1).replace(/\s+/g, '');
+                  return (
+                    <tr key={div}>
+                      <td className="border border-gray-200 p-2 font-bold">{div}</td>
+                      <td className="border border-gray-200 p-2 text-center">{formData.dhqc.guruAlQuran[key] || 0}</td>
+                      <td className="border border-gray-200 p-2 text-center">{formData.dhqc.qariQariah[key] || 0}</td>
+                    </tr>
+                  );
+                })}
+                <tr className="bg-gray-50 font-black">
+                  <td className="border border-gray-200 p-2 uppercase">Jumlah Besar</td>
+                  <td className="border border-gray-200 p-2 text-center text-[#0a1e3b]">{Object.values(formData.dhqc.guruAlQuran).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0)}</td>
+                  <td className="border border-gray-200 p-2 text-center text-[#0a1e3b]">{Object.values(formData.dhqc.qariQariah).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* UPP Specific Layout */}
+      {isUPP && formData.upp && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-teal-600 text-white rounded-3xl flex justify-between items-center border-b-4 border-teal-800">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Unit Pengurusan Projek (UPP) 2025</h3>
+              <p className="text-teal-100 text-xs font-bold uppercase tracking-widest mt-1">Jabatan Agama Islam Sarawak</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-white">
+                {((parseInt(formData.upp.statistikTahunan.siap) || 0) / (parseInt(formData.upp.statistikTahunan.dijalankan) || 1) * 100).toFixed(1)}%
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">KPI Peratus Siap 2025</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                Statistik Projek & Mesyuarat
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Projek Dijalankan</p>
+                  <p className="text-xl font-black text-teal-600">{formData.upp.statistikTahunan.dijalankan || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {UPP_2024_REFERENCE.statistikTahunan.dijalankan}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Projek Siap</p>
+                  <p className="text-xl font-black text-teal-600">{formData.upp.statistikTahunan.siap || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {UPP_2024_REFERENCE.statistikTahunan.siap}</p>
+                </div>
+              </div>
+              <div className="p-4 bg-zus-gold text-zus-900 rounded-2xl">
+                <p className="text-[8px] font-black uppercase mb-2">Jumlah Mesyuarat: {(parseInt(formData.upp.mesyuarat.pembangunan) || 0) + (parseInt(formData.upp.mesyuarat.teknikal) || 0)}</p>
+                <div className="flex justify-between text-[10px] mb-1">
+                  <span>J/Kuasa Pembangunan</span>
+                  <span className="font-bold">{formData.upp.mesyuarat.pembangunan || 0}</span>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span>J/Kuasa Teknikal</span>
+                  <span className="font-bold">{formData.upp.mesyuarat.teknikal || 0}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                Pembangunan Masjid & Surau
+              </h3>
+              <table className="w-full text-[8px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-1 text-left">Bahagian</th>
+                    <th className="border p-1 text-center">Rancang</th>
+                    <th className="border p-1 text-center">Laksana</th>
+                    <th className="border p-1 text-center">Siap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SARAWAK_DIVISIONS.map((div) => (
+                    <tr key={div}>
+                      <td className="border p-1 font-bold">{div}</td>
+                      <td className="border p-1 text-center">{formData.upp.projekMasjid[div]?.perancangan || 0}</td>
+                      <td className="border p-1 text-center">{formData.upp.projekMasjid[div]?.pelaksanaan || 0}</td>
+                      <td className="border p-1 text-center">{formData.upp.projekMasjid[div]?.siap || 0}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Pembangunan Sekolah (SABK & SMKA)
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(formData.upp.projekSekolah).map(([school, data]: [string, any]) => (
+                <div key={school} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                  <span className="text-[8px] font-bold text-gray-700 truncate mr-2">{school}</span>
+                  <div className="flex gap-2 items-center">
+                    <span className="text-[8px] text-gray-400">{data.siap || 0}/{data.total || 0}</span>
+                    <span className={`text-[8px] font-black px-1 rounded ${parseInt(data.siap) === parseInt(data.total) && parseInt(data.total) > 0 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                      {data.total > 0 ? ((data.siap / data.total) * 100).toFixed(0) : 0}%
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Integriti Specific Layout */}
+      {isIntegriti && formData.integriti && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-[#FDE047] text-zus-900 rounded-3xl flex justify-between items-center border-b-4 border-yellow-500">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Unit Integriti (UI) 2025</h3>
+              <p className="text-zus-900/60 text-xs font-bold uppercase tracking-widest mt-1">Jabatan Agama Islam Sarawak</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-zus-900">{formData.integriti.tadbirUrus.program || 0}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Program Integriti 2025</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
+                Tadbir Urus & Multimedia
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Mesyuarat Tatakelola</p>
+                  <p className="text-xl font-black text-zus-900">{formData.integriti.tadbirUrus.mesyuarat || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Video Dihasilkan</p>
+                  <p className="text-xl font-black text-zus-900">{formData.integriti.multimedia.video || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.multimedia.video}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
+                Dokumentasi Integriti
+              </h3>
+              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Manual</p>
+                  <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.manual || 0}</p>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Polisi</p>
+                  <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.polisi || 0}</p>
+                </div>
+                <div className="pt-2 border-t border-gray-200 flex justify-between items-center">
+                  <p className="text-[8px] font-black text-zus-900 uppercase">Jumlah Besar</p>
+                  <p className="text-lg font-black text-zus-900">{(parseInt(formData.integriti.dokumentasi.manual) || 0) + (parseInt(formData.integriti.dokumentasi.polisi) || 0)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
+              Pautan Dokumen Integriti
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              {formData.integriti.dokumentasi.links.map((link: any, idx: number) => (
+                <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                  <p className="text-[10px] font-bold text-gray-700">{link.title}</p>
+                  <p className="text-[8px] text-blue-500 truncate">{link.url}</p>
+                </div>
+              ))}
+              {formData.integriti.dokumentasi.links.length === 0 && (
+                <p className="text-[10px] text-gray-400 italic">Tiada pautan dokumen dimasukkan.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Quality Initiatives Section inside Integriti */}
+          {formData.quality && (
+            <div className="pt-8 border-t-2 border-teal-500 space-y-8">
+              <div className="p-6 bg-[#0D9488] text-white rounded-3xl flex justify-between items-center border-b-4 border-teal-900">
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-tight">Inisiatif Kualiti</h3>
+                  <p className="text-teal-100 text-xs font-bold uppercase tracking-widest mt-1">Laporan Tahunan 2025</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-black text-white">CERTIFIED</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Status Pensijilan ISO</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                    Audit ISO 9001:2015
+                  </h3>
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">Tarikh Audit</span>
+                      <span className="font-black text-zus-900">{formData.quality.iso9001.tarikhAudit || '-'}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">Badan Audit</span>
+                      <span className="font-black text-zus-900">{formData.quality.iso9001.badanAudit || '-'}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">NCR / OFI</span>
+                      <span className="font-black text-teal-600">{formData.quality.iso9001.ncr || 0} / {formData.quality.iso9001.ofi || 0}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                    Audit ISO 37001:2016 (ABMS)
+                  </h3>
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-2">
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">Tarikh Audit</span>
+                      <span className="font-black text-zus-900">{formData.quality.iso37001.tarikhAudit || '-'}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">Badan Audit</span>
+                      <span className="font-black text-zus-900">{formData.quality.iso37001.badanAudit || '-'}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px]">
+                      <span className="text-gray-400 font-bold uppercase">NCR / OFI</span>
+                      <span className="font-black text-teal-600">{formData.quality.iso37001.ncr || 0} / {formData.quality.iso37001.ofi || 0}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                    Frameworks & Prestasi
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {formData.quality.frameworks.mbef && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">MBEF</span>}
+                    {formData.quality.frameworks.scsScorecard && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">SCS Scorecard</span>}
+                    {formData.quality.frameworks.eksa && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">EKSA</span>}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                    Inisiatif Kualiti Tambahan
+                  </h3>
+                  <div className="space-y-2">
+                    {formData.quality.additionalInitiatives.map((init: any, idx: number) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                        <span className="text-[8px] font-bold text-gray-700">{init.title}</span>
+                        <span className="text-[8px] font-black text-teal-600 uppercase">{init.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* BPPI Specific Layout */}
+      {isBPPI && formData.bppi && (
+        <div className="space-y-8 mb-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Institusi Pendidikan Islam 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border p-2 text-left">Kategori</th>
+                    <th className="border p-2 text-center">2024</th>
+                    <th className="border p-2 text-center bg-blue-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold">Sekolah Agama MIS</td>
+                    <td className="border p-2 text-center">{BPPI_2024_REFERENCE.institusi.mis.total}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">
+                      {(parseInt(formData.bppi.institusi.mis.rendah) || 0) + (parseInt(formData.bppi.institusi.mis.menengah) || 0)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Institusi Persendirian (IPIP)</td>
+                    <td className="border p-2 text-center">{BPPI_2024_REFERENCE.institusi.ipip.total}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">
+                      {Number(Object.values(formData.bppi.institusi.ipip || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0))}
+                    </td>
+                  </tr>
+                  <tr className="bg-zus-900 text-white">
+                    <td className="border border-zus-900 p-2 font-black">JUMLAH BESAR</td>
+                    <td className="border border-zus-900 p-2 text-center font-black">{BPPI_2024_REFERENCE.institusi.grandTotal}</td>
+                    <td className="border border-zus-900 p-2 text-center font-black">
+                      {(parseInt(formData.bppi.institusi.mis.rendah) || 0) + 
+                       (parseInt(formData.bppi.institusi.mis.menengah) || 0) +
+                       Number(Object.values(formData.bppi.institusi.ipip || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Data KAFA & UPKK 2025
+              </h3>
+              <table className="w-full text-[10px] border-collapse">
+                <tbody>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Bilangan Pelajar KAFA</td>
+                    <td className="border p-2 text-center">{formData.bppi.kafa.pelajar || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Bilangan Guru KAFA</td>
+                    <td className="border p-2 text-center">{formData.bppi.kafa.guru || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">Bilangan Calon UPKK</td>
+                    <td className="border p-2 text-center">{Number(formData.bppi.kafa.upkk.calon || 0)}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold bg-gray-50">GPS UPKK</td>
+                    <td className="border p-2 text-center font-black text-blue-600">{String(formData.bppi.kafa.upkk.gps || '0.00')}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Enrolmen Pelajar Sekolah Agama MIS 2025
+            </h3>
+            <div className="grid grid-cols-3 gap-2">
+              {formData.bppi.enrolmenMIS.map((s: any, idx: number) => (
+                <div key={idx} className="p-2 border border-gray-100 rounded bg-gray-50 flex justify-between items-center">
+                  <span className="text-[8px] font-bold text-gray-500 uppercase truncate pr-2">{s.name}</span>
+                  <span className="text-[10px] font-black text-zus-900">{s.value || 0}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Kelas Agama Dewasa (KAD) 2025
+            </h3>
+            <table className="w-full text-[9px] border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-1.5 text-left">Bahagian</th>
+                  <th className="border p-1.5 text-center">Bil. Kelas</th>
+                  <th className="border p-1.5 text-center">Bil. Pelajar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {formData.bppi.kad.pecahan.map((p: any) => (
+                  <tr key={p.name}>
+                    <td className="border p-1.5 font-bold">{p.name}</td>
+                    <td className="border p-1.5 text-center">{p.kelas || 0}</td>
+                    <td className="border p-1.5 text-center">{p.pelajar || 0}</td>
+                  </tr>
+                ))}
+                <tr className="bg-zus-900 text-white font-black">
+                  <td className="border border-zus-900 p-1.5">JUMLAH KESELURUHAN</td>
+                  <td className="border border-zus-900 p-1.5 text-center">
+                    {formData.bppi.kad.pecahan.reduce((a:any, b:any) => a + (parseInt(b.kelas) || 0), 0)}
+                  </td>
+                  <td className="border border-zus-900 p-1.5 text-center">
+                    {formData.bppi.kad.pecahan.reduce((a:any, b:any) => a + (parseInt(b.pelajar) || 0), 0)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* BKIM Specific Layout */}
       {isBKIM && formData.bkim && (
@@ -312,23 +1172,70 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                 Pemenang Penulisan Ilmiah
               </h3>
-              <table className="w-full text-[10px] border-collapse">
+              <table className="w-full text-[9px] border-collapse">
                 <thead>
                   <tr className="bg-gray-100">
+                    <th className="border p-2 text-left">Kategori</th>
                     <th className="border p-2 text-left">Kedudukan</th>
                     <th className="border p-2 text-left">Nama & Tajuk</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {['johan', 'naibJohan', 'ketiga'].map((rank) => (
-                    <tr key={rank}>
-                      <td className="border p-2 font-bold uppercase">{rank === 'ketiga' ? 'Tempat Ketiga' : rank}</td>
-                      <td className="border p-2">
-                        <div className="font-black">{formData.bpnp.penulisan[rank].nama || '................................'}</div>
-                        <div className="italic text-gray-500">{formData.bpnp.penulisan[rank].tajuk || '................................'}</div>
-                      </td>
-                    </tr>
-                  ))}
+                  {/* Diploma */}
+                  <tr>
+                    <td rowSpan={4} className="border p-2 font-black text-blue-600 bg-blue-50/30 text-center">DIPLOMA</td>
+                    <td className="border p-2 font-bold uppercase">Johan</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.diploma.johan.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.johan.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold uppercase">Naib Johan</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.diploma.naibJohan.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.diploma.ketiga.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.ketiga.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr className="bg-blue-50/50">
+                    <td className="border p-2 font-bold uppercase">Peserta Lain</td>
+                    <td className="border p-2 font-black text-blue-700">{formData.bpnp.penulisan.diploma.pesertaLain} Orang</td>
+                  </tr>
+
+                  {/* Sarjana Muda */}
+                  <tr>
+                    <td rowSpan={4} className="border p-2 font-black text-indigo-600 bg-indigo-50/30 text-center">SARJANA MUDA & KEATAS</td>
+                    <td className="border p-2 font-bold uppercase">Johan</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold uppercase">Naib Johan</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
+                    <td className="border p-2">
+                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '................................'}</div>
+                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '................................'}</div>
+                    </td>
+                  </tr>
+                  <tr className="bg-indigo-50/50">
+                    <td className="border p-2 font-bold uppercase">Peserta Lain</td>
+                    <td className="border p-2 font-black text-indigo-700">{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -396,166 +1303,9 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         </div>
       )}
 
-      {/* HR Specific Layout */}
-      {isHR && formData.hr && (
-        <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Ringkasan Perjawatan 2025
-              </h3>
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Kategori</th>
-                    <th className="border p-2 text-center">2024</th>
-                    <th className="border p-2 text-center bg-blue-50">2025</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border p-2 font-bold">Perjawatan (Bajet)</td>
-                    <td className="border p-2 text-center">{HR_2024_REFERENCE.ringkasan.perjawatanBajet}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.perjawatanBajet}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold">Perjawatan Diisi</td>
-                    <td className="border p-2 text-center">{HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.perjawatanDiisi}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold">Jumlah Warga Kerja</td>
-                    <td className="border p-2 text-center">{HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.jumlahWargaKerja}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
 
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Pecahan Jantina
-              </h3>
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Jantina</th>
-                    <th className="border p-2 text-center">2024</th>
-                    <th className="border p-2 text-center bg-blue-50">2025</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border p-2 font-bold">Lelaki</td>
-                    <td className="border p-2 text-center">{HR_2024_REFERENCE.demografi.lelaki}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.hr.demografi.lelaki}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold">Wanita</td>
-                    <td className="border p-2 text-center">{HR_2024_REFERENCE.demografi.wanita}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.hr.demografi.wanita}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
-          <div className="space-y-4">
-            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-              Pecahan Skim Perkhidmatan
-            </h3>
-            <table className="w-full text-[10px] border-collapse">
-              <thead>
-                <tr className="bg-zus-900 text-white">
-                  <th className="border border-zus-900 p-2 text-left">Skim / Kategori</th>
-                  <th className="border border-zus-900 p-2 text-center">2024</th>
-                  <th className="border border-zus-900 p-2 text-center bg-zus-800">2025</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { label: 'JUSA', field: 'jusa', ref: HR_2024_REFERENCE.skim.jusa },
-                  { label: 'Hal Ehwal Islam', field: 'halEhwalIslam', ref: HR_2024_REFERENCE.skim.halEhwalIslam },
-                  { label: 'Perundangan & Kehakiman', field: 'perundangan', ref: HR_2024_REFERENCE.skim.perundangan },
-                  { label: 'Kewangan', field: 'kewangan', ref: HR_2024_REFERENCE.skim.kewangan },
-                  { label: 'Keselamatan', field: 'keselamatan', ref: HR_2024_REFERENCE.skim.keselamatan },
-                  { label: 'Pendidikan', field: 'pendidikan', ref: HR_2024_REFERENCE.skim.pendidikan },
-                  { label: 'Kejuruteraan', field: 'kejuruteraan', ref: HR_2024_REFERENCE.skim.kejuruteraan },
-                  { label: 'Pentadbiran & Sokongan', field: 'pentadbiran', ref: HR_2024_REFERENCE.skim.pentadbiran },
-                  { label: 'Pembantu Am & Pemandu', field: 'pembantuAm', ref: HR_2024_REFERENCE.skim.pembantuAm },
-                ].map((item) => (
-                  <tr key={item.field}>
-                    <td className="border p-1.5 font-bold">{item.label}</td>
-                    <td className="border p-1.5 text-center">{item.ref}</td>
-                    <td className="border p-1.5 text-center font-black bg-blue-50">{formData.hr.skim[item.field as keyof typeof formData.hr.skim]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Kakitangan Sangkutan
-              </h3>
-              <table className="w-full text-[10px] border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Agensi / Kategori</th>
-                    <th className="border p-2 text-center">2024</th>
-                    <th className="border p-2 text-center bg-blue-50">2025</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-indigo-50/50">
-                    <td className="border p-1.5 font-black" colSpan={3}>Majlis Islam Sarawak (MIS)</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-1.5 pl-4">Pekhidmat MIS</td>
-                    <td className="border p-1.5 text-center">{HR_2024_REFERENCE.sangkutan.mis}</td>
-                    <td className="border p-1.5 text-center font-black bg-blue-50">{formData.hr.sangkutan.mis}</td>
-                  </tr>
-                  <tr className="bg-zus-50/50">
-                    <td className="border p-1.5 font-black" colSpan={3}>JAKIM</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-1.5 pl-4">Penyelia KAFA</td>
-                    <td className="border p-1.5 text-center">{HR_2024_REFERENCE.sangkutan.jakim.penyeliaKafa}</td>
-                    <td className="border p-1.5 text-center font-black bg-blue-50">{formData.hr.sangkutan.jakim.penyeliaKafa}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-1.5 pl-4">Penggerak Masyarakat</td>
-                    <td className="border p-1.5 text-center">{HR_2024_REFERENCE.sangkutan.jakim.penggerak}</td>
-                    <td className="border p-1.5 text-center font-black bg-blue-50">{formData.hr.sangkutan.jakim.penggerak}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-1.5 pl-4">Takmir & Penyelaras</td>
-                    <td className="border p-1.5 text-center">{HR_2024_REFERENCE.sangkutan.jakim.takmir}</td>
-                    <td className="border p-1.5 text-center font-black bg-blue-50">{formData.hr.sangkutan.jakim.takmir}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Persaraan
-              </h3>
-              <div className="p-6 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] font-black text-red-400 uppercase tracking-widest">Jumlah Bersara 2025</div>
-                  <div className="text-2xl font-black text-red-700">{formData.hr.bersara}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[10px] font-bold text-gray-400 uppercase">Rujukan 2024</div>
-                  <div className="text-lg font-bold text-gray-500">{HR_2024_REFERENCE.bersara}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* BKSP Specific Layout */}
       {isBKSP && formData.bksp && (
@@ -848,6 +1598,494 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         </div>
       )}
 
+      {/* BKKI Specific Layout */}
+      {isBKKI && formData.bkki && (
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Statistik Keluarga Islam (2025)
+              </h3>
+              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-blue-900 uppercase">Bilangan Perkahwinan</span>
+                  <span className="text-xl font-black text-blue-700">{formData.bkki.stats?.bilPerkahwinan || 0}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-blue-900 uppercase">Bilangan Perceraian</span>
+                  <span className="text-xl font-black text-blue-700">{formData.bkki.stats?.bilPerceraian || 0}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UKOKO Specific Layout */}
+      {isUKOKO && (
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Statistik Media Sosial (2025)
+              </h3>
+              <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-indigo-900 uppercase">FB Followers</span>
+                  <span className="text-xl font-black text-indigo-700">{formData.socialMedia?.fbFollowers || 0}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-indigo-900 uppercase">TikTok Followers</span>
+                  <span className="text-xl font-black text-indigo-700">{formData.socialMedia?.tiktokFollowers || 0}</span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Pengurusan Aduan (2025)
+              </h3>
+              <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-emerald-900 uppercase">Aduan Diterima</span>
+                  <span className="text-xl font-black text-emerald-700">{formData.aduan?.diterima || 0}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-emerald-900 uppercase">Aduan Diselesaikan</span>
+                  <span className="text-xl font-black text-emerald-700">{formData.aduan?.diselesaikan || 0}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Finance Specific Layout */}
+      {isFinance && formData.finance && (
+        <div className="space-y-8 mb-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-purple-600 pl-2">
+                Bajet & Belanjawan 2025
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-purple-50">
+                    <th className="border border-purple-100 p-2 text-left">Kategori</th>
+                    <th className="border border-purple-100 p-2 text-center">2024 (RM)</th>
+                    <th className="border border-purple-100 p-2 text-center bg-purple-100">2025 (RM)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-purple-100 p-2 font-bold">Peruntukan Lulus</td>
+                    <td className="border border-purple-100 p-2 text-center">{FINANCE_2024_REFERENCE.financeYears[3].lulus.toLocaleString()}</td>
+                    <td className="border border-purple-100 p-2 text-center font-black bg-purple-50">{parseInt(formData.finance.financeYears[0].lulus || 0).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-purple-100 p-2 font-bold">Perbelanjaan</td>
+                    <td className="border border-purple-100 p-2 text-center">{FINANCE_2024_REFERENCE.financeYears[3].belanja.toLocaleString()}</td>
+                    <td className="border border-purple-100 p-2 text-center font-black bg-purple-50">{parseInt(formData.finance.financeYears[0].belanja || 0).toLocaleString()}</td>
+                  </tr>
+                  <tr className="bg-blue-50">
+                    <td className="border border-blue-100 p-2 font-bold">Baki</td>
+                    <td className="border border-blue-100 p-2 text-center">{(FINANCE_2024_REFERENCE.financeYears[3].lulus - FINANCE_2024_REFERENCE.financeYears[3].belanja).toLocaleString()}</td>
+                    <td className="border border-blue-100 p-2 text-center font-black">{( (parseInt(formData.finance.financeYears[0].lulus) || 0) - (parseInt(formData.finance.financeYears[0].belanja) || 0) ).toLocaleString()}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-emerald-600 pl-2">
+                Prestasi & Hasil
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-center">
+                  <div className="text-[10px] font-black text-emerald-900 uppercase">Kutipan Hasil</div>
+                  <div className="text-xl font-black text-emerald-700">RM {parseInt(formData.finance.financeYears[0].hasil || 0).toLocaleString()}</div>
+                  <div className="text-[8px] font-bold text-emerald-400">REF 24: RM {FINANCE_2024_REFERENCE.financeYears[3].hasil.toLocaleString()}</div>
+                </div>
+                <div className="p-4 bg-rose-50 border border-rose-100 rounded-xl text-center">
+                  <div className="text-[10px] font-black text-rose-900 uppercase">Prestasi Belanja</div>
+                  <div className="text-xl font-black text-rose-700">{formData.finance.percentageBelanja || 0}%</div>
+                  <div className="text-[8px] font-bold text-rose-400">REF 24: {FINANCE_2024_REFERENCE.percentageBelanja}%</div>
+                </div>
+                <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl text-center col-span-2">
+                  <div className="text-[10px] font-black text-indigo-900 uppercase">Pencapaian eCSA</div>
+                  <div className="text-xl font-black text-indigo-700">{formData.finance.percentageEcsa || 0}%</div>
+                  <div className="text-[8px] font-bold text-indigo-400">REF 24: {FINANCE_2024_REFERENCE.percentageEcsa}%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Naziran Kewangan & Inspektorat Perbendaharaan (2025)
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {formData.finance.financeDistricts.map((district: any) => (
+                <div key={district.name} className="p-3 bg-gray-50 border border-gray-100 rounded-xl flex flex-col items-center justify-center gap-2">
+                  <div className="text-[10px] font-black text-zus-900 uppercase">{district.name}</div>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${district.naziran ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase">{district.naziran ? 'Naziran ✔' : 'Naziran ✘'}</span>
+                  </div>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <div key={star} className={`w-2 h-2 rounded-full ${star <= district.starRating ? 'bg-zus-gold' : 'bg-gray-200'}`}></div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pentadbiran Leadership Layout */}
+      {isPentadbiran && formData.leadership && (
+        <div className="space-y-8 mb-8">
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
+              Unit Pentadbiran - Kepimpinan (Mesyuarat & Perhimpunan 2025)
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { label: 'J.P.T.O', value: formData.leadership.jpto, ref: LEADERSHIP_2024_REFERENCE.jpto, color: 'blue' },
+                { label: 'M.P.J', value: formData.leadership.mpj, ref: LEADERSHIP_2024_REFERENCE.mpj, color: 'emerald' },
+                { label: 'Pegawai Agama', value: formData.leadership.pegawaiAgama, ref: LEADERSHIP_2024_REFERENCE.pegawaiAgama, color: 'purple' },
+                { label: 'Aset Alih', value: formData.leadership.aset, ref: LEADERSHIP_2024_REFERENCE.aset, color: 'slate' },
+                { label: 'Keselamatan', value: formData.leadership.keselamatan, ref: LEADERSHIP_2024_REFERENCE.keselamatan, color: 'red' },
+                { label: 'Kader (HEI)', value: formData.leadership.kader, ref: LEADERSHIP_2024_REFERENCE.kader, color: 'teal' },
+                { label: 'Kewangan', value: formData.leadership.kewanganPerolehan, ref: LEADERSHIP_2024_REFERENCE.kewanganPerolehan, color: 'amber' },
+              ].map(item => (
+                <div key={item.label} className={`p-3 bg-${item.color}-50 border border-${item.color}-100 rounded-xl text-center`}>
+                  <div className={`text-[8px] font-black text-${item.color}-900 uppercase`}>{item.label}</div>
+                  <div className={`text-lg font-black text-${item.color}-700`}>{item.value || 0}</div>
+                  <div className="text-[7px] font-bold text-gray-400">REF 24: {item.ref}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xs font-black text-zus-900 uppercase border-l-4 border-orange-600 pl-2">
+                Perhimpunan Bersama Pengurusan
+              </h3>
+              <div className="p-4 bg-orange-50 border border-orange-100 rounded-2xl space-y-3">
+                <div className="flex justify-between items-center border-b border-orange-100 pb-2">
+                  <span className="text-[10px] font-black text-orange-900 uppercase">Jumlah Keseluruhan</span>
+                  <span className="text-xl font-black text-orange-700">{formData.leadership.perhimpunan.total}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="text-center">
+                    <div className="text-[7px] font-bold text-orange-400 uppercase">Tawjihat</div>
+                    <div className="text-xs font-black text-orange-600">{formData.leadership.perhimpunan.tawjihat || 0}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[7px] font-bold text-orange-400 uppercase">Perdana</div>
+                    <div className="text-xs font-black text-orange-600">{formData.leadership.perhimpunan.perdana || 0}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[7px] font-bold text-orange-400 uppercase">Bulanan</div>
+                    <div className="text-xs font-black text-orange-600">{formData.leadership.perhimpunan.bulanan || 0}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-xs font-black text-zus-900 uppercase border-l-4 border-rose-600 pl-2">
+                Panel Pengurusan Sumber Manusia
+              </h3>
+              <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl space-y-3">
+                <div className="flex justify-between items-center border-b border-rose-100 pb-2">
+                  <span className="text-[10px] font-black text-rose-900 uppercase">Jumlah Keseluruhan</span>
+                  <span className="text-xl font-black text-rose-700">{formData.leadership.panelHR.total}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="text-center">
+                    <div className="text-[7px] font-bold text-rose-400 uppercase">Biasa</div>
+                    <div className="text-xs font-black text-rose-600">{formData.leadership.panelHR.biasa || 0}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[7px] font-bold text-rose-400 uppercase">Khas</div>
+                    <div className="text-xs font-black text-rose-600">{formData.leadership.panelHR.khas || 0}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HR Specific Layout */}
+      {isHR && formData.hr && (
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Ringkasan Perjawatan (2025)
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border border-gray-200 p-2 text-left">Kategori</th>
+                    <th className="border border-gray-200 p-2 text-center">2024</th>
+                    <th className="border border-gray-200 p-2 text-center bg-blue-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-gray-200 p-2 font-bold">Perjawatan (Bajet)</td>
+                    <td className="border border-gray-200 p-2 text-center">{HR_2024_REFERENCE.ringkasan.perjawatanBajet}</td>
+                    <td className="border border-gray-200 p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.perjawatanBajet}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-200 p-2 font-bold">Perjawatan Diisi</td>
+                    <td className="border border-gray-200 p-2 text-center">{HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</td>
+                    <td className="border border-gray-200 p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.perjawatanDiisi}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-200 p-2 font-bold">Jumlah Warga Kerja</td>
+                    <td className="border border-gray-200 p-2 text-center">{HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</td>
+                    <td className="border border-gray-200 p-2 text-center font-black bg-blue-50">{formData.hr.ringkasan.jumlahWargaKerja}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Demografi Jantina (2025)
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border border-gray-200 p-2 text-left">Jantina</th>
+                    <th className="border border-gray-200 p-2 text-center">2024</th>
+                    <th className="border border-gray-200 p-2 text-center bg-blue-50">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-gray-200 p-2 font-bold">Lelaki</td>
+                    <td className="border border-gray-200 p-2 text-center">{HR_2024_REFERENCE.demografi.lelaki}</td>
+                    <td className="border border-gray-200 p-2 text-center font-black bg-blue-50">{formData.hr.demografi.lelaki}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-200 p-2 font-bold">Wanita</td>
+                    <td className="border border-gray-200 p-2 text-center">{HR_2024_REFERENCE.demografi.wanita}</td>
+                    <td className="border border-gray-200 p-2 text-center font-black bg-blue-50">{formData.hr.demografi.wanita}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Pecahan Skim Perkhidmatan (2025)
+            </h3>
+            <table className="w-full text-[10px] border-collapse">
+              <thead>
+                <tr className="bg-zus-900 text-white">
+                  <th className="border border-zus-900 p-2 text-left">Skim / Kategori</th>
+                  <th className="border border-zus-900 p-2 text-center">2024</th>
+                  <th className="border border-zus-900 p-2 text-center bg-zus-800">2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { label: 'JUSA', field: 'jusa', ref: HR_2024_REFERENCE.skim.jusa },
+                  { label: 'Hal Ehwal Islam', field: 'halEhwalIslam', ref: HR_2024_REFERENCE.skim.halEhwalIslam },
+                  { label: 'Perundangan & Kehakiman', field: 'perundangan', ref: HR_2024_REFERENCE.skim.perundangan },
+                  { label: 'Kewangan', field: 'kewangan', ref: HR_2024_REFERENCE.skim.kewangan },
+                  { label: 'Keselamatan', field: 'keselamatan', ref: HR_2024_REFERENCE.skim.keselamatan },
+                  { label: 'Pendidikan', field: 'pendidikan', ref: HR_2024_REFERENCE.skim.pendidikan },
+                  { label: 'Kejuruteraan', field: 'kejuruteraan', ref: HR_2024_REFERENCE.skim.kejuruteraan },
+                  { label: 'Pentadbiran & Sokongan', field: 'pentadbiran', ref: HR_2024_REFERENCE.skim.pentadbiran },
+                  { label: 'Pembantu Am & Pemandu', field: 'pembantuAm', ref: HR_2024_REFERENCE.skim.pembantuAm },
+                ].map((item) => (
+                  <tr key={item.field}>
+                    <td className="border border-gray-200 p-1.5 font-bold">{item.label}</td>
+                    <td className="border border-gray-200 p-1.5 text-center">{item.ref}</td>
+                    <td className="border border-gray-200 p-1.5 text-center font-black bg-blue-50">{formData.hr.skim[item.field as keyof typeof formData.hr.skim]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Kakitangan Sangkutan
+              </h3>
+              <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black text-indigo-900 uppercase">Pekhidmat MIS</span>
+                  <span className="text-lg font-black text-indigo-700">{formData.hr.sangkutan.mis}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black text-indigo-900 uppercase">Penyelia KAFA (JAKIM)</span>
+                  <span className="text-lg font-black text-indigo-700">{formData.hr.sangkutan.jakim.penyeliaKafa}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                Persaraan 2025
+              </h3>
+              <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-black text-red-400 uppercase">Jumlah Bersara</div>
+                  <div className="text-2xl font-black text-red-700">{formData.hr.bersara}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] font-bold text-gray-400 uppercase">Ref 2024</div>
+                  <div className="text-lg font-bold text-gray-500">{HR_2024_REFERENCE.bersara}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+              Taburan Kakitangan Ibu Pejabat (2025)
+            </h3>
+            <div className="grid grid-cols-4 gap-4">
+              {[
+                { label: 'BPPS', field: 'bpps' },
+                { label: 'BPNP', field: 'bpnp' },
+                { label: 'Dakwah', field: 'dakwah' },
+                { label: 'BKIM', field: 'bkim' },
+                { label: 'BPKS', field: 'bpks' },
+                { label: 'BKKI', field: 'bkki' },
+                { label: 'BPH', field: 'bph' },
+                { label: 'BPDS', field: 'bpds' },
+                { label: 'BKSK', field: 'bksk' },
+                { label: 'BKSP', field: 'bksp' },
+                { label: 'Kaunseling', field: 'kaunseling' },
+                { label: 'UKOKO', field: 'ukoko' },
+                { label: 'UPP', field: 'upp' },
+                { label: 'Integriti', field: 'integriti' },
+              ].map(item => (
+                <div key={item.field} className="p-2 bg-teal-50 border border-teal-100 rounded-lg text-center">
+                  <div className="text-[8px] font-black text-teal-900 uppercase">{item.label}</div>
+                  <div className="text-sm font-black text-teal-700">{formData.hr.taburan.ibuPejabat[item.field as keyof typeof formData.hr.taburan.ibuPejabat]}</div>
+                </div>
+              ))}
+              <div className="p-2 bg-teal-900 text-white rounded-lg text-center col-span-4">
+                <div className="text-[10px] font-black uppercase">Jumlah Besar Ibu Pejabat</div>
+                <div className="text-xl font-black">{formData.hr.taburan.ibuPejabat.total}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+              Taburan Kakitangan Mengikut Daerah (2025)
+            </h3>
+            <div className="grid grid-cols-7 gap-2">
+              {formData.hr.taburan.daerah.map((daerah: any) => (
+                <div key={daerah.name} className="p-2 border border-gray-100 rounded text-center">
+                  <div className="text-[8px] font-bold text-gray-400 uppercase">{daerah.name}</div>
+                  <div className="text-xs font-black text-teal-900">{daerah.value}</div>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-2 bg-teal-100 border border-teal-200 rounded-lg text-center">
+                <div className="text-[10px] font-black text-teal-900 uppercase">Jumlah Daerah</div>
+                <div className="text-xl font-black text-teal-700">{formData.hr.taburan.totalDaerah}</div>
+              </div>
+              <div className="p-2 bg-teal-900 text-white rounded-lg text-center">
+                <div className="text-[10px] font-black uppercase">Jumlah Besar Keseluruhan</div>
+                <div className="text-xl font-black">{formData.hr.taburan.grandTotal}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Latihan Sumber Manusia Section */}
+          {formData.latihan && (
+            <div className="space-y-6 pt-8 border-t-2 border-teal-500 border-dashed mt-8">
+              <div className="flex justify-between items-end">
+                <div>
+                  <h3 className="text-xl font-black text-zus-900 uppercase tracking-tighter">Latihan Sumber Manusia</h3>
+                  <p className="text-[10px] font-bold text-teal-600 uppercase tracking-widest">Unit Latihan BPPS</p>
+                </div>
+                <div className="bg-teal-900 text-white p-4 rounded-2xl text-right min-w-[200px]">
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-70">Jumlah Latihan 2025</p>
+                  <p className="text-3xl font-black">{formData.latihan.ringkasan.jumlah || 0}</p>
+                  <div className="flex justify-end gap-4 mt-2 border-t border-white/20 pt-2">
+                    <div className="text-right">
+                      <p className="text-[8px] font-bold uppercase opacity-60">Generik</p>
+                      <p className="text-xs font-black">{formData.latihan.ringkasan.generik || 0}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[8px] font-bold uppercase opacity-60">Spesifik</p>
+                      <p className="text-xs font-black">{formData.latihan.ringkasan.spesifik || 0}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-teal-600 pl-2">
+                  Pencapaian Jam Latihan Kakitangan
+                </h3>
+                <table className="w-full text-[9px] border-collapse border border-gray-200">
+                  <thead>
+                    <tr className="bg-[#0D9488] text-white">
+                      <th className="border border-teal-800 p-2 text-left">REKOD PENCAPAIAN</th>
+                      <th className="border border-teal-800 p-2 text-center">P&P</th>
+                      <th className="border border-teal-800 p-2 text-center">SK 1</th>
+                      <th className="border border-teal-800 p-2 text-center">SK 2</th>
+                      <th className="border border-teal-800 p-2 text-center">JUMLAH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: 'Pegawai Telah Mencapai', key: 'mencapai' },
+                      { label: 'Pegawai Tidak Mencapai', key: 'tidakMencapai' },
+                      { label: 'Tiada Rekod Log Latihan', key: 'tiadaRekod' },
+                    ].map((row) => (
+                      <tr key={row.key}>
+                        <td className="border border-gray-200 p-2 font-bold">{row.label}</td>
+                        {['pp', 'sk1', 'sk2'].map((col) => (
+                          <td key={col} className="border border-gray-200 p-2 text-center">
+                            <span className="font-black text-zus-900">{formData.latihan.pencapaian[row.key][col] || 0}</span>
+                            <span className="text-gray-400 ml-1">({formData.latihan.pencapaian[row.key][`${col}Pct`] || 0}%)</span>
+                          </td>
+                        ))}
+                        <td className="border border-gray-200 p-2 text-center bg-teal-50">
+                          <span className="font-black text-teal-700">{formData.latihan.pencapaian[row.key].total || 0}</span>
+                          <span className="text-teal-400 ml-1">({formData.latihan.pencapaian[row.key].totalPct || 0}%)</span>
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="bg-gray-100 font-black">
+                      <td className="border border-gray-200 p-2 uppercase">JUMLAH KESELURUHAN</td>
+                      <td className="border border-gray-200 p-2 text-center">{formData.latihan.pencapaian.jumlahKeseluruhan.pp}</td>
+                      <td className="border border-gray-200 p-2 text-center">{formData.latihan.pencapaian.jumlahKeseluruhan.sk1}</td>
+                      <td className="border border-gray-200 p-2 text-center">{formData.latihan.pencapaian.jumlahKeseluruhan.sk2}</td>
+                      <td className="border border-gray-200 p-2 text-center bg-teal-900 text-white">{formData.latihan.pencapaian.jumlahKeseluruhan.total}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p className="text-[8px] text-gray-400 italic">
+                  * P&P: Pengurusan dan Profesional | SK: Sokongan (SK 1 & SK 2)
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Narrative Sections (Common) */}
       <div className="mt-8 space-y-6">
         <div className="space-y-2">
@@ -878,6 +2116,35 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           </div>
         </div>
       </div>
+
+      {/* Lawatan Section */}
+      {formData.lawatan && formData.lawatan.length > 0 && (
+        <div className="mt-8 space-y-4">
+          <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+            Rekod Lawatan / Penandaarasan
+          </h3>
+          <table className="w-full text-[10px] border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-2 text-left w-1/6">Jenis</th>
+                <th className="border p-2 text-left w-1/3">Tajuk / Agensi</th>
+                <th className="border p-2 text-left w-1/4">Tarikh & Tempat</th>
+                <th className="border p-2 text-left w-1/4">Objektif</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formData.lawatan.map((item: any, idx: number) => (
+                <tr key={idx}>
+                  <td className="border p-2 font-bold uppercase text-zus-900">{item.jenis}</td>
+                  <td className="border p-2">{item.tajukAgensi}</td>
+                  <td className="border p-2">{item.tarikh} @ {item.tempat}</td>
+                  <td className="border p-2">{item.objektif}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Signature Section */}
       <div className="mt-12 grid grid-cols-2 gap-16">
