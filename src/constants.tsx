@@ -21,6 +21,7 @@ import {
 
 export const DEPARTMENTS: Department[] = [
   { id: '1', name: 'BPNP', active: true }, // Renamed from BP&P
+  { id: 'data-dashboard', name: 'Data', active: true },
   { id: '2', name: 'BDKWH', active: true },
   { id: '3', name: 'BKIM', active: true },
   { 
@@ -38,7 +39,16 @@ export const DEPARTMENTS: Department[] = [
   { id: '6', name: 'BPH', active: true },
   { id: '7', name: 'BKKI', active: true },
   { id: '8', name: 'BPPI', active: true },
-  { id: '9', name: 'UKOKO', active: true, subUnits: [{ id: '9a', name: 'Subunit Perayaan Islam', active: true }] },
+  { 
+    id: '9', 
+    name: 'UKOKO', 
+    active: true, 
+    subUnits: [
+      { id: '9b', name: 'Unit Komunikasi dan Pusat Sumber', active: true },
+      { id: '9c', name: 'Unit Pengurusan Acara', active: true },
+      { id: '9d', name: 'Unit Penerbitan', active: true },
+    ] 
+  },
   { id: '10', name: 'Unit Integriti', active: true },
   { id: '11', name: 'BKSK', active: true },
   { id: '12', name: 'BKSPP', active: true },

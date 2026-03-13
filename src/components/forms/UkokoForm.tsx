@@ -13,14 +13,14 @@ import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { SARAWAK_DIVISIONS, UKOKO_2024_REFERENCE } from '../../constants';
 
-const UkokoForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
   const {
     formData,
     setFormData,
     handleSave,
     isSaving,
     showSuccess
-  } = useFormLogic('UKOKO', {
+  } = useFormLogic(deptName, {
     ukoko: {
       perayaanIslam: [],
       majlisKesyukuran: []
@@ -75,7 +75,7 @@ const UkokoForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   return (
     <FormLayout
-      deptName="Unit Komunikasi Korporat (UKOKO) - Subunit Perayaan Islam"
+      deptName={deptName}
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}

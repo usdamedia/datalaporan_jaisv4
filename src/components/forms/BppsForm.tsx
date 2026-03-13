@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import TransportManagement from './TransportManagement';
 import { LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE } from '../../constants';
 import { Users, ChevronRight, TrendingUp, DollarSign, Percent, Star, CheckCircle2, XCircle } from 'lucide-react';
 
@@ -41,6 +42,12 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
         khas: '',
         total: 0
       }
+    },
+    transport: {
+      van: '',
+      mpv: '',
+      suv: '',
+      bus: ''
     },
     finance: {
       financeYears: [
@@ -181,6 +188,16 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
       ...prev,
       finance: {
         ...prev.finance,
+        [field]: value
+      }
+    }));
+  };
+
+  const updateTransportField = (field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      transport: {
+        ...prev.transport,
         [field]: value
       }
     }));
@@ -376,8 +393,17 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
       )}
 
       {isPentadbiran && (
-        <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-          <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+        <div className="space-y-8">
+          <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+            <TransportManagement 
+              data2025={formData.transport} 
+              onChange={updateTransportField} 
+              onSave={handleSave}
+            />
+          </section>
+
+          <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+            <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
             <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
               <Users className="w-5 h-5" />
             </div>
@@ -574,7 +600,8 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
             </div>
           </div>
         </section>
-      )}
+      </div>
+    )}
 
       <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
       <LawatanSection 

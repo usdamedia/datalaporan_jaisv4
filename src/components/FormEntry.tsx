@@ -13,6 +13,7 @@ import BppiForm from './forms/BppiForm';
 import BphForm from './forms/BphForm';
 import BpksForm from './forms/BpksForm';
 import UkokoForm from './forms/UkokoForm';
+import UkokoPublicRelationsForm from './forms/UkokoPublicRelationsForm';
 import DhqcForm from './forms/DhqcForm';
 import GenericForm from './forms/GenericForm';
 
@@ -49,7 +50,10 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   }
 
   if (deptName.includes('UKOKO')) {
-    return <UkokoForm onBack={onBack} />;
+    if (deptName.includes('Komunikasi dan Pusat Sumber')) {
+      return <UkokoPublicRelationsForm deptName={deptName} onBack={onBack} />;
+    }
+    return <UkokoForm deptName={deptName} onBack={onBack} />;
   }
   
   if (deptName.includes('BPPI')) {
