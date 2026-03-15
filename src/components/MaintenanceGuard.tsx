@@ -10,6 +10,8 @@ const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
   const [password, setPassword] = useState('');
   const [showLogin, setShowLogin] = useState(false);
   const [error, setError] = useState('');
+  const [timeLeft, setTimeLeft] = useState(10); // 10 seconds countdown
+  const [timerFinished, setTimerFinished] = useState(false);
 
   const ADMIN_PASSWORD = 'bpnpj@is2026';
 
@@ -18,17 +20,30 @@ const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
     if (adminStatus === 'true') {
       setIsAdmin(true);
     }
-  }, []);
+
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else {
+      setTimerFinished(true);
+    }
+  }, [timeLeft]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === ADMIN_PASSWORD) {
-      setIsAdmin(true);
-      sessionStorage.setItem('is_admin_authenticated', 'true');
-      setError('');
+      performLogin();
     } else {
       setError('Kata laluan tidak sah.');
     }
+  };
+
+  const performLogin = () => {
+    setIsAdmin(true);
+    sessionStorage.setItem('is_admin_authenticated', 'true');
+    setError('');
   };
 
   if (isAdmin) {
@@ -85,43 +100,59 @@ const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
             Terima kasih atas kesabaran anda. Kami sedang berusaha untuk memberikan pengalaman yang lebih baik.
           </p>
 
-          {/* Subtle Admin Access */}
-          {!showLogin ? (
-            <button 
-              onClick={() => setShowLogin(true)}
-              className="text-gray-300 hover:text-gray-400 transition-colors text-[10px] uppercase tracking-[0.2em] font-bold"
-            >
-              Admin Access
-            </button>
-          ) : (
-            <form onSubmit={handleLogin} className="max-w-xs mx-auto animate-fade-in-up">
-              <div className="relative">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Masukkan Kod Akses"
-                  className="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-zus-gold focus:ring-2 focus:ring-zus-gold/20 outline-none text-center font-bold transition-all"
-                  autoFocus
-                />
-                <button 
-                  type="submit"
-                  className="mt-3 w-full bg-zus-900 text-white py-3 rounded-xl font-bold hover:bg-zus-800 transition-all flex items-center justify-center gap-2"
-                >
-                  <Lock className="w-4 h-4" />
-                  Log Masuk Admin
-                </button>
+          {/* Countdown and Login Access */}
+          <div className="flex flex-col items-center gap-4">
+            {!timerFinished ? (
+              <div className="flex items-center gap-2 text-zus-900 font-black text-sm uppercase tracking-widest bg-zus-gold/20 px-6 py-3 rounded-full animate-pulse">
+                <Clock className="w-4 h-4" />
+                Akses Terbuka Dalam: {timeLeft}s
               </div>
-              {error && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{error}</p>}
+            ) : (
               <button 
-                type="button"
-                onClick={() => setShowLogin(false)}
-                className="mt-4 text-gray-400 text-[10px] uppercase font-bold"
+                onClick={performLogin}
+                className="bg-zus-gold text-zus-900 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg hover:bg-zus-gold/80 active:scale-95 transition-all animate-bounce"
               >
-                Batal
+                Masuk Tanpa Kata Laluan
               </button>
-            </form>
-          )}
+            )}
+
+            {!showLogin ? (
+              <button 
+                onClick={() => setShowLogin(true)}
+                className="text-gray-300 hover:text-gray-400 transition-colors text-[10px] uppercase tracking-[0.2em] font-bold mt-4"
+              >
+                Admin Access (Manual)
+              </button>
+            ) : (
+              <form onSubmit={handleLogin} className="max-w-xs mx-auto animate-fade-in-up w-full">
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Masukkan Kod Akses"
+                    className="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-zus-gold focus:ring-2 focus:ring-zus-gold/20 outline-none text-center font-bold transition-all"
+                    autoFocus
+                  />
+                  <button 
+                    type="submit"
+                    className="mt-3 w-full bg-zus-900 text-white py-3 rounded-xl font-bold hover:bg-zus-800 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Lock className="w-4 h-4" />
+                    Log Masuk Admin
+                  </button>
+                </div>
+                {error && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{error}</p>}
+                <button 
+                  type="button"
+                  onClick={() => setShowLogin(false)}
+                  className="mt-4 text-gray-400 text-[10px] uppercase font-bold"
+                >
+                  Batal
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
 

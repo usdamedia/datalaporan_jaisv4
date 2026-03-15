@@ -16,6 +16,8 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           // Deep merge for specific objects if needed
           bkim: prev.bkim ? { ...prev.bkim, ...parsed.bkim } : prev.bkim,
           finance: prev.finance ? { ...prev.finance, ...parsed.finance } : prev.finance,
+          leadership: prev.leadership ? { ...prev.leadership, ...parsed.leadership } : prev.leadership,
+          transport: prev.transport ? { ...prev.transport, ...parsed.transport } : prev.transport,
           bkki: prev.bkki ? { ...prev.bkki, ...parsed.bkki } : prev.bkki,
           socialMedia: prev.socialMedia ? { ...prev.socialMedia, ...parsed.socialMedia } : prev.socialMedia,
           aduan: prev.aduan ? { ...prev.aduan, ...parsed.aduan } : prev.aduan,

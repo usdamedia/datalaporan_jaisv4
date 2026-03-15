@@ -277,119 +277,117 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
       
       <div className="space-y-8 animate-fade-in mt-8">
         
-        {/* 1. Maklumat Ringkasan Perjawatan */}
+        {/* 1. Ringkasan Eksekutif & Demografi (Z-Pattern Header) */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-slate-900 p-4 flex items-center gap-3">
             <div className="p-2 bg-blue-500/20 rounded-lg">
               <Users className="w-5 h-5 text-blue-400" />
             </div>
-            <h2 className="text-white font-bold">1. Maklumat Ringkasan Perjawatan</h2>
+            <h2 className="text-white font-bold text-lg">1. Ringkasan Eksekutif & Demografi</h2>
           </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase">Perjawatan (Bajet)</label>
-              <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanBajet}</div>
-              <input
-                type="number"
-                value={formData.hr.ringkasan.perjawatanBajet}
-                onChange={(e) => updateNestedField('ringkasan', 'perjawatanBajet', e.target.value)}
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-bold"
-                placeholder="0"
-              />
+          {/* Z-Pattern Layout: Left to Right, Top to Bottom */}
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+              {/* Kiri: Perjawatan Bajet */}
+              <div className="space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <label className="text-sm md:text-base font-bold text-gray-700 whitespace-normal break-words block">Perjawatan (Bajet)</label>
+                <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanBajet}</div>
+                <input
+                  type="number"
+                  value={formData.hr.ringkasan.perjawatanBajet}
+                  onChange={(e) => updateNestedField('ringkasan', 'perjawatanBajet', e.target.value)}
+                  className="w-full max-w-xs p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold"
+                  placeholder="0"
+                />
+              </div>
+              
+              {/* Tengah: Perjawatan Diisi */}
+              <div className="space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <label className="text-sm md:text-base font-bold text-gray-700 whitespace-normal break-words block">Perjawatan Diisi</label>
+                <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</div>
+                <input
+                  type="number"
+                  value={formData.hr.ringkasan.perjawatanDiisi}
+                  onChange={(e) => updateNestedField('ringkasan', 'perjawatanDiisi', e.target.value)}
+                  className="w-full max-w-xs p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold"
+                  placeholder="0"
+                />
+              </div>
+
+              {/* Kanan: Keseluruhan Warga Kerja (Auto-Sum) */}
+              <div className="space-y-2 bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                <label className="text-sm md:text-base font-bold text-emerald-900 whitespace-normal break-words block">Keseluruhan Warga Kerja JAIS</label>
+                <div className="text-[10px] font-bold text-emerald-600 mb-1">Auto-Kira (Lelaki + Wanita) | Ref 24: {HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</div>
+                <input
+                  type="number"
+                  readOnly
+                  value={formData.hr.ringkasan.jumlahWargaKerja}
+                  className="w-full max-w-xs p-3 bg-white border border-emerald-200 rounded-xl text-emerald-700 font-black outline-none"
+                  placeholder="0"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase">Perjawatan Diisi</label>
-              <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</div>
-              <input
-                type="number"
-                value={formData.hr.ringkasan.perjawatanDiisi}
-                onChange={(e) => updateNestedField('ringkasan', 'perjawatanDiisi', e.target.value)}
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-bold"
-                placeholder="0"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-500 uppercase">Jumlah Warga Kerja (Auto)</label>
-              <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</div>
-              <input
-                type="number"
-                readOnly
-                value={formData.hr.ringkasan.jumlahWargaKerja}
-                className="w-full p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-700 font-black outline-none"
-                placeholder="0"
-              />
+
+            {/* Demografi Jantina */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-100 pt-6">
+              <div className="space-y-2">
+                <label className="text-sm md:text-base font-bold text-blue-900 whitespace-normal break-words block">Lelaki</label>
+                <div className="text-[10px] font-bold text-blue-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.demografi.lelaki}</div>
+                <input
+                  type="number"
+                  value={formData.hr.demografi.lelaki}
+                  onChange={(e) => updateNestedField('demografi', 'lelaki', e.target.value)}
+                  className="w-full max-w-xs p-3 bg-white border-2 border-blue-100 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none font-bold transition-all"
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm md:text-base font-bold text-pink-900 whitespace-normal break-words block">Wanita</label>
+                <div className="text-[10px] font-bold text-pink-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.demografi.wanita}</div>
+                <input
+                  type="number"
+                  value={formData.hr.demografi.wanita}
+                  onChange={(e) => updateNestedField('demografi', 'wanita', e.target.value)}
+                  className="w-full max-w-xs p-3 bg-white border-2 border-pink-100 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none font-bold transition-all"
+                  placeholder="0"
+                />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 2. Pecahan Jantina */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-emerald-900 p-4 flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/20 rounded-lg">
-              <Users className="w-5 h-5 text-emerald-400" />
+        {/* 2. Skim Perkhidmatan */}
+        <section className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
+          <div className="bg-emerald-600 p-4 flex items-center gap-3">
+            <div className="p-2 bg-emerald-500/30 rounded-lg">
+              <Briefcase className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-white font-bold">2. Pecahan Jantina (Warga Kerja)</h2>
+            <h2 className="text-white font-bold text-lg">2. Skim Perkhidmatan</h2>
           </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-black text-blue-900 uppercase">Lelaki</label>
-                <span className="text-[10px] font-bold text-blue-400 uppercase">Rujukan 2024: {HR_2024_REFERENCE.demografi.lelaki}</span>
-              </div>
-              <input
-                type="number"
-                value={formData.hr.demografi.lelaki}
-                onChange={(e) => updateNestedField('demografi', 'lelaki', e.target.value)}
-                className="w-full p-4 bg-white border-2 border-blue-200 rounded-xl focus:border-blue-500 outline-none text-2xl font-black text-blue-600 transition-all"
-                placeholder="0"
-              />
-            </div>
-            <div className="bg-pink-50 p-6 rounded-2xl border border-pink-100 space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-black text-pink-900 uppercase">Wanita</label>
-                <span className="text-[10px] font-bold text-pink-400 uppercase">Rujukan 2024: {HR_2024_REFERENCE.demografi.wanita}</span>
-              </div>
-              <input
-                type="number"
-                value={formData.hr.demografi.wanita}
-                onChange={(e) => updateNestedField('demografi', 'wanita', e.target.value)}
-                className="w-full p-4 bg-white border-2 border-pink-200 rounded-xl focus:border-pink-500 outline-none text-2xl font-black text-pink-600 transition-all"
-                placeholder="0"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* 3. Pecahan Skim Perkhidmatan */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-slate-900 p-4 flex items-center gap-3">
-            <div className="p-2 bg-zus-gold/20 rounded-lg">
-              <Briefcase className="w-5 h-5 text-zus-gold" />
-            </div>
-            <h2 className="text-white font-bold">3. Pecahan Perjawatan Mengikut Skim/Kategori</h2>
-          </div>
-          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { label: 'JUSA', field: 'jusa', ref: HR_2024_REFERENCE.skim.jusa },
+              { label: 'Jusa', field: 'jusa', ref: HR_2024_REFERENCE.skim.jusa },
               { label: 'Hal Ehwal Islam', field: 'halEhwalIslam', ref: HR_2024_REFERENCE.skim.halEhwalIslam },
-              { label: 'Perundangan & Kehakiman', field: 'perundangan', ref: HR_2024_REFERENCE.skim.perundangan },
+              { label: 'Perundangan dan Kehakiman', field: 'perundangan', ref: HR_2024_REFERENCE.skim.perundangan },
               { label: 'Kewangan', field: 'kewangan', ref: HR_2024_REFERENCE.skim.kewangan },
               { label: 'Keselamatan', field: 'keselamatan', ref: HR_2024_REFERENCE.skim.keselamatan },
               { label: 'Pendidikan', field: 'pendidikan', ref: HR_2024_REFERENCE.skim.pendidikan },
               { label: 'Kejuruteraan', field: 'kejuruteraan', ref: HR_2024_REFERENCE.skim.kejuruteraan },
-              { label: 'Pentadbiran & Sokongan', field: 'pentadbiran', ref: HR_2024_REFERENCE.skim.pentadbiran },
-              { label: 'Pembantu Am & Pemandu', field: 'pembantuAm', ref: HR_2024_REFERENCE.skim.pembantuAm },
+              { label: 'Pentadbiran dan Sokongan', field: 'pentadbiran', ref: HR_2024_REFERENCE.skim.pentadbiran },
+              { label: 'Pembantu Am dan Pemandu', field: 'pembantuAm', ref: HR_2024_REFERENCE.skim.pembantuAm },
             ].map((item) => (
-              <div key={item.field} className="p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-zus-gold transition-colors group">
-                <div className="flex justify-between items-start mb-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase group-hover:text-zus-900 transition-colors">{item.label}</label>
-                  <span className="text-[9px] font-bold text-gray-300">Ref 24: {item.ref}</span>
+              <div key={item.field} className="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors flex flex-col justify-between h-full">
+                <div className="mb-3">
+                  <label className="text-sm md:text-base font-bold text-emerald-900 whitespace-normal break-words block leading-tight">
+                    {item.label}
+                  </label>
+                  <span className="text-[10px] font-bold text-emerald-600/70 mt-1 block">Ref 24: {item.ref}</span>
                 </div>
                 <input
                   type="number"
                   value={formData.hr.skim[item.field as keyof typeof formData.hr.skim]}
                   onChange={(e) => updateNestedField('skim', item.field, e.target.value)}
-                  className="w-full p-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-zus-gold outline-none font-bold text-sm"
+                  className="w-full max-w-xs p-3 bg-white border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
                   placeholder="0"
                 />
               </div>
@@ -397,60 +395,64 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        {/* 4. Kakitangan Sangkutan */}
+        {/* 3. Kakitangan Sangkutan */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-indigo-900 p-4 flex items-center gap-3">
-            <div className="p-2 bg-indigo-500/20 rounded-lg">
-              <UserPlus className="w-5 h-5 text-indigo-400" />
+          <div className="bg-slate-800 p-4 flex items-center gap-3">
+            <div className="p-2 bg-slate-700 rounded-lg">
+              <UserPlus className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-white font-bold">4. Kakitangan Sangkutan</h2>
+            <h2 className="text-white font-bold text-lg">3. Kakitangan Sangkutan</h2>
           </div>
           <div className="p-6 space-y-8">
-            {/* MIS */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-indigo-100 pb-2">
-                <div className="w-2 h-6 bg-indigo-600 rounded-full"></div>
-                <h3 className="font-black text-indigo-900 uppercase text-sm">Majlis Islam Sarawak (MIS)</h3>
+            {/* MIS - Hitam/Kelabu Gelap */}
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+              <div className="flex items-center gap-3 border-b border-slate-200 pb-3 mb-5">
+                <div className="w-2 h-6 bg-slate-700 rounded-full"></div>
+                <h3 className="font-bold text-slate-800 text-base md:text-lg">Majlis Islam Sarawak (MIS)</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <label className="text-xs font-bold text-gray-500">Pekhidmat MIS</label>
-                    <span className="text-[10px] font-bold text-indigo-400 uppercase">2024: {HR_2024_REFERENCE.sangkutan.mis}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="flex flex-col justify-between h-full">
+                  <div className="mb-3">
+                    <label className="text-sm md:text-base font-bold text-slate-700 whitespace-normal break-words block leading-tight">
+                      Pekhidmat MIS
+                    </label>
+                    <span className="text-[10px] font-bold text-slate-500 mt-1 block">Rujukan 2024: {HR_2024_REFERENCE.sangkutan.mis}</span>
                   </div>
                   <input
                     type="number"
                     value={formData.hr.sangkutan.mis}
                     onChange={(e) => updateNestedField('sangkutan', 'mis', e.target.value)}
-                    className="w-full p-3 bg-indigo-50 border border-indigo-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold"
+                    className="w-full max-w-xs p-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
                     placeholder="0"
                   />
                 </div>
               </div>
             </div>
 
-            {/* JAKIM */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-zus-gold/30 pb-2">
-                <div className="w-2 h-6 bg-zus-gold rounded-full"></div>
-                <h3 className="font-black text-zus-900 uppercase text-sm">JAKIM</h3>
+            {/* JAKIM - Biru Cerah */}
+            <div className="bg-cyan-50 p-6 rounded-2xl border border-cyan-200">
+              <div className="flex items-center gap-3 border-b border-cyan-200 pb-3 mb-5">
+                <div className="w-2 h-6 bg-cyan-500 rounded-full"></div>
+                <h3 className="font-bold text-cyan-900 text-base md:text-lg">JAKIM</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                   { label: 'Penyelia KAFA', field: 'penyeliaKafa', ref: HR_2024_REFERENCE.sangkutan.jakim.penyeliaKafa },
-                  { label: 'Penggerak Masyarakat', field: 'penggerak', ref: HR_2024_REFERENCE.sangkutan.jakim.penggerak },
-                  { label: 'Takmir & Penyelaras', field: 'takmir', ref: HR_2024_REFERENCE.sangkutan.jakim.takmir },
+                  { label: 'Penggerak Masyarakat Saudara Kita', field: 'penggerak', ref: HR_2024_REFERENCE.sangkutan.jakim.penggerak },
+                  { label: 'Pegawai Takmir, Pembantu Takmir dan Penyelaras Pentadbiran Masjid Daerah', field: 'takmir', ref: HR_2024_REFERENCE.sangkutan.jakim.takmir },
                 ].map((item) => (
-                  <div key={item.field} className="space-y-2">
-                    <div className="flex justify-between">
-                      <label className="text-xs font-bold text-gray-500">{item.label}</label>
-                      <span className="text-[10px] font-bold text-zus-gold uppercase">2024: {item.ref}</span>
+                  <div key={item.field} className="flex flex-col justify-between h-full">
+                    <div className="mb-3">
+                      <label className="text-sm md:text-base font-bold text-cyan-900 whitespace-normal break-words block leading-tight">
+                        {item.label}
+                      </label>
+                      <span className="text-[10px] font-bold text-cyan-600 mt-1 block">Rujukan 2024: {item.ref}</span>
                     </div>
                     <input
                       type="number"
                       value={formData.hr.sangkutan.jakim[item.field as keyof typeof formData.hr.sangkutan.jakim]}
                       onChange={(e) => updateNestedField('sangkutan', 'jakim', e.target.value, item.field)}
-                      className="w-full p-3 bg-zus-50 border border-zus-100 rounded-xl focus:ring-2 focus:ring-zus-gold outline-none font-bold"
+                      className="w-full max-w-xs p-3 bg-white border border-cyan-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
                       placeholder="0"
                     />
                   </div>
@@ -460,13 +462,13 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        {/* 5. Taburan Kakitangan */}
+        {/* 4. Taburan Kakitangan */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-teal-900 p-4 flex items-center gap-3">
             <div className="p-2 bg-teal-500/20 rounded-lg">
               <Users className="w-5 h-5 text-teal-400" />
             </div>
-            <h2 className="text-white font-bold">5. Taburan Kakitangan (Ibu Pejabat & Daerah)</h2>
+            <h2 className="text-white font-bold text-lg">4. Taburan Kakitangan (Ibu Pejabat & Daerah)</h2>
           </div>
           
           <div className="p-6 space-y-10">
@@ -568,35 +570,39 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        {/* 6. Kakitangan Bersara */}
+        {/* 5. Kakitangan Bersara */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-red-900 p-4 flex items-center gap-3">
-            <div className="p-2 bg-red-500/20 rounded-lg">
-              <LogOut className="w-5 h-5 text-red-400" />
+          <div className="bg-red-800 p-4 flex items-center gap-3">
+            <div className="p-2 bg-red-700 rounded-lg">
+              <LogOut className="w-5 h-5 text-white" />
             </div>
-            <h2 className="text-white font-bold">6. Kakitangan Bersara</h2>
+            <h2 className="text-white font-bold text-lg">5. Kakitangan Bersara</h2>
           </div>
-          <div className="p-8 flex flex-col items-center justify-center text-center space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-lg font-black text-zus-900 uppercase tracking-tight">Jumlah Keseluruhan Bersara 2025</h3>
-              <span className="text-xs font-bold text-red-400 uppercase tracking-widest">Rujukan 2024: {HR_2024_REFERENCE.bersara}</span>
-            </div>
-            <div className="relative w-full max-w-xs">
-              <input
-                type="number"
-                value={formData.hr.bersara}
-                onChange={(e) => updateNestedField('bersara', '', e.target.value)}
-                className="w-full p-6 bg-red-50 border-2 border-red-200 rounded-3xl focus:border-red-500 outline-none text-5xl font-black text-red-600 text-center transition-all"
-                placeholder="0"
-              />
-              <div className="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">
-                WAJIB ISI
+          <div className="p-6">
+            <div className="bg-red-50 p-6 rounded-2xl border border-red-100 max-w-md mx-auto">
+              <div className="mb-4 text-center">
+                <label className="text-sm md:text-base font-bold text-red-900 whitespace-normal break-words block leading-tight">
+                  Kakitangan Bersara
+                </label>
+                <span className="text-xs font-bold text-red-500 mt-1 block">Rujukan 2024: {HR_2024_REFERENCE.bersara}</span>
+              </div>
+              <div className="relative w-full max-w-xs mx-auto">
+                <input
+                  type="number"
+                  value={formData.hr.bersara}
+                  onChange={(e) => updateNestedField('bersara', '', e.target.value)}
+                  className="w-full p-4 bg-white border-2 border-red-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-black text-red-700 text-center transition-all"
+                  placeholder="0"
+                />
+                <div className="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">
+                  WAJIB ISI
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 7. Latihan Sumber Manusia */}
+        {/* 6. Latihan Sumber Manusia */}
         <section className="space-y-8">
           {/* Z-Pattern Header & Summary Card */}
           <div className="flex flex-col lg:flex-row gap-6 items-start">

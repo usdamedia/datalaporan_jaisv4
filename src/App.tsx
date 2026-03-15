@@ -3,11 +3,10 @@ import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
 import DigitalizationPage from './components/DigitalizationPage';
-import DataManagementDashboard from './components/DataManagementDashboard';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import { DEPARTMENTS } from './constants';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, ChevronUp, Cpu, Database } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, ChevronUp, Cpu } from 'lucide-react';
 
 export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
@@ -15,15 +14,9 @@ export default function App() {
   const [showSubUnitModal, setShowSubUnitModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showDigitalization, setShowDigitalization] = useState(false);
-  const [showDataDashboard, setShowDataDashboard] = useState(false);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
-
-    if (dept.id === 'data-dashboard') {
-      setShowDataDashboard(true);
-      return;
-    }
 
     if (dept.subUnits && dept.subUnits.length > 0) {
       setSelectedDept(dept);
@@ -46,11 +39,10 @@ export default function App() {
     setSelectedSubUnit(null);
     setShowSubUnitModal(false);
     setShowDigitalization(false);
-    setShowDataDashboard(false);
   };
 
   // Logic: Show form if a leaf-node department/unit is selected
-  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit) && selectedDept.id !== 'data-dashboard';
+  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit);
   
   // Title for Form Entry
   const formTitle = selectedSubUnit 
@@ -60,9 +52,9 @@ export default function App() {
   return (
     <MaintenanceGuard>
       <Layout 
-        showBack={isFormMode || showSubUnitModal || showDigitalization || showDataDashboard} 
+        showBack={isFormMode || showSubUnitModal || showDigitalization} 
         onBack={resetSelection}
-        title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showDataDashboard ? 'Data Management' : 'Utama'}
+        title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : 'Utama'}
       >
         {/* 1. Modal for Sub Units (Glassmorphism Overlay) */}
         {showSubUnitModal && selectedDept && (
@@ -117,8 +109,6 @@ export default function App() {
         {/* 2. Main View Handling */}
         {showDigitalization ? (
           <DigitalizationPage />
-        ) : showDataDashboard ? (
-          <DataManagementDashboard />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
@@ -157,15 +147,6 @@ export default function App() {
                 >
                   {showTutorial ? <ChevronUp className="w-4 h-4" /> : <Info className="w-4 h-4" />}
                   {showTutorial ? 'Tutup Panduan' : 'Panduan Pengguna'}
-                </button>
-
-                {/* Data Dashboard Button */}
-                <button 
-                  onClick={() => setShowDataDashboard(true)}
-                  className="flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold bg-[#134E4A] text-white shadow-lg hover:bg-teal-900 transition-all active:scale-95 border border-teal-800"
-                >
-                  <Database className="w-4 h-4" />
-                  Data Management
                 </button>
 
                 {/* Digitalization Page Button */}

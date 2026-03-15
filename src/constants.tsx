@@ -21,7 +21,6 @@ import {
 
 export const DEPARTMENTS: Department[] = [
   { id: '1', name: 'BPNP', active: true }, // Renamed from BP&P
-  { id: 'data-dashboard', name: 'Data', active: true },
   { id: '2', name: 'BDKWH', active: true },
   { id: '3', name: 'BKIM', active: true },
   { 

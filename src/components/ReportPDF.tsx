@@ -7,126 +7,207 @@ import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSP_2
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    padding: 50,
     fontSize: 10,
     fontFamily: 'Helvetica',
-    color: '#333',
+    color: '#1f2937',
+    backgroundColor: '#ffffff',
+    position: 'relative',
+  },
+  watermark: {
+    position: 'absolute',
+    top: '45%',
+    left: '15%',
+    fontSize: 60,
+    color: 'rgba(200, 200, 200, 0.1)',
+    transform: 'rotate(-45deg)',
+    fontWeight: 'bold',
+    zIndex: -1,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 2,
-    borderBottomColor: '#0a1e3b',
-    paddingBottom: 10,
-    marginBottom: 20,
+    alignItems: 'center',
+    borderBottomWidth: 3,
+    borderBottomColor: '#0d9488',
+    paddingBottom: 20,
+    marginBottom: 30,
+  },
+  logoContainer: {
+    width: 65,
+    height: 65,
+    backgroundColor: '#0d9488',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  logoText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   titleContainer: {
-    flexDirection: 'column',
+    flex: 1,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#0a1e3b',
+    color: '#0d9488',
+    letterSpacing: 1,
+    marginBottom: 4,
     textTransform: 'uppercase',
   },
   subtitle: {
-    fontSize: 10,
-    color: '#666',
-    marginTop: 2,
+    fontSize: 9,
+    color: '#6b7280',
+    fontWeight: 'medium',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+  },
+  deptInfo: {
+    alignItems: 'flex-end',
   },
   deptName: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 'bold',
-    color: '#0a1e3b',
+    color: '#c5a065',
+    textAlign: 'right',
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+  tarikhText: {
+    fontSize: 8,
+    color: '#9ca3af',
     textAlign: 'right',
   },
   section: {
-    marginBottom: 15,
+    marginBottom: 25,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 'bold',
-    color: '#0a1e3b',
-    backgroundColor: '#f3f4f6',
-    padding: 5,
-    marginBottom: 8,
-    borderLeftWidth: 3,
+    color: '#ffffff',
+    backgroundColor: '#0d9488',
+    padding: '8 12',
+    marginBottom: 15,
+    borderRadius: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  subSectionTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#0d9488',
+    marginBottom: 10,
+    marginTop: 5,
+    borderLeftWidth: 4,
     borderLeftColor: '#c5a065',
+    paddingLeft: 10,
+    textTransform: 'uppercase',
   },
   row: {
     flexDirection: 'row',
-    marginBottom: 5,
+    marginBottom: 8,
+    alignItems: 'flex-start',
   },
   label: {
-    width: '40%',
+    width: '35%',
     fontWeight: 'bold',
     color: '#4b5563',
+    fontSize: 9,
   },
   value: {
-    width: '60%',
+    width: '65%',
+    color: '#1f2937',
+    fontSize: 9,
+    lineHeight: 1.4,
   },
   table: {
-    width: 'auto',
+    width: '100%',
     borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    marginBottom: 10,
+    borderWidth: 0,
+    marginBottom: 20,
   },
   tableRow: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#e5e7eb',
+    minHeight: 28,
+    alignItems: 'center',
   },
   tableHeader: {
-    backgroundColor: '#f9fafb',
-    fontWeight: 'bold',
+    backgroundColor: '#f8fafc',
+    borderBottomWidth: 2,
+    borderBottomColor: '#0d9488',
   },
   tableCell: {
-    padding: 5,
-    borderRightWidth: 1,
-    borderRightColor: '#e5e7eb',
+    padding: '8 10',
+    fontSize: 8.5,
+    color: '#334155',
+  },
+  tableCellHeader: {
+    fontWeight: 'bold',
+    color: '#0d9488',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   tableCellCenter: {
     textAlign: 'center',
   },
+  narrativeBox: {
+    backgroundColor: '#f9fafb',
+    padding: 12,
+    borderRadius: 6,
+    borderWidth: 0.5,
+    borderColor: '#e5e7eb',
+    marginTop: 5,
+  },
+  narrativeText: {
+    fontSize: 9.5,
+    lineHeight: 1.6,
+    textAlign: 'justify',
+    color: '#374151',
+  },
   footer: {
     position: 'absolute',
     bottom: 30,
-    left: 40,
-    right: 40,
-    borderTopWidth: 1,
+    left: 50,
+    right: 50,
+    borderTopWidth: 0.5,
     borderTopColor: '#e5e7eb',
-    paddingTop: 10,
+    paddingTop: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   footerText: {
-    fontSize: 8,
+    fontSize: 7.5,
     color: '#9ca3af',
   },
-  signatureContainer: {
+  signatureSection: {
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
-    paddingHorizontal: 10,
   },
   signatureBox: {
     width: '40%',
-    flexDirection: 'column',
+    borderTopWidth: 1,
+    borderTopColor: '#1f2937',
+    paddingTop: 8,
+    marginTop: 60,
   },
-  signatureTitle: {
+  signatureLabel: {
     fontSize: 9,
+    textAlign: 'center',
     fontWeight: 'bold',
-    marginBottom: 40,
+    color: '#1f2937',
   },
-  signatureLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    marginBottom: 5,
-  },
-  signatureDetail: {
+  signatureSubLabel: {
     fontSize: 8,
-    marginBottom: 2,
+    textAlign: 'center',
+    color: '#6b7280',
+    marginTop: 2,
   },
 });
 
@@ -156,15 +237,23 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Watermark */}
+        <Text style={styles.watermark}>DOKUMEN RASMI</Text>
+
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Laporan Tahunan 2025</Text>
-            <Text style={styles.subtitle}>Jabatan Agama Islam Sarawak (JAIS)</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.logoContainer}>
+              <Text style={styles.logoText}>JAIS</Text>
+            </View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Laporan Tahunan 2025</Text>
+              <Text style={styles.subtitle}>Jabatan Agama Islam Sarawak</Text>
+            </View>
           </View>
-          <View>
+          <View style={styles.deptInfo}>
             <Text style={styles.deptName}>{deptName}</Text>
-            <Text style={[styles.subtitle, { textAlign: 'right' }]}>Tarikh: {formData.tarikh}</Text>
+            <Text style={styles.tarikhText}>Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}</Text>
           </View>
         </View>
 
@@ -174,6 +263,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           <View style={styles.row}>
             <Text style={styles.label}>Disediakan Oleh:</Text>
             <Text style={styles.value}>{formData.disediakanOleh || '-'}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>Jawatan:</Text>
+            <Text style={styles.value}>{formData.jawatan || '-'}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Tarikh Laporan:</Text>
@@ -198,71 +291,66 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Pemenang Penulisan Ilmiah (2025)</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>Kedudukan</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Nama & Tajuk</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kedudukan</Text></View>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Nama & Tajuk</Text></View>
                 </View>
                 
                 {/* Diploma */}
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%', fontWeight: 'bold' }]}><Text>DIPLOMA</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>DIPLOMA</Text></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.johan.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.diploma.johan.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.johan.tajuk || '-'}</Text>
                   </View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.naibJohan.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '-'}</Text>
                   </View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.ketiga.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.diploma.ketiga.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.ketiga.tajuk || '-'}</Text>
                   </View>
-                </View>
-                <View style={[styles.tableRow, { backgroundColor: '#f0f9ff' }]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
-                  <View style={[styles.tableCell, { width: '25%', fontWeight: 'bold' }]}><Text>PESERTA LAIN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%', fontWeight: 'bold' }]}><Text>{formData.bpnp.penulisan.diploma.pesertaLain} Orang</Text></View>
                 </View>
 
                 {/* Sarjana Muda */}
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%', fontWeight: 'bold' }]}><Text>SARJANA MUDA & KEATAS</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>SARJANA MUDA</Text></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '-'}</Text>
                   </View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '-'}</Text>
                   </View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
                   <View style={[styles.tableCell, { width: '50%' }]}>
                     <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '-'}</Text>
-                    <Text style={{ fontStyle: 'italic', fontSize: 8 }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '-'}</Text>
+                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '-'}</Text>
                   </View>
                 </View>
-                <View style={[styles.tableRow, { backgroundColor: '#eef2ff' }]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text></Text></View>
-                  <View style={[styles.tableCell, { width: '25%', fontWeight: 'bold' }]}><Text>PESERTA LAIN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%', fontWeight: 'bold' }]}><Text>{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</Text></View>
+                <View style={[styles.tableRow, { backgroundColor: '#f8fafc' }]}>
+                  <View style={[styles.tableCell, { width: '25%' }]}></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>PESERTA LAIN</Text></View>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</Text></View>
                 </View>
               </View>
             </View>
@@ -308,30 +396,96 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
               </View>
             </View>
+
+            {/* Data Management Dashboard Section */}
+            {formData.bpnp.dataManagement && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Pengurusan Data (Data Management Dashboard)</Text>
+                <View style={styles.table}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Kategori Pengurusan Data</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>2024</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>2025</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Mesyuarat DTAWG</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>1</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.dtawgMeetings}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Integrated Data Management Dashboard</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>1</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.integratedDashboards}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Kluster Data</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>26</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.dataClusters}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Sub-Data Dashboard</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>3</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.subDataDashboards}</Text></View>
+                  </View>
+                </View>
+
+                {formData.bpnp.dataManagement.subDataList && formData.bpnp.dataManagement.subDataList.length > 0 && (
+                  <View style={{ marginTop: 5 }}>
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', marginBottom: 5 }}>Senarai Sub-Data Dashboard (2025):</Text>
+                    {formData.bpnp.dataManagement.subDataList.map((item: string, i: number) => item && (
+                      <View key={i} style={{ flexDirection: 'row', marginLeft: 10, marginBottom: 2 }}>
+                        <Text style={{ width: 10 }}>•</Text>
+                        <Text style={{ flex: 1 }}>{item}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
           </>
         )}
 
         {/* UPP Specific Data */}
-        {isUPP && formData.uppDivisions && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Status Projek Mengikut Bahagian</Text>
-            <View style={styles.table}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <View style={[styles.tableCell, { width: '40%' }]}><Text>Bahagian</Text></View>
-                <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Rancang</Text></View>
-                <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Laksana</Text></View>
-                <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Siap</Text></View>
-              </View>
-              {formData.uppDivisions.map((div: any, idx: number) => (
-                <View key={idx} style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>{div.name}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{div.fasaPerancangan}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{div.fasaPelaksanaan}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{div.siapSepenuhnya}</Text></View>
+        {isUPP && formData.upp && (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Status Projek Masjid Mengikut Bahagian</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Rancang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Laksana</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Siap</Text></View>
                 </View>
-              ))}
+                {Object.entries(formData.upp.projekMasjid).map(([name, data]: [string, any], idx: number) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text>{name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{data.perancangan || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{data.pelaksanaan || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{data.siap || 0}</Text></View>
+                  </View>
+                ))}
+              </View>
             </View>
-          </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Status Projek Sekolah Agama</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '60%' }]}><Text>Nama Sekolah</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Jumlah Projek</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Siap</Text></View>
+                </View>
+                {Object.entries(formData.upp.projekSekolah).map(([name, data]: [string, any], idx: number) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '60%' }]}><Text>{name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{data.total || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{data.siap || 0}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </>
         )}
 
         {/* INTEGRITI Specific Data */}
@@ -431,6 +585,38 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Dakwah Melalui Media (2025)</Text>
               <View style={styles.row}><Text style={styles.label}>Radio:</Text><Text style={styles.value}>{formData.dakwah.mediaRadio2025 || 0}</Text></View>
               <View style={styles.row}><Text style={styles.label}>Internet:</Text><Text style={styles.value}>{formData.dakwah.mediaInternet2025 || 0}</Text></View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Pecahan Tauliah Mengikut Bahagian</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text>Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Tauliah Aktif</Text></View>
+                </View>
+                {formData.dakwah.tauliahDivisions.map((div: any, idx: number) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>{div.name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{div.val2025 || 0}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Pecahan Guru Asing Mengikut Bahagian</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text>Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Bil. Guru</Text></View>
+                </View>
+                {formData.dakwah.guruAsingDivisions.map((div: any, idx: number) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>{div.name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{div.val2025 || 0}</Text></View>
+                  </View>
+                ))}
+              </View>
             </View>
           </>
         )}
@@ -765,19 +951,19 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Statistik Operasi 2025</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Ref 2024</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Ref 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>BTAM Diterima</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPKS_2024_REFERENCE.statistik.btam}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.statistik.btam || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.statistik.btam || 0}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Rondaan & Operasi</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPKS_2024_REFERENCE.statistik.rondaan}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.statistik.rondaan || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.statistik.rondaan || 0}</Text></View>
                 </View>
               </View>
             </View>
@@ -785,9 +971,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Sumber Manusia 2025</Text>
               <View style={[styles.table, { backgroundColor: '#0D9488' }]}>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>JUMLAH PEGAWAI PENGUATKUASA</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>{String(Object.values(formData.bpks.pegawai).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0))}</Text></View>
+                <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 10 }}>JUMLAH PEGAWAI PENGUATKUASA</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 12 }}>{String(Object.values(formData.bpks.pegawai).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0))}</Text></View>
                 </View>
               </View>
             </View>
@@ -796,20 +982,20 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Borang 5 Didaftar 2025</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bahagian</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Ref 2024</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text style={styles.tableCellHeader}>Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Ref 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
                 </View>
                 {Object.keys(formData.bpks.borang5.bahagian).map(div => (
                   <View key={div} style={styles.tableRow}>
                     <View style={[styles.tableCell, { width: '40%' }]}><Text>{div.toUpperCase()}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPKS_2024_REFERENCE.borang5.bahagian[div as keyof typeof BPKS_2024_REFERENCE.borang5.bahagian] || 0}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.borang5.bahagian[div] || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.borang5.bahagian[div] || 0}</Text></View>
                   </View>
                 ))}
-                <View style={[styles.tableRow, { backgroundColor: '#111827' }]}>
+                <View style={[styles.tableRow, { backgroundColor: '#111827', borderBottomWidth: 0 }]}>
                   <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>JUMLAH BESAR BORANG 5</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>{String(Object.values(formData.bpks.borang5.bahagian).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0))}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>{String(Object.values(formData.bpks.borang5.bahagian).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0))}</Text></View>
                 </View>
               </View>
             </View>
@@ -818,28 +1004,28 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Pecahan Kategori & Kertas Siasatan</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Borang 5</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Kertas Siasatan</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Borang 5</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Kertas Siasatan</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Matrimoni</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.borang5.kategori.matrimoni || 0}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.kertasSiasatan.matrimoni || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.kertasSiasatan.matrimoni || 0}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Jenayah Syariah</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.borang5.kategori.jenayahSyariah || 0}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpks.kertasSiasatan.jenayahSyariah || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.kertasSiasatan.jenayahSyariah || 0}</Text></View>
                 </View>
               </View>
             </View>
 
             <View style={styles.section}>
-              <View style={[styles.table, { backgroundColor: '#f9fafb' }]}>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ fontWeight: 'bold' }}>JUMLAH PROGRAM / AKTIVITI</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpks.aktiviti.total || 0}</Text></View>
+              <View style={[styles.table, { backgroundColor: '#f8fafc', borderLeftWidth: 4, borderLeftColor: '#0D9488' }]}>
+                <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ fontWeight: 'bold', color: '#0D9488' }}>JUMLAH PROGRAM / AKTIVITI</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ fontWeight: 'bold', fontSize: 12, color: '#0D9488' }}>{formData.bpks.aktiviti.total || 0}</Text></View>
                 </View>
               </View>
             </View>
@@ -851,10 +1037,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Laporan Perayaan Islam & Majlis Kesyukuran 2025</Text>
-              <View style={[styles.table, { backgroundColor: '#064e3b' }]}>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>JUMLAH KESELURUHAN ACARA</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>{String((formData.ukoko.perayaanIslam?.length || 0) + (formData.ukoko.majlisKesyukuran?.length || 0))}</Text></View>
+              <View style={[styles.table, { backgroundColor: '#064e3b', borderLeftWidth: 4, borderLeftColor: '#c5a065' }]}>
+                <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 10 }}>JUMLAH KESELURUHAN ACARA</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 12 }}>{String((formData.ukoko.perayaanIslam?.length || 0) + (formData.ukoko.majlisKesyukuran?.length || 0))}</Text></View>
                 </View>
               </View>
             </View>
@@ -863,14 +1049,14 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Senarai Perayaan Islam 2025</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Nama Majlis</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Tarikh</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Tuan Rumah</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Mesyuarat</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text style={styles.tableCellHeader}>Nama Majlis</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Tarikh</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Tuan Rumah</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Mesyuarat</Text></View>
                 </View>
                 {formData.ukoko.perayaanIslam.map((event: any, idx: number) => (
                   <View key={idx} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '40%' }]}><Text>{event.nama}</Text></View>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text style={{ fontWeight: 'bold' }}>{event.nama}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tarikh}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tuanRumah}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.mesyuarat}</Text></View>
@@ -883,14 +1069,14 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Senarai Majlis Kesyukuran 2025</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Nama Majlis</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Tarikh</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Tuan Rumah</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Mesyuarat</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text style={styles.tableCellHeader}>Nama Majlis</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Tarikh</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Tuan Rumah</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Mesyuarat</Text></View>
                 </View>
                 {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
                   <View key={idx} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '40%' }]}><Text>{event.nama}</Text></View>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text style={{ fontWeight: 'bold' }}>{event.nama}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tarikh}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tuanRumah}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.mesyuarat}</Text></View>
@@ -1129,25 +1315,46 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {isBPPI && formData.bppi && (
           <>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Institusi Pendidikan Islam 2025</Text>
+              <Text style={styles.sectionTitle}>1. Institusi Pendidikan Islam 2025</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Ref 2024</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
                 </View>
+                {/* MIS Breakdown */}
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Sekolah Agama MIS</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.institusi.mis.total}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{(parseInt(formData.bppi.institusi.mis.rendah) || 0) + (parseInt(formData.bppi.institusi.mis.menengah) || 0)}</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>MIS (Rendah)</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.institusi.mis.rendah}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.institusi.mis.rendah || 0}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Institusi Persendirian (IPIP)</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.institusi.ipip.total}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{Object.values(formData.bppi.institusi.ipip || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0)}</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>MIS (Menengah)</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.institusi.mis.menengah}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.institusi.mis.menengah || 0}</Text></View>
                 </View>
+                {/* IPIP Breakdown */}
+                {[
+                  { label: 'Tadika Islam', field: 'tadika', ref: BPPI_2024_REFERENCE.institusi.ipip.tadika },
+                  { label: 'Sekolah Agama Rakyat (KAFA)', field: 'kafa', ref: BPPI_2024_REFERENCE.institusi.ipip.kafa },
+                  { label: 'Sekolah Rendah Agama Rakyat (SRAR)', field: 'srar', ref: BPPI_2024_REFERENCE.institusi.ipip.srar },
+                  { label: 'Sekolah Rendah Agama', field: 'sra', ref: BPPI_2024_REFERENCE.institusi.ipip.sra },
+                  { label: 'Sekolah Menengah Agama', field: 'sma', ref: BPPI_2024_REFERENCE.institusi.ipip.sma },
+                  { label: 'Tahfiz Rendah', field: 'tahfizRendah', ref: BPPI_2024_REFERENCE.institusi.ipip.tahfizRendah },
+                  { label: 'Tahfiz Menengah', field: 'tahfizMenengah', ref: BPPI_2024_REFERENCE.institusi.ipip.tahfizMenengah },
+                  { label: 'Tahfiz Rendah & Menengah', field: 'tahfizRendahMenengah', ref: BPPI_2024_REFERENCE.institusi.ipip.tahfizRendahMenengah },
+                  { label: 'Pondok', field: 'pondok', ref: BPPI_2024_REFERENCE.institusi.ipip.pondok },
+                  { label: 'Lepasan SPM', field: 'lepasanSpm', ref: BPPI_2024_REFERENCE.institusi.ipip.lepasanSpm },
+                  { label: 'Kelas Dewasa', field: 'dewasa', ref: BPPI_2024_REFERENCE.institusi.ipip.dewasa },
+                ].map(item => (
+                  <View key={item.field} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text>{item.label}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.ref}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.institusi.ipip[item.field] || 0}</Text></View>
+                  </View>
+                ))}
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>JUMLAH BESAR</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>JUMLAH BESAR INSTITUSI</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.institusi.grandTotal}</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{(parseInt(formData.bppi.institusi.mis.rendah) || 0) + (parseInt(formData.bppi.institusi.mis.menengah) || 0) + Object.values(formData.bppi.institusi.ipip || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0)}</Text></View>
                 </View>
@@ -1155,29 +1362,99 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Data KAFA & UPKK 2025</Text>
+              <Text style={styles.sectionTitle}>2. Enrolmen Pelajar Sekolah Agama MIS 2025</Text>
               <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%', backgroundColor: '#f9fafb' }]}><Text>Bilangan Pelajar KAFA</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.kafa.pelajar || 0}</Text></View>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Nama Sekolah</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Ref 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>2025</Text></View>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%', backgroundColor: '#f9fafb' }]}><Text>Bilangan Guru KAFA</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.kafa.guru || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%', backgroundColor: '#f9fafb' }]}><Text>Bilangan Calon UPKK</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bppi.kafa.upkk.calon || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%', backgroundColor: '#f9fafb' }]}><Text>GPS UPKK</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%', color: '#2563eb', fontWeight: 'bold' }]}><Text>{String(formData.bppi.kafa.upkk.gps || '0.00')}</Text></View>
+                {formData.bppi.enrolmenMIS.map((school: any, idx: number) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '50%' }]}><Text>{school.name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{BPPI_2024_REFERENCE.enrolmenMIS[idx].value.toLocaleString()}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{(parseInt(school.value) || 0).toLocaleString()}</Text></View>
+                  </View>
+                ))}
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>JUMLAH ENROLMEN</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{BPPI_2024_REFERENCE.enrolmenMIS.reduce((a,b)=>a+b.value,0).toLocaleString()}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{formData.bppi.enrolmenMIS.reduce((acc: number, s: any) => acc + (parseInt(s.value) || 0), 0).toLocaleString()}</Text></View>
                 </View>
               </View>
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Kelas Agama Dewasa (KAD) 2025</Text>
+              <Text style={styles.sectionTitle}>3. Kelas al-Quran dan Fardu Ain (KAFA)</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Ref 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilangan Pelajar</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.kafa.pelajar.toLocaleString()}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{(parseInt(formData.bppi.kafa.pelajar) || 0).toLocaleString()}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilangan Guru</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.kafa.guru.toLocaleString()}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{(parseInt(formData.bppi.kafa.guru) || 0).toLocaleString()}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilangan Penyelia</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPPI_2024_REFERENCE.kafa.penyelia.toLocaleString()}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{(parseInt(formData.bppi.kafa.penyelia) || 0).toLocaleString()}</Text></View>
+                </View>
+              </View>
+
+              <Text style={[styles.subtitle, { fontWeight: 'bold', marginTop: 10, marginBottom: 5 }]}>Statistik UPKK 2025</Text>
+              <View style={styles.table}>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%', backgroundColor: '#f9fafb' }]}><Text>Bilangan Calon UPKK</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Ref 24: {BPPI_2024_REFERENCE.kafa.upkk.calon.toLocaleString()}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{formData.bppi.kafa.upkk.calon || 0}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%', backgroundColor: '#f9fafb' }]}><Text>Gred Purata Skor (GPS)</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Ref 24: {BPPI_2024_REFERENCE.kafa.upkk.gps}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%', color: '#2563eb', fontWeight: 'bold' }]}><Text>{String(formData.bppi.kafa.upkk.gps || '0.00')}</Text></View>
+                </View>
+              </View>
+
+              <Text style={[styles.subtitle, { fontWeight: 'bold', marginTop: 10, marginBottom: 5 }]}>Trend Tahunan UPKK</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '34%' }]}><Text>Tahun</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '33%' }]}><Text>Bil. Calon</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '33%' }]}><Text>GPS</Text></View>
+                </View>
+                {formData.bppi.kafa.trendUPKK.map((t: any) => (
+                  <View key={t.year} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '34%' }]}><Text>{t.year}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '33%' }]}><Text>{t.calon || '-'}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '33%' }]}><Text>{t.gps || '-'}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>4. Kelas Agama Dewasa (KAD) 2025</Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>Bilangan Guru (Lelaki):</Text>
+                <Text style={styles.value}>{formData.bppi.kad.guruLelaki || 0} (Ref 24: {BPPI_2024_REFERENCE.kad.guru.lelaki})</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.label}>Bilangan Guru (Wanita):</Text>
+                <Text style={styles.value}>{formData.bppi.kad.guruWanita || 0} (Ref 24: {BPPI_2024_REFERENCE.kad.guru.wanita})</Text>
+              </View>
+              <View style={[styles.row, { marginBottom: 10 }]}>
+                <Text style={styles.label}>Jumlah Guru KAD:</Text>
+                <Text style={[styles.value, { fontWeight: 'bold' }]}>{(parseInt(formData.bppi.kad.guruLelaki) || 0) + (parseInt(formData.bppi.kad.guruWanita) || 0)}</Text>
+              </View>
+
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Bahagian</Text></View>
@@ -1559,19 +1836,25 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Narrative Sections */}
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Ringkasan Pencapaian Utama 2025</Text>
-          <Text style={{ textAlign: 'justify', lineHeight: 1.5 }}>{formData.ringkasan || 'Tiada maklumat disediakan.'}</Text>
+          <View style={styles.narrativeBox}>
+            <Text style={styles.narrativeText}>{formData.ringkasan || 'Tiada maklumat disediakan.'}</Text>
+          </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Isu & Cabaran</Text>
-          <Text style={{ textAlign: 'justify', lineHeight: 1.5 }}>{formData.isu || 'Tiada maklumat disediakan.'}</Text>
+          <View style={styles.narrativeBox}>
+            <Text style={styles.narrativeText}>{formData.isu || 'Tiada maklumat disediakan.'}</Text>
+          </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Cadangan Penambahbaikan</Text>
-          <Text style={{ textAlign: 'justify', lineHeight: 1.5 }}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
+          <View style={styles.narrativeBox}>
+            <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
+          </View>
         </View>
 
         {/* Lawatan */}
@@ -1580,15 +1863,15 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
             <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
-                <View style={[styles.tableCell, { width: '15%' }]}><Text>Jenis</Text></View>
-                <View style={[styles.tableCell, { width: '35%' }]}><Text>Tajuk/Agensi</Text></View>
-                <View style={[styles.tableCell, { width: '25%' }]}><Text>Tarikh/Tempat</Text></View>
-                <View style={[styles.tableCell, { width: '25%' }]}><Text>Objektif</Text></View>
+                <View style={[styles.tableCell, { width: '15%' }]}><Text style={styles.tableCellHeader}>Jenis</Text></View>
+                <View style={[styles.tableCell, { width: '35%' }]}><Text style={styles.tableCellHeader}>Tajuk/Agensi</Text></View>
+                <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Tarikh/Tempat</Text></View>
+                <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Objektif</Text></View>
               </View>
               {formData.lawatan.map((item: any, idx: number) => (
                 <View key={idx} style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '15%' }]}><Text>{item.jenis}</Text></View>
-                  <View style={[styles.tableCell, { width: '35%' }]}><Text>{item.tajukAgensi}</Text></View>
+                  <View style={[styles.tableCell, { width: '35%' }]}><Text style={{ fontWeight: 'bold' }}>{item.tajukAgensi}</Text></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.tarikh} @ {item.tempat}</Text></View>
                   <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.objektif}</Text></View>
                 </View>
@@ -1598,10 +1881,11 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Signature Section */}
-        <View style={styles.signatureContainer}>
+        <View style={styles.signatureSection} wrap={false}>
           {/* Left: Disediakan Oleh */}
           <View style={styles.signatureBox}>
-            <Text style={styles.signatureTitle}>Disediakan oleh:</Text>
+            <Text style={styles.signatureLabel}>DISEDIAKAN OLEH:</Text>
+            <View style={{ height: 40 }} />
             <View style={styles.signatureLine} />
             <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
             <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
@@ -1610,7 +1894,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
           {/* Right: Disahkan Oleh */}
           <View style={styles.signatureBox}>
-            <Text style={styles.signatureTitle}>Disahkan oleh:</Text>
+            <Text style={styles.signatureLabel}>DISAHKAN OLEH:</Text>
+            <View style={{ height: 40 }} />
             <View style={styles.signatureLine} />
             <Text style={styles.signatureDetail}>Nama: ................................</Text>
             <Text style={styles.signatureDetail}>Jawatan: ................................</Text>
@@ -1621,7 +1906,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2025 Jabatan Agama Islam Sarawak (JAIS)</Text>
-          <Text style={styles.footerText}>Halaman 1 dari 1</Text>
+          <Text style={styles.footerText} render={({ pageNumber, totalPages }) => (
+            `Halaman ${pageNumber} dari ${totalPages}`
+          )} />
         </View>
       </Page>
     </Document>

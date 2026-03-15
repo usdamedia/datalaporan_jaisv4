@@ -22,6 +22,11 @@ interface Data2025 {
   subDataList: string[];
 }
 
+interface DataManagementDashboardProps {
+  data?: Data2025;
+  onChange?: (data: Data2025) => void;
+}
+
 const INITIAL_2025_DATA: Data2025 = {
   dtawgMeetings: 0,
   integratedDashboards: 0,
@@ -30,48 +35,53 @@ const INITIAL_2025_DATA: Data2025 = {
   subDataList: ['']
 };
 
-const DataManagementDashboard: React.FC = () => {
-  const [data2025, setData2025] = useState<Data2025>(INITIAL_2025_DATA);
+const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data, onChange }) => {
+  const [localData, setLocalData] = useState<Data2025>(data || INITIAL_2025_DATA);
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('jais_data_management_2025');
-    if (saved) {
-      setData2025(JSON.parse(saved));
+    if (data) {
+      setLocalData(data);
     }
-  }, []);
+  }, [data]);
+
+  const handleDataChange = (newData: Data2025) => {
+    setLocalData(newData);
+    if (onChange) {
+      onChange(newData);
+    }
+  };
 
   const handleSave = () => {
-    localStorage.setItem('jais_data_management_2025', JSON.stringify(data2025));
+    localStorage.setItem('jais_data_management_2025', JSON.stringify(localData));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };
 
   const addSubDataItem = () => {
-    setData2025(prev => ({
-      ...prev,
-      subDataList: [...prev.subDataList, ''],
-      subDataDashboards: prev.subDataDashboards + 1
-    }));
+    const newData = {
+      ...localData,
+      subDataList: [...localData.subDataList, ''],
+      subDataDashboards: localData.subDataDashboards + 1
+    };
+    handleDataChange(newData);
   };
 
   const removeSubDataItem = (index: number) => {
-    setData2025(prev => {
-      const newList = prev.subDataList.filter((_, i) => i !== index);
-      return {
-        ...prev,
-        subDataList: newList,
-        subDataDashboards: newList.length
-      };
-    });
+    const newList = localData.subDataList.filter((_, i) => i !== index);
+    const newData = {
+      ...localData,
+      subDataList: newList,
+      subDataDashboards: newList.length
+    };
+    handleDataChange(newData);
   };
 
   const updateSubDataItem = (index: number, value: string) => {
-    setData2025(prev => {
-      const newList = [...prev.subDataList];
-      newList[index] = value;
-      return { ...prev, subDataList: newList };
-    });
+    const newList = [...localData.subDataList];
+    newList[index] = value;
+    const newData = { ...localData, subDataList: newList };
+    handleDataChange(newData);
   };
 
   const stats2024 = [
@@ -194,9 +204,9 @@ const DataManagementDashboard: React.FC = () => {
               <div className="md:w-1/2">
                 <input 
                   type="number" 
-                  value={data2025[field.id as keyof Data2025] as number}
+                  value={localData[field.id as keyof Data2025] as number}
                   readOnly={field.readOnly}
-                  onChange={(e) => setData2025(prev => ({ ...prev, [field.id]: parseInt(e.target.value) || 0 }))}
+                  onChange={(e) => handleDataChange({ ...localData, [field.id]: parseInt(e.target.value) || 0 })}
                   className={`w-full px-6 py-4 rounded-2xl border-2 border-gray-100 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition-all font-black text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
                 />
               </div>
@@ -215,7 +225,7 @@ const DataManagementDashboard: React.FC = () => {
               <p className="ml-11 text-[10px] font-bold text-gray-400 lowercase">Tambah atau edit nama dashboard secara dinamik</p>
             </label>
             <div className="md:w-1/2 space-y-3">
-              {data2025.subDataList.map((item, index) => (
+              {localData.subDataList.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 group">
                   <input 
                     type="text" 
