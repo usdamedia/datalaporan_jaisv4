@@ -209,6 +209,17 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     marginTop: 2,
   },
+  signatureLine: {
+    borderTopWidth: 1,
+    borderTopColor: '#1f2937',
+    borderTopStyle: 'dotted',
+    marginBottom: 8,
+  },
+  signatureDetail: {
+    fontSize: 9,
+    color: '#374151',
+    marginBottom: 4,
+  },
 });
 
 interface ReportPDFProps {
