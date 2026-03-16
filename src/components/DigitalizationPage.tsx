@@ -21,8 +21,8 @@ import {
   Loader2
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import DigitalizationReportPDF from './DigitalizationReportPDF';
 import { 
   BarChart, 
   Bar, 
@@ -98,7 +98,6 @@ const DigitalizationPage: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [data2025, setData2025] = useState(INITIAL_2025_DATA);
   const [isSaved, setIsSaved] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -124,85 +123,7 @@ const DigitalizationPage: React.FC = () => {
     }));
   };
 
-  const handleExportPDF = async () => {
-    setIsExporting(true);
-    try {
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      // Title
-      pdf.setFontSize(18);
-      pdf.setTextColor(13, 148, 136); // Teal-600
-      pdf.text('Laporan Data Digital JAIS', 14, 20);
-      
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 116, 139); // Slate-500
-      pdf.text(`Tarikh Laporan: ${new Date().toLocaleDateString('ms-MY')}`, 14, 28);
-      
-      // Table Header
-      const startY = 40;
-      const colWidths = [30, 30, 30, 30, 60];
-      const headers = ['Platform', '2023', '2024', '2025', 'Catatan'];
-      
-      pdf.setFillColor(241, 245, 249); // Slate-100
-      pdf.rect(14, startY - 5, 180, 10, 'F');
-      
-      pdf.setFontSize(10);
-      pdf.setTextColor(15, 23, 42); // Slate-900
-      pdf.setFont('helvetica', 'bold');
-      
-      let currentX = 14;
-      headers.forEach((header, i) => {
-        pdf.text(header, currentX + 2, startY + 2);
-        currentX += colWidths[i];
-      });
-      
-      // Table Content
-      pdf.setFont('helvetica', 'normal');
-      let currentY = startY + 10;
-      
-      const platforms = [
-        { id: 'fb', name: 'Facebook', v23: 152400, v24: 185600 },
-        { id: 'ig', name: 'Instagram', v23: 45200, v24: 62800 },
-        { id: 'tt', name: 'TikTok', v23: 21500, v24: 88400 },
-        { id: 'yt', name: 'YouTube', v23: 12800, v24: 19200 },
-      ];
-      
-      platforms.forEach((p) => {
-        const pData = data2025[p.id as keyof typeof INITIAL_2025_DATA];
-        const row = [
-          p.name,
-          p.v23.toLocaleString(),
-          p.v24.toLocaleString(),
-          pData.value.toLocaleString(),
-          pData.remark || '-'
-        ];
-        
-        currentX = 14;
-        row.forEach((text, i) => {
-          // Handle long text for remarks
-          if (i === 4) {
-            const splitText = pdf.splitTextToSize(text, colWidths[i] - 5);
-            pdf.text(splitText, currentX + 2, currentY + 2);
-          } else {
-            pdf.text(text.toString(), currentX + 2, currentY + 2);
-          }
-          currentX += colWidths[i];
-        });
-        
-        currentY += 15; // Row height
-        
-        // Add line
-        pdf.setDrawColor(226, 232, 240); // Slate-200
-        pdf.line(14, currentY - 8, 194, currentY - 8);
-      });
-      
-      pdf.save(`Laporan_Data_Digital_JAIS_${new Date().getTime()}.pdf`);
-    } catch (error) {
-      console.error('Export failed:', error);
-    } finally {
-      setIsExporting(false);
-    }
-  };
+
 
   const chartData = [
     { name: 'FB', '2023': 152400, '2024': 185600, '2025': data2025.fb.value },
@@ -224,14 +145,18 @@ const DigitalizationPage: React.FC = () => {
             {isAdmin ? 'Admin Mode: On' : 'Admin Mode: Off'}
           </button>
 
-          <button 
-            onClick={handleExportPDF}
-            disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white text-teal-700 border border-teal-100 hover:bg-teal-50 transition-all shadow-sm disabled:opacity-50"
+          <PDFDownloadLink
+            document={<DigitalizationReportPDF data2025={data2025} />}
+            fileName={`Laporan_Data_Digital_JAIS_${new Date().getTime()}.pdf`}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white text-teal-700 border border-teal-100 hover:bg-teal-50 transition-all shadow-sm"
           >
-            {isExporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
-            {isExporting ? 'Menjana PDF...' : 'Export PDF'}
-          </button>
+            {({ loading }) => (
+              <>
+                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
+                {loading ? 'Menjana PDF...' : 'Export PDF'}
+              </>
+            )}
+          </PDFDownloadLink>
         </div>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
