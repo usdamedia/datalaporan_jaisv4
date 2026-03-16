@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { ArrowLeft, Save, FileDown, CheckCircle2, AlertCircle } from 'lucide-react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import ReportPDF from '../ReportPDF';
+import PrintableReport from '../PrintableReport';
+import { exportElementToPdf } from '../../utils/exportElementToPdf';
 
 interface FormLayoutProps {
   deptName: string;
@@ -22,8 +22,31 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   formData,
   children 
 }) => {
+  const printRef = useRef<HTMLDivElement>(null);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+
+  const handleExportPdf = async () => {
+    if (!printRef.current || isExportingPdf) return;
+
+    setIsExportingPdf(true);
+    try {
+      await exportElementToPdf(printRef.current, {
+        fileName: `Laporan_JAIS_2025_${deptName.replace(/\s+/g, '_')}.pdf`,
+      });
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in pb-20">
+    <>
+      <div className="fixed left-[-99999px] top-0 z-[-1] w-[1120px] bg-white p-0" aria-hidden="true">
+        <div ref={printRef}>
+          <PrintableReport deptName={deptName} formData={formData} />
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto animate-fade-in pb-20">
       {/* Form Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
@@ -53,19 +76,15 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             )}
             Simpan Draf
           </button>
-          
-          <PDFDownloadLink
-            document={<ReportPDF deptName={deptName} formData={formData} />}
-            fileName={`Laporan_JAIS_2025_${deptName.replace(/\s+/g, '_')}.pdf`}
+
+          <button
+            onClick={handleExportPdf}
+            disabled={isExportingPdf}
             className="flex items-center gap-2 bg-white text-zus-900 border border-gray-200 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-zus-gold transition-all active:scale-95"
           >
-            {({ loading }) => (
-              <>
-                <FileDown className="w-4 h-4" />
-                {loading ? 'Generating...' : 'Export PDF'}
-              </>
-            )}
-          </PDFDownloadLink>
+            <FileDown className="w-4 h-4" />
+            {isExportingPdf ? 'Generating...' : 'Export PDF'}
+          </button>
         </div>
       </div>
 
@@ -89,7 +108,8 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -21,8 +21,6 @@ import {
   Loader2
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import DigitalizationReportPDF from './DigitalizationReportPDF';
 import { 
   BarChart, 
   Bar, 
@@ -33,6 +31,7 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
+import { exportElementToPdf } from '../utils/exportElementToPdf';
 
 const timelineData = [
   {
@@ -98,6 +97,7 @@ const DigitalizationPage: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [data2025, setData2025] = useState(INITIAL_2025_DATA);
   const [isSaved, setIsSaved] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -123,6 +123,19 @@ const DigitalizationPage: React.FC = () => {
     }));
   };
 
+  const handleExportPdf = async () => {
+    if (!pageRef.current || isExportingPdf) return;
+
+    setIsExportingPdf(true);
+    try {
+      await exportElementToPdf(pageRef.current, {
+        fileName: `Laporan_Data_Digital_JAIS_${Date.now()}.pdf`,
+        ignoreElements: (element) => element instanceof HTMLElement && element.dataset.pdfIgnore === 'true',
+      });
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
 
 
   const chartData = [
@@ -136,7 +149,7 @@ const DigitalizationPage: React.FC = () => {
     <div ref={pageRef} className="space-y-12 animate-fade-in p-4 md:p-8 bg-gray-50 rounded-[2.5rem]">
       {/* Header Section */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
-        <div className="flex justify-center items-center gap-3 mb-4">
+        <div className="flex justify-center items-center gap-3 mb-4" data-pdf-ignore="true">
           <button 
             onClick={() => setIsAdmin(!isAdmin)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all ${isAdmin ? 'bg-zus-900 text-white shadow-lg' : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-200'}`}
@@ -145,18 +158,14 @@ const DigitalizationPage: React.FC = () => {
             {isAdmin ? 'Admin Mode: On' : 'Admin Mode: Off'}
           </button>
 
-          <PDFDownloadLink
-            document={<DigitalizationReportPDF data2025={data2025} />}
-            fileName={`Laporan_Data_Digital_JAIS_${new Date().getTime()}.pdf`}
+          <button
+            onClick={handleExportPdf}
+            disabled={isExportingPdf}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white text-teal-700 border border-teal-100 hover:bg-teal-50 transition-all shadow-sm"
           >
-            {({ loading }) => (
-              <>
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
-                {loading ? 'Menjana PDF...' : 'Export PDF'}
-              </>
-            )}
-          </PDFDownloadLink>
+            {isExportingPdf ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
+            {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
+          </button>
         </div>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
