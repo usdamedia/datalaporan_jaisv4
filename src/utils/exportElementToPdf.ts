@@ -1,5 +1,4 @@
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 
 interface ExportElementToPdfOptions {
   fileName: string;
@@ -8,62 +7,27 @@ interface ExportElementToPdfOptions {
 }
 
 export async function exportElementToPdf(
-  element: HTMLElement,
+  element: HTMLElement | (() => HTMLElement | null),
   options: ExportElementToPdfOptions
 ) {
-  const marginMm = options.marginMm ?? 8;
-  const pageWidthMm = 210;
-  const pageHeightMm = 297;
-  const contentWidthMm = pageWidthMm - marginMm * 2;
-  const contentHeightMm = pageHeightMm - marginMm * 2;
+  const getTargetElement = typeof element === 'function' ? element : () => element;
 
-  const canvas = await html2canvas(element, {
-    scale: Math.max(window.devicePixelRatio, 2),
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    logging: false,
-    ignoreElements: options.ignoreElements,
-  });
+  const pdfOptions = {
+    filename: options.fileName,
+    method: 'save',
+    resolution: Resolution.MEDIUM,
+    page: {
+      margin: options.marginMm ?? Margin.SMALL,
+      format: 'a4',
+      orientation: 'portrait',
+    },
+    overrides: {
+      canvas: {
+        useCORS: true,
+        ignoreElements: options.ignoreElements,
+      },
+    },
+  };
 
-  const imageData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-    compress: true,
-  });
-
-  const imageHeightMm = (canvas.height * contentWidthMm) / canvas.width;
-  let remainingHeightMm = imageHeightMm;
-  let offsetYMm = 0;
-
-  pdf.addImage(
-    imageData,
-    'PNG',
-    marginMm,
-    marginMm + offsetYMm,
-    contentWidthMm,
-    imageHeightMm,
-    undefined,
-    'FAST'
-  );
-  remainingHeightMm -= contentHeightMm;
-
-  while (remainingHeightMm > 0) {
-    offsetYMm = remainingHeightMm - imageHeightMm;
-    pdf.addPage();
-    pdf.addImage(
-      imageData,
-      'PNG',
-      marginMm,
-      marginMm + offsetYMm,
-      contentWidthMm,
-      imageHeightMm,
-      undefined,
-      'FAST'
-    );
-    remainingHeightMm -= contentHeightMm;
-  }
-
-  pdf.save(options.fileName);
+  await generatePDF(getTargetElement as any, pdfOptions as any);
 }
