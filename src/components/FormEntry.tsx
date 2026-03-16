@@ -23,68 +23,70 @@ interface FormEntryProps {
 }
 
 const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
+  const normalizedDeptName = deptName.toUpperCase();
+
   // Route to specific form components based on department name
   
   // Explicitly handle BPPS sub-units first to avoid conflict with BPNP/BPP check
-  if (deptName.includes('BPPS')) {
-    if (deptName.includes('HR')) {
+  if (normalizedDeptName.includes('BPPS')) {
+    if (normalizedDeptName.includes('HR')) {
       return <HrForm deptName={deptName} onBack={onBack} />;
     }
     return <BppsForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('BKIM')) {
+  if (normalizedDeptName.includes('BKIM')) {
     return <BkimForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('BKKI')) {
+  if (normalizedDeptName.includes('BKKI')) {
     return <BkkiForm deptName={deptName} onBack={onBack} />;
   }
   
-  if (deptName.includes('BPH')) {
+  if (normalizedDeptName.includes('BPH')) {
     return <BphForm deptName={deptName} onBack={onBack} />;
   }
   
-  if (deptName.includes('BPKS')) {
+  if (normalizedDeptName.includes('BPKS')) {
     return <BpksForm onBack={onBack} />;
   }
 
-  if (deptName.includes('UKOKO')) {
-    if (deptName.includes('Komunikasi dan Pusat Sumber')) {
+  if (normalizedDeptName.includes('UKOKO')) {
+    if (normalizedDeptName.includes('KOMUNIKASI DAN PUSAT SUMBER')) {
       return <UkokoPublicRelationsForm deptName={deptName} onBack={onBack} />;
     }
     return <UkokoForm deptName={deptName} onBack={onBack} />;
   }
   
-  if (deptName.includes('BPPI')) {
+  if (normalizedDeptName.includes('BPPI')) {
     return <BppiForm deptName={deptName} onBack={onBack} />;
   }
   
-  if (deptName.includes('BPNP') || deptName.includes('BPP')) {
+  if (normalizedDeptName.includes('BPNP') || normalizedDeptName.includes('BPP')) {
     return <BpnpForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('UPP')) {
+  if (normalizedDeptName.includes('UPP')) {
     return <UppForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('INTEGRITI') || deptName.includes('Kualiti')) {
+  if (normalizedDeptName.includes('INTEGRITI') || normalizedDeptName.includes('KUALITI')) {
     return <IntegritiForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('DAKWAH') || deptName.includes('BDKWH')) {
+  if (normalizedDeptName.includes('DAKWAH') || normalizedDeptName.includes('BDKWH')) {
     return <DakwahForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('BKSP') || deptName.includes('Kaunseling')) {
+  if (normalizedDeptName.includes('BKSP') || normalizedDeptName.includes('KAUNSELING')) {
     return <BkspForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('BPDS') || deptName.includes('Pendakwaan')) {
+  if (normalizedDeptName.includes('BPDS') || normalizedDeptName.includes('PENDAKWAAN')) {
     return <BpdsForm deptName={deptName} onBack={onBack} />;
   }
 
-  if (deptName.includes('DHQC')) {
+  if (normalizedDeptName.includes('DHQC')) {
     return <DhqcForm onBack={onBack} />;
   }
 
