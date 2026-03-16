@@ -1,0 +1,1 @@
+## 2025-03-16 - Add ARIA label to DepartmentCard button\n**Learning:** Icon-heavy UI cards used as buttons often lack accessible names for screen readers.\n**Action:** Ensure dynamic states (e.g. active/inactive) are reflected in aria-labels, not just visual styles.
