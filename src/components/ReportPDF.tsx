@@ -24,39 +24,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     zIndex: -1,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 3,
+  simpleHeader: {
+    borderBottomWidth: 2,
     borderBottomColor: '#0d9488',
-    paddingBottom: 20,
-    marginBottom: 30,
+    paddingBottom: 10,
+    marginBottom: 20,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
-  logoContainer: {
-    width: 65,
-    height: 65,
-    backgroundColor: '#0d9488',
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 20,
-  },
-  logoText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  titleContainer: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
+  simpleDeptName: {
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#0d9488',
-    letterSpacing: 1,
-    marginBottom: 4,
     textTransform: 'uppercase',
+    lineHeight: 1.2,
+    marginBottom: 2,
+  },
+  simpleSubUnit: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#c5a065',
+    textTransform: 'uppercase',
+    marginTop: 2,
   },
   subtitle: {
     fontSize: 9,
@@ -65,21 +54,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1.5,
   },
-  deptInfo: {
-    alignItems: 'flex-end',
-  },
-  deptName: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    color: '#c5a065',
-    textAlign: 'right',
-    textTransform: 'uppercase',
-    marginBottom: 4,
-  },
-  tarikhText: {
-    fontSize: 8,
+  tarikhKecil: {
+    fontSize: 7,
     color: '#9ca3af',
-    textAlign: 'right',
+    marginTop: 4,
   },
   section: {
     marginBottom: 25,
@@ -89,7 +67,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     backgroundColor: '#0d9488',
-    padding: '8 12',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     marginBottom: 15,
     borderRadius: 4,
     textTransform: 'uppercase',
@@ -126,13 +105,15 @@ const styles = StyleSheet.create({
   table: {
     width: '100%',
     borderStyle: 'solid',
-    borderWidth: 0,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#d1d5db',
     marginBottom: 20,
   },
   tableRow: {
     flexDirection: 'row',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#e5e7eb',
+    borderBottomWidth: 1,
+    borderBottomColor: '#d1d5db',
     minHeight: 28,
     alignItems: 'center',
   },
@@ -142,9 +123,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#0d9488',
   },
   tableCell: {
-    padding: '8 10',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     fontSize: 8.5,
     color: '#334155',
+    borderRightWidth: 1,
+    borderRightColor: '#d1d5db',
+    height: '100%',
+    justifyContent: 'center',
   },
   tableCellHeader: {
     fontWeight: 'bold',
@@ -159,8 +145,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
     padding: 12,
     borderRadius: 6,
-    borderWidth: 0.5,
-    borderColor: '#e5e7eb',
+    borderWidth: 1,
+    borderColor: '#d1d5db',
     marginTop: 5,
   },
   narrativeText: {
@@ -174,8 +160,8 @@ const styles = StyleSheet.create({
     bottom: 30,
     left: 50,
     right: 50,
-    borderTopWidth: 0.5,
-    borderTopColor: '#e5e7eb',
+    borderTopWidth: 1,
+    borderTopColor: '#d1d5db',
     paddingTop: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -192,33 +178,30 @@ const styles = StyleSheet.create({
   },
   signatureBox: {
     width: '40%',
-    borderTopWidth: 1,
-    borderTopColor: '#1f2937',
-    paddingTop: 8,
     marginTop: 60,
   },
   signatureLabel: {
     fontSize: 9,
-    textAlign: 'center',
+    textAlign: 'left',
     fontWeight: 'bold',
     color: '#1f2937',
+    marginBottom: 5,
+  },
+  signatureLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#1f2937',
+    marginVertical: 5,
+  },
+  signatureDetail: {
+    fontSize: 9,
+    color: '#1f2937',
+    marginTop: 3,
   },
   signatureSubLabel: {
     fontSize: 8,
     textAlign: 'center',
     color: '#6b7280',
     marginTop: 2,
-  },
-  signatureLine: {
-    borderTopWidth: 1,
-    borderTopColor: '#1f2937',
-    borderTopStyle: 'dotted',
-    marginBottom: 8,
-  },
-  signatureDetail: {
-    fontSize: 9,
-    color: '#374151',
-    marginBottom: 4,
   },
 });
 
@@ -228,29 +211,24 @@ interface ReportPDFProps {
 }
 
 const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
-  const normalizedDeptName = deptName.toUpperCase();
-  const isBKIM = normalizedDeptName.includes('BKIM');
-  const isBPP = normalizedDeptName.includes('BPNP') || normalizedDeptName.includes('BPP') || normalizedDeptName.includes('UNIT PERANCANGAN STRATEGIK');
-  const isDataManagement = normalizedDeptName.includes('DATA MANAGEMENT');
-  const isUPP = normalizedDeptName.includes('UPP');
-  const isIntegriti = normalizedDeptName.includes('INTEGRITI') || normalizedDeptName.includes('KUALITI');
-  const isBKKI = normalizedDeptName.includes('BKKI') || normalizedDeptName.includes('KELUARGA ISLAM');
-  const isBPH = normalizedDeptName.includes('BPH') || normalizedDeptName.includes('HALAL');
-  const isBPKS = normalizedDeptName.includes('BPKS') || normalizedDeptName.includes('PENGUATKUASAAN');
-  const isBPPI = normalizedDeptName.includes('BPPI');
-  const isUKOKO = normalizedDeptName.includes('UKOKO');
-  const isUKOKOCommunication = isUKOKO && normalizedDeptName.includes('KOMUNIKASI DAN PUSAT SUMBER');
-  const isDHQC = normalizedDeptName.includes('DHQC');
-  const isDakwah = normalizedDeptName.includes('DAKWAH') || normalizedDeptName.includes('BDKWH');
-  const isBKSP = normalizedDeptName.includes('BKSP') || normalizedDeptName.includes('KAUNSELING');
-  const isBPDS = normalizedDeptName.includes('BPDS') || normalizedDeptName.includes('PENDAKWAAN');
-  const isHR = normalizedDeptName.includes('HR & LATIHAN') || normalizedDeptName.includes('U HR') || normalizedDeptName.includes('LATIHAN');
-  const isPentadbiran = normalizedDeptName.includes('PENTADBIRAN');
-  const isFinance = normalizedDeptName.includes('KEWANGAN') || normalizedDeptName.includes('AKAUN');
-  const hasBpnpData = !!formData.bpnp;
-  const hasDataManagementData = !!formData.bpnp?.dataManagement;
-  const hasUkokoPrData = !!formData.pr;
-  const hasUkokoEventsData = !!formData.ukoko;
+  const isBKIM = deptName.includes('BKIM');
+  const isBPP = deptName.includes('BPNP');
+  const isUPP = deptName.includes('UPP');
+  const isIntegriti = deptName.includes('INTEGRITI');
+  const isBKKI = deptName.includes('BKKI') || deptName.includes('Keluarga Islam');
+  const isBPH = deptName.includes('BPH') || deptName.includes('Halal');
+  const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
+  const isBPPI = deptName.includes('BPPI');
+  const isUKOKO = deptName.includes('UKOKO');
+  const isDHQC = deptName.includes('DHQC');
+  const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
+  const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
+  const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
+  const isHR = deptName.includes('HR & Latihan');
+  const isPentadbiran = deptName.includes('Pentadbiran');
+  const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
+
+  const [mainDept, unitName] = deptName.split(' : ');
 
   return (
     <Document>
@@ -258,21 +236,11 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* Watermark */}
         <Text style={styles.watermark}>DOKUMEN RASMI</Text>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>JAIS</Text>
-            </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>Laporan Tahunan 2025</Text>
-              <Text style={styles.subtitle}>Jabatan Agama Islam Sarawak</Text>
-            </View>
-          </View>
-          <View style={styles.deptInfo}>
-            <Text style={styles.deptName}>{deptName}</Text>
-            <Text style={styles.tarikhText}>Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}</Text>
-          </View>
+        {/* Simple Header */}
+        <View style={styles.simpleHeader}>
+          <Text style={styles.simpleDeptName}>{mainDept}</Text>
+          {unitName && <Text style={styles.simpleSubUnit}>{unitName}</Text>}
+          <Text style={styles.tarikhKecil}>Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}</Text>
         </View>
 
         {/* Maklumat Asas */}
@@ -293,7 +261,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         </View>
 
         {/* BPNP Specific Data */}
-        {isBPP && hasBpnpData && !isDataManagement && (
+        {isBPP && formData.bpnp && (
           <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Kajian & Kaji Selidik 2025</Text>
@@ -463,60 +431,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           </>
         )}
 
-        {isDataManagement && hasDataManagementData && (
-          <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Data Management Dashboard</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Komponen</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Mesyuarat DTAWG</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>1</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.dataManagement.dtawgMeetings || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Integrated Dashboard</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>1</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.dataManagement.integratedDashboards || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kluster Data</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>26</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.dataManagement.dataClusters || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Sub-Data Dashboard</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>3</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.dataManagement.subDataDashboards || 0}</Text></View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Senarai Sub-Data Dashboard 2025</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '100%' }]}><Text>Nama Dashboard</Text></View>
-                </View>
-                {(formData.bpnp.dataManagement.subDataList || []).filter((item: string) => item?.trim()).map((item: string, idx: number) => (
-                  <View key={idx} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '100%' }]}><Text>{item}</Text></View>
-                  </View>
-                ))}
-                {!(formData.bpnp.dataManagement.subDataList || []).some((item: string) => item?.trim()) && (
-                  <View style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '100%' }]}><Text>-</Text></View>
-                  </View>
-                )}
-              </View>
-            </View>
-          </>
-        )}
-
         {/* UPP Specific Data */}
         {isUPP && formData.upp && (
           <>
@@ -621,6 +535,28 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
           </>
         )}
+
+
+        {/* BKKI Specific Data */}
+        {isBKKI && formData.bkki && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Statistik Keluarga Islam</Text>
+            <View style={styles.row}><Text style={styles.label}>Bilangan Perkahwinan:</Text><Text style={styles.value}>{formData.bkki.stats?.bilPerkahwinan || 0}</Text></View>
+            <View style={styles.row}><Text style={styles.label}>Bilangan Perceraian:</Text><Text style={styles.value}>{formData.bkki.stats?.bilPerceraian || 0}</Text></View>
+          </View>
+        )}
+
+        {/* UKOKO Specific Data */}
+        {isUKOKO && formData.socialMedia && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Statistik Media Sosial & Komunikasi</Text>
+            <View style={styles.row}><Text style={styles.label}>FB Followers:</Text><Text style={styles.value}>{formData.socialMedia.fbFollowers || 0}</Text></View>
+            <View style={styles.row}><Text style={styles.label}>TikTok Followers:</Text><Text style={styles.value}>{formData.socialMedia.tiktokFollowers || 0}</Text></View>
+            <View style={styles.row}><Text style={styles.label}>Aduan Diterima:</Text><Text style={styles.value}>{formData.aduan?.diterima || 0}</Text></View>
+            <View style={styles.row}><Text style={styles.label}>Aduan Diselesaikan:</Text><Text style={styles.value}>{formData.aduan?.diselesaikan || 0}</Text></View>
+          </View>
+        )}
+
         {/* DAKWAH Specific Data */}
         {isDakwah && formData.dakwah && (
           <>
@@ -830,91 +766,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <View style={[styles.tableCell, { width: '70%' }]}><Text>Jumlah Program / Aktiviti</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpds.aktiviti}</Text></View>
                 </View>
-              </View>
-            </View>
-          </>
-        )}
-
-        {isUKOKOCommunication && hasUkokoPrData && (
-          <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Statistik Aduan 2025</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '55%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>Jumlah</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '55%' }]}><Text>Sumber Tali Khidmat</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>{formData.pr.aduan.sumber.talikhidmat || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '55%' }]}><Text>Sumber Lain</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>{formData.pr.aduan.sumber.lain || 0}</Text></View>
-                </View>
-                {[
-                  ['Masjid', formData.pr.aduan.kategori.masjid],
-                  ['Kad Nikah', formData.pr.aduan.kategori.kadNikah],
-                  ['KAFA', formData.pr.aduan.kategori.kafa],
-                  ['Halal', formData.pr.aduan.kategori.halal],
-                  ['NCR', formData.pr.aduan.kategori.ncr],
-                  ['Penguatkuasaan', formData.pr.aduan.kategori.penguatkuasaan],
-                  ['Pendidikan', formData.pr.aduan.kategori.pendidikan],
-                  ['USK', formData.pr.aduan.kategori.usk],
-                ].map(([label, value]) => (
-                  <View key={label} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '55%' }]}><Text>{label}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>{String(value || 0)}</Text></View>
-                  </View>
-                ))}
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Lokasi Aduan PAIB</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '55%' }]}><Text>Lokasi</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>Jumlah</Text></View>
-                </View>
-                {[
-                  ['Ibu Pejabat', formData.pr.aduan.lokasi.hq],
-                  ['Bintulu', formData.pr.aduan.lokasi.bintulu],
-                  ['Kuching', formData.pr.aduan.lokasi.kuching],
-                  ['Miri', formData.pr.aduan.lokasi.miri],
-                  ['Sarikei', formData.pr.aduan.lokasi.sarikei],
-                  ['Sibu', formData.pr.aduan.lokasi.sibu],
-                ].map(([label, value]) => (
-                  <View key={label} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '55%' }]}><Text>{label}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '45%' }]}><Text>{String(value || 0)}</Text></View>
-                  </View>
-                ))}
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Maklum Balas Pelanggan</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Saluran</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Puas</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Tidak Puas</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Queue Bee</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.pr.maklumBalas.queueBee.puas || 0}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.pr.maklumBalas.queueBee.tidakPuas || 0}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kod QR</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.pr.maklumBalas.qrCode.puas || 0}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.pr.maklumBalas.qrCode.tidakPuas || 0}</Text></View>
-                </View>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Jumlah Lawatan Luar:</Text>
-                <Text style={styles.value}>{formData.pr.lawatanLuar || 0}</Text>
               </View>
             </View>
           </>
@@ -1168,7 +1019,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* UKOKO Data */}
-        {isUKOKO && hasUkokoEventsData && !isUKOKOCommunication && (
+        {isUKOKO && formData.ukoko && (
           <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Laporan Perayaan Islam & Majlis Kesyukuran 2025</Text>

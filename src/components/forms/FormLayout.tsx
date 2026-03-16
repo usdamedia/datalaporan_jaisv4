@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Save, FileDown, CheckCircle2, AlertCircle } from 'lucide-react';
-import PrintableReport from '../PrintableReport';
-import { exportElementToPdf } from '../../utils/exportElementToPdf';
+import { pdf } from '@react-pdf/renderer';
+import ReportPDF from '../ReportPDF';
 
 interface FormLayoutProps {
   deptName: string;
@@ -22,17 +22,34 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   formData,
   children 
 }) => {
-  const printRef = useRef<HTMLDivElement>(null);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const handleExportPdf = async () => {
-    if (!printRef.current || isExportingPdf) return;
+    if (isExportingPdf) return;
 
     setIsExportingPdf(true);
+    setExportError(null);
     try {
-      await exportElementToPdf(printRef.current, {
-        fileName: `Laporan_JAIS_2025_${deptName.replace(/\s+/g, '_')}.pdf`,
-      });
+      // Generate PDF using @react-pdf/renderer
+      const blob = await pdf(<ReportPDF deptName={deptName} formData={formData} />).toBlob();
+      
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Laporan_JAIS_2025_${deptName.replace(/\s+/g, '_')}.pdf`;
+      
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('PDF Export failed:', err);
+      setExportError('Gagal menjana PDF. Sila cuba lagi.');
     } finally {
       setIsExportingPdf(false);
     }
@@ -40,12 +57,6 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
   return (
     <>
-      <div className="fixed left-[-99999px] top-0 z-[-1] w-[1120px] bg-white p-0" aria-hidden="true">
-        <div ref={printRef}>
-          <PrintableReport deptName={deptName} formData={formData} />
-        </div>
-      </div>
-
       <div className="max-w-4xl mx-auto animate-fade-in pb-20">
       {/* Form Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -80,13 +91,29 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           <button
             onClick={handleExportPdf}
             disabled={isExportingPdf}
-            className="flex items-center gap-2 bg-white text-zus-900 border border-gray-200 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-zus-gold transition-all active:scale-95"
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 ${
+              isExportingPdf 
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                : 'bg-white text-zus-900 border border-gray-200 hover:border-zus-gold'
+            }`}
           >
-            <FileDown className="w-4 h-4" />
-            {isExportingPdf ? 'Generating...' : 'Export PDF'}
+            {isExportingPdf ? (
+              <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
+            ) : (
+              <FileDown className="w-4 h-4" />
+            )}
+            {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
           </button>
         </div>
       </div>
+
+      {/* Error Notification */}
+      {exportError && (
+        <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-700 animate-scale-in">
+          <AlertCircle className="w-5 h-5" />
+          <span className="text-sm font-bold">{exportError}</span>
+        </div>
+      )}
 
       {/* Success Notification */}
       {showSuccess && (

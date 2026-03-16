@@ -17,7 +17,6 @@ import {
   Lock,
   Unlock,
   MessageSquare,
-  FileDown,
   Loader2
 } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -31,7 +30,6 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
-import { exportElementToPdf } from '../utils/exportElementToPdf';
 
 const timelineData = [
   {
@@ -124,17 +122,7 @@ const DigitalizationPage: React.FC = () => {
   };
 
   const handleExportPdf = async () => {
-    if (!pageRef.current || isExportingPdf) return;
-
-    setIsExportingPdf(true);
-    try {
-      await exportElementToPdf(pageRef.current, {
-        fileName: `Laporan_Data_Digital_JAIS_${Date.now()}.pdf`,
-        ignoreElements: (element) => element instanceof HTMLElement && element.dataset.pdfIgnore === 'true',
-      });
-    } finally {
-      setIsExportingPdf(false);
-    }
+    alert('Fungsi eksport PDF untuk halaman ini sedang dikemaskini menggunakan @react-pdf/renderer.');
   };
 
 
@@ -146,7 +134,7 @@ const DigitalizationPage: React.FC = () => {
   ];
 
   return (
-    <div ref={pageRef} className="space-y-12 animate-fade-in p-4 md:p-8 bg-gray-50 rounded-[2.5rem]">
+    <div ref={pageRef} id="print-container" className="space-y-12 animate-fade-in p-4 md:p-8 bg-gray-50 rounded-[2.5rem]">
       {/* Header Section */}
       <div className="text-center space-y-4 max-w-3xl mx-auto">
         <div className="flex justify-center items-center gap-3 mb-4" data-pdf-ignore="true">
@@ -160,11 +148,10 @@ const DigitalizationPage: React.FC = () => {
 
           <button
             onClick={handleExportPdf}
-            disabled={isExportingPdf}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-white text-teal-700 border border-teal-100 hover:bg-teal-50 transition-all shadow-sm"
           >
-            {isExportingPdf ? <Loader2 className="w-3 h-3 animate-spin" /> : <FileDown className="w-3 h-3" />}
-            {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
+            <Loader2 className="w-3 h-3" />
+            Export PDF
           </button>
         </div>
         <motion.div 

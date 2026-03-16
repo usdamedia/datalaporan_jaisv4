@@ -24,27 +24,28 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isPentadbiran = deptName.includes('Pentadbiran');
   const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
 
+  const [mainDept, unitName] = deptName.split(' : ');
+
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b-4 border-zus-900 pb-6 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="bg-zus-900 text-zus-gold p-3 rounded-full font-bold text-2xl">
-            JAIS
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-zus-900 uppercase tracking-tighter">
-              Laporan Tahunan 2025
-            </h1>
-            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
-              Jabatan Agama Islam Sarawak
+      {/* Simple Header */}
+      <div className="border-b-4 border-zus-900 pb-6 mb-8">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-3xl font-black text-zus-900 uppercase leading-tight break-words">
+            {mainDept}
+          </h1>
+          {unitName && (
+            <h2 className="text-xl font-bold text-gray-600 uppercase tracking-wide break-words">
+              {unitName}
+            </h2>
+          )}
+          <div className="flex justify-between items-end mt-4">
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+              Laporan Tahunan 2025 • Jabatan Agama Islam Sarawak
             </p>
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="text-xl font-black text-zus-900">{deptName}</div>
-          <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-            Tarikh: {formData.tarikh}
+            <p className="text-[10px] font-bold text-gray-400 uppercase">
+              Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}
+            </p>
           </div>
         </div>
       </div>
@@ -627,7 +628,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           <div className="p-6 bg-[#FDE047] text-zus-900 rounded-3xl flex justify-between items-center border-b-4 border-yellow-500">
             <div>
               <h3 className="text-xl font-black uppercase tracking-tight">Laporan Unit Integriti (UI) 2025</h3>
-              <p className="text-zus-900/60 text-xs font-bold uppercase tracking-widest mt-1">Jabatan Agama Islam Sarawak</p>
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mt-1">Jabatan Agama Islam Sarawak</p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-black text-zus-900">{formData.integriti.tadbirUrus.program || 0}</p>
@@ -1183,7 +1184,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                 <tbody>
                   {/* Diploma */}
                   <tr>
-                    <td rowSpan={4} className="border p-2 font-black text-blue-600 bg-blue-50/30 text-center">DIPLOMA</td>
+                    <td rowSpan={4} className="border p-2 font-black text-blue-600 bg-blue-50 text-center">DIPLOMA</td>
                     <td className="border p-2 font-bold uppercase">Johan</td>
                     <td className="border p-2">
                       <div className="font-black">{formData.bpnp.penulisan.diploma.johan.nama || '................................'}</div>
@@ -1204,14 +1205,14 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                       <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.ketiga.tajuk || '................................'}</div>
                     </td>
                   </tr>
-                  <tr className="bg-blue-50/50">
+                  <tr className="bg-blue-50">
                     <td className="border p-2 font-bold uppercase">Peserta Lain</td>
                     <td className="border p-2 font-black text-blue-700">{formData.bpnp.penulisan.diploma.pesertaLain} Orang</td>
                   </tr>
 
                   {/* Sarjana Muda */}
                   <tr>
-                    <td rowSpan={4} className="border p-2 font-black text-indigo-600 bg-indigo-50/30 text-center">SARJANA MUDA & KEATAS</td>
+                    <td rowSpan={4} className="border p-2 font-black text-indigo-600 bg-indigo-50 text-center">SARJANA MUDA & KEATAS</td>
                     <td className="border p-2 font-bold uppercase">Johan</td>
                     <td className="border p-2">
                       <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '................................'}</div>
@@ -1232,7 +1233,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                       <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '................................'}</div>
                     </td>
                   </tr>
-                  <tr className="bg-indigo-50/50">
+                  <tr className="bg-indigo-50">
                     <td className="border p-2 font-bold uppercase">Peserta Lain</td>
                     <td className="border p-2 font-black text-indigo-700">{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</td>
                   </tr>
