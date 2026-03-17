@@ -19,7 +19,9 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
               {showBack && (
                 <button
                   onClick={onBack}
-                  className="p-2 -ml-2 text-gray-500 hover:text-zus-900 hover:bg-gray-100 rounded-full transition-all active:scale-90"
+                  aria-label="Kembali"
+                  title="Kembali"
+                  className="p-2 -ml-2 text-gray-500 hover:text-zus-900 hover:bg-gray-100 rounded-full transition-all active:scale-90 focus-visible:ring-2 focus-visible:ring-zus-gold outline-none"
                 >
                   <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
