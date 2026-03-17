@@ -14,7 +14,7 @@ const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
   const [timeLeft, setTimeLeft] = useState(10); // 10 seconds countdown
   const [timerFinished, setTimerFinished] = useState(false);
 
-  const ADMIN_PASSWORD = 'bpnpj@is2026';
+  const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || '';
 
   useEffect(() => {
     // If we are bypassing, we don't need to check session storage
@@ -36,7 +36,7 @@ const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
+    if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
       performLogin();
     } else {
       setError('Kata laluan tidak sah.');
