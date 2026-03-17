@@ -15,6 +15,7 @@ const DepartmentCard: React.FC<DepartmentCardProps> = ({ name, active, hasSubUni
     <button
       onClick={onClick}
       disabled={!active}
+      aria-label={`${active ? 'Pilih Bahagian' : 'Akan Datang'} ${name}`}
       className={`
         w-full h-full text-left p-4 md:p-6 rounded-2xl md:rounded-3xl border transition-all duration-300 group relative overflow-hidden
         ${active 
