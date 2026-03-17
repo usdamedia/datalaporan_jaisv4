@@ -60,15 +60,22 @@ export default function App() {
         {showSubUnitModal && selectedDept && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in" onClick={resetSelection}></div>
-            <div className="relative bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 max-w-md w-full shadow-2xl animate-scale-in max-h-[90vh] overflow-y-auto">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-title"
+              className="relative bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 max-w-md w-full shadow-2xl animate-scale-in max-h-[90vh] overflow-y-auto"
+            >
               <button 
                 onClick={resetSelection}
-                className="absolute top-3 right-3 md:top-4 md:right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors hover:bg-gray-100 rounded-full"
+                aria-label="Tutup"
+                title="Tutup"
+                className="absolute top-3 right-3 md:top-4 md:right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors hover:bg-gray-100 rounded-full focus-visible:ring-2 focus-visible:ring-zus-gold outline-none"
               >
                 <X className="w-5 h-5" />
               </button>
               
-              <h2 className="text-lg md:text-xl font-bold text-zus-900 mb-1 flex items-center gap-2">
+              <h2 id="modal-title" className="text-lg md:text-xl font-bold text-zus-900 mb-1 flex items-center gap-2">
                   <span className="text-zus-gold">►</span> {selectedDept.name}
               </h2>
               <p className="text-gray-500 text-xs md:text-sm mb-5 border-b border-gray-100 pb-4">
@@ -87,7 +94,7 @@ export default function App() {
                       onClick={() => handleSubUnitClick(unit)}
                       disabled={!unit.active}
                       className={`
-                        w-full p-3 md:p-4 rounded-xl text-left border flex items-center justify-between group transition-all duration-200
+                        w-full p-3 md:p-4 rounded-xl text-left border flex items-center justify-between group transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-zus-gold
                         ${unit.active 
                           ? `${getUnitColor(unit.name)} shadow-sm hover:shadow-lg text-gray-700 active:scale-[0.98]` 
                           : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'}
