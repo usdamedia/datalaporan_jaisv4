@@ -188,7 +188,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       formData={formData}
     >
-      {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' ? (
+      {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' || selectedUnit === 'UNIT AKIDAH TAPISAN' ? (
         showDataManagement ? (
           <DataManagementDashboard 
             data={formData.bpnp.dataManagement} 
@@ -202,18 +202,22 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           />
         ) : (
           <>
-            <div className="mb-8 flex justify-end">
-              <button
-                onClick={() => setShowDataManagement(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-[#134E4A] text-white rounded-2xl font-bold hover:bg-teal-900 transition-all shadow-lg active:scale-95"
-              >
-                <LayoutDashboard className="w-5 h-5" />
-                Buka Data Management Dashboard
-              </button>
-            </div>
+            {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' && (
+              <div className="mb-8 flex justify-end">
+                <button
+                  onClick={() => setShowDataManagement(true)}
+                  className="flex items-center gap-2 px-6 py-3 bg-[#134E4A] text-white rounded-2xl font-bold hover:bg-teal-900 transition-all shadow-lg active:scale-95"
+                >
+                  <LayoutDashboard className="w-5 h-5" />
+                  Buka Data Management Dashboard
+                </button>
+              </div>
+            )}
             
             <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
+            {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' && (
+              <>
           {/* Kajian & Kaji Selidik */}
           <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
@@ -506,7 +510,11 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
             </div>
           </section>
+              </>
+            )}
 
+            {selectedUnit === 'UNIT AKIDAH TAPISAN' && (
+              <>
           {/* Statistik & Penerbitan */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
@@ -565,6 +573,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
             </section>
           </div>
+              </>
+            )}
 
           <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
           <LawatanSection 
