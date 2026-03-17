@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Gavel, FileText, CheckCircle2, Users, ClipboardList, Activity, Info } from 'lucide-react';
+import { Gavel, FileText, CheckCircle2, Users, ClipboardList, Activity, Info, Trash2 } from 'lucide-react';
 import { BPDS_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
@@ -35,6 +35,9 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
         jenayahSyariah: 0
       },
       penggubalanKaedah: BPDS_2024_REFERENCE.penggubalanKaedah.map(k => ({ name: k.name, value: 0 })),
+      derafUndangUndang: '',
+      derafUndangUndangList: [],
+      derafUndangUndangKemajuan: 0,
       aktiviti: 0
     }
   };
@@ -74,6 +77,27 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
     });
   };
 
+  const handleBpdsDraftArrayChange = (index: number, field: string, value: any) => {
+    setFormData((prev: any) => {
+      const currentDrafts = (prev.bpds.derafUndangUndangList || []).map((item: any) =>
+        typeof item === 'string' ? { name: item, value: 0 } : item
+      );
+      const nextDrafts = [...currentDrafts];
+      nextDrafts[index] = {
+        ...nextDrafts[index],
+        [field]: field === 'value' ? parseFloat(value) || 0 : value
+      };
+
+      return {
+        ...prev,
+        bpds: {
+          ...prev.bpds,
+          derafUndangUndangList: nextDrafts
+        }
+      };
+    });
+  };
+
   const handleBpdsSimpleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -82,6 +106,62 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
         [field]: parseInt(value) || 0
       }
     }));
+  };
+
+  const handleBpdsTextChange = (field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      bpds: {
+        ...prev.bpds,
+        [field]: value
+      }
+    }));
+  };
+
+  const handleSaveDerafUndangUndang = () => {
+    const derafText = (formData.bpds.derafUndangUndang || '').trim();
+
+    if (!derafText) {
+      handleSave();
+      return;
+    }
+
+    const updatedData = {
+      ...formData,
+      bpds: {
+        ...formData.bpds,
+        derafUndangUndang: '',
+        derafUndangUndangKemajuan: 0,
+        derafUndangUndangList: [
+          ...((formData.bpds.derafUndangUndangList || []).map((item: any) =>
+            typeof item === 'string' ? { name: item, value: 0 } : item
+          )),
+          {
+            name: derafText,
+            value: parseFloat(formData.bpds.derafUndangUndangKemajuan) || 0
+          }
+        ]
+      }
+    };
+
+    setFormData(updatedData);
+    handleSave(updatedData);
+  };
+
+  const handleDeleteDeraf = (index: number) => {
+    const nextDrafts = [...(formData.bpds.derafUndangUndangList || [])];
+    nextDrafts.splice(index, 1);
+    
+    const updatedData = {
+      ...formData,
+      bpds: {
+        ...formData.bpds,
+        derafUndangUndangList: nextDrafts
+      }
+    };
+    
+    setFormData(updatedData);
+    handleSave(updatedData);
   };
 
   const totalKesSelesai = useMemo(() => 
@@ -299,8 +379,80 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                   </td>
                 </tr>
               ))}
+              {(formData.bpds.derafUndangUndangList || []).map((item: any, idx: number) => {
+                const draftItem = typeof item === 'string' ? { name: item, value: 0 } : item;
+
+                return (
+                  <tr key={`draft-${draftItem.name}-${idx}`} className="bg-amber-50/40 hover:bg-amber-50/70 transition-colors">
+                    <td className="p-4 text-xs font-bold text-stone-700 border-b border-stone-100">{draftItem.name}</td>
+                    <td className="p-4 text-xs font-bold text-stone-300 border-b border-stone-100 text-center">-</td>
+                    <td className="p-4 border-b border-stone-100">
+                      <div className="flex items-center gap-3 justify-center">
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={draftItem.value || 0}
+                          onChange={(e) => handleBpdsDraftArrayChange(idx, 'value', e.target.value)}
+                          className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
+                        />
+                        <span className="text-xs font-bold text-stone-400">%</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDeraf(idx)}
+                          className="p-2 text-red-500 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-lg transition-colors ml-1"
+                          title="Padam Deraf"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-6 border-t border-stone-100 pt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-end">
+            <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
+              <label className="block text-xs font-black text-stone-700 uppercase tracking-wider mb-2">
+                Tambah Deraf Undang Undang
+              </label>
+              <textarea
+                value={formData.bpds.derafUndangUndang || ''}
+                onChange={(e) => handleBpdsTextChange('derafUndangUndang', e.target.value)}
+                rows={4}
+                placeholder="Masukkan maklumat deraf undang-undang di sini"
+                className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-medium text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none resize-y"
+              />
+            </div>
+
+            <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl lg:max-w-[180px]">
+              <label className="block text-xs font-black text-stone-700 uppercase tracking-wider mb-2">
+                Kemajuan 2025 (%)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.bpds.derafUndangUndangKemajuan || 0}
+                onChange={(e) => handleBpdsTextChange('derafUndangUndangKemajuan', e.target.value)}
+                className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSaveDerafUndangUndang}
+              disabled={isSaving}
+              className="h-fit px-5 py-3 bg-stone-900 text-white rounded-xl text-sm font-black hover:bg-stone-800 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
+          </div>
+          <p className="mt-3 text-[11px] text-stone-500 font-medium">
+            Simpanan menggunakan `localStorage` untuk data page Pendakwaaan.
+          </p>
         </div>
       </section>
 

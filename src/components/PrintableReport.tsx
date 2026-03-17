@@ -1572,6 +1572,23 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     </div>
                   </div>
                 ))}
+                {(formData.bpds.derafUndangUndangList || []).map((item: any, idx: number) => {
+                  const draftItem = typeof item === 'string' ? { name: item, value: 0 } : item;
+                  return (
+                    <div key={`draft-${idx}`} className="space-y-1">
+                      <div className="flex justify-between text-[9px] font-bold uppercase text-stone-700">
+                        <span>{draftItem.name}</span>
+                        <span>{draftItem.value || 0}%</span>
+                      </div>
+                      <div className="w-full bg-stone-100 rounded-full h-1.5">
+                        <div 
+                          className="bg-stone-400 h-1.5 rounded-full" 
+                          style={{ width: `${Math.min(draftItem.value || 0, 100)}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

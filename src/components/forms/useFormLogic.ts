@@ -14,6 +14,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           ...prev,
           ...parsed,
           // Deep merge for specific objects if needed
+          bpds: prev.bpds ? { ...prev.bpds, ...parsed.bpds } : prev.bpds,
           bkim: prev.bkim ? { ...prev.bkim, ...parsed.bkim } : prev.bkim,
           finance: prev.finance ? { ...prev.finance, ...parsed.finance } : prev.finance,
           leadership: prev.leadership ? { ...prev.leadership, ...parsed.leadership } : prev.leadership,
@@ -41,10 +42,11 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
+  const handleSave = (dataToSave?: any) => {
+    const payload = dataToSave ?? formData;
     setIsSaving(true);
     setTimeout(() => {
-      localStorage.setItem(`jais_2025_${deptName}`, JSON.stringify(formData));
+      localStorage.setItem(`jais_2025_${deptName}`, JSON.stringify(payload));
       setIsSaving(false);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);

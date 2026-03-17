@@ -30,10 +30,10 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                 </div>
                 <div>
                   <h1 className="text-sm md:text-lg font-bold text-zus-900 leading-tight">
-                    JAIS 2025
+                    KEPERLUAN DATA
                   </h1>
                   <p className="text-[10px] md:text-xs text-gray-500 font-medium">
-                    Laporan Tahunan
+                    Laporan Tahunan JAIS 2025
                   </p>
                 </div>
               </div>

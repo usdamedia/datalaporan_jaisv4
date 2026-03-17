@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:live": "vite --host 0.0.0.0 --open",
     "build": "vite build",
     "lint": "tsc --noEmit",
     "preview": "vite preview"

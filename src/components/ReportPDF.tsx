@@ -155,6 +155,71 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     color: '#374151',
   },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 20,
+  },
+  statsColumn: {
+    width: '48%',
+  },
+  infoCard: {
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 10,
+  },
+  infoCardLabel: {
+    fontSize: 8,
+    fontWeight: 'bold',
+    color: '#9ca3af',
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+  infoCardValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#0a1e3b',
+    marginBottom: 4,
+  },
+  infoCardRef: {
+    fontSize: 8,
+    color: '#9ca3af',
+  },
+  totalRow: {
+    borderTopWidth: 1,
+    borderTopColor: '#d1d5db',
+    paddingTop: 8,
+    marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  linkCard: {
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
+  },
+  linkTitle: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: '#374151',
+    marginBottom: 3,
+  },
+  linkUrl: {
+    fontSize: 8,
+    color: '#2563eb',
+  },
+  emptyState: {
+    fontSize: 8.5,
+    color: '#9ca3af',
+    fontStyle: 'italic',
+  },
   footer: {
     position: 'absolute',
     bottom: 30,
@@ -227,6 +292,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isHR = deptName.includes('HR & Latihan');
   const isPentadbiran = deptName.includes('Pentadbiran');
   const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
+  const integritiLinks = formData.integriti?.dokumentasi?.links || [];
+  const totalDokumentasiIntegriti =
+    (parseInt(formData.integriti?.dokumentasi?.manual) || 0) +
+    (parseInt(formData.integriti?.dokumentasi?.polisi) || 0);
 
   const [mainDept, unitName] = deptName.split(' : ');
 
@@ -752,6 +821,15 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.value}%</Text></View>
                   </View>
                 ))}
+                {(formData.bpds.derafUndangUndangList || []).map((item: any, idx: number) => {
+                  const draftItem = typeof item === 'string' ? { name: item, value: 0 } : item;
+                  return (
+                    <View key={`draft-${idx}`} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '70%' }]}><Text>{draftItem.name}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{draftItem.value || 0}%</Text></View>
+                    </View>
+                  );
+                })}
               </View>
             </View>
 
@@ -1144,6 +1222,42 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Statistik Projek & Mesyuarat</Text>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Projek Dijalankan</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.upp.statistikTahunan.dijalankan || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(UPP_2024_REFERENCE.statistikTahunan.dijalankan)}</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Projek Siap</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.upp.statistikTahunan.siap || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(UPP_2024_REFERENCE.statistikTahunan.siap)}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.infoCard}>
+                <View style={[styles.row, { marginBottom: 6 }]}>
+                  <Text style={styles.infoCardLabel}>Jawatankuasa Pembangunan</Text>
+                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.upp.mesyuarat.pembangunan || 0)}</Text>
+                </View>
+                <View style={[styles.row, { marginBottom: 0 }]}>
+                  <Text style={styles.infoCardLabel}>Jawatankuasa Teknikal</Text>
+                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.upp.mesyuarat.teknikal || 0)}</Text>
+                </View>
+                <View style={styles.totalRow}>
+                  <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#0a1e3b', textTransform: 'uppercase' }}>Jumlah Mesyuarat</Text>
+                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#0a1e3b' }}>
+                    {String((parseInt(formData.upp.mesyuarat.pembangunan) || 0) + (parseInt(formData.upp.mesyuarat.teknikal) || 0))}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
               <Text style={styles.sectionTitle}>Pembangunan Masjid, Surau & Perkuburan</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1198,42 +1312,54 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Tadbir Urus & Multimedia</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>Nilai 2025</Text></View>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Mesyuarat Tatakelola</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.mesyuarat || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat)}</Text>
+                  </View>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Mesyuarat J/Kuasa Tatakelola</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{String(formData.integriti.tadbirUrus.mesyuarat || 0)}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Video Integriti Dihasilkan</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{String(formData.integriti.multimedia.video || 0)}</Text></View>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Video Dihasilkan</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.integriti.multimedia.video || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.multimedia.video)}</Text>
+                  </View>
                 </View>
               </View>
             </View>
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Dokumentasi Integriti</Text>
-              <View style={styles.table}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Jenis Dokumen</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>Bilangan</Text></View>
+              <View style={styles.infoCard}>
+                <View style={[styles.row, { marginBottom: 6 }]}>
+                  <Text style={styles.infoCardLabel}>Manual</Text>
+                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.integriti.dokumentasi.manual || 0)}</Text>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Manual</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{String(formData.integriti.dokumentasi.manual || 0)}</Text></View>
+                <View style={[styles.row, { marginBottom: 0 }]}>
+                  <Text style={styles.infoCardLabel}>Polisi</Text>
+                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.integriti.dokumentasi.polisi || 0)}</Text>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Polisi</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{String(formData.integriti.dokumentasi.polisi || 0)}</Text></View>
-                </View>
-                <View style={[styles.tableRow, { backgroundColor: '#f9fafb' }]}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>JUMLAH KESELURUHAN</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>{String((parseInt(formData.integriti.dokumentasi.manual) || 0) + (parseInt(formData.integriti.dokumentasi.polisi) || 0))}</Text></View>
+                <View style={styles.totalRow}>
+                  <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#0a1e3b', textTransform: 'uppercase' }}>Jumlah Besar</Text>
+                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#0a1e3b' }}>{String(totalDokumentasiIntegriti)}</Text>
                 </View>
               </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Pautan Dokumen Integriti</Text>
+              {integritiLinks.length > 0 ? (
+                integritiLinks.map((link: any, idx: number) => (
+                  <View key={idx} style={styles.linkCard}>
+                    <Text style={styles.linkTitle}>{link.title || `Dokumen ${idx + 1}`}</Text>
+                    <Text style={styles.linkUrl}>{link.url || '-'}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.emptyState}>Tiada pautan dokumen dimasukkan.</Text>
+              )}
             </View>
 
             {/* Quality Initiatives inside Integriti */}

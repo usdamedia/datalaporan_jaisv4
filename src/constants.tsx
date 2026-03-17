@@ -20,56 +20,37 @@ import {
 } from 'lucide-react';
 
 export const DEPARTMENTS: Department[] = [
-  { id: '1', name: 'BPNP', active: true }, // Renamed from BP&P
-  { id: '2', name: 'BDKWH', active: true },
-  { id: '3', name: 'BKIM', active: true },
-  { 
-    id: '4', 
-    name: 'BPPS', 
-    active: true,
-    subUnits: [
-      { id: '4a', name: 'U Pentadbiran', active: true },
-      { id: '4b', name: 'Inisiatif Kualiti', active: true },
-      { id: '4c', name: 'U HR & Latihan', active: true },
-      { id: '4d', name: 'U Akaun', active: true },
-    ]
-  },
-  { id: '5', name: 'BPKS', active: true },
-  { id: '6', name: 'BPH', active: true },
-  { id: '7', name: 'BKKI', active: true },
-  { id: '8', name: 'BPPI', active: true },
-  { 
-    id: '9', 
-    name: 'UKOKO', 
-    active: true, 
-    subUnits: [
-      { id: '9b', name: 'Unit Komunikasi dan Pusat Sumber', active: true },
-      { id: '9c', name: 'Unit Pengurusan Acara', active: true },
-      { id: '9d', name: 'Unit Penerbitan', active: true },
-    ] 
-  },
-  { id: '10', name: 'Unit Integriti', active: true },
-  { id: '11', name: 'BKSK', active: true },
-  { id: '12', name: 'BKSPP', active: true },
-  { id: '13', name: 'UPP', active: true },
-  { id: '14', name: 'BPDS', active: true },
-  { id: '15', name: 'DHQC', active: true },
+  { id: '13', name: 'UPP UNIT PENGURUSAN PROJEK', active: true },
+  { id: '1', name: 'Bahagian Pentadbiran & Pengurusan Sumber BPNP', active: true },
+  { id: '2', name: 'Bahagian Dakwah BDAKWAH', active: true },
+  { id: '3', name: 'Bahagian Kemajuan Institusi Masjid BKIM', active: true },
+  { id: '5', name: 'Bahagian Penguatkuasaan Syariah BPKS', active: true },
+  { id: '7', name: 'Bahagian Kemajuan Keluarga Islam BKKI', active: true },
+  { id: '6', name: 'Bahagian Pengurusan Halal BPH', active: true },
+  { id: '14', name: 'Bahagian Pendakwaan Syariah BPDS', active: true },
+  { id: '11', name: 'Bahagian Kemajuan Saudara Kita BKSK', active: true },
+  { id: '8', name: 'Bahagian Pengukuhan Pendidikan Islam BPPI', active: true },
+  { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: true },
+  { id: '9', name: 'Unit Komunikasi Korporat UKOKO', active: true },
+  { id: '10', name: 'Unit Integriti UI', active: true },
 ];
 
 export const getIconForDept = (name: string) => {
+  const normalizedName = name.toUpperCase();
+
   // Logic icons based on department names (Keywords)
-  if (name.includes('UPP')) return <HardHat className="w-6 h-6" />;
-  if (name.includes('BPPS') || name.includes('Pentadbiran')) return <Users className="w-6 h-6" />;
-  if (name.includes('Akaun')) return <Landmark className="w-6 h-6" />;
-  if (name.includes('Kualiti')) return <ShieldCheck className="w-6 h-6" />;
-  if (name.includes('INTEGRITI')) return <Scale className="w-6 h-6" />;
-  if (name.includes('UKOKO')) return <Activity className="w-6 h-6" />;
-  if (name.includes('BKKI')) return <Globe className="w-6 h-6" />;
-  if (name.includes('BKSPP')) return <BookOpen className="w-6 h-6" />;
-  if (name.includes('BPKS')) return <Zap className="w-6 h-6" />;
-  if (name.includes('HR')) return <Briefcase className="w-6 h-6" />;
-  if (name.includes('BPDS') || name.includes('Pendakwaan')) return <Gavel className="w-6 h-6" />;
-  if (name.includes('DHQC')) return <Book className="w-6 h-6" />;
+  if (normalizedName.includes('UPP')) return <HardHat className="w-6 h-6" />;
+  if (normalizedName.includes('BPPS') || normalizedName.includes('PENTADBIRAN')) return <Users className="w-6 h-6" />;
+  if (normalizedName.includes('AKAUN')) return <Landmark className="w-6 h-6" />;
+  if (normalizedName.includes('KUALITI')) return <ShieldCheck className="w-6 h-6" />;
+  if (normalizedName.includes('INTEGRITI') || normalizedName.includes(' UI')) return <Scale className="w-6 h-6" />;
+  if (normalizedName.includes('UKOKO')) return <Activity className="w-6 h-6" />;
+  if (normalizedName.includes('BKKI')) return <Globe className="w-6 h-6" />;
+  if (normalizedName.includes('BKSPP')) return <BookOpen className="w-6 h-6" />;
+  if (normalizedName.includes('BPKS')) return <Zap className="w-6 h-6" />;
+  if (normalizedName.includes('HR')) return <Briefcase className="w-6 h-6" />;
+  if (normalizedName.includes('BPDS') || normalizedName.includes('PENDAKWAAN')) return <Gavel className="w-6 h-6" />;
+  if (normalizedName.includes('DHQC')) return <Book className="w-6 h-6" />;
   
   // Default icon
   return <Building2 className="w-6 h-6" />;
@@ -783,4 +764,3 @@ export const LATIHAN_2024_REFERENCE = {
     tiadaRekod: { pp: 0, sk1: 0, sk2: 0, total: 0, ppPct: 0, sk1Pct: 0, sk2Pct: 0, totalPct: 0 }
   }
 };
-

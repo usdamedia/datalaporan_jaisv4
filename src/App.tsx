@@ -124,7 +124,7 @@ export default function App() {
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-3 md:mb-4 text-zus-900 leading-tight">
-                DATA LAPORAN TAHUNAN <br/>
+                KEPERLUAN DATA LAPORAN TAHUNAN <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-zus-900 via-zus-700 to-zus-gold">
                   JAIS 2025
                 </span>

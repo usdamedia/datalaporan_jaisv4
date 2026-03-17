@@ -41,7 +41,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
     }
   });
 
-  const handleNestedInputChange = (section: string, subSection: string, field: string, value: string) => {
+  const handleNestedInputChange = (section: string, field: string, value: string) => {
     const numValue = value === '' ? '' : Math.max(0, parseInt(value));
     setFormData((prev: any) => ({
       ...prev,
@@ -49,10 +49,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
         ...prev.upp,
         [section]: {
           ...prev.upp[section],
-          [subSection]: {
-            ...prev.upp[section][subSection],
-            [field]: numValue
-          }
+          [field]: numValue
         }
       }
     }));
@@ -143,7 +140,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
             type="number"
             min="0"
             value={formData.upp.statistikTahunan.dijalankan}
-            onChange={(e) => handleNestedInputChange('statistikTahunan', 'dijalankan', '', e.target.value)}
+            onChange={(e) => handleNestedInputChange('statistikTahunan', 'dijalankan', e.target.value)}
             className="text-3xl font-black text-zus-900 bg-transparent border-none p-0 w-full focus:ring-0"
             placeholder="0"
           />
@@ -159,7 +156,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
             type="number"
             min="0"
             value={formData.upp.statistikTahunan.siap}
-            onChange={(e) => handleNestedInputChange('statistikTahunan', 'siap', '', e.target.value)}
+            onChange={(e) => handleNestedInputChange('statistikTahunan', 'siap', e.target.value)}
             className="text-3xl font-black text-zus-900 bg-transparent border-none p-0 w-full focus:ring-0"
             placeholder="0"
           />
@@ -180,7 +177,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
               type="number"
               min="0"
               value={formData.upp.mesyuarat.pembangunan}
-              onChange={(e) => handleNestedInputChange('mesyuarat', 'pembangunan', '', e.target.value)}
+              onChange={(e) => handleNestedInputChange('mesyuarat', 'pembangunan', e.target.value)}
               className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-teal-500"
               placeholder="0"
             />
@@ -191,7 +188,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
               type="number"
               min="0"
               value={formData.upp.mesyuarat.teknikal}
-              onChange={(e) => handleNestedInputChange('mesyuarat', 'teknikal', '', e.target.value)}
+              onChange={(e) => handleNestedInputChange('mesyuarat', 'teknikal', e.target.value)}
               className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-teal-500"
               placeholder="0"
             />
