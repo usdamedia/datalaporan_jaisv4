@@ -580,6 +580,92 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.fasiliti.musolla}</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.bilMusolla}</Text></View>
                 </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Imam I</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.perjawatan.imam1}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.imam1}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Imam II</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.perjawatan.imam2}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.imam2}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Imam III</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.perjawatan.imam3}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.imam3}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilal</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.perjawatan.bilal}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.bilal}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Marbot</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.perjawatan.marbot}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.marbot}</Text></View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Tanah Perkuburan & Penarafan Bintang</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>MIS</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.kubur.mis}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.kuburMis}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Tanah Kerajaan</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.kubur.kerajaan}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.kuburKerajaan}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>LAK</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.kubur.lak}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.kuburLak}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Lain-Lain</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.kubur.lain}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.kuburLain}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>5 Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star5}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star5}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>4 Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star4}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star4}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>3 Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star3}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star3}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>2 Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star2}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star2}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>1 Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star1}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star1}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Tiada Bintang</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BKIM_2024_REFERENCE.bintang.star0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bkim.star0}</Text></View>
+                </View>
               </View>
             </View>
 
@@ -587,17 +673,23 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Pecahan Mengikut Bahagian (2025)</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>Bahagian</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Program</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Guru Takmir</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>LAK</Text></View>
+                  <View style={[styles.tableCell, { width: '28%' }]}><Text>Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '12%' }]}><Text>Program 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '12%' }]}><Text>Program 2025</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '16%' }]}><Text>Guru Takmir 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '16%' }]}><Text>Guru Takmir 2025</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '8%' }]}><Text>LAK 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '8%' }]}><Text>LAK 2025</Text></View>
                 </View>
                 {formData.bkim.bkimDivisions.map((div: any, idx: number) => (
                   <View key={idx} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '25%' }]}><Text>{div.name}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{div.program}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{div.guruTakmir}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{div.lak}</Text></View>
+                    <View style={[styles.tableCell, { width: '28%' }]}><Text>{div.name}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '12%' }]}><Text>{BKIM_2024_REFERENCE.divisions[idx]?.program || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '12%' }]}><Text>{div.program}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '16%' }]}><Text>{BKIM_2024_REFERENCE.divisions[idx]?.guruTakmir || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '16%' }]}><Text>{div.guruTakmir}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '8%' }]}><Text>{BKIM_2024_REFERENCE.divisions[idx]?.lak || 0}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '8%' }]}><Text>{div.lak}</Text></View>
                   </View>
                 ))}
               </View>
