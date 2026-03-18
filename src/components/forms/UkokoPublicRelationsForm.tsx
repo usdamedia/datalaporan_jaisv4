@@ -10,7 +10,10 @@ import {
   CheckCircle2,
   AlertCircle,
   TrendingUp,
-  Building2
+  Building2,
+  Save,
+  Trash2,
+  Plus
 } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
@@ -22,6 +25,7 @@ interface UkokoPRData {
       talikhidmat: number;
       lain: number;
     };
+    statusSelesai: number;
     kategori: {
       masjid: number;
       kadNikah: number;
@@ -40,6 +44,11 @@ interface UkokoPRData {
       paibSarikei: number;
       paibSibu: number;
     };
+    customKategori: Array<{
+      id: string;
+      name: string;
+      value: number;
+    }>;
   };
   maklumBalas: {
     queueBee: {
@@ -66,6 +75,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     pr: {
       aduan: {
         sumber: { talikhidmat: 0, lain: 0 },
+        statusSelesai: 0,
         kategori: {
           masjid: 0,
           kadNikah: 0,
@@ -83,7 +93,8 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
           paibMiri: 0,
           paibSarikei: 0,
           paibSibu: 0
-        }
+        },
+        customKategori: []
       },
       maklumBalas: {
         queueBee: { puas: 0, tidakPuas: 0 },
@@ -94,6 +105,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   });
 
   const prData = formData.pr as UkokoPRData;
+  const [newCustomKategori, setNewCustomKategori] = React.useState('');
 
   const updateField = (path: string, value: string) => {
     const numValue = parseInt(value) || 0;
@@ -110,9 +122,68 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     });
   };
 
+  const addCustomKategori = () => {
+    const trimmed = newCustomKategori.trim();
+    if (!trimmed) return;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customKategori: [
+            ...(prev.pr.aduan.customKategori || []),
+            {
+              id: `${Date.now()}-${trimmed.toLowerCase().replace(/\s+/g, '-')}`,
+              name: trimmed,
+              value: 0,
+            },
+          ],
+        },
+      },
+    }));
+    setNewCustomKategori('');
+  };
+
+  const updateCustomKategori = (id: string, field: 'name' | 'value', value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customKategori: (prev.pr.aduan.customKategori || []).map((item: any) =>
+            item.id === id
+              ? {
+                  ...item,
+                  [field]: field === 'value' ? parseInt(value) || 0 : value,
+                }
+              : item
+          ),
+        },
+      },
+    }));
+  };
+
+  const removeCustomKategori = (id: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customKategori: (prev.pr.aduan.customKategori || []).filter((item: any) => item.id !== id),
+        },
+      },
+    }));
+  };
+
   // Calculations
   const totalAduanSumber = prData.aduan.sumber.talikhidmat + prData.aduan.sumber.lain;
-  const totalAduanKategori = Object.values(prData.aduan.kategori).reduce((a, b) => a + b, 0);
+  const totalAduanKategori =
+    Object.values(prData.aduan.kategori).reduce((a, b) => a + b, 0) +
+    (prData.aduan.customKategori || []).reduce((sum, item) => sum + (item.value || 0), 0);
   const totalAduanLokasi = Object.values(prData.aduan.lokasi).reduce((a, b) => a + b, 0);
 
   const totalQueueBee = prData.maklumBalas.queueBee.puas + prData.maklumBalas.queueBee.tidakPuas;
@@ -128,7 +199,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     ncr: 'NCR',
     tindakanPenguatkuasaanSyariah: 'Tindakan Penguatkuasaan Syariah',
     tindakanPengukuhanPendidikanIslam: 'Tindakan Pengukuhan Pendidikan Islam',
-    usk: 'USK',
+    usk: 'USIK',
   };
   const aduanLokasiLabels: Record<string, string> = {
     hqBkki: 'HQ BKKI',
@@ -186,9 +257,16 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
               </p>
             </div>
             <div className="rounded-3xl border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-indigo-50 p-6 shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500">Status Aduan 2024</p>
-              <p className="mt-3 text-4xl font-black text-violet-950">{UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-400">Selesai</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500">Status Selesai</p>
+              <p className="mt-2 text-[10px] font-bold text-violet-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</p>
+              <input
+                type="number"
+                value={prData.aduan.statusSelesai}
+                onChange={(e) => updateField('aduan.statusSelesai', e.target.value)}
+                className="mt-3 w-full rounded-2xl border border-violet-200 bg-white p-4 text-center text-3xl font-black text-violet-950 focus:ring-4 focus:ring-violet-500/20 outline-none"
+                placeholder="0"
+              />
+              <p className="mt-2 text-xs font-semibold text-slate-400">Jumlah aduan selesai bagi 2025</p>
             </div>
           </div>
 
@@ -210,7 +288,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                   />
                 </div>
                 <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
-                  <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">Lain-lain (Emel/Surat)</label>
+                  <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">Email / Emel / Surat</label>
                   <p className="mb-2 text-[10px] font-bold text-indigo-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.sumber.lain}</p>
                   <input
                     type="number"
@@ -222,7 +300,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 <div className="p-4 bg-indigo-900 rounded-2xl text-white">
                   <p className="text-[10px] font-black uppercase opacity-60">Jumlah Aduan</p>
                   <p className="text-2xl font-black">{totalAduanSumber}</p>
-                  <p className="mt-1 text-[10px] font-bold text-indigo-200/70 uppercase">Status Aduan 2024: {UKOKO_PR_2024_REFERENCE.aduan.statusSelesai} Selesai</p>
+                  <p className="mt-1 text-[10px] font-bold text-indigo-200/70 uppercase">Status Selesai 2025: {prData.aduan.statusSelesai}</p>
                 </div>
               </div>
             </div>
@@ -247,6 +325,73 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     />
                   </div>
                 ))}
+              </div>
+              <div className="rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/40 p-4">
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <input
+                    type="text"
+                    value={newCustomKategori}
+                    onChange={(e) => setNewCustomKategori(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addCustomKategori();
+                      }
+                    }}
+                    placeholder="Tambah jenis / kategori aduan baharu"
+                    className="flex-1 rounded-xl border border-indigo-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCustomKategori}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-indigo-700"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Tambah Kategori
+                  </button>
+                </div>
+
+                {(prData.aduan.customKategori || []).length > 0 && (
+                  <div className="mt-4 space-y-3">
+                    {(prData.aduan.customKategori || []).map((item) => (
+                      <div key={item.id} className="rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm">
+                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_140px_auto_auto]">
+                          <input
+                            type="text"
+                            value={item.name}
+                            onChange={(e) => updateCustomKategori(item.id, 'name', e.target.value)}
+                            className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Nama kategori aduan"
+                          />
+                          <input
+                            type="number"
+                            value={item.value}
+                            onChange={(e) => updateCustomKategori(item.id, 'value', e.target.value)}
+                            className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-black text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="0"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleSave}
+                            disabled={isSaving}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-white transition hover:bg-emerald-700 disabled:opacity-60"
+                          >
+                            <Save className="h-4 w-4" />
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeCustomKategori(item.id)}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className={`p-3 rounded-xl flex justify-between items-center ${totalAduanKategori === totalAduanSumber ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
                 <span className="text-[10px] font-black uppercase">Jumlah Kategori</span>
