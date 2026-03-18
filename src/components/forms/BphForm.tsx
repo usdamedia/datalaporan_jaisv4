@@ -79,6 +79,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     setFormData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -160,7 +161,8 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       onBack={onBack} 
       onSave={handleSave} 
       isSaving={isSaving} 
-      showSuccess={showSuccess} 
+      showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />

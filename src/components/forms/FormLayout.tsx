@@ -9,6 +9,7 @@ interface FormLayoutProps {
   onSave: () => void;
   isSaving: boolean;
   showSuccess: boolean;
+  saveError?: string | null;
   formData: any;
   children: React.ReactNode;
 }
@@ -19,6 +20,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   onSave, 
   isSaving, 
   showSuccess, 
+  saveError,
   formData,
   children 
 }) => {
@@ -120,6 +122,13 @@ const FormLayout: React.FC<FormLayoutProps> = ({
         <div className="mb-6 bg-green-50 border border-green-100 p-4 rounded-2xl flex items-center gap-3 text-green-700 animate-scale-in">
           <CheckCircle2 className="w-5 h-5" />
           <span className="text-sm font-bold">Data telah berjaya disimpan secara lokal!</span>
+        </div>
+      )}
+
+      {saveError && (
+        <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-700 animate-scale-in">
+          <AlertCircle className="w-5 h-5" />
+          <span className="text-sm font-bold">{saveError}</span>
         </div>
       )}
 

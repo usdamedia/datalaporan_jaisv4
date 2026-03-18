@@ -59,7 +59,8 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     setFormData,
     handleSave,
     isSaving,
-    showSuccess
+    showSuccess,
+    saveError
   } = useFormLogic(deptName, {
     pr: {
       aduan: {
@@ -126,6 +127,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <div className="space-y-8">

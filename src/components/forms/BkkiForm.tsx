@@ -67,6 +67,7 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
     setFormData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -128,6 +129,7 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />

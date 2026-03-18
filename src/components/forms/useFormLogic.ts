@@ -1,15 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export const useFormLogic = (deptName: string, initialState: any) => {
   const [formData, setFormData] = useState<any>(initialState);
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const saveTimeoutRef = useRef<number | null>(null);
+  const successTimeoutRef = useRef<number | null>(null);
+  const storageKey = useMemo(() => {
+    const normalizedDeptName = deptName
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+    return `jais_2025_${normalizedDeptName || 'DEPARTMENT'}`;
+  }, [deptName]);
 
   useEffect(() => {
-    const savedData = localStorage.getItem(`jais_2025_${deptName}`);
+    let savedData: string | null = null;
+
+    try {
+      savedData = localStorage.getItem(storageKey);
+
+      // Migrate older records that used the raw department label as the key.
+      if (!savedData) {
+        const legacyKey = `jais_2025_${deptName}`;
+        const legacyData = localStorage.getItem(legacyKey);
+
+        if (legacyData) {
+          savedData = legacyData;
+          localStorage.setItem(storageKey, legacyData);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading saved data', error);
+      setSaveError('Pelayar ini menghalang simpanan lokal. Sila semak mod private/incognito atau ruang storan.');
+      return;
+    }
+
     if (savedData) {
       try {
         const parsed = JSON.parse(savedData);
+        setSaveError(null);
         setFormData((prev: any) => ({
           ...prev,
           ...parsed,
@@ -35,7 +68,17 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         console.error("Error parsing saved data", e);
       }
     }
-  }, [deptName]);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        window.clearTimeout(saveTimeoutRef.current);
+      }
+
+      if (successTimeoutRef.current) {
+        window.clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, [deptName, storageKey]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -43,13 +86,33 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   };
 
   const handleSave = (dataToSave?: any) => {
-    const payload = dataToSave ?? formData;
+    // Determine if dataToSave is a React synthetic event or DOM event
+    const isEvent = dataToSave && typeof dataToSave === 'object' && ('nativeEvent' in dataToSave || 'preventDefault' in dataToSave);
+    const payload = (dataToSave && !isEvent) ? dataToSave : formData;
+
+    if (saveTimeoutRef.current) {
+      window.clearTimeout(saveTimeoutRef.current);
+    }
+
+    if (successTimeoutRef.current) {
+      window.clearTimeout(successTimeoutRef.current);
+    }
+
+    setSaveError(null);
+    setShowSuccess(false);
     setIsSaving(true);
-    setTimeout(() => {
-      localStorage.setItem(`jais_2025_${deptName}`, JSON.stringify(payload));
-      setIsSaving(false);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
+    saveTimeoutRef.current = window.setTimeout(() => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(payload));
+        setShowSuccess(true);
+        successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
+      } catch (error) {
+        console.error('Error saving data locally', error);
+        setShowSuccess(false);
+        setSaveError('Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.');
+      } finally {
+        setIsSaving(false);
+      }
     }, 800);
   };
 
@@ -83,6 +146,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setFormData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,

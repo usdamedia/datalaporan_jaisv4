@@ -21,7 +21,8 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     setFormData,
     handleSave,
     isSaving,
-    showSuccess
+    showSuccess,
+    saveError
   } = useFormLogic('DHQC', {
     dhqc: {
       pusatPemuliaan: [],
@@ -145,6 +146,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       {/* Overview Cards */}

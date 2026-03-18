@@ -46,6 +46,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
     formData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -180,6 +181,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />

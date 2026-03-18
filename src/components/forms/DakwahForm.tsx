@@ -47,6 +47,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
     formData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -80,6 +81,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />

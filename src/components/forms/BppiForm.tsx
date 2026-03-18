@@ -61,6 +61,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
     setFormData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -127,7 +128,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
   if (!formData.bppi) return null;
 
   return (
-    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} showSuccess={showSuccess} formData={formData}>
+    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} showSuccess={showSuccess} saveError={saveError} formData={formData}>
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
       <div className="space-y-8 animate-fade-in mt-8">

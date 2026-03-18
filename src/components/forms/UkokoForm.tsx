@@ -19,7 +19,8 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
     setFormData,
     handleSave,
     isSaving,
-    showSuccess
+    showSuccess,
+    saveError
   } = useFormLogic(deptName, {
     ukoko: {
       perayaanIslam: [],
@@ -80,6 +81,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       {/* Summary Header */}

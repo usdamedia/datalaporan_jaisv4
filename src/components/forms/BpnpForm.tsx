@@ -59,6 +59,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     formData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -186,6 +187,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' || selectedUnit === 'UNIT AKIDAH TAPISAN' ? (

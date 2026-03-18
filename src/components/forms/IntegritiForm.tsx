@@ -27,7 +27,8 @@ const IntegritiForm: React.FC<{ deptName: string; onBack: () => void }> = ({ dep
     setFormData,
     handleSave,
     isSaving,
-    showSuccess
+    showSuccess,
+    saveError
   } = useFormLogic('INTEGRITI', {
     integriti: {
       tadbirUrus: {
@@ -203,6 +204,7 @@ const IntegritiForm: React.FC<{ deptName: string; onBack: () => void }> = ({ dep
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       {/* Z-Pattern: Summary Cards */}

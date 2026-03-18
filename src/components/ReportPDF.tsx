@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
+  reportEyebrow: {
+    fontSize: 8,
+    color: '#6b7280',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: 6,
+  },
   simpleDeptName: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -307,6 +314,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {/* Simple Header */}
         <View style={styles.simpleHeader}>
+          <Text style={styles.reportEyebrow}>Data Laporan Tahunan JAIS 2025</Text>
           <Text style={styles.simpleDeptName}>{mainDept}</Text>
           {unitName && <Text style={styles.simpleSubUnit}>{unitName}</Text>}
           <Text style={styles.tarikhKecil}>Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}</Text>

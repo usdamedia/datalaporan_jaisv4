@@ -23,6 +23,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ deptName, onBack }) => {
     formData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -37,6 +38,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />

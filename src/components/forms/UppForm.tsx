@@ -19,7 +19,8 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
     setFormData,
     handleSave,
     isSaving,
-    showSuccess
+    showSuccess,
+    saveError
   } = useFormLogic('UPP', {
     upp: {
       mesyuarat: {
@@ -109,6 +110,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       {/* Z-Pattern: Header & Top Section */}

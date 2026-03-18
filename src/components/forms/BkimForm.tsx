@@ -51,6 +51,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
     formData,
     isSaving,
     showSuccess,
+    saveError,
     handleInputChange,
     handleSave,
     addLawatan,
@@ -84,6 +85,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
       onSave={handleSave}
       isSaving={isSaving}
       showSuccess={showSuccess}
+      saveError={saveError}
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
