@@ -41,12 +41,13 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
         pelajar: '', guru: '', penyelia: '',
         upkk: { calon: '', gps: '' },
         trendUPKK: [
-          { year: '2019', calon: '', gps: '' },
-          { year: '2020', calon: '', gps: '' },
-          { year: '2021', calon: '', gps: '' },
-          { year: '2022', calon: '', gps: '' },
-          { year: '2023', calon: '', gps: '' },
-          { year: '2024', calon: '', gps: '' },
+          { year: '2019', calon: '', gps: '2.08' },
+          { year: '2020', calon: '', gps: '1.83' },
+          { year: '2021', calon: '', gps: '1.83' },
+          { year: '2022', calon: '', gps: '2.28' },
+          { year: '2023', calon: '', gps: '2.28' },
+          { year: '2024', calon: '', gps: String(BPPI_2024_REFERENCE.kafa.upkk.gps) },
+          { year: '2025', calon: '', gps: '' },
         ]
       },
       kad: {
@@ -295,7 +296,17 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
             </div>
 
             <div className="bg-white border border-amber-100 rounded-2xl p-4 space-y-4">
-              <h4 className="text-[10px] font-black text-amber-900 uppercase">Trend Tahunan UPKK (2019 - 2024)</h4>
+              <div className="flex items-center justify-between gap-4">
+                <h4 className="text-[10px] font-black text-amber-900 uppercase">Trend Tahunan UPKK (2019 - 2025)</h4>
+                <button
+                  type="button"
+                  onClick={() => handleSave()}
+                  disabled={isSaving}
+                  className="rounded-lg bg-amber-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSaving ? 'Menyimpan...' : 'Simpan Trend'}
+                </button>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>

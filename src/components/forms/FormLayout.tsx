@@ -48,33 +48,35 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
   return (
     <>
-      <div className="max-w-4xl mx-auto animate-fade-in pb-20">
+      <div className="mx-auto max-w-7xl animate-fade-in pb-24">
       {/* Form Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
+      <div className="mb-10 flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+        <div className="min-w-0">
           <button 
             onClick={onBack}
-            className="flex items-center gap-2 text-gray-500 hover:text-zus-900 font-bold text-sm mb-2 transition-colors group"
+            className="group mb-3 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition-colors hover:text-zus-900"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Kembali ke Utama
           </button>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-zus-900">
+          <h2 className="text-3xl font-extrabold tracking-tight text-zus-900 sm:text-4xl md:text-5xl">
             {deptName}
           </h2>
-          <p className="text-gray-500 text-sm md:text-base">Sila lengkapkan maklumat laporan tahunan di bawah.</p>
+          <p className="mt-2 max-w-3xl text-base font-medium text-gray-500 md:text-xl">
+            Sila lengkapkan maklumat laporan tahunan di bawah.
+          </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
           <button
             onClick={onSave}
             disabled={isSaving}
-            className="flex items-center gap-2 bg-zus-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg hover:bg-zus-700 transition-all active:scale-95 disabled:opacity-70"
+            className="flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] bg-zus-900 px-7 py-5 text-lg font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
           >
             {isSaving ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             ) : (
-              <Save className="w-4 h-4" />
+              <Save className="w-6 h-6" />
             )}
             Simpan Draf
           </button>
@@ -83,16 +85,16 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <button
               onClick={handleExportPdf}
               disabled={isExportingPdf}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 ${
+              className={`flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] px-7 py-5 text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
                 isExportingPdf 
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'bg-white text-zus-900 border border-gray-200 hover:border-zus-gold'
+                  : 'border border-gray-200 bg-white text-zus-900 hover:border-zus-gold hover:bg-slate-50'
               }`}
             >
               {isExportingPdf ? (
                 <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
               ) : (
-                <FileDown className="w-4 h-4" />
+                <FileDown className="w-6 h-6" />
               )}
               {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
             </button>
@@ -124,12 +126,12 @@ const FormLayout: React.FC<FormLayoutProps> = ({
       )}
 
       {/* Main Form Content */}
-      <div className="space-y-6">
+      <div className="space-y-8">
         {children}
 
         {/* Footer Info */}
-        <div className="flex items-center gap-2 p-4 bg-blue-50/50 rounded-2xl border border-blue-100 text-blue-600">
-          <AlertCircle className="w-4 h-4" />
+        <div className="flex items-start gap-3 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-5 text-blue-700">
+          <AlertCircle className="mt-0.5 h-5 w-5" />
           <p className="text-[10px] md:text-xs font-medium">
             Nota: Data anda disimpan secara automatik dalam pelayar ini. Pastikan anda menekan butang <strong>Simpan Draf</strong> sebelum menutup tab.
           </p>

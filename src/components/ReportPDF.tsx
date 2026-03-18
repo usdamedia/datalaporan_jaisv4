@@ -1424,7 +1424,43 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Tadbir Urus & Multimedia</Text>
+              <Text style={styles.sectionTitle}>Ringkasan Utama</Text>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={[styles.infoCard, { backgroundColor: '#fef9c3', borderColor: '#fde68a' }]}>
+                    <Text style={[styles.infoCardLabel, { color: '#a16207' }]}>Jumlah Program</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.program || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.program)}</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Mesyuarat Tatakelola</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.mesyuarat || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat)}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Jumlah Dokumen</Text>
+                    <Text style={styles.infoCardValue}>{String(totalDokumentasiIntegriti)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.dokumentasi.total)}</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={[styles.infoCard, integritiCertificationStatus === 'CERTIFIED' ? { backgroundColor: '#f0fdfa', borderColor: '#99f6e4' } : { backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }]}>
+                    <Text style={styles.infoCardLabel}>Status ISO</Text>
+                    <Text style={styles.infoCardValue}>{integritiCertificationStatus}</Text>
+                    <Text style={styles.infoCardRef}>Berdasarkan syor keputusan audit</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Tadbir Urus & Aktiviti</Text>
               <View style={styles.statsGrid}>
                 <View style={styles.statsColumn}>
                   <View style={styles.infoCard}>
@@ -1435,9 +1471,28 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
                 <View style={styles.statsColumn}>
                   <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Program / Aktiviti Integriti</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.program || 0)}</Text>
+                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.program)}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Kandungan Multimedia</Text>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
                     <Text style={styles.infoCardLabel}>Video Dihasilkan</Text>
                     <Text style={styles.infoCardValue}>{String(formData.integriti.multimedia.video || 0)}</Text>
                     <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.multimedia.video)}</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={[styles.infoCard, { backgroundColor: '#fafafa' }]}>
+                    <Text style={styles.infoCardLabel}>Nota</Text>
+                    <Text style={[styles.value, { width: '100%' }]}>Termasuk video pertandingan integriti.</Text>
                   </View>
                 </View>
               </View>

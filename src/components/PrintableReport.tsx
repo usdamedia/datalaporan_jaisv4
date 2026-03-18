@@ -649,10 +649,32 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-yellow-100 bg-yellow-50 p-5">
+              <p className="text-[9px] font-black uppercase tracking-widest text-yellow-700">Jumlah Program</p>
+              <p className="mt-2 text-3xl font-black text-zus-900">{formData.integriti.tadbirUrus.program || 0}</p>
+              <p className="mt-1 text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.tadbirUrus.program}</p>
+            </div>
+            <div className="rounded-2xl border border-gray-100 bg-white p-5">
+              <p className="text-[9px] font-black uppercase tracking-widest text-gray-500">Mesyuarat Tatakelola</p>
+              <p className="mt-2 text-3xl font-black text-zus-900">{formData.integriti.tadbirUrus.mesyuarat || 0}</p>
+              <p className="mt-1 text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat}</p>
+            </div>
+            <div className="rounded-2xl border border-gray-100 bg-white p-5">
+              <p className="text-[9px] font-black uppercase tracking-widest text-gray-500">Jumlah Dokumen</p>
+              <p className="mt-2 text-3xl font-black text-zus-900">{(parseInt(formData.integriti.dokumentasi.manual) || 0) + (parseInt(formData.integriti.dokumentasi.polisi) || 0)}</p>
+              <p className="mt-1 text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.dokumentasi.total}</p>
+            </div>
+            <div className={`rounded-2xl border p-5 ${integritiCertificationStatus === 'Certified' ? 'border-teal-200 bg-teal-50' : 'border-gray-200 bg-gray-50'}`}>
+              <p className={`text-[9px] font-black uppercase tracking-widest ${integritiCertificationStatus === 'Certified' ? 'text-teal-700' : 'text-gray-500'}`}>Status ISO</p>
+              <p className={`mt-2 text-3xl font-black ${integritiCertificationStatus === 'Certified' ? 'text-teal-700' : 'text-gray-500'}`}>{integritiCertificationStatus.toUpperCase()}</p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
-                Tadbir Urus & Multimedia
+                Tadbir Urus & Aktiviti
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
@@ -661,30 +683,42 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat}</p>
                 </div>
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[8px] font-black text-gray-400 uppercase">Video Dihasilkan</p>
-                  <p className="text-xl font-black text-zus-900">{formData.integriti.multimedia.video || 0}</p>
-                  <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.multimedia.video}</p>
+                  <p className="text-[8px] font-black text-gray-400 uppercase">Program / Aktiviti Integriti</p>
+                  <p className="text-xl font-black text-zus-900">{formData.integriti.tadbirUrus.program || 0}</p>
+                  <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.tadbirUrus.program}</p>
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
-                Dokumentasi Integriti
+                Kandungan Multimedia
               </h3>
               <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-[8px] font-black text-gray-400 uppercase">Manual</p>
-                  <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.manual || 0}</p>
-                </div>
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-[8px] font-black text-gray-400 uppercase">Polisi</p>
-                  <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.polisi || 0}</p>
-                </div>
-                <div className="pt-2 border-t border-gray-200 flex justify-between items-center">
-                  <p className="text-[8px] font-black text-zus-900 uppercase">Jumlah Besar</p>
-                  <p className="text-lg font-black text-zus-900">{(parseInt(formData.integriti.dokumentasi.manual) || 0) + (parseInt(formData.integriti.dokumentasi.polisi) || 0)}</p>
-                </div>
+                <p className="text-[8px] font-black text-gray-400 uppercase">Video Dihasilkan</p>
+                <p className="text-xl font-black text-zus-900">{formData.integriti.multimedia.video || 0}</p>
+                <p className="text-[8px] text-gray-400">REF 2024: {INTEGRITI_2024_REFERENCE.multimedia.video}</p>
+                <p className="mt-2 text-[8px] italic text-gray-400">Termasuk video pertandingan integriti.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-yellow-400 pl-2">
+              Dokumentasi Integriti
+            </h3>
+            <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-[8px] font-black text-gray-400 uppercase">Manual</p>
+                <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.manual || 0}</p>
+              </div>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-[8px] font-black text-gray-400 uppercase">Polisi</p>
+                <p className="text-sm font-black text-zus-900">{formData.integriti.dokumentasi.polisi || 0}</p>
+              </div>
+              <div className="pt-2 border-t border-gray-200 flex justify-between items-center">
+                <p className="text-[8px] font-black text-zus-900 uppercase">Jumlah Besar</p>
+                <p className="text-lg font-black text-zus-900">{(parseInt(formData.integriti.dokumentasi.manual) || 0) + (parseInt(formData.integriti.dokumentasi.polisi) || 0)}</p>
               </div>
             </div>
           </div>

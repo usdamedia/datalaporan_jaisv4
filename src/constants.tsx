@@ -50,7 +50,16 @@ export const DEPARTMENTS: Department[] = [
   { id: '11', name: 'Bahagian Kemajuan Saudara Kita BKSK', active: true },
   { id: '8', name: 'Bahagian Pengukuhan Pendidikan Islam BPPI', active: true },
   { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: true },
-  { id: '9', name: 'Unit Komunikasi Korporat UKOKO', active: true },
+  {
+    id: '9',
+    name: 'Unit Komunikasi Korporat UKOKO',
+    active: true,
+    subUnits: [
+      { id: 'ukoko-pr', name: 'Unit Perhubungan Awam', active: true },
+      { id: 'ukoko-perayaan', name: 'Unit Perayaan Islam', active: true },
+      { id: 'ukoko-lain', name: 'Sub Unit UKOKO (Kemaskini Kemudian)', active: false },
+    ]
+  },
   { id: '10', name: 'Unit Integriti UI', active: true },
 ];
 
@@ -678,6 +687,49 @@ export const UKOKO_2024_REFERENCE = {
     { name: "Majlis Kesyukuran Sempena Sambutan Hari Lahir ke-78 TYT Yang Di-Pertua Negeri Sarawak", tarikh: "2024-10-10", tuanRumah: "Kuching", mesyuarat: 3 }
   ],
   total: 10
+};
+
+export const UKOKO_PR_2024_REFERENCE = {
+  aduan: {
+    jumlah: 15,
+    statusSelesai: 15,
+    sumber: {
+      talikhidmat: 11,
+      lain: 4,
+    },
+    kategori: {
+      kadNikah: 1,
+      kafa: 1,
+      logoHalal: 1,
+      masjid: 7,
+      ncr: 1,
+      tindakanPenguatkuasaanSyariah: 2,
+      tindakanPengukuhanPendidikanIslam: 1,
+      usk: 1,
+    },
+    lokasi: {
+      hqBkki: 1,
+      paibBintulu: 1,
+      paibKuching: 6,
+      paibMiri: 2,
+      paibSarikei: 1,
+      paibSibu: 3,
+    },
+  },
+  maklumBalas: {
+    jumlah: 7473,
+    queueBee: {
+      jumlah: 6533,
+      puas: 6453,
+      tidakPuas: 80,
+    },
+    kodQr: {
+      jumlah: 940,
+      puas: 928,
+      tidakPuas: 12,
+    },
+  },
+  lawatanLuar: 44,
 };
 
 export const DHQC_2024_REFERENCE = {

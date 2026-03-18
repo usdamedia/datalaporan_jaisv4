@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { UKOKO_PR_2024_REFERENCE } from '../../constants';
 
 interface UkokoPRData {
   aduan: {
@@ -25,19 +26,19 @@ interface UkokoPRData {
       masjid: number;
       kadNikah: number;
       kafa: number;
-      halal: number;
+      logoHalal: number;
       ncr: number;
-      penguatkuasaan: number;
-      pendidikan: number;
+      tindakanPenguatkuasaanSyariah: number;
+      tindakanPengukuhanPendidikanIslam: number;
       usk: number;
     };
     lokasi: {
-      hq: number;
-      bintulu: number;
-      kuching: number;
-      miri: number;
-      sarikei: number;
-      sibu: number;
+      hqBkki: number;
+      paibBintulu: number;
+      paibKuching: number;
+      paibMiri: number;
+      paibSarikei: number;
+      paibSibu: number;
     };
   };
   maklumBalas: {
@@ -69,19 +70,19 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
           masjid: 0,
           kadNikah: 0,
           kafa: 0,
-          halal: 0,
+          logoHalal: 0,
           ncr: 0,
-          penguatkuasaan: 0,
-          pendidikan: 0,
+          tindakanPenguatkuasaanSyariah: 0,
+          tindakanPengukuhanPendidikanIslam: 0,
           usk: 0
         },
         lokasi: {
-          hq: 0,
-          bintulu: 0,
-          kuching: 0,
-          miri: 0,
-          sarikei: 0,
-          sibu: 0
+          hqBkki: 0,
+          paibBintulu: 0,
+          paibKuching: 0,
+          paibMiri: 0,
+          paibSarikei: 0,
+          paibSibu: 0
         }
       },
       maklumBalas: {
@@ -119,6 +120,24 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   const totalMaklumBalas = totalQueueBee + totalQrCode;
 
   const isAduanBalanced = totalAduanSumber === totalAduanKategori && totalAduanSumber === totalAduanLokasi;
+  const aduanKategoriLabels: Record<string, string> = {
+    masjid: 'Masjid',
+    kadNikah: 'Kad Nikah',
+    kafa: 'KAFA',
+    logoHalal: 'Logo Halal',
+    ncr: 'NCR',
+    tindakanPenguatkuasaanSyariah: 'Tindakan Penguatkuasaan Syariah',
+    tindakanPengukuhanPendidikanIslam: 'Tindakan Pengukuhan Pendidikan Islam',
+    usk: 'USK',
+  };
+  const aduanLokasiLabels: Record<string, string> = {
+    hqBkki: 'HQ BKKI',
+    paibBintulu: 'PAIB Bintulu',
+    paibKuching: 'PAIB Kuching',
+    paibMiri: 'PAIB Miri',
+    paibSarikei: 'PAIB Sarikei',
+    paibSibu: 'PAIB Sibu',
+  };
 
   return (
     <FormLayout
@@ -131,15 +150,45 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       formData={formData}
     >
       <div className="space-y-8">
+        <section className="rounded-[2rem] bg-[linear-gradient(135deg,#5b6cff_0%,#7c3aed_55%,#5b21b6_100%)] p-8 text-white shadow-xl">
+          <p className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-100">Laporan Tahunan Perhubungan Awam</p>
+          <h1 className="mt-3 max-w-4xl text-3xl font-black uppercase tracking-tight">Unit Komunikasi Korporat (UKOKO) · Unit Perhubungan Awam</h1>
+          <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-indigo-50">
+            Halaman ini memfokuskan pengisian data aduan, maklum balas pelanggan, dan lawatan luar bagi tahun 2025 dengan semakan automatik pada jumlah utama.
+          </p>
+        </section>
+
         {/* 1. Statistik Aduan */}
-        <section className="bg-white border border-indigo-100 rounded-3xl p-6 md:p-8 shadow-sm">
+        <section className="overflow-hidden rounded-[2rem] border border-indigo-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-indigo-50 pb-4">
             <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
               <MessageSquare className="w-6 h-6" />
             </div>
             <div>
               <h3 className="text-xl font-black text-indigo-950 uppercase tracking-tight">Statistik Aduan 2025</h3>
-              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Pengurusan Aduan Awam</p>
+              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Pengurusan Aduan Awam • Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
+            </div>
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-500">Jumlah Aduan</p>
+              <p className="mt-3 text-4xl font-black text-indigo-950">{totalAduanSumber}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-400">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
+            </div>
+            <div className={`rounded-3xl border p-6 shadow-sm ${isAduanBalanced ? 'border-emerald-100 bg-emerald-50' : 'border-rose-100 bg-rose-50'}`}>
+              <p className={`text-[10px] font-black uppercase tracking-[0.25em] ${isAduanBalanced ? 'text-emerald-600' : 'text-rose-600'}`}>Semakan Auto-Sum</p>
+              <p className={`mt-3 text-2xl font-black ${isAduanBalanced ? 'text-emerald-900' : 'text-rose-900'}`}>
+                {isAduanBalanced ? 'Jumlah Seimbang' : 'Jumlah Tidak Sepadan'}
+              </p>
+              <p className={`mt-2 text-xs font-semibold ${isAduanBalanced ? 'text-emerald-700' : 'text-rose-700'}`}>
+                Sumber: {totalAduanSumber} · Kategori: {totalAduanKategori} · Lokasi: {totalAduanLokasi}
+              </p>
+            </div>
+            <div className="rounded-3xl border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-indigo-50 p-6 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500">Status Aduan 2024</p>
+              <p className="mt-3 text-4xl font-black text-violet-950">{UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-400">Selesai</p>
             </div>
           </div>
 
@@ -152,6 +201,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
               <div className="grid grid-cols-1 gap-3">
                 <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
                   <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">SCS Talikhidmat</label>
+                  <p className="mb-2 text-[10px] font-bold text-indigo-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.sumber.talikhidmat}</p>
                   <input
                     type="number"
                     value={prData.aduan.sumber.talikhidmat}
@@ -161,6 +211,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 </div>
                 <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
                   <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">Lain-lain (Emel/Surat)</label>
+                  <p className="mb-2 text-[10px] font-bold text-indigo-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.sumber.lain}</p>
                   <input
                     type="number"
                     value={prData.aduan.sumber.lain}
@@ -171,6 +222,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 <div className="p-4 bg-indigo-900 rounded-2xl text-white">
                   <p className="text-[10px] font-black uppercase opacity-60">Jumlah Aduan</p>
                   <p className="text-2xl font-black">{totalAduanSumber}</p>
+                  <p className="mt-1 text-[10px] font-bold text-indigo-200/70 uppercase">Status Aduan 2024: {UKOKO_PR_2024_REFERENCE.aduan.statusSelesai} Selesai</p>
                 </div>
               </div>
             </div>
@@ -184,8 +236,9 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 {Object.entries(prData.aduan.kategori).map(([key, val]) => (
                   <div key={key} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 truncate">
-                      {key.replace(/([A-Z])/g, ' $1')}
+                      {aduanKategoriLabels[key]}
                     </label>
+                    <p className="mb-1 text-[9px] font-bold text-slate-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.kategori[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.kategori]}</p>
                     <input
                       type="number"
                       value={val}
@@ -210,8 +263,9 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 {Object.entries(prData.aduan.lokasi).map(([key, val]) => (
                   <div key={key} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 truncate">
-                      {key.toUpperCase()}
+                      {aduanLokasiLabels[key]}
                     </label>
+                    <p className="mb-1 text-[9px] font-bold text-slate-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi]}</p>
                     <input
                       type="number"
                       value={val}
@@ -239,7 +293,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
 
           {/* Bar Chart Placeholders */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 h-48 flex flex-col items-center justify-center text-slate-400">
+            <div className="h-48 rounded-[1.75rem] border border-slate-100 bg-slate-50 p-6 text-slate-400 flex flex-col items-center justify-center">
               <BarChart3 className="w-8 h-8 mb-2 opacity-20" />
               <p className="text-[10px] font-black uppercase tracking-widest">Visualisasi Kategori Aduan</p>
               <div className="w-full mt-4 flex items-end gap-2 h-16 px-4">
@@ -248,7 +302,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 ))}
               </div>
             </div>
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 h-48 flex flex-col items-center justify-center text-slate-400">
+            <div className="h-48 rounded-[1.75rem] border border-slate-100 bg-slate-50 p-6 text-slate-400 flex flex-col items-center justify-center">
               <BarChart3 className="w-8 h-8 mb-2 opacity-20" />
               <p className="text-[10px] font-black uppercase tracking-widest">Visualisasi Lokasi PAIB</p>
               <div className="w-full mt-4 flex items-end gap-2 h-16 px-8">
@@ -261,14 +315,36 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
         </section>
 
         {/* 2. Maklum Balas Pelanggan */}
-        <section className="bg-white border border-purple-100 rounded-3xl p-6 md:p-8 shadow-sm">
+        <section className="overflow-hidden rounded-[2rem] border border-purple-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-purple-50 pb-4">
             <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
               <Smile className="w-6 h-6" />
             </div>
             <div>
               <h3 className="text-xl font-black text-purple-950 uppercase tracking-tight">Maklum Balas Pelanggan</h3>
-              <p className="text-xs text-purple-400 font-bold uppercase tracking-widest">Kepuasan Perkhidmatan</p>
+              <p className="text-xs text-purple-400 font-bold uppercase tracking-widest">Kepuasan Perkhidmatan • Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
+            </div>
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div className="rounded-3xl border border-purple-100 bg-gradient-to-br from-purple-50 via-white to-indigo-50 p-6 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-purple-500">Jumlah Maklum Balas</p>
+              <p className="mt-3 text-4xl font-black text-purple-950">{totalMaklumBalas.toLocaleString()}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-400">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
+            </div>
+            <div className="rounded-3xl border border-emerald-100 bg-emerald-50 p-6 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Puas Hati</p>
+              <p className="mt-3 text-4xl font-black text-emerald-950">
+                {(prData.maklumBalas.queueBee.puas + prData.maklumBalas.qrCode.puas).toLocaleString()}
+              </p>
+              <p className="mt-2 text-xs font-semibold text-emerald-700">Queue Bee + Kod QR</p>
+            </div>
+            <div className="rounded-3xl border border-rose-100 bg-rose-50 p-6 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-600">Tidak Puas</p>
+              <p className="mt-3 text-4xl font-black text-rose-950">
+                {(prData.maklumBalas.queueBee.tidakPuas + prData.maklumBalas.qrCode.tidakPuas).toLocaleString()}
+              </p>
+              <p className="mt-2 text-xs font-semibold text-rose-700">Queue Bee + Kod QR</p>
             </div>
           </div>
 
@@ -284,6 +360,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     <Smile className="w-4 h-4" />
                     <span className="text-[10px] font-black uppercase">Puas Hati</span>
                   </div>
+                  <p className="text-[10px] font-bold text-emerald-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.puas.toLocaleString()}</p>
                   <input
                     type="number"
                     value={prData.maklumBalas.queueBee.puas}
@@ -296,6 +373,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     <Frown className="w-4 h-4" />
                     <span className="text-[10px] font-black uppercase">Tidak Puas</span>
                   </div>
+                  <p className="text-[10px] font-bold text-rose-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.tidakPuas}</p>
                   <input
                     type="number"
                     value={prData.maklumBalas.queueBee.tidakPuas}
@@ -308,6 +386,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 <span className="text-[10px] font-black text-indigo-400 uppercase">Sub-Jumlah</span>
                 <span className="text-lg font-black text-indigo-900">{totalQueueBee}</span>
               </div>
+              <p className="mt-2 text-[10px] font-bold text-indigo-300 uppercase">Jumlah Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.jumlah.toLocaleString()}</p>
             </div>
 
             {/* QR Code */}
@@ -321,6 +400,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     <Smile className="w-4 h-4" />
                     <span className="text-[10px] font-black uppercase">Puas Hati</span>
                   </div>
+                  <p className="text-[10px] font-bold text-emerald-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.puas}</p>
                   <input
                     type="number"
                     value={prData.maklumBalas.qrCode.puas}
@@ -333,6 +413,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     <Frown className="w-4 h-4" />
                     <span className="text-[10px] font-black uppercase">Tidak Puas</span>
                   </div>
+                  <p className="text-[10px] font-bold text-rose-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.tidakPuas}</p>
                   <input
                     type="number"
                     value={prData.maklumBalas.qrCode.tidakPuas}
@@ -345,13 +426,15 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                 <span className="text-[10px] font-black text-purple-400 uppercase">Sub-Jumlah</span>
                 <span className="text-lg font-black text-purple-900">{totalQrCode}</span>
               </div>
+              <p className="mt-2 text-[10px] font-bold text-purple-300 uppercase">Jumlah Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.jumlah}</p>
             </div>
           </div>
 
-          <div className="mt-8 bg-gradient-to-r from-indigo-900 to-purple-900 rounded-3xl p-8 text-white flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="mt-8 flex flex-col items-center justify-between gap-6 rounded-[2rem] bg-gradient-to-r from-indigo-900 to-purple-900 p-8 text-white md:flex-row">
             <div>
               <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-1">Jumlah Keseluruhan Maklum Balas</p>
               <h3 className="text-5xl font-black tracking-tighter">{totalMaklumBalas.toLocaleString()}</h3>
+              <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-indigo-200/70">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
             </div>
             <div className="flex gap-4">
               <div className="text-center px-6 py-3 bg-white/10 rounded-2xl backdrop-blur-md">
@@ -371,14 +454,14 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
         </section>
 
         {/* 3. Lawatan Luar */}
-        <section className="bg-white border border-indigo-100 rounded-3xl p-6 md:p-8 shadow-sm">
+        <section className="overflow-hidden rounded-[2rem] border border-indigo-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-indigo-50 pb-4">
             <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
               <Building2 className="w-6 h-6" />
             </div>
             <div>
               <h3 className="text-xl font-black text-indigo-950 uppercase tracking-tight">Lawatan Luar</h3>
-              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Agensi / Badan / NGO / Syarikat</p>
+              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Agensi / Badan / NGO / Syarikat • Ref 2024: {UKOKO_PR_2024_REFERENCE.lawatanLuar}</p>
             </div>
           </div>
 
