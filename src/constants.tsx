@@ -21,7 +21,27 @@ import {
 
 export const DEPARTMENTS: Department[] = [
   { id: '13', name: 'UPP UNIT PENGURUSAN PROJEK', active: true },
-  { id: '1', name: 'Bahagian Pentadbiran & Pengurusan Sumber BPNP', active: true },
+  {
+    id: '1',
+    name: 'Bahagian Pentadbiran & Pengurusan Sumber BPPS',
+    active: true,
+    subUnits: [
+      { id: 'bpps-pentadbiran', name: 'Unit Pentadbiran', active: true },
+      { id: 'bpps-akaun', name: 'Unit Akaun', active: true },
+      { id: 'bpps-hr', name: 'Unit HR', active: true },
+      { id: 'bpps-latihan', name: 'Unit Latihan', active: true }
+    ]
+  },
+  {
+    id: '15',
+    name: 'Bahagian Perancangan dan Penyelidikan BPNP',
+    active: true,
+    subUnits: [
+      { id: 'bpnp-penyelidikan', name: 'Unit Penyelidikan', active: true },
+      { id: 'bpnp-strategik', name: 'Unit Perancangan Strategik', active: true },
+      { id: 'bpnp-akidah', name: 'Unit Akidah Tapisan', active: true }
+    ]
+  },
   { id: '2', name: 'Bahagian Dakwah BDAKWAH', active: true },
   { id: '3', name: 'Bahagian Kemajuan Institusi Masjid BKIM', active: true },
   { id: '5', name: 'Bahagian Penguatkuasaan Syariah BPKS', active: true },
