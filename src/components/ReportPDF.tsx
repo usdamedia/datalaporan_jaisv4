@@ -318,6 +318,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     formData.quality?.frameworks?.scsScorecard ? 'SCS Scorecard' : null,
     formData.quality?.frameworks?.eksa ? 'EKSA' : null,
   ].filter(Boolean);
+  const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
 
   return (
     <Document>
@@ -1051,7 +1052,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Permohonan Sijil</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPH_2024_REFERENCE.sphm.permohonan}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bph.sphm.permohonan || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{bphPermohonanTotal}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '40%' }]}><Text>Pemilik Sijil Aktif</Text></View>

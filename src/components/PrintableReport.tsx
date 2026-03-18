@@ -38,6 +38,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     formData.quality?.frameworks?.scsScorecard ? 'SCS Scorecard' : null,
     formData.quality?.frameworks?.eksa ? 'EKSA' : null,
   ].filter(Boolean);
+  const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -140,7 +141,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <tr>
                     <td className="border p-2 font-bold">Permohonan Sijil</td>
                     <td className="border p-2 text-center">{BPH_2024_REFERENCE.sphm.permohonan}</td>
-                    <td className="border p-2 text-center font-black bg-olive-50">{formData.bph.sphm.permohonan || 0}</td>
+                    <td className="border p-2 text-center font-black bg-olive-50">{bphPermohonanTotal}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Pemilik Sijil Aktif</td>

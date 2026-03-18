@@ -50,8 +50,54 @@
 }
 
 @layer base {
+  :root {
+    --app-font-header: 2rem;
+    --app-font-subheader: 1.125rem;
+    --app-font-body: 0.95rem;
+  }
+
   body {
     @apply bg-slate-50 text-slate-900;
+  }
+}
+
+@layer components {
+  .app-typography {
+    font-size: var(--app-font-body);
+    line-height: 1.6;
+  }
+
+  .app-typography :is(h1, h2, h3, [data-font-level="header"]) {
+    font-size: var(--app-font-header) !important;
+    line-height: 1.15 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+  }
+
+  .app-typography :is(h4, h5, h6, label, th, [data-font-level="subheader"]) {
+    font-size: var(--app-font-subheader) !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+  }
+
+  .app-typography :is(
+    p,
+    span,
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    td,
+    li,
+    small,
+    strong,
+    em,
+    figcaption,
+    [data-font-level="body"]
+  ) {
+    font-size: var(--app-font-body) !important;
+    line-height: 1.6 !important;
   }
 }
 
