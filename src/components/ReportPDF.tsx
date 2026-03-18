@@ -305,6 +305,18 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const totalDokumentasiIntegriti =
     (parseInt(formData.integriti?.dokumentasi?.manual) || 0) +
     (parseInt(formData.integriti?.dokumentasi?.polisi) || 0);
+  const iso9001Status = formData.quality?.iso9001?.status?.trim() || '';
+  const iso37001Status = formData.quality?.iso37001?.status?.trim() || '';
+  const integritiCertificationStatus =
+    iso9001Status.toLowerCase().includes('recommend') ||
+    iso37001Status.toLowerCase().includes('recommend')
+      ? 'CERTIFIED'
+      : 'PENDING';
+  const activeIntegritiFrameworks = [
+    formData.quality?.frameworks?.mbef ? 'MBEF' : null,
+    formData.quality?.frameworks?.scsScorecard ? 'SCS Scorecard' : null,
+    formData.quality?.frameworks?.eksa ? 'EKSA' : null,
+  ].filter(Boolean);
 
   return (
     <Document>
@@ -1470,7 +1482,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <View style={[styles.table, { backgroundColor: '#0D9488' }]}>
                     <View style={styles.tableRow}>
                       <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>STATUS PENSIJILAN ISO</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>CERTIFIED</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>{integritiCertificationStatus}</Text></View>
                     </View>
                   </View>
                 </View>
@@ -1489,6 +1501,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                     <View style={styles.tableRow}>
                       <View style={[styles.tableCell, { width: '40%' }]}><Text>Tarikh Audit</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso9001.tarikhAudit || '-'}</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Syor Keputusan</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{iso9001Status || '-'}</Text></View>
                     </View>
                     <View style={styles.tableRow}>
                       <View style={[styles.tableCell, { width: '40%' }]}><Text>NCR / OFI</Text></View>
@@ -1513,10 +1529,41 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso37001.tarikhAudit || '-'}</Text></View>
                     </View>
                     <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Syor Keputusan</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{iso37001Status || '-'}</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
                       <View style={[styles.tableCell, { width: '40%' }]}><Text>NCR / OFI</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso37001.ncr || 0} / {formData.quality.iso37001.ofi || 0}</Text></View>
                     </View>
                   </View>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Frameworks & Prestasi</Text>
+                  {activeIntegritiFrameworks.length > 0 ? (
+                    activeIntegritiFrameworks.map((framework) => (
+                      <View key={framework} style={styles.linkCard}>
+                        <Text style={styles.linkTitle}>{framework}</Text>
+                      </View>
+                    ))
+                  ) : (
+                    <Text style={styles.emptyState}>Tiada framework dipilih.</Text>
+                  )}
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Inisiatif Kualiti Tambahan</Text>
+                  {formData.quality.additionalInitiatives.length > 0 ? (
+                    formData.quality.additionalInitiatives.map((initiative: any, idx: number) => (
+                      <View key={idx} style={styles.linkCard}>
+                        <Text style={styles.linkTitle}>{initiative.title || `Inisiatif ${idx + 1}`}</Text>
+                        <Text style={styles.value}>{initiative.status || '-'}</Text>
+                      </View>
+                    ))
+                  ) : (
+                    <Text style={styles.emptyState}>Tiada inisiatif tambahan dimasukkan.</Text>
+                  )}
                 </View>
               </>
             )}

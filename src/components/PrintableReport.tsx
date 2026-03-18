@@ -25,6 +25,18 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isIntegriti = deptName.includes('INTEGRITI');
   const isPentadbiran = targetName.includes('Pentadbiran');
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
+  const iso9001Status = formData.quality?.iso9001?.status?.trim() || '';
+  const iso37001Status = formData.quality?.iso37001?.status?.trim() || '';
+  const integritiCertificationStatus =
+    iso9001Status.toLowerCase().includes('recommend') ||
+    iso37001Status.toLowerCase().includes('recommend')
+      ? 'Certified'
+      : 'Pending';
+  const activeIntegritiFrameworks = [
+    formData.quality?.frameworks?.mbef ? 'MBEF' : null,
+    formData.quality?.frameworks?.scsScorecard ? 'SCS Scorecard' : null,
+    formData.quality?.frameworks?.eksa ? 'EKSA' : null,
+  ].filter(Boolean);
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -702,7 +714,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <p className="text-teal-100 text-xs font-bold uppercase tracking-widest mt-1">Laporan Tahunan 2025</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-black text-white">CERTIFIED</p>
+                  <p className="text-3xl font-black text-white">{integritiCertificationStatus.toUpperCase()}</p>
                   <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Status Pensijilan ISO</p>
                 </div>
               </div>
@@ -720,6 +732,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <div className="flex justify-between text-[10px]">
                       <span className="text-gray-400 font-bold uppercase">Badan Audit</span>
                       <span className="font-black text-zus-900">{formData.quality.iso9001.badanAudit || '-'}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px] gap-4">
+                      <span className="text-gray-400 font-bold uppercase">Syor Keputusan</span>
+                      <span className="font-black text-zus-900 text-right">{iso9001Status || '-'}</span>
                     </div>
                     <div className="flex justify-between text-[10px]">
                       <span className="text-gray-400 font-bold uppercase">NCR / OFI</span>
@@ -741,6 +757,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                       <span className="text-gray-400 font-bold uppercase">Badan Audit</span>
                       <span className="font-black text-zus-900">{formData.quality.iso37001.badanAudit || '-'}</span>
                     </div>
+                    <div className="flex justify-between text-[10px] gap-4">
+                      <span className="text-gray-400 font-bold uppercase">Syor Keputusan</span>
+                      <span className="font-black text-zus-900 text-right">{iso37001Status || '-'}</span>
+                    </div>
                     <div className="flex justify-between text-[10px]">
                       <span className="text-gray-400 font-bold uppercase">NCR / OFI</span>
                       <span className="font-black text-teal-600">{formData.quality.iso37001.ncr || 0} / {formData.quality.iso37001.ofi || 0}</span>
@@ -755,9 +775,15 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     Frameworks & Prestasi
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {formData.quality.frameworks.mbef && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">MBEF</span>}
-                    {formData.quality.frameworks.scsScorecard && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">SCS Scorecard</span>}
-                    {formData.quality.frameworks.eksa && <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">EKSA</span>}
+                    {activeIntegritiFrameworks.length > 0 ? (
+                      activeIntegritiFrameworks.map((framework) => (
+                        <span key={framework} className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[8px] font-black uppercase">
+                          {framework}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[10px] italic text-gray-400">Tiada framework dipilih.</span>
+                    )}
                   </div>
                 </div>
 
@@ -766,12 +792,16 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     Inisiatif Kualiti Tambahan
                   </h3>
                   <div className="space-y-2">
-                    {formData.quality.additionalInitiatives.map((init: any, idx: number) => (
-                      <div key={idx} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
-                        <span className="text-[8px] font-bold text-gray-700">{init.title}</span>
-                        <span className="text-[8px] font-black text-teal-600 uppercase">{init.status}</span>
-                      </div>
-                    ))}
+                    {formData.quality.additionalInitiatives.length > 0 ? (
+                      formData.quality.additionalInitiatives.map((init: any, idx: number) => (
+                        <div key={idx} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                          <span className="text-[8px] font-bold text-gray-700">{init.title || `Inisiatif ${idx + 1}`}</span>
+                          <span className="text-[8px] font-black text-teal-600 uppercase">{init.status || '-'}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[10px] italic text-gray-400">Tiada inisiatif tambahan dimasukkan.</p>
+                    )}
                   </div>
                 </div>
               </div>
