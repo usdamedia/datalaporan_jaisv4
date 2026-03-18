@@ -12,6 +12,11 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
   const fontScaleOptions = useMemo(
     () => ({
+      compact: {
+        header: '1.6rem',
+        subheader: '0.92rem',
+        body: '0.8rem',
+      },
       small: {
         header: '1.8rem',
         subheader: '1rem',
@@ -30,10 +35,12 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
     }),
     []
   );
-  const [fontScale, setFontScale] = useState<'small' | 'default' | 'large'>(() => {
+  const [fontScale, setFontScale] = useState<'compact' | 'small' | 'default' | 'large'>(() => {
     if (typeof window === 'undefined') return 'default';
     const saved = window.localStorage.getItem(FONT_SIZE_STORAGE_KEY);
-    return saved === 'small' || saved === 'large' || saved === 'default' ? saved : 'default';
+    return saved === 'compact' || saved === 'small' || saved === 'large' || saved === 'default'
+      ? saved
+      : 'default';
   });
 
   useEffect(() => {
@@ -83,6 +90,19 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
 
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-1.5 py-1 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setFontScale('compact')}
+                  aria-label="Kecilkan font lagi"
+                  title="Kecilkan font lagi"
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
+                    fontScale === 'compact'
+                      ? 'bg-zus-900 text-white'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                  }`}
+                >
+                  A--
+                </button>
                 <button
                   type="button"
                   onClick={() => setFontScale('small')}
