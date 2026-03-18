@@ -346,6 +346,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const targetName = unitName || deptName;
   const isBKIM = deptName.includes('BKIM');
   const isBPP = deptName.includes('BPNP');
+  const isBpnPenyelidikan = targetName.toUpperCase().includes('UNIT PENYELIDIKAN');
+  const isBpnStrategik = targetName.toUpperCase().includes('UNIT PERANCANGAN STRATEGIK');
+  const isBpnAkidah = targetName.toUpperCase().includes('UNIT AKIDAH TAPISAN');
   const isUPP = deptName.includes('UPP');
   const isIntegriti = deptName.includes('INTEGRITI');
   const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
@@ -417,128 +420,166 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BPNP Specific Data */}
         {isBPP && formData.bpnp && (
           <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Kajian & Kaji Selidik 2025</Text>
-              {formData.bpnp.kajianList.map((k: string, i: number) => (
-                <View key={i} style={styles.row}>
-                  <Text style={{ width: '10%', fontWeight: 'bold' }}>{i+1}.</Text>
-                  <Text style={{ width: '90%' }}>{k || '................................'}</Text>
-                </View>
-              ))}
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Pemenang Penulisan Ilmiah (2025)</Text>
-              <View style={styles.table} wrap={false}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kedudukan</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Nama & Tajuk</Text></View>
-                </View>
-                
-                {/* Diploma */}
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>DIPLOMA</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.johan.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.johan.tajuk || '-'}</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.naibJohan.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '-'}</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.ketiga.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.ketiga.tajuk || '-'}</Text>
+            {isBpnPenyelidikan && (
+              <>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Rujukan Data 2024</Text>
+                  <View style={styles.narrativeBox}>
+                    {BPNP_2024_REFERENCE.kajian.map((k: string, i: number) => (
+                      <View key={i} style={[styles.row, { marginBottom: 6 }]}>
+                        <Text style={{ width: '10%', fontWeight: 'bold', color: '#2563eb' }}>{i + 1}.</Text>
+                        <Text style={{ width: '90%', color: '#334155' }}>{k}</Text>
+                      </View>
+                    ))}
                   </View>
                 </View>
 
-                {/* Sarjana Muda */}
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>SARJANA MUDA</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '-'}</Text>
-                  </View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Senarai Kajian / Kaji Selidik 2025</Text>
+                  {formData.bpnp.kajianList.map((k: string, i: number) => (
+                    <View key={i} style={styles.row}>
+                      <Text style={{ width: '10%', fontWeight: 'bold' }}>{i+1}.</Text>
+                      <Text style={{ width: '90%' }}>{k || '................................'}</Text>
+                    </View>
+                  ))}
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '-'}</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '25%' }]}></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}>
-                    <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '-'}</Text>
-                    <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '-'}</Text>
-                  </View>
-                </View>
-                <View style={[styles.tableRow, { backgroundColor: '#f8fafc' }]}>
-                  <View style={[styles.tableCell, { width: '25%' }]}></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>PESERTA LAIN</Text></View>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</Text></View>
-                </View>
-              </View>
-            </View>
+              </>
+            )}
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Statistik Operasi</Text>
-              <View style={styles.table} wrap={false}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+            {isBpnStrategik && (
+              <>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Kajian & Kaji Selidik 2025</Text>
+                  {formData.bpnp.kajianList.map((k: string, i: number) => (
+                    <View key={i} style={styles.row}>
+                      <Text style={{ width: '10%', fontWeight: 'bold' }}>{i+1}.</Text>
+                      <Text style={{ width: '90%' }}>{k || '................................'}</Text>
+                    </View>
+                  ))}
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Penapisan Bahan</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.penapisan}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.penapisan}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kluster Data</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.kluster}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.kluster}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Program / Aktiviti</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.program}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.program}</Text></View>
-                </View>
-              </View>
-            </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Penerbitan Digital</Text>
-              <View style={styles.table} wrap={false}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Pemenang Penulisan Ilmiah (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Kedudukan</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Nama & Tajuk</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>DIPLOMA</Text></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.johan.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.johan.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.naibJohan.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.diploma.ketiga.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.diploma.ketiga.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>SARJANA MUDA</Text></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>JOHAN</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>NAIB JOHAN</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '25%' }]}></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>TEMPAT KETIGA</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}>
+                        <Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '-'}</Text>
+                        <Text style={{ fontSize: 7, color: '#6b7280', marginTop: 2 }}>{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '-'}</Text>
+                      </View>
+                    </View>
+                    <View style={[styles.tableRow, { backgroundColor: '#f8fafc' }]}>
+                      <View style={[styles.tableCell, { width: '25%' }]}></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text style={{ fontWeight: 'bold' }}>PESERTA LAIN</Text></View>
+                      <View style={[styles.tableCell, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</Text></View>
+                    </View>
+                  </View>
                 </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Infografik Akidah</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.infografik}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.infografik}</Text></View>
+              </>
+            )}
+
+            {isBpnAkidah && (
+              <>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Statistik Aktiviti & Operasi (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Penapisan Bahan</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.penapisan}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.penapisan}</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kluster Data</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.kluster}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.kluster}</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Program / Aktiviti</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.program}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.program}</Text></View>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Penerbitan Digital (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Infografik Akidah</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.infografik}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.infografik}</Text></View>
+                    </View>
+                  </View>
+                  <View style={styles.narrativeBox}>
+                    <Text style={[styles.infoCardLabel, { marginBottom: 4 }]}>Rujukan 2024</Text>
+                    <Text style={styles.narrativeText}>Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).</Text>
+                    <Text style={[styles.infoCardLabel, { marginTop: 10, marginBottom: 4 }]}>Kandungan Utama / Tajuk Koleksi 2025</Text>
+                    <Text style={styles.narrativeText}>
+                      {formData.bpnp.penerbitanDigital?.kandunganUtama || '................................'}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
 
             {/* Data Management Dashboard Section */}
-            {formData.bpnp.dataManagement && (
+            {isBpnStrategik && formData.bpnp.dataManagement && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Pengurusan Data (Data Management Dashboard)</Text>
                 <View style={styles.table} wrap={false}>

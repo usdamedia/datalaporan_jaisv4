@@ -12,6 +12,9 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isBKIM = deptName.includes('BKIM');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isBPNP = deptName.includes('BPNP');
+  const isBpnPenyelidikan = targetName.toUpperCase().includes('UNIT PENYELIDIKAN');
+  const isBpnStrategik = targetName.toUpperCase().includes('UNIT PERANCANGAN STRATEGIK');
+  const isBpnAkidah = targetName.toUpperCase().includes('UNIT AKIDAH TAPISAN');
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
   const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
   const isHR = deptName.includes('HR & Latihan');
@@ -1224,153 +1227,192 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       {/* BPNP Specific Layout */}
       {isBPNP && formData.bpnp && (
         <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Kajian & Kaji Selidik 2025
-              </h3>
-              <div className="space-y-2">
-                {formData.bpnp.kajianList.map((k: string, i: number) => (
-                  <div key={i} className="text-xs p-2 bg-gray-50 border border-gray-100 rounded flex gap-2">
-                    <span className="font-bold text-gray-400">{i+1}.</span>
-                    <span>{k || '................................'}</span>
+          {isBpnPenyelidikan && (
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-blue-100 bg-blue-50/70 p-6">
+                <h3 className="text-sm font-black text-blue-800 uppercase tracking-widest">Rujukan Data 2024</h3>
+                <div className="mt-4 space-y-2">
+                  {BPNP_2024_REFERENCE.kajian.map((k, i) => (
+                    <div key={i} className="flex gap-3 rounded-2xl border border-blue-100 bg-white px-4 py-3 text-xs text-slate-700">
+                      <span className="font-black text-blue-500">{i + 1}.</span>
+                      <span className="font-medium">{k}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Senarai Kajian / Kaji Selidik 2025
+                </h3>
+                <div className="space-y-2">
+                  {formData.bpnp.kajianList.map((k: string, i: number) => (
+                    <div key={i} className="text-xs p-3 bg-white border border-slate-200 rounded-xl flex gap-2">
+                      <span className="font-bold text-gray-400">{i+1}.</span>
+                      <span>{k || '................................'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isBpnStrategik && (
+            <>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                    Kajian & Kaji Selidik 2025
+                  </h3>
+                  <div className="space-y-2">
+                    {formData.bpnp.kajianList.map((k: string, i: number) => (
+                      <div key={i} className="text-xs p-2 bg-gray-50 border border-gray-100 rounded flex gap-2">
+                        <span className="font-bold text-gray-400">{i+1}.</span>
+                        <span>{k || '................................'}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                    Pemenang Penulisan Ilmiah
+                  </h3>
+                  <table className="w-full text-[9px] border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border p-2 text-left">Kategori</th>
+                        <th className="border p-2 text-left">Kedudukan</th>
+                        <th className="border p-2 text-left">Nama & Tajuk</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowSpan={4} className="border p-2 font-black text-blue-600 bg-blue-50 text-center">DIPLOMA</td>
+                        <td className="border p-2 font-bold uppercase">Johan</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.diploma.johan.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.johan.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold uppercase">Naib Johan</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.diploma.naibJohan.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.diploma.ketiga.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.ketiga.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr className="bg-blue-50">
+                        <td className="border p-2 font-bold uppercase">Peserta Lain</td>
+                        <td className="border p-2 font-black text-blue-700">{formData.bpnp.penulisan.diploma.pesertaLain} Orang</td>
+                      </tr>
+                      <tr>
+                        <td rowSpan={4} className="border p-2 font-black text-indigo-600 bg-indigo-50 text-center">SARJANA MUDA & KEATAS</td>
+                        <td className="border p-2 font-bold uppercase">Johan</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold uppercase">Naib Johan</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
+                        <td className="border p-2">
+                          <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '................................'}</div>
+                          <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '................................'}</div>
+                        </td>
+                      </tr>
+                      <tr className="bg-indigo-50">
+                        <td className="border p-2 font-bold uppercase">Peserta Lain</td>
+                        <td className="border p-2 font-black text-indigo-700">{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+
+          {isBpnAkidah && (
+            <div className="grid grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Statistik Aktiviti & Operasi (2025)
+                </h3>
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border p-2 text-left">Kategori</th>
+                      <th className="border p-2 text-center">2024</th>
+                      <th className="border p-2 text-center bg-blue-50">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border p-2 font-bold">Penapisan Bahan</td>
+                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.penapisan}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.penapisan}</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2 font-bold">Kluster Data</td>
+                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.kluster}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.kluster}</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2 font-bold">Program / Aktiviti</td>
+                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.program}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.program}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Penerbitan Digital (2025)
+                </h3>
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border p-2 text-left">Kategori</th>
+                      <th className="border p-2 text-center">2024</th>
+                      <th className="border p-2 text-center bg-blue-50">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border p-2 font-bold">Infografik Akidah</td>
+                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.infografik}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.infografik}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="p-3 bg-indigo-50 border border-indigo-100 rounded text-[10px] space-y-2">
+                  <div>
+                    <span className="font-black text-indigo-900 uppercase">Rujukan 2024:</span>
+                    <p className="text-indigo-700">Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).</p>
+                  </div>
+                  <div>
+                    <span className="font-black text-indigo-900 uppercase">Kandungan Utama / Tajuk Koleksi 2025:</span>
+                    <p className="text-slate-700">{formData.bpnp.penerbitanDigital?.kandunganUtama || '................................'}</p>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Pemenang Penulisan Ilmiah
-              </h3>
-              <table className="w-full text-[9px] border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Kategori</th>
-                    <th className="border p-2 text-left">Kedudukan</th>
-                    <th className="border p-2 text-left">Nama & Tajuk</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Diploma */}
-                  <tr>
-                    <td rowSpan={4} className="border p-2 font-black text-blue-600 bg-blue-50 text-center">DIPLOMA</td>
-                    <td className="border p-2 font-bold uppercase">Johan</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.diploma.johan.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.johan.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold uppercase">Naib Johan</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.diploma.naibJohan.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.naibJohan.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.diploma.ketiga.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.diploma.ketiga.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr className="bg-blue-50">
-                    <td className="border p-2 font-bold uppercase">Peserta Lain</td>
-                    <td className="border p-2 font-black text-blue-700">{formData.bpnp.penulisan.diploma.pesertaLain} Orang</td>
-                  </tr>
-
-                  {/* Sarjana Muda */}
-                  <tr>
-                    <td rowSpan={4} className="border p-2 font-black text-indigo-600 bg-indigo-50 text-center">SARJANA MUDA & KEATAS</td>
-                    <td className="border p-2 font-bold uppercase">Johan</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.johan.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.johan.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold uppercase">Naib Johan</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.naibJohan.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold uppercase">Tempat Ketiga</td>
-                    <td className="border p-2">
-                      <div className="font-black">{formData.bpnp.penulisan.sarjanaMuda.ketiga.nama || '................................'}</div>
-                      <div className="italic text-gray-500">{formData.bpnp.penulisan.sarjanaMuda.ketiga.tajuk || '................................'}</div>
-                    </td>
-                  </tr>
-                  <tr className="bg-indigo-50">
-                    <td className="border p-2 font-bold uppercase">Peserta Lain</td>
-                    <td className="border p-2 font-black text-indigo-700">{formData.bpnp.penulisan.sarjanaMuda.pesertaLain} Orang</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Statistik Operasi
-              </h3>
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Kategori</th>
-                    <th className="border p-2 text-center">2024</th>
-                    <th className="border p-2 text-center bg-blue-50">2025</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border p-2 font-bold">Penapisan Bahan</td>
-                    <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.penapisan}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.penapisan}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold">Kluster Data</td>
-                    <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.kluster}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.kluster}</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2 font-bold">Program / Aktiviti</td>
-                    <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.program}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.program}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Penerbitan Digital
-              </h3>
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2 text-left">Kategori</th>
-                    <th className="border p-2 text-center">2024</th>
-                    <th className="border p-2 text-center bg-blue-50">2025</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border p-2 font-bold">Infografik Akidah</td>
-                    <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.infografik}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.infografik}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="p-3 bg-indigo-50 border border-indigo-100 rounded text-[10px]">
-                <span className="font-black text-indigo-900 uppercase">Kandungan Utama:</span>
-                <p className="text-indigo-700">Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).</p>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       )}
 
