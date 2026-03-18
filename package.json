@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "npm@10.8.2",
   "scripts": {
     "dev": "vite",
     "dev:live": "vite --host 0.0.0.0 --open",
@@ -30,6 +31,6 @@
     "vite-plugin-singlefile": "^2.3.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "20.x"
   }
 }
