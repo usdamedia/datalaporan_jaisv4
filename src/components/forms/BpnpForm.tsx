@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer } from 'lucide-react';
+import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer, Star } from 'lucide-react';
 import { BPNP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';

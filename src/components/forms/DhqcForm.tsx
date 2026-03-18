@@ -1,19 +1,23 @@
 import React, { useMemo } from 'react';
-import { 
-  Plus, 
-  Trash2, 
-  BookOpen, 
-  Anchor, 
-  Users, 
-  Gavel,
-  Calculator,
-  Save,
-  ArrowLeft,
-  MapPin
-} from 'lucide-react';
+import { Anchor, BookOpen, Gavel, MapPin, Save, Users } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
-import { SARAWAK_DIVISIONS, DHQC_2024_REFERENCE } from '../../constants';
+import { DHQC_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
+
+const DIVISION_FIELD_MAP: Record<string, keyof typeof DHQC_2024_REFERENCE.guruAlQuran> = {
+  Kuching: 'kuching',
+  Samarahan: 'samarahan',
+  Serian: 'serian',
+  'Sri Aman': 'sriAman',
+  Betong: 'betong',
+  Sarikei: 'sarikei',
+  Sibu: 'sibu',
+  Mukah: 'mukah',
+  Kapit: 'kapit',
+  Bintulu: 'bintulu',
+  Miri: 'miri',
+  Limbang: 'limbang',
+};
 
 const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const {
@@ -22,13 +26,13 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     handleSave,
     isSaving,
     showSuccess,
-    saveError
+    saveError,
   } = useFormLogic('DHQC', {
     dhqc: {
       pusatPemuliaan: [],
       statistikDebu: {
         berat: '',
-        kekerapan: ''
+        kekerapan: '',
       },
       guruAlQuran: {
         kuching: '',
@@ -42,16 +46,16 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         kapit: '',
         bintulu: '',
         miri: '',
-        limbang: ''
+        limbang: '',
       },
       penyelia: {
         ibuPejabat: '',
-        bintulu: ''
+        bintulu: '',
       },
       hakim: {
         negeri: '',
         bahagian: '',
-        daerah: ''
+        daerah: '',
       },
       qariQariah: {
         kuching: '',
@@ -65,9 +69,9 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         kapit: '',
         bintulu: '',
         miri: '',
-        limbang: ''
-      }
-    }
+        limbang: '',
+      },
+    },
   });
 
   const handleNestedInputChange = (section: string, subSection: string, field: string, value: string) => {
@@ -78,70 +82,91 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         ...prev[section],
         [subSection]: {
           ...prev[section][subSection],
-          [field]: numValue
-        }
-      }
+          [field]: numValue,
+        },
+      },
     }));
   };
 
-  const addPusat = () => {
-    setFormData((prev: any) => ({
-      ...prev,
-      dhqc: {
-        ...prev.dhqc,
-        pusatPemuliaan: [
-          ...prev.dhqc.pusatPemuliaan,
-          { lokasi: '', bahagian: '' }
-        ]
-      }
-    }));
-  };
+  const totalGuru = useMemo(
+    () => Object.values(formData.dhqc.guruAlQuran).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0),
+    [formData.dhqc.guruAlQuran]
+  );
 
-  const removePusat = (index: number) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      dhqc: {
-        ...prev.dhqc,
-        pusatPemuliaan: prev.dhqc.pusatPemuliaan.filter((_: any, i: number) => i !== index)
-      }
-    }));
-  };
+  const totalQari = useMemo(
+    () => Object.values(formData.dhqc.qariQariah).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0),
+    [formData.dhqc.qariQariah]
+  );
 
-  const updatePusat = (index: number, field: string, value: string) => {
+  const totalPenyelia = useMemo(
+    () => (parseFloat(formData.dhqc.penyelia.ibuPejabat) || 0) + (parseFloat(formData.dhqc.penyelia.bintulu) || 0),
+    [formData.dhqc.penyelia]
+  );
+
+  const totalHakim = useMemo(
+    () =>
+      (parseFloat(formData.dhqc.hakim.negeri) || 0) +
+      (parseFloat(formData.dhqc.hakim.bahagian) || 0) +
+      (parseFloat(formData.dhqc.hakim.daerah) || 0),
+    [formData.dhqc.hakim]
+  );
+
+  const totalPusat2025 = formData.dhqc.pusatPemuliaan.filter(
+    (item: { lokasi?: string; bahagian?: string }) => item?.lokasi?.trim() || item?.bahagian?.trim()
+  ).length;
+
+  const updatePusat = (index: number, field: 'lokasi' | 'bahagian', value: string) => {
     setFormData((prev: any) => {
-      const newList = [...prev.dhqc.pusatPemuliaan];
-      newList[index] = { ...newList[index], [field]: value };
+      const currentRows = [...prev.dhqc.pusatPemuliaan];
+      while (currentRows.length <= index) {
+        currentRows.push({ lokasi: '', bahagian: '' });
+      }
+
+      currentRows[index] = {
+        ...currentRows[index],
+        [field]: value,
+      };
+
       return {
         ...prev,
         dhqc: {
           ...prev.dhqc,
-          pusatPemuliaan: newList
-        }
+          pusatPemuliaan: currentRows,
+        },
       };
     });
   };
 
-  const totalGuru = useMemo(() => {
-    return Object.values(formData.dhqc.guruAlQuran).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0);
-  }, [formData.dhqc.guruAlQuran]);
-
-  const totalQari = useMemo(() => {
-    return Object.values(formData.dhqc.qariQariah).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0);
-  }, [formData.dhqc.qariQariah]);
-
-  const totalPenyelia = useMemo(() => {
-    return (parseFloat(formData.dhqc.penyelia.ibuPejabat) || 0) + (parseFloat(formData.dhqc.penyelia.bintulu) || 0);
-  }, [formData.dhqc.penyelia]);
-
-  const totalHakim = useMemo(() => {
-    return (parseFloat(formData.dhqc.hakim.negeri) || 0) + 
-           (parseFloat(formData.dhqc.hakim.bahagian) || 0) + 
-           (parseFloat(formData.dhqc.hakim.daerah) || 0);
-  }, [formData.dhqc.hakim]);
+  const statCards = [
+    {
+      label: 'Jumlah Guru Al-Quran',
+      value: totalGuru,
+      ref: DHQC_2024_REFERENCE.guruAlQuran.total,
+      icon: <BookOpen className="h-5 w-5" />,
+    },
+    {
+      label: 'Jumlah Qari / Qariah',
+      value: totalQari,
+      ref: DHQC_2024_REFERENCE.qariQariah.total,
+      icon: <Users className="h-5 w-5" />,
+    },
+    {
+      label: 'Jumlah Hakim Tilawah',
+      value: totalHakim,
+      ref: DHQC_2024_REFERENCE.hakim.total,
+      icon: <Gavel className="h-5 w-5" />,
+    },
+    {
+      label: 'Jumlah Pusat Pemuliaan',
+      value: totalPusat2025,
+      ref: DHQC_2024_REFERENCE.pusatPemuliaan.length,
+      icon: <MapPin className="h-5 w-5" />,
+    },
+  ];
 
   return (
     <FormLayout
-      deptName="Darul Hana Quran Centre (DHQC)"
+      deptName="DHQC - Darul Hana Quranic Centre"
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
@@ -149,260 +174,342 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       saveError={saveError}
       formData={formData}
     >
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[#0a1e3b] p-6 rounded-3xl shadow-lg border-b-4 border-[#c5a065]">
-          <p className="text-[#c5a065] text-[10px] font-black uppercase tracking-widest mb-1">Jumlah Guru al-Quran</p>
-          <h3 className="text-3xl font-black text-white">{totalGuru}</h3>
-          <p className="text-white/40 text-[10px] mt-1">Ref 2024: {DHQC_2024_REFERENCE.guruAlQuran.total}</p>
-        </div>
-        <div className="bg-[#0a1e3b] p-6 rounded-3xl shadow-lg border-b-4 border-[#c5a065]">
-          <p className="text-[#c5a065] text-[10px] font-black uppercase tracking-widest mb-1">Jumlah Qari/Qariah</p>
-          <h3 className="text-3xl font-black text-white">{totalQari}</h3>
-          <p className="text-white/40 text-[10px] mt-1">Ref 2024: {DHQC_2024_REFERENCE.qariQariah.total}</p>
-        </div>
-        <div className="bg-[#0a1e3b] p-6 rounded-3xl shadow-lg border-b-4 border-[#c5a065]">
-          <p className="text-[#c5a065] text-[10px] font-black uppercase tracking-widest mb-1">Jumlah Hakim</p>
-          <h3 className="text-3xl font-black text-white">{totalHakim}</h3>
-          <p className="text-white/40 text-[10px] mt-1">Ref 2024: {DHQC_2024_REFERENCE.hakim.total}</p>
-        </div>
-        <div className="bg-[#0a1e3b] p-6 rounded-3xl shadow-lg border-b-4 border-[#c5a065]">
-          <p className="text-[#c5a065] text-[10px] font-black uppercase tracking-widest mb-1">Debu al-Quran (Tan)</p>
-          <h3 className="text-3xl font-black text-white">{formData.dhqc.statistikDebu.berat || 0}</h3>
-          <p className="text-white/40 text-[10px] mt-1">Ref 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}</p>
-        </div>
-      </div>
-
-      {/* Pusat Pemuliaan Section */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-        <div className="p-6 border-b border-gray-50 flex items-center justify-between bg-[#0a1e3b]">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#c5a065] rounded-xl text-[#0a1e3b]">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-black text-white uppercase tracking-tight">Pusat Pemuliaan Al-Quran</h3>
+      <div className="space-y-8">
+      <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0d4f45] via-[#0b3c35] to-[#072822] text-white shadow-[0_20px_60px_rgba(7,40,34,0.22)]">
+        <div className="grid gap-8 px-6 py-8 md:grid-cols-[1.4fr_0.8fr] md:px-8">
+          <div>
+            <p className="mb-3 inline-flex items-center rounded-full border border-[#f0cf73]/30 bg-[#f0cf73]/10 px-4 py-1 text-[11px] font-black uppercase tracking-[0.28em] text-[#f7d982]">
+              Dashboard Pengurusan Data DHQC
+            </p>
+            <h2 className="max-w-3xl text-3xl font-black tracking-tight md:text-5xl">
+              Sistem Kemasukan Data DHQC - Unit Al-Quran
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-white/78 md:text-base">
+              Paparan ini menempatkan rujukan 2024 secara read-only dan ruang kemasukan data 2025 untuk pemantauan trend DHQC.
+            </p>
           </div>
-          <button
-            onClick={addPusat}
-            className="flex items-center gap-2 px-4 py-2 bg-[#c5a065] text-[#0a1e3b] rounded-xl text-xs font-bold hover:bg-[#b08e56] transition-all shadow-sm"
-          >
-            <Plus className="w-4 h-4" />
-            TAMBAH LOKASI
-          </button>
-        </div>
-        <div className="p-6">
-          {formData.dhqc.pusatPemuliaan.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-              <p className="text-gray-400 text-sm font-medium">Tiada lokasi pusat pemuliaan dimasukkan.</p>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#f7d982]">Rujukan Ringkas 2024</p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-2xl bg-black/10 p-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Debu Al-Quran</p>
+                <p className="mt-1 text-2xl font-black">{DHQC_2024_REFERENCE.statistikDebu.berat} Tan</p>
+              </div>
+              <div className="rounded-2xl bg-black/10 p-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Pemuliaan Lautan</p>
+                <p className="mt-1 text-2xl font-black">{DHQC_2024_REFERENCE.statistikDebu.kekerapan} Kali</p>
+              </div>
+              <div className="rounded-2xl bg-black/10 p-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Penyelia GAQMIS</p>
+                <p className="mt-1 text-2xl font-black">{DHQC_2024_REFERENCE.penyelia.total}</p>
+              </div>
+              <div className="rounded-2xl bg-black/10 p-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Hakim Tilawah</p>
+                <p className="mt-1 text-2xl font-black">{DHQC_2024_REFERENCE.hakim.total}</p>
+              </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {formData.dhqc.pusatPemuliaan.map((item: any, idx: number) => (
-                <div key={idx} className="flex gap-4 items-start bg-gray-50 p-4 rounded-2xl group transition-all hover:shadow-md">
-                  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Nama Lokasi / Masjid</label>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {statCards.map((card) => (
+          <div key={card.label} className="rounded-[1.6rem] border border-[#d7e7e0] bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="rounded-2xl bg-[#dff2ea] p-3 text-[#0d4f45]">{card.icon}</div>
+              <span className="rounded-full bg-[#f8eab6] px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#7b5c0c]">
+                Ref 2024: {card.ref}
+              </span>
+            </div>
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-400">{card.label}</p>
+            <p className="mt-2 text-4xl font-black tracking-tight text-[#0d3b35]">{card.value}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="overflow-hidden rounded-[2rem] border border-[#d6e4dd] bg-white shadow-sm">
+        <div className="flex items-center gap-3 bg-[#0d4f45] px-6 py-5 text-white">
+          <div className="rounded-2xl bg-[#f0cf73] p-2 text-[#0d4f45]">
+            <MapPin className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black uppercase tracking-tight">Komponen A: Pusat Pemuliaan & Statistik Debu</h3>
+            <p className="text-xs font-semibold text-white/70">Lokasi rujukan 2024 dipaparkan kekal, input 2025 diisi pada ruang sebelah.</p>
+          </div>
+        </div>
+
+        <div className="grid gap-8 p-6 xl:grid-cols-[1.25fr_0.95fr]">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Pusat Pemuliaan Al-Quran</h4>
+              <span className="rounded-full bg-[#dff2ea] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#0d4f45]">
+                Total 2025: {totalPusat2025}
+              </span>
+            </div>
+
+            <div className="grid gap-4">
+              {DHQC_2024_REFERENCE.pusatPemuliaan.map((item, index) => {
+                const current2025 = formData.dhqc.pusatPemuliaan[index] || { lokasi: '', bahagian: '' };
+
+                return (
+                  <div key={`${item.lokasi}-${item.bahagian}`} className="grid gap-4 rounded-[1.5rem] border border-gray-100 bg-[#fbfcfb] p-4 lg:grid-cols-2">
+                    <div className="rounded-[1.35rem] border border-[#dce7e2] bg-white p-4">
+                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Rujukan 2024</p>
+                      <p className="mt-3 text-sm font-black text-[#0d3b35]">{item.lokasi}</p>
+                      <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#947225]">{item.bahagian}</p>
+                    </div>
+
+                    <div className="space-y-3 rounded-[1.35rem] border border-[#f5e8bb] bg-[#fffaf0] p-4">
+                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#947225]">Input 2025</p>
                       <input
                         type="text"
-                        value={item.lokasi}
-                        onChange={(e) => updatePusat(idx, 'lokasi', e.target.value)}
-                        placeholder="Contoh: Masjid Assyakirin"
-                        className="w-full bg-white border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#c5a065] shadow-sm"
+                        value={current2025.lokasi}
+                        onChange={(e) => updatePusat(index, 'lokasi', e.target.value)}
+                        placeholder="Masukkan lokasi 2025"
+                        className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
                       />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Bahagian</label>
                       <select
-                        value={item.bahagian}
-                        onChange={(e) => updatePusat(idx, 'bahagian', e.target.value)}
-                        className="w-full bg-white border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#c5a065] shadow-sm"
+                        value={current2025.bahagian}
+                        onChange={(e) => updatePusat(index, 'bahagian', e.target.value)}
+                        className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
                       >
-                        <option value="">Pilih Bahagian</option>
-                        {SARAWAK_DIVISIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                        <option value="">Pilih Bahagian 2025</option>
+                        {SARAWAK_DIVISIONS.map((division) => (
+                          <option key={division} value={division}>
+                            {division}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
-                  <button
-                    onClick={() => removePusat(idx)}
-                    className="mt-6 p-2.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-[1.6rem] border border-[#dce7e2] bg-[#f8fcfa] p-5">
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-[#dff2ea] p-3 text-[#0d4f45]">
+                  <Anchor className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Statistik Debu & Pemuliaan</h4>
+                  <p className="text-xs font-medium text-slate-500">Masukkan data 2025 sambil mengekalkan rujukan 2024.</p>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <div className="grid grid-cols-[1.2fr_0.7fr_0.9fr] items-center gap-3">
+                  <label className="text-sm font-bold text-slate-600">Berat Debu Al-Quran (Tan)</label>
+                  <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+                    Ref 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}
+                  </div>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={formData.dhqc.statistikDebu.berat}
+                    onChange={(e) => handleNestedInputChange('dhqc', 'statistikDebu', 'berat', e.target.value)}
+                    placeholder="0.0"
+                    className="rounded-xl border border-[#c9ded6] bg-white px-4 py-3 text-sm font-bold text-[#0d3b35] outline-none transition focus:border-[#0d4f45] focus:ring-2 focus:ring-[#0d4f45]/15"
+                  />
+                </div>
+
+                <div className="grid grid-cols-[1.2fr_0.7fr_0.9fr] items-center gap-3">
+                  <label className="text-sm font-bold text-slate-600">Kekerapan Pemuliaan ke Lautan</label>
+                  <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+                    Ref 2024: {DHQC_2024_REFERENCE.statistikDebu.kekerapan}
+                  </div>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.dhqc.statistikDebu.kekerapan}
+                    onChange={(e) => handleNestedInputChange('dhqc', 'statistikDebu', 'kekerapan', e.target.value)}
+                    placeholder="0"
+                    className="rounded-xl border border-[#c9ded6] bg-white px-4 py-3 text-sm font-bold text-[#0d3b35] outline-none transition focus:border-[#0d4f45] focus:ring-2 focus:ring-[#0d4f45]/15"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-[2rem] border border-[#d6e4dd] bg-white shadow-sm">
+        <div className="flex items-center gap-3 bg-[#0d4f45] px-6 py-5 text-white">
+          <div className="rounded-2xl bg-[#f0cf73] p-2 text-[#0d4f45]">
+            <BookOpen className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black uppercase tracking-tight">Komponen B: Guru Al-Quran & Qari/Qariah</h3>
+            <p className="text-xs font-semibold text-white/70">Jadual perbandingan rujukan 2024 bersebelahan input kemas kini 2025.</p>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="bg-[#f6faf8] text-left text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                <th className="px-5 py-4">Nama Bahagian</th>
+                <th className="px-5 py-4">Guru 2024</th>
+                <th className="px-5 py-4">Guru 2025</th>
+                <th className="px-5 py-4">Qari/Qariah 2024</th>
+                <th className="px-5 py-4">Qari/Qariah 2025</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {SARAWAK_DIVISIONS.map((division) => {
+                const key = DIVISION_FIELD_MAP[division];
+
+                return (
+                  <tr key={division} className="hover:bg-[#fbfcfb]">
+                    <td className="px-5 py-4 font-black text-[#0d3b35]">{division}</td>
+                    <td className="px-5 py-4">
+                      <span className="inline-flex rounded-full bg-[#edf4f1] px-3 py-1 text-xs font-black text-slate-500">
+                        {DHQC_2024_REFERENCE.guruAlQuran[key]}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.dhqc.guruAlQuran[key]}
+                        onChange={(e) => handleNestedInputChange('dhqc', 'guruAlQuran', key, e.target.value)}
+                        className="w-28 rounded-xl border border-[#c9ded6] bg-white px-4 py-3 text-sm font-bold text-[#0d3b35] outline-none transition focus:border-[#0d4f45] focus:ring-2 focus:ring-[#0d4f45]/15"
+                        placeholder="0"
+                      />
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="inline-flex rounded-full bg-[#fff4d7] px-3 py-1 text-xs font-black text-[#947225]">
+                        {DHQC_2024_REFERENCE.qariQariah[key]}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.dhqc.qariQariah[key]}
+                        onChange={(e) => handleNestedInputChange('dhqc', 'qariQariah', key, e.target.value)}
+                        className="w-28 rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-bold text-[#7b5c0c] outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/35"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot>
+              <tr className="bg-[#0d4f45] text-white">
+                <td className="px-5 py-4 text-sm font-black uppercase tracking-[0.16em]">Jumlah Keseluruhan</td>
+                <td className="px-5 py-4 text-lg font-black text-[#f7d982]">{DHQC_2024_REFERENCE.guruAlQuran.total}</td>
+                <td className="px-5 py-4 text-lg font-black">{totalGuru}</td>
+                <td className="px-5 py-4 text-lg font-black text-[#f7d982]">{DHQC_2024_REFERENCE.qariQariah.total}</td>
+                <td className="px-5 py-4 text-lg font-black">{totalQari}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-[2rem] border border-[#d6e4dd] bg-white shadow-sm">
+        <div className="flex items-center gap-3 bg-[#0d4f45] px-6 py-5 text-white">
+          <div className="rounded-2xl bg-[#f0cf73] p-2 text-[#0d4f45]">
+            <Users className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black uppercase tracking-tight">Komponen C: Penyelia GAQMIS & Hakim Tilawah</h3>
+            <p className="text-xs font-semibold text-white/70">Padanan rujukan 2024 dan rekod 2025 dengan jumlah automatik.</p>
+          </div>
+        </div>
+
+        <div className="grid gap-6 p-6 md:grid-cols-2">
+          <div className="rounded-[1.6rem] border border-[#dce7e2] bg-[#f8fcfa] p-5">
+            <div className="mb-5 flex items-center justify-between">
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Penyelia GAQMIS</h4>
+              <span className="rounded-full bg-[#dff2ea] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#0d4f45]">
+                Total 2025: {totalPenyelia}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                { label: 'Ibu Pejabat', field: 'ibuPejabat', ref: DHQC_2024_REFERENCE.penyelia.ibuPejabat },
+                { label: 'Bintulu', field: 'bintulu', ref: DHQC_2024_REFERENCE.penyelia.bintulu },
+              ].map((item) => (
+                <div key={item.field} className="grid grid-cols-[1fr_0.7fr_0.8fr] items-center gap-3">
+                  <label className="text-sm font-bold text-slate-600">{item.label}</label>
+                  <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+                    Ref 2024: {item.ref}
+                  </div>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.dhqc.penyelia[item.field as keyof typeof formData.dhqc.penyelia]}
+                    onChange={(e) => handleNestedInputChange('dhqc', 'penyelia', item.field, e.target.value)}
+                    className="rounded-xl border border-[#c9ded6] bg-white px-4 py-3 text-sm font-bold text-[#0d3b35] outline-none transition focus:border-[#0d4f45] focus:ring-2 focus:ring-[#0d4f45]/15"
+                    placeholder="0"
+                  />
                 </div>
               ))}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
-      {/* Statistik Debu & Penyelia & Hakim */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        {/* Statistik Debu */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-5 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
-            <Anchor className="w-5 h-5 text-[#0a1e3b]" />
-            <h3 className="text-sm font-black text-[#0a1e3b] uppercase">Statistik Pemuliaan Debu</h3>
-          </div>
-          <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Berat Debu (Tan)</label>
-              <input
-                type="number"
-                step="0.1"
-                min="0"
-                value={formData.dhqc.statistikDebu.berat}
-                onChange={(e) => handleNestedInputChange('dhqc', 'statistikDebu', 'berat', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0.0"
-              />
+          <div className="rounded-[1.6rem] border border-[#f5e8bb] bg-[#fffaf0] p-5">
+            <div className="mb-5 flex items-center justify-between">
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#7b5c0c]">Hakim Tilawah</h4>
+              <span className="rounded-full bg-[#f8eab6] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#7b5c0c]">
+                Total 2025: {totalHakim}
+              </span>
             </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Kekerapan Pemuliaan</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.statistikDebu.kekerapan}
-                onChange={(e) => handleNestedInputChange('dhqc', 'statistikDebu', 'kekerapan', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* Penyelia GAQMIS */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-5 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
-            <Users className="w-5 h-5 text-[#0a1e3b]" />
-            <h3 className="text-sm font-black text-[#0a1e3b] uppercase">Penyelia GAQMIS</h3>
-          </div>
-          <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Ibu Pejabat</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.penyelia.ibuPejabat}
-                onChange={(e) => handleNestedInputChange('dhqc', 'penyelia', 'ibuPejabat', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Bintulu</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.penyelia.bintulu}
-                onChange={(e) => handleNestedInputChange('dhqc', 'penyelia', 'bintulu', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-            <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-xs font-black text-gray-400 uppercase">Jumlah Besar</span>
-              <span className="text-lg font-black text-[#0a1e3b]">{totalPenyelia}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Hakim Majlis Tilawah */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-5 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
-            <Gavel className="w-5 h-5 text-[#0a1e3b]" />
-            <h3 className="text-sm font-black text-[#0a1e3b] uppercase">Hakim Majlis Tilawah</h3>
-          </div>
-          <div className="p-6 space-y-3">
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Peringkat Negeri</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.hakim.negeri}
-                onChange={(e) => handleNestedInputChange('dhqc', 'hakim', 'negeri', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Peringkat Bahagian</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.hakim.bahagian}
-                onChange={(e) => handleNestedInputChange('dhqc', 'hakim', 'bahagian', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Peringkat Daerah</label>
-              <input
-                type="number"
-                min="0"
-                value={formData.dhqc.hakim.daerah}
-                onChange={(e) => handleNestedInputChange('dhqc', 'hakim', 'daerah', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                placeholder="0"
-              />
-            </div>
-            <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-xs font-black text-gray-400 uppercase">Jumlah Besar</span>
-              <span className="text-lg font-black text-[#0a1e3b]">{totalHakim}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Guru & Qari/Qariah Table */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-        <div className="p-6 bg-[#0a1e3b] flex items-center gap-3">
-          <Calculator className="w-6 h-6 text-[#c5a065]" />
-          <h3 className="text-lg font-black text-white uppercase tracking-tight">Pecahan Guru & Qari/Qariah Mengikut Bahagian</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead>
-              <tr className="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">
-                <th className="px-6 py-4">Bahagian</th>
-                <th className="px-6 py-4">Guru al-Quran (GAQMIS)</th>
-                <th className="px-6 py-4">Statistik Qari/Qariah</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {SARAWAK_DIVISIONS.map((div) => (
-                <tr key={div} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-gray-700">{div}</td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number"
-                      min="0"
-                      value={formData.dhqc.guruAlQuran[div.charAt(0).toLowerCase() + div.slice(1).replace(/\s+/g, '')]}
-                      onChange={(e) => handleNestedInputChange('dhqc', 'guruAlQuran', div.charAt(0).toLowerCase() + div.slice(1).replace(/\s+/g, ''), e.target.value)}
-                      className="w-24 bg-gray-50 border-none rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="px-6 py-4">
-                    <input
-                      type="number"
-                      min="0"
-                      value={formData.dhqc.qariQariah[div.charAt(0).toLowerCase() + div.slice(1).replace(/\s+/g, '')]}
-                      onChange={(e) => handleNestedInputChange('dhqc', 'qariQariah', div.charAt(0).toLowerCase() + div.slice(1).replace(/\s+/g, ''), e.target.value)}
-                      className="w-24 bg-gray-50 border-none rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#c5a065]"
-                      placeholder="0"
-                    />
-                  </td>
-                </tr>
+            <div className="space-y-4">
+              {[
+                { label: 'Peringkat Negeri', field: 'negeri', ref: DHQC_2024_REFERENCE.hakim.negeri },
+                { label: 'Peringkat Bahagian', field: 'bahagian', ref: DHQC_2024_REFERENCE.hakim.bahagian },
+                { label: 'Peringkat Daerah', field: 'daerah', ref: DHQC_2024_REFERENCE.hakim.daerah },
+              ].map((item) => (
+                <div key={item.field} className="grid grid-cols-[1fr_0.7fr_0.8fr] items-center gap-3">
+                  <label className="text-sm font-bold text-slate-600">{item.label}</label>
+                  <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+                    Ref 2024: {item.ref}
+                  </div>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.dhqc.hakim[item.field as keyof typeof formData.dhqc.hakim]}
+                    onChange={(e) => handleNestedInputChange('dhqc', 'hakim', item.field, e.target.value)}
+                    className="rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-bold text-[#7b5c0c] outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/35"
+                    placeholder="0"
+                  />
+                </div>
               ))}
-              <tr className="bg-[#0a1e3b] text-white">
-                <td className="px-6 py-4 font-black uppercase tracking-widest">Jumlah Keseluruhan</td>
-                <td className="px-6 py-4 text-xl font-black text-[#c5a065]">{totalGuru}</td>
-                <td className="px-6 py-4 text-xl font-black text-[#c5a065]">{totalQari}</td>
-              </tr>
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-[#d6e4dd] bg-gradient-to-r from-[#f8fcfa] to-[#fffaf0] p-6 shadow-sm print:hidden">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 className="text-lg font-black tracking-tight text-[#0d3b35]">Tindakan Rekod 2025</h3>
+            <p className="mt-1 text-sm font-medium text-slate-500">
+              Simpan rekod DHQC. Butang `Export PDF` standard aplikasi di bahagian atas menggunakan layout alternatif PDF aplikasi.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleSave()}
+            disabled={isSaving}
+            className="inline-flex items-center justify-center gap-3 rounded-[1.2rem] bg-[#0d4f45] px-6 py-4 text-sm font-black text-white shadow-[0_14px_30px_rgba(13,79,69,0.18)] transition hover:bg-[#0b4038] disabled:opacity-70"
+          >
+            <Save className="h-5 w-5" />
+            {isSaving ? 'Menyimpan...' : 'Simpan Rekod 2025'}
+          </button>
+        </div>
+      </section>
       </div>
     </FormLayout>
   );

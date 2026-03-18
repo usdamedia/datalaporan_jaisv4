@@ -47,6 +47,7 @@ export const DEPARTMENTS: Department[] = [
   { id: '7', name: 'Bahagian Kemajuan Keluarga Islam BKKI', active: true },
   { id: '6', name: 'Bahagian Pengurusan Halal BPH', active: true },
   { id: '14', name: 'Bahagian Pendakwaan Syariah BPDS', active: true },
+  { id: '16', name: 'DHQC - Darul Hana Quranic Centre', active: true },
   { id: '11', name: 'Bahagian Kemajuan Saudara Kita BKSK', active: true },
   { id: '8', name: 'Bahagian Pengukuhan Pendidikan Islam BPPI', active: true },
   { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: true },
@@ -78,7 +79,7 @@ export const getIconForDept = (name: string) => {
   if (normalizedName.includes('BPKS')) return <Zap className="w-6 h-6" />;
   if (normalizedName.includes('HR')) return <Briefcase className="w-6 h-6" />;
   if (normalizedName.includes('BPDS') || normalizedName.includes('PENDAKWAAN')) return <Gavel className="w-6 h-6" />;
-  if (normalizedName.includes('DHQC')) return <Book className="w-6 h-6" />;
+  if (normalizedName.includes('DHQC') || normalizedName.includes('DARUL HANA')) return <Book className="w-6 h-6" />;
   
   // Default icon
   return <Building2 className="w-6 h-6" />;
@@ -724,6 +725,11 @@ export const UKOKO_PR_2024_REFERENCE = {
       tidakPuas: 80,
     },
     kodQr: {
+      jumlah: 940,
+      puas: 928,
+      tidakPuas: 12,
+    },
+    qrCode: {
       jumlah: 940,
       puas: 928,
       tidakPuas: 12,

@@ -51,9 +51,9 @@
 
 @layer base {
   :root {
-    --app-font-header: 2rem;
-    --app-font-subheader: 1.125rem;
-    --app-font-body: 0.95rem;
+    --app-font-header: 1.75rem;
+    --app-font-subheader: 1rem;
+    --app-font-body: 0.875rem;
   }
 
   body {

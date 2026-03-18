@@ -16,6 +16,11 @@ export const usePrintView = <T extends HTMLElement>({ documentTitle }: UsePrintV
       }
 
       @media print {
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
         html, body {
           background: #ffffff !important;
         }

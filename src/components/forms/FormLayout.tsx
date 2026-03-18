@@ -6,6 +6,7 @@ interface FormLayoutProps {
   deptName: string;
   onBack: () => void;
   onSave: () => void;
+  onExport?: () => void | Promise<void>;
   isSaving: boolean;
   showSuccess: boolean;
   saveError?: string | null;
@@ -19,6 +20,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   deptName, 
   onBack, 
   onSave, 
+  onExport,
   isSaving, 
   showSuccess, 
   saveError,
@@ -36,8 +38,12 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     setIsExportingPdf(true);
     setExportError(null);
     try {
-      const exportState = getExportState ? getExportState() : buildReportExportState(deptName, formData);
-      await exportReportPdf(deptName, exportState);
+      if (onExport) {
+        await onExport();
+      } else {
+        const exportState = getExportState ? getExportState() : buildReportExportState(deptName, formData);
+        await exportReportPdf(deptName, exportState);
+      }
     } catch (err) {
       console.error('PDF Export failed:', err);
       setExportError('Gagal menjana PDF. Sila cuba lagi.');
@@ -48,30 +54,30 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
   return (
     <>
-      <div className="mx-auto max-w-7xl animate-fade-in pb-24">
+      <div className="mx-auto max-w-[110rem] animate-fade-in pb-28">
       {/* Form Header */}
-      <div className="mb-10 flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+      <div className="mb-12 flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">
           <button 
             onClick={onBack}
-            className="group mb-3 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition-colors hover:text-zus-900"
+            className="group mb-4 inline-flex items-center gap-2 text-xs font-bold text-gray-500 transition-colors hover:text-zus-900"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Kembali ke Utama
           </button>
-          <h2 className="text-3xl font-extrabold tracking-tight text-zus-900 sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
             {deptName}
           </h2>
-          <p className="mt-2 max-w-3xl text-base font-medium text-gray-500 md:text-xl">
+          <p className="mt-3 max-w-4xl text-sm font-medium text-gray-500 md:text-base">
             Sila lengkapkan maklumat laporan tahunan di bawah.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row xl:justify-end">
+        <div className="flex flex-col gap-4 sm:flex-row xl:justify-end">
           <button
             onClick={onSave}
             disabled={isSaving}
-            className="flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] bg-zus-900 px-7 py-5 text-lg font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
+            className="flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] bg-zus-900 px-8 py-5 text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
           >
             {isSaving ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -126,13 +132,13 @@ const FormLayout: React.FC<FormLayoutProps> = ({
       )}
 
       {/* Main Form Content */}
-      <div className="space-y-8">
+      <div className="space-y-10">
         {children}
 
         {/* Footer Info */}
-        <div className="flex items-start gap-3 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-5 text-blue-700">
+        <div className="flex items-start gap-4 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-6 text-blue-700">
           <AlertCircle className="mt-0.5 h-5 w-5" />
-          <p className="text-[10px] md:text-xs font-medium">
+          <p className="text-[10px] md:text-[11px] font-medium">
             Nota: Data anda disimpan secara automatik dalam pelayar ini. Pastikan anda menekan butang <strong>Simpan Draf</strong> sebelum menutup tab.
           </p>
         </div>

@@ -1,17 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { 
   MessageSquare, 
-  Users, 
   MapPin, 
   BarChart3, 
   Smile, 
-  Frown, 
-  ExternalLink,
-  CheckCircle2,
   AlertCircle,
   TrendingUp,
   Building2,
-  Save,
   Trash2,
   Plus
 } from 'lucide-react';
@@ -104,7 +99,51 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     }
   });
 
-  const prData = formData.pr as UkokoPRData;
+  const prData = {
+    aduan: {
+      sumber: {
+        talikhidmat: formData.pr?.aduan?.sumber?.talikhidmat || 0,
+        lain: formData.pr?.aduan?.sumber?.lain || 0,
+      },
+      statusSelesai: formData.pr?.aduan?.statusSelesai || 0,
+      kategori: {
+        masjid: formData.pr?.aduan?.kategori?.masjid || 0,
+        kadNikah: formData.pr?.aduan?.kategori?.kadNikah || 0,
+        kafa: formData.pr?.aduan?.kategori?.kafa || 0,
+        logoHalal: formData.pr?.aduan?.kategori?.logoHalal || 0,
+        ncr: formData.pr?.aduan?.kategori?.ncr || 0,
+        tindakanPenguatkuasaanSyariah: formData.pr?.aduan?.kategori?.tindakanPenguatkuasaanSyariah || 0,
+        tindakanPengukuhanPendidikanIslam: formData.pr?.aduan?.kategori?.tindakanPengukuhanPendidikanIslam || 0,
+        usk: formData.pr?.aduan?.kategori?.usk || 0,
+      },
+      lokasi: {
+        hqBkki: formData.pr?.aduan?.lokasi?.hqBkki || 0,
+        paibBintulu: formData.pr?.aduan?.lokasi?.paibBintulu || 0,
+        paibKuching: formData.pr?.aduan?.lokasi?.paibKuching || 0,
+        paibMiri: formData.pr?.aduan?.lokasi?.paibMiri || 0,
+        paibSarikei: formData.pr?.aduan?.lokasi?.paibSarikei || 0,
+        paibSibu: formData.pr?.aduan?.lokasi?.paibSibu || 0,
+      },
+      customKategori: formData.pr?.aduan?.customKategori || [],
+    },
+    maklumBalas: {
+      queueBee: {
+        puas: formData.pr?.maklumBalas?.queueBee?.puas || 0,
+        tidakPuas: formData.pr?.maklumBalas?.queueBee?.tidakPuas || 0,
+      },
+      qrCode: {
+        puas:
+          formData.pr?.maklumBalas?.qrCode?.puas ||
+          formData.pr?.maklumBalas?.kodQr?.puas ||
+          0,
+        tidakPuas:
+          formData.pr?.maklumBalas?.qrCode?.tidakPuas ||
+          formData.pr?.maklumBalas?.kodQr?.tidakPuas ||
+          0,
+      },
+    },
+    lawatanLuar: formData.pr?.lawatanLuar || 0,
+  } as UkokoPRData;
   const [newCustomKategori, setNewCustomKategori] = React.useState('');
 
   const updateField = (path: string, value: string) => {
@@ -209,6 +248,78 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
+  const complaintSummaryRows = [
+    {
+      label: 'Jumlah Aduan',
+      ref: UKOKO_PR_2024_REFERENCE.aduan.jumlah,
+      value: totalAduanSumber,
+      readOnly: true,
+    },
+    {
+      label: 'SCS Talikhidmat',
+      ref: UKOKO_PR_2024_REFERENCE.aduan.sumber.talikhidmat,
+      value: prData.aduan.sumber.talikhidmat,
+      path: 'aduan.sumber.talikhidmat',
+    },
+    {
+      label: 'Email / Emel / Surat',
+      ref: UKOKO_PR_2024_REFERENCE.aduan.sumber.lain,
+      value: prData.aduan.sumber.lain,
+      path: 'aduan.sumber.lain',
+    },
+    {
+      label: 'Status Selesai',
+      ref: UKOKO_PR_2024_REFERENCE.aduan.statusSelesai,
+      value: prData.aduan.statusSelesai,
+      path: 'aduan.statusSelesai',
+    },
+  ];
+  const feedbackRows = [
+    {
+      label: 'Queue Bee - Puas',
+      ref: UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.puas,
+      value: prData.maklumBalas.queueBee.puas,
+      path: 'maklumBalas.queueBee.puas',
+    },
+    {
+      label: 'Queue Bee - Tidak Puas',
+      ref: UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.tidakPuas,
+      value: prData.maklumBalas.queueBee.tidakPuas,
+      path: 'maklumBalas.queueBee.tidakPuas',
+    },
+    {
+      label: 'Kod QR - Puas',
+      ref: UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.puas,
+      value: prData.maklumBalas.qrCode.puas,
+      path: 'maklumBalas.qrCode.puas',
+    },
+    {
+      label: 'Kod QR - Tidak Puas',
+      ref: UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.tidakPuas,
+      value: prData.maklumBalas.qrCode.tidakPuas,
+      path: 'maklumBalas.qrCode.tidakPuas',
+    },
+    {
+      label: 'Jumlah Maklum Balas',
+      ref: UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah,
+      value: totalMaklumBalas,
+      readOnly: true,
+    },
+  ];
+  const kategoriRows = Object.entries(prData.aduan.kategori).map(([key, value]) => ({
+    key,
+    label: aduanKategoriLabels[key] || key,
+    ref: UKOKO_PR_2024_REFERENCE.aduan.kategori[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.kategori] || 0,
+    value,
+    path: `aduan.kategori.${key}`,
+  }));
+  const lokasiRows = Object.entries(prData.aduan.lokasi).map(([key, value]) => ({
+    key,
+    label: aduanLokasiLabels[key] || key,
+    ref: UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi] || 0,
+    value,
+    path: `aduan.lokasi.${key}`,
+  }));
 
   return (
     <FormLayout
@@ -225,11 +336,10 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
           <p className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-100">Laporan Tahunan Perhubungan Awam</p>
           <h1 className="mt-3 max-w-4xl text-3xl font-black uppercase tracking-tight">Unit Komunikasi Korporat (UKOKO) · Unit Perhubungan Awam</h1>
           <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-indigo-50">
-            Halaman ini memfokuskan pengisian data aduan, maklum balas pelanggan, dan lawatan luar bagi tahun 2025 dengan semakan automatik pada jumlah utama.
+            Borang ini kini dipaparkan dalam susun atur satu aliran supaya item yang diisi mengikuti turutan komponen yang sama seperti paparan PDF eksport.
           </p>
         </section>
 
-        {/* 1. Statistik Aduan */}
         <section className="overflow-hidden rounded-[2rem] border border-indigo-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-indigo-50 pb-4">
             <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
@@ -241,92 +351,129 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
           </div>
 
-          <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-500">Jumlah Aduan</p>
-              <p className="mt-3 text-4xl font-black text-indigo-950">{totalAduanSumber}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-400">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
+          <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="rounded-3xl border border-indigo-100 bg-indigo-50 p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-500">Jumlah Aduan 2025</p>
+              <p className="mt-2 text-4xl font-black text-indigo-950">{totalAduanSumber}</p>
+              <p className="mt-2 text-xs font-semibold text-indigo-400">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
             </div>
-            <div className={`rounded-3xl border p-6 shadow-sm ${isAduanBalanced ? 'border-emerald-100 bg-emerald-50' : 'border-rose-100 bg-rose-50'}`}>
-              <p className={`text-[10px] font-black uppercase tracking-[0.25em] ${isAduanBalanced ? 'text-emerald-600' : 'text-rose-600'}`}>Semakan Auto-Sum</p>
-              <p className={`mt-3 text-2xl font-black ${isAduanBalanced ? 'text-emerald-900' : 'text-rose-900'}`}>
-                {isAduanBalanced ? 'Jumlah Seimbang' : 'Jumlah Tidak Sepadan'}
-              </p>
-              <p className={`mt-2 text-xs font-semibold ${isAduanBalanced ? 'text-emerald-700' : 'text-rose-700'}`}>
+            <div className={`rounded-3xl border p-5 ${isAduanBalanced ? 'border-emerald-100 bg-emerald-50 text-emerald-900' : 'border-rose-100 bg-rose-50 text-rose-900'}`}>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em]">Semakan Auto-Sum</p>
+              <p className="mt-2 text-2xl font-black">{isAduanBalanced ? 'Jumlah Seimbang' : 'Jumlah Tidak Sepadan'}</p>
+              <p className="mt-2 text-xs font-semibold">
                 Sumber: {totalAduanSumber} · Kategori: {totalAduanKategori} · Lokasi: {totalAduanLokasi}
               </p>
             </div>
-            <div className="rounded-3xl border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-indigo-50 p-6 shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500">Status Selesai</p>
-              <p className="mt-2 text-[10px] font-bold text-violet-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</p>
-              <input
-                type="number"
-                value={prData.aduan.statusSelesai}
-                onChange={(e) => updateField('aduan.statusSelesai', e.target.value)}
-                className="mt-3 w-full rounded-2xl border border-violet-200 bg-white p-4 text-center text-3xl font-black text-violet-950 focus:ring-4 focus:ring-violet-500/20 outline-none"
-                placeholder="0"
-              />
-              <p className="mt-2 text-xs font-semibold text-slate-400">Jumlah aduan selesai bagi 2025</p>
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* A. Sumber Aduan */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-black text-indigo-900 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" /> SUMBER ADUAN
+          <div className="space-y-8">
+            <div>
+              <h4 className="mb-4 flex items-center gap-2 text-sm font-black text-indigo-900">
+                <TrendingUp className="w-4 h-4" /> RINGKASAN ADUAN & SUMBER
               </h4>
-              <div className="grid grid-cols-1 gap-3">
-                <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
-                  <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">SCS Talikhidmat</label>
-                  <p className="mb-2 text-[10px] font-bold text-indigo-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.sumber.talikhidmat}</p>
-                  <input
-                    type="number"
-                    value={prData.aduan.sumber.talikhidmat}
-                    onChange={(e) => updateField('aduan.sumber.talikhidmat', e.target.value)}
-                    className="w-full bg-white border border-indigo-200 rounded-xl p-3 font-black text-indigo-900 focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
-                </div>
-                <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
-                  <label className="block text-[10px] font-black text-indigo-400 uppercase mb-2">Email / Emel / Surat</label>
-                  <p className="mb-2 text-[10px] font-bold text-indigo-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.sumber.lain}</p>
-                  <input
-                    type="number"
-                    value={prData.aduan.sumber.lain}
-                    onChange={(e) => updateField('aduan.sumber.lain', e.target.value)}
-                    className="w-full bg-white border border-indigo-200 rounded-xl p-3 font-black text-indigo-900 focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
-                </div>
-                <div className="p-4 bg-indigo-900 rounded-2xl text-white">
-                  <p className="text-[10px] font-black uppercase opacity-60">Jumlah Aduan</p>
-                  <p className="text-2xl font-black">{totalAduanSumber}</p>
-                  <p className="mt-1 text-[10px] font-bold text-indigo-200/70 uppercase">Status Selesai 2025: {prData.aduan.statusSelesai}</p>
-                </div>
+              <div className="overflow-x-auto rounded-3xl border border-indigo-100">
+                <table className="w-full min-w-[640px] text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-indigo-50">
+                      <th className="border border-indigo-100 p-3 text-left font-black uppercase text-indigo-900">Komponen</th>
+                      <th className="border border-indigo-100 p-3 text-center font-black uppercase text-indigo-900">2024</th>
+                      <th className="border border-indigo-100 p-3 text-center font-black uppercase text-indigo-900">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {complaintSummaryRows.map((row) => (
+                      <tr key={row.label}>
+                        <td className="border border-indigo-100 p-3 font-bold text-slate-800">{row.label}</td>
+                        <td className="border border-indigo-100 p-3 text-center text-slate-500">{row.ref}</td>
+                        <td className="border border-indigo-100 p-2">
+                          {row.readOnly ? (
+                            <div className="rounded-2xl bg-indigo-50 px-4 py-3 text-center font-black text-indigo-950">{row.value}</div>
+                          ) : (
+                            <input
+                              type="number"
+                              value={row.value}
+                              onChange={(e) => updateField(row.path!, e.target.value)}
+                              className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            {/* B. Kategori Aduan */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-black text-indigo-900 flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" /> KATEGORI ADUAN
+            <div>
+              <h4 className="mb-4 flex items-center gap-2 text-sm font-black text-slate-900">
+                <BarChart3 className="w-4 h-4" /> ADUAN MENGIKUT KATEGORI
               </h4>
-              <div className="grid grid-cols-2 gap-3">
-                {Object.entries(prData.aduan.kategori).map(([key, val]) => (
-                  <div key={key} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 truncate">
-                      {aduanKategoriLabels[key]}
-                    </label>
-                    <p className="mb-1 text-[9px] font-bold text-slate-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.kategori[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.kategori]}</p>
-                    <input
-                      type="number"
-                      value={val}
-                      onChange={(e) => updateField(`aduan.kategori.${key}`, e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg p-2 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-                    />
-                  </div>
-                ))}
+              <div className="overflow-x-auto rounded-3xl border border-slate-200">
+                <table className="w-full min-w-[640px] text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50">
+                      <th className="border border-slate-200 p-3 text-left font-black uppercase text-slate-900">Kategori</th>
+                      <th className="border border-slate-200 p-3 text-center font-black uppercase text-slate-900">2024</th>
+                      <th className="border border-slate-200 p-3 text-center font-black uppercase text-slate-900">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {kategoriRows.map((row) => (
+                      <tr key={row.key}>
+                        <td className="border border-slate-200 p-3 font-bold text-slate-800">{row.label}</td>
+                        <td className="border border-slate-200 p-3 text-center text-slate-500">{row.ref}</td>
+                        <td className="border border-slate-200 p-2">
+                          <input
+                            type="number"
+                            value={row.value}
+                            onChange={(e) => updateField(row.path, e.target.value)}
+                            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                    {(prData.aduan.customKategori || []).map((item) => (
+                      <tr key={item.id}>
+                        <td className="border border-slate-200 p-2">
+                          <input
+                            type="text"
+                            value={item.name}
+                            onChange={(e) => updateCustomKategori(item.id, 'name', e.target.value)}
+                            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Kategori tambahan"
+                          />
+                        </td>
+                        <td className="border border-slate-200 p-3 text-center font-bold text-slate-400">-</td>
+                        <td className="border border-slate-200 p-2">
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              value={item.value}
+                              onChange={(e) => updateCustomKategori(item.id, 'value', e.target.value)}
+                              className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                              placeholder="0"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeCustomKategori(item.id)}
+                              className="inline-flex items-center justify-center rounded-2xl bg-rose-50 px-4 text-sm font-black text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
+                              aria-label={`Delete ${item.name || 'kategori'}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="bg-slate-50">
+                      <td className="border border-slate-200 p-3 font-black text-slate-900">JUMLAH</td>
+                      <td className="border border-slate-200 p-3 text-center font-black text-slate-900">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
+                      <td className="border border-slate-200 p-3 text-center font-black text-slate-900">{totalAduanKategori}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div className="rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/40 p-4">
+              <div className="mt-4 rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/40 p-4">
                 <div className="flex flex-col gap-3 md:flex-row">
                   <input
                     type="text"
@@ -350,79 +497,44 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     Tambah Kategori
                   </button>
                 </div>
-
-                {(prData.aduan.customKategori || []).length > 0 && (
-                  <div className="mt-4 space-y-3">
-                    {(prData.aduan.customKategori || []).map((item) => (
-                      <div key={item.id} className="rounded-2xl border border-indigo-100 bg-white p-4 shadow-sm">
-                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_140px_auto_auto]">
-                          <input
-                            type="text"
-                            value={item.name}
-                            onChange={(e) => updateCustomKategori(item.id, 'name', e.target.value)}
-                            className="rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="Nama kategori aduan"
-                          />
-                          <input
-                            type="number"
-                            value={item.value}
-                            onChange={(e) => updateCustomKategori(item.id, 'value', e.target.value)}
-                            className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-black text-slate-900 outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="0"
-                          />
-                          <button
-                            type="button"
-                            onClick={handleSave}
-                            disabled={isSaving}
-                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-white transition hover:bg-emerald-700 disabled:opacity-60"
-                          >
-                            <Save className="h-4 w-4" />
-                            Save
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeCustomKategori(item.id)}
-                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className={`p-3 rounded-xl flex justify-between items-center ${totalAduanKategori === totalAduanSumber ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
-                <span className="text-[10px] font-black uppercase">Jumlah Kategori</span>
-                <span className="font-black">{totalAduanKategori}</span>
               </div>
             </div>
 
-            {/* C. Lokasi PAIB */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-black text-indigo-900 flex items-center gap-2">
-                <MapPin className="w-4 h-4" /> LOKASI PAIB
+            <div>
+              <h4 className="mb-4 flex items-center gap-2 text-sm font-black text-purple-900">
+                <MapPin className="w-4 h-4" /> ADUAN MENGIKUT BAHAGIAN / PAIB
               </h4>
-              <div className="grid grid-cols-2 gap-3">
-                {Object.entries(prData.aduan.lokasi).map(([key, val]) => (
-                  <div key={key} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 truncate">
-                      {aduanLokasiLabels[key]}
-                    </label>
-                    <p className="mb-1 text-[9px] font-bold text-slate-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi]}</p>
-                    <input
-                      type="number"
-                      value={val}
-                      onChange={(e) => updateField(`aduan.lokasi.${key}`, e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg p-2 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className={`p-3 rounded-xl flex justify-between items-center ${totalAduanLokasi === totalAduanSumber ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
-                <span className="text-[10px] font-black uppercase">Jumlah Lokasi</span>
-                <span className="font-black">{totalAduanLokasi}</span>
+              <div className="overflow-x-auto rounded-3xl border border-purple-100">
+                <table className="w-full min-w-[640px] text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-purple-50">
+                      <th className="border border-purple-100 p-3 text-left font-black uppercase text-purple-900">Bahagian / PAIB</th>
+                      <th className="border border-purple-100 p-3 text-center font-black uppercase text-purple-900">2024</th>
+                      <th className="border border-purple-100 p-3 text-center font-black uppercase text-purple-900">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lokasiRows.map((row) => (
+                      <tr key={row.key}>
+                        <td className="border border-purple-100 p-3 font-bold text-slate-800">{row.label}</td>
+                        <td className="border border-purple-100 p-3 text-center text-slate-500">{row.ref}</td>
+                        <td className="border border-purple-100 p-2">
+                          <input
+                            type="number"
+                            value={row.value}
+                            onChange={(e) => updateField(row.path, e.target.value)}
+                            className="w-full rounded-2xl border border-purple-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-purple-500"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="bg-purple-50">
+                      <td className="border border-purple-100 p-3 font-black text-purple-900">JUMLAH</td>
+                      <td className="border border-purple-100 p-3 text-center font-black text-purple-900">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
+                      <td className="border border-purple-100 p-3 text-center font-black text-purple-900">{totalAduanLokasi}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -436,30 +548,8 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
           )}
 
-          {/* Bar Chart Placeholders */}
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="h-48 rounded-[1.75rem] border border-slate-100 bg-slate-50 p-6 text-slate-400 flex flex-col items-center justify-center">
-              <BarChart3 className="w-8 h-8 mb-2 opacity-20" />
-              <p className="text-[10px] font-black uppercase tracking-widest">Visualisasi Kategori Aduan</p>
-              <div className="w-full mt-4 flex items-end gap-2 h-16 px-4">
-                {[40, 70, 30, 90, 50, 60, 20, 45].map((h, i) => (
-                  <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-indigo-200 rounded-t-sm opacity-50"></div>
-                ))}
-              </div>
-            </div>
-            <div className="h-48 rounded-[1.75rem] border border-slate-100 bg-slate-50 p-6 text-slate-400 flex flex-col items-center justify-center">
-              <BarChart3 className="w-8 h-8 mb-2 opacity-20" />
-              <p className="text-[10px] font-black uppercase tracking-widest">Visualisasi Lokasi PAIB</p>
-              <div className="w-full mt-4 flex items-end gap-2 h-16 px-8">
-                {[60, 40, 80, 50, 30, 70].map((h, i) => (
-                  <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-purple-200 rounded-t-sm opacity-50"></div>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
 
-        {/* 2. Maklum Balas Pelanggan */}
         <section className="overflow-hidden rounded-[2rem] border border-purple-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-purple-50 pb-4">
             <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
@@ -471,134 +561,62 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
           </div>
 
-          <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <div className="rounded-3xl border border-purple-100 bg-gradient-to-br from-purple-50 via-white to-indigo-50 p-6 shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-purple-500">Jumlah Maklum Balas</p>
-              <p className="mt-3 text-4xl font-black text-purple-950">{totalMaklumBalas.toLocaleString()}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-400">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
+          <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="rounded-3xl border border-emerald-100 bg-emerald-50 p-5">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Jumlah Maklum Balas</p>
+              <p className="mt-2 text-4xl font-black text-emerald-950">{totalMaklumBalas.toLocaleString()}</p>
+              <p className="mt-2 text-xs font-semibold text-emerald-700">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
             </div>
-            <div className="rounded-3xl border border-emerald-100 bg-emerald-50 p-6 shadow-sm">
+            <div className="rounded-3xl border border-emerald-100 bg-white p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Puas Hati</p>
-              <p className="mt-3 text-4xl font-black text-emerald-950">
-                {(prData.maklumBalas.queueBee.puas + prData.maklumBalas.qrCode.puas).toLocaleString()}
-              </p>
-              <p className="mt-2 text-xs font-semibold text-emerald-700">Queue Bee + Kod QR</p>
+              <p className="mt-2 text-3xl font-black text-emerald-950">{(prData.maklumBalas.queueBee.puas + prData.maklumBalas.qrCode.puas).toLocaleString()}</p>
             </div>
-            <div className="rounded-3xl border border-rose-100 bg-rose-50 p-6 shadow-sm">
+            <div className="rounded-3xl border border-rose-100 bg-white p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-600">Tidak Puas</p>
-              <p className="mt-3 text-4xl font-black text-rose-950">
-                {(prData.maklumBalas.queueBee.tidakPuas + prData.maklumBalas.qrCode.tidakPuas).toLocaleString()}
-              </p>
-              <p className="mt-2 text-xs font-semibold text-rose-700">Queue Bee + Kod QR</p>
+              <p className="mt-2 text-3xl font-black text-rose-950">{(prData.maklumBalas.queueBee.tidakPuas + prData.maklumBalas.qrCode.tidakPuas).toLocaleString()}</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Queue Bee */}
-            <div className="bg-indigo-50/30 rounded-3xl p-6 border border-indigo-100">
-              <h4 className="text-xs font-black text-indigo-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" /> Queue Bee System
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-emerald-600 mb-1">
-                    <Smile className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase">Puas Hati</span>
-                  </div>
-                  <p className="text-[10px] font-bold text-emerald-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.puas.toLocaleString()}</p>
-                  <input
-                    type="number"
-                    value={prData.maklumBalas.queueBee.puas}
-                    onChange={(e) => updateField('maklumBalas.queueBee.puas', e.target.value)}
-                    className="w-full bg-white border border-emerald-200 rounded-xl p-3 font-black text-emerald-900 focus:ring-2 focus:ring-emerald-500 outline-none"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-rose-600 mb-1">
-                    <Frown className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase">Tidak Puas</span>
-                  </div>
-                  <p className="text-[10px] font-bold text-rose-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.tidakPuas}</p>
-                  <input
-                    type="number"
-                    value={prData.maklumBalas.queueBee.tidakPuas}
-                    onChange={(e) => updateField('maklumBalas.queueBee.tidakPuas', e.target.value)}
-                    className="w-full bg-white border border-rose-200 rounded-xl p-3 font-black text-rose-900 focus:ring-2 focus:ring-rose-500 outline-none"
-                  />
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-indigo-100 flex justify-between items-center">
-                <span className="text-[10px] font-black text-indigo-400 uppercase">Sub-Jumlah</span>
-                <span className="text-lg font-black text-indigo-900">{totalQueueBee}</span>
-              </div>
-              <p className="mt-2 text-[10px] font-bold text-indigo-300 uppercase">Jumlah Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.jumlah.toLocaleString()}</p>
-            </div>
-
-            {/* QR Code */}
-            <div className="bg-purple-50/30 rounded-3xl p-6 border border-purple-100">
-              <h4 className="text-xs font-black text-purple-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" /> Kod QR
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-emerald-600 mb-1">
-                    <Smile className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase">Puas Hati</span>
-                  </div>
-                  <p className="text-[10px] font-bold text-emerald-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.puas}</p>
-                  <input
-                    type="number"
-                    value={prData.maklumBalas.qrCode.puas}
-                    onChange={(e) => updateField('maklumBalas.qrCode.puas', e.target.value)}
-                    className="w-full bg-white border border-emerald-200 rounded-xl p-3 font-black text-emerald-900 focus:ring-2 focus:ring-emerald-500 outline-none"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-rose-600 mb-1">
-                    <Frown className="w-4 h-4" />
-                    <span className="text-[10px] font-black uppercase">Tidak Puas</span>
-                  </div>
-                  <p className="text-[10px] font-bold text-rose-300">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.tidakPuas}</p>
-                  <input
-                    type="number"
-                    value={prData.maklumBalas.qrCode.tidakPuas}
-                    onChange={(e) => updateField('maklumBalas.qrCode.tidakPuas', e.target.value)}
-                    className="w-full bg-white border border-rose-200 rounded-xl p-3 font-black text-rose-900 focus:ring-2 focus:ring-rose-500 outline-none"
-                  />
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-purple-100 flex justify-between items-center">
-                <span className="text-[10px] font-black text-purple-400 uppercase">Sub-Jumlah</span>
-                <span className="text-lg font-black text-purple-900">{totalQrCode}</span>
-              </div>
-              <p className="mt-2 text-[10px] font-bold text-purple-300 uppercase">Jumlah Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.kodQr.jumlah}</p>
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center justify-between gap-6 rounded-[2rem] bg-gradient-to-r from-indigo-900 to-purple-900 p-8 text-white md:flex-row">
-            <div>
-              <p className="text-indigo-200 text-xs font-black uppercase tracking-widest mb-1">Jumlah Keseluruhan Maklum Balas</p>
-              <h3 className="text-5xl font-black tracking-tighter">{totalMaklumBalas.toLocaleString()}</h3>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-indigo-200/70">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="text-center px-6 py-3 bg-white/10 rounded-2xl backdrop-blur-md">
-                <p className="text-[10px] font-black uppercase opacity-60">Puas Hati</p>
-                <p className="text-xl font-black text-emerald-400">
-                  {(prData.maklumBalas.queueBee.puas + prData.maklumBalas.qrCode.puas).toLocaleString()}
-                </p>
-              </div>
-              <div className="text-center px-6 py-3 bg-white/10 rounded-2xl backdrop-blur-md">
-                <p className="text-[10px] font-black uppercase opacity-60">Tidak Puas</p>
-                <p className="text-xl font-black text-rose-400">
-                  {(prData.maklumBalas.queueBee.tidakPuas + prData.maklumBalas.qrCode.tidakPuas).toLocaleString()}
-                </p>
-              </div>
+          <div>
+            <h4 className="mb-4 flex items-center gap-2 text-sm font-black text-emerald-900">
+              <Smile className="w-4 h-4" /> MAKLUM BALAS PELANGGAN
+            </h4>
+            <div className="overflow-x-auto rounded-3xl border border-emerald-100">
+              <table className="w-full min-w-[640px] text-sm border-collapse">
+                <thead>
+                  <tr className="bg-emerald-50">
+                    <th className="border border-emerald-100 p-3 text-left font-black uppercase text-emerald-900">Platform</th>
+                    <th className="border border-emerald-100 p-3 text-center font-black uppercase text-emerald-900">2024</th>
+                    <th className="border border-emerald-100 p-3 text-center font-black uppercase text-emerald-900">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {feedbackRows.map((row) => (
+                    <tr key={row.label}>
+                      <td className="border border-emerald-100 p-3 font-bold text-slate-800">{row.label}</td>
+                      <td className="border border-emerald-100 p-3 text-center text-slate-500">{row.ref.toLocaleString()}</td>
+                      <td className="border border-emerald-100 p-2">
+                        {row.readOnly ? (
+                          <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-center font-black text-emerald-950">
+                            {row.value.toLocaleString()}
+                          </div>
+                        ) : (
+                          <input
+                            type="number"
+                            value={row.value}
+                            onChange={(e) => updateField(row.path!, e.target.value)}
+                            className="w-full rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-emerald-500"
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
 
-        {/* 3. Lawatan Luar */}
         <section className="overflow-hidden rounded-[2rem] border border-indigo-100 bg-white p-6 shadow-sm md:p-8">
           <div className="flex items-center gap-3 mb-8 border-b border-indigo-50 pb-4">
             <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
@@ -610,22 +628,24 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
           </div>
 
-          <div className="max-w-md">
-            <div className="p-6 bg-indigo-50/50 rounded-3xl border border-indigo-100 flex items-center gap-6">
-              <div className="flex-1">
-                <label className="block text-xs font-black text-indigo-900 uppercase mb-2">Jumlah Lawatan Diterima</label>
-                <input
-                  type="number"
-                  value={prData.lawatanLuar}
-                  onChange={(e) => updateField('lawatanLuar', e.target.value)}
-                  className="w-full bg-white border border-indigo-200 rounded-2xl p-4 font-black text-3xl text-indigo-900 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all"
-                  placeholder="0"
-                />
-              </div>
-              <div className="w-20 h-20 bg-indigo-900 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                <TrendingUp className="w-10 h-10 opacity-40" />
-              </div>
-            </div>
+          <div className="max-w-3xl overflow-x-auto rounded-3xl border border-indigo-100">
+            <table className="w-full min-w-[520px] text-sm border-collapse">
+              <tbody>
+                <tr>
+                  <td className="border border-indigo-100 p-3 font-black uppercase text-indigo-900">Jumlah Lawatan</td>
+                  <td className="border border-indigo-100 p-3 text-center font-bold text-slate-500">{UKOKO_PR_2024_REFERENCE.lawatanLuar}</td>
+                  <td className="border border-indigo-100 p-2">
+                    <input
+                      type="number"
+                      value={prData.lawatanLuar}
+                      onChange={(e) => updateField('lawatanLuar', e.target.value)}
+                      className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-3 text-center font-black text-indigo-900 outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </div>

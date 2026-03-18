@@ -13,24 +13,24 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   const fontScaleOptions = useMemo(
     () => ({
       compact: {
-        header: '1.6rem',
-        subheader: '0.92rem',
-        body: '0.8rem',
+        header: '1.45rem',
+        subheader: '0.84rem',
+        body: '0.76rem',
       },
       small: {
-        header: '1.8rem',
-        subheader: '1rem',
-        body: '0.88rem',
+        header: '1.6rem',
+        subheader: '0.92rem',
+        body: '0.82rem',
       },
       default: {
-        header: '2rem',
-        subheader: '1.125rem',
-        body: '0.95rem',
+        header: '1.75rem',
+        subheader: '1rem',
+        body: '0.875rem',
       },
       large: {
-        header: '2.2rem',
-        subheader: '1.25rem',
-        body: '1.03rem',
+        header: '1.95rem',
+        subheader: '1.08rem',
+        body: '0.94rem',
       },
     }),
     []
@@ -60,8 +60,8 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
     <div className="app-typography min-h-screen flex flex-col" style={appTypographyStyle}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20">
+        <div className="mx-auto max-w-[112rem] px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex justify-between items-center h-16 md:h-20 lg:h-22">
             <div className="flex items-center gap-3 md:gap-4">
               {showBack && (
                 <button
@@ -150,14 +150,14 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
 
       {/* Main Content */}
       <main className="flex-grow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="mx-auto max-w-[112rem] px-5 py-8 sm:px-8 md:py-12 lg:px-12 xl:px-16">
           {children}
         </div>
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-6 md:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[112rem] px-5 sm:px-8 lg:px-12 xl:px-16">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-left">
               <p className="text-xs md:text-sm text-gray-500 font-medium">

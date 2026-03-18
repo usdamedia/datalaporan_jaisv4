@@ -55,6 +55,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           bkki: prev.bkki ? { ...prev.bkki, ...parsed.bkki } : prev.bkki,
           socialMedia: prev.socialMedia ? { ...prev.socialMedia, ...parsed.socialMedia } : prev.socialMedia,
           aduan: prev.aduan ? { ...prev.aduan, ...parsed.aduan } : prev.aduan,
+          pr: prev.pr ? { ...prev.pr, ...parsed.pr } : prev.pr,
           bpnp: prev.bpnp ? { ...prev.bpnp, ...parsed.bpnp } : prev.bpnp,
           bksk: prev.bksk ? { ...prev.bksk, ...parsed.bksk } : prev.bksk,
           hr: prev.hr ? { ...prev.hr, ...parsed.hr } : prev.hr,
