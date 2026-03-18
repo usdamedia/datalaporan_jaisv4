@@ -4,6 +4,15 @@ import { BKSP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip
+} from 'recharts';
 
 interface BkspFormProps {
   deptName: string;
@@ -105,6 +114,16 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   );
 
   const totalProgram = (formData.bksp.statistik.kaunselingSyarie || 0) + (formData.bksp.statistik.psikologi || 0);
+
+  const puncaKrisisChartData = useMemo(() => {
+    return (formData.bksp.puncaKrisis || [])
+      .map((item: any) => ({
+        name: item.name,
+        value: item.value || 0
+      }))
+      .filter((item: any) => item.value > 0)
+      .sort((a: any, b: any) => b.value - a.value);
+  }, [formData.bksp.puncaKrisis]);
 
   return (
     <FormLayout
@@ -284,6 +303,60 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
               />
             </div>
           ))}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-pink-100 bg-gradient-to-br from-pink-50 via-white to-rose-50 p-5">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div>
+              <h4 className="text-sm font-black text-pink-900 uppercase">Live Bar Chart Punca Krisis</h4>
+              <p className="text-xs font-medium text-pink-400">
+                Carta ini dikemas kini secara langsung berdasarkan nilai yang diisi dalam borang.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white px-4 py-2 text-right shadow-sm ring-1 ring-pink-100">
+              <div className="text-[10px] font-black uppercase tracking-widest text-pink-400">Kategori Aktif</div>
+              <div className="text-lg font-black text-pink-700">{puncaKrisisChartData.length}</div>
+            </div>
+          </div>
+
+          {puncaKrisisChartData.length > 0 ? (
+            <div
+              className="rounded-2xl border border-pink-100 bg-white p-4"
+              style={{ height: `${Math.max(320, puncaKrisisChartData.length * 44)}px` }}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={puncaKrisisChartData}
+                  layout="vertical"
+                  margin={{ top: 8, right: 24, left: 24, bottom: 8 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3d7e4" />
+                  <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#be567f', fontWeight: 700 }} />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    width={180}
+                    tick={{ fontSize: 11, fill: '#831843', fontWeight: 700 }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: '#fdf2f8' }}
+                    contentStyle={{ borderRadius: '14px', border: '1px solid #fbcfe8', boxShadow: '0 10px 30px rgba(190, 24, 93, 0.08)' }}
+                  />
+                  <Bar dataKey="value" name="Jumlah Kes" radius={[0, 10, 10, 0]} fill="#ec4899" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-pink-200 bg-white px-6 py-12 text-center">
+              <BarChart3 className="mx-auto mb-3 h-10 w-10 text-pink-200" />
+              <p className="text-sm font-black text-pink-800">Carta akan muncul selepas nilai dimasukkan</p>
+              <p className="mt-2 text-xs font-medium text-pink-400">
+                Masukkan sekurang-kurangnya satu jumlah kes melebihi `0` untuk melihat visual live.
+              </p>
+            </div>
+          )}
         </div>
         
         <div className="mt-8 pt-6 border-t border-pink-50 space-y-4">

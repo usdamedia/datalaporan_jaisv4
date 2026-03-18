@@ -39,6 +39,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     formData.quality?.frameworks?.eksa ? 'EKSA' : null,
   ].filter(Boolean);
   const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
+  const bkspPuncaKrisisData = (formData.bksp?.puncaKrisis || [])
+    .filter((p: any) => (p.value || 0) > 0)
+    .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
+  const bkspPuncaKrisisMax = bkspPuncaKrisisData.reduce((max: number, item: any) => Math.max(max, item.value || 0), 0);
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -1572,15 +1576,55 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-pink-600 pl-2">
                 Punca Krisis (Data 2025)
               </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {formData.bksp.puncaKrisis.filter((p: any) => (p.value || 0) > 0).map((item: any) => (
-                  <div key={item.name} className="flex justify-between items-center p-2 bg-pink-50 border border-pink-100 rounded-lg">
-                    <span className="text-[9px] font-bold text-pink-900 uppercase">{item.name}</span>
-                    <span className="text-[10px] font-black text-pink-600">{item.value}</span>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-pink-50">
+                    <th className="border border-pink-100 p-2 text-left">Punca Krisis</th>
+                    <th className="border border-pink-100 p-2 text-center bg-pink-100">Jumlah Kes 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bkspPuncaKrisisData.map((item: any) => (
+                    <tr key={item.name}>
+                      <td className="border border-pink-100 p-2 font-bold text-pink-900">{item.name}</td>
+                      <td className="border border-pink-100 p-2 text-center font-black bg-pink-50 text-pink-700">{item.value}</td>
+                    </tr>
+                  ))}
+                  {bkspPuncaKrisisData.length === 0 && (
+                    <tr>
+                      <td colSpan={2} className="border border-pink-100 p-3 text-center text-xs italic text-gray-400">
+                        Tiada data punca krisis dimasukkan.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+              <div className="rounded-2xl border border-pink-100 bg-gradient-to-br from-pink-50 via-white to-rose-50 p-4">
+                <div className="mb-4 flex items-center justify-between">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-pink-800">Bar Chart Punca Krisis 2025</h4>
+                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-pink-500 ring-1 ring-pink-100">
+                    {bkspPuncaKrisisData.length} kategori aktif
+                  </span>
+                </div>
+
+                {bkspPuncaKrisisData.length > 0 ? (
+                  <div className="space-y-3">
+                    {bkspPuncaKrisisData.map((item: any) => (
+                      <div key={`print-chart-${item.name}`} className="grid grid-cols-[220px_1fr_48px] items-center gap-3">
+                        <div className="text-[10px] font-bold text-pink-900">{item.name}</div>
+                        <div className="h-4 overflow-hidden rounded-full bg-pink-100">
+                          <div
+                            className="h-full rounded-full bg-pink-500"
+                            style={{ width: `${bkspPuncaKrisisMax > 0 ? ((item.value || 0) / bkspPuncaKrisisMax) * 100 : 0}%` }}
+                          />
+                        </div>
+                        <div className="text-right text-[10px] font-black text-pink-600">{item.value}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                {formData.bksp.puncaKrisis.filter((p: any) => (p.value || 0) > 0).length === 0 && (
-                  <p className="text-xs italic text-gray-400 col-span-2">Tiada data punca krisis dimasukkan.</p>
+                ) : (
+                  <p className="text-xs italic text-gray-400">Carta akan dipaparkan apabila nilai punca krisis melebihi 0.</p>
                 )}
               </div>
             </div>

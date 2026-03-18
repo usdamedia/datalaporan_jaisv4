@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, FileSearch, Database, TrendingUp, Star, LayoutDashboard, Printer } from 'lucide-react';
+import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer } from 'lucide-react';
 import { BPNP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
@@ -13,11 +13,16 @@ interface BpnpFormProps {
 }
 
 const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
-  const [selectedUnit, setSelectedUnit] = React.useState<string | null>(null);
   const [showDataManagement, setShowDataManagement] = React.useState(false);
   const { contentRef: strategicPrintRef, handlePrint: handleStrategicPrint } = usePrintView<HTMLDivElement>({
     documentTitle: 'BPNP_Unit_Perancangan_Strategik_2025',
   });
+  const normalizedDeptName = deptName.toUpperCase();
+  const selectedUnit = normalizedDeptName.includes('PERANCANGAN STRATEGIK')
+    ? 'UNIT PERANCANGAN STRATEGIK'
+    : normalizedDeptName.includes('AKIDAH TAPISAN')
+      ? 'UNIT AKIDAH TAPISAN'
+      : 'UNIT PENYELIDIKAN';
 
   const initialState = {
     tarikh: new Date().toISOString().split('T')[0],
@@ -71,53 +76,6 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     updateLawatan,
     setFormData
   } = useFormLogic(selectedUnit || deptName, initialState);
-
-  const units = [
-    { id: 'penyelidikan', name: 'UNIT PENYELIDIKAN', icon: <FileSearch className="w-6 h-6" />, color: 'bg-blue-600' },
-    { id: 'strategik', name: 'UNIT PERANCANGAN STRATEGIK', icon: <TrendingUp className="w-6 h-6" />, color: 'bg-emerald-600' },
-    { id: 'akidah', name: 'UNIT AKIDAH TAPISAN', icon: <Database className="w-6 h-6" />, color: 'bg-purple-600' },
-  ];
-
-  if (!selectedUnit) {
-    return (
-      <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="flex items-center gap-4 mb-8">
-            <button 
-              onClick={onBack}
-              className="p-2 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-zus-900"
-            >
-              <Plus className="w-6 h-6 rotate-45" />
-            </button>
-            <div>
-              <h1 className="text-2xl font-black text-zus-900 tracking-tight uppercase">Bahagian Penyelidikan dan Pembangunan (BPNP)</h1>
-              <p className="text-sm text-slate-500 font-medium">Sila pilih unit untuk pengisian laporan tahunan 2025</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {units.map((unit) => (
-              <button
-                key={unit.id}
-                onClick={() => setSelectedUnit(unit.name)}
-                className="group relative bg-white border border-slate-200 rounded-3xl p-8 text-left hover:border-zus-gold hover:shadow-xl transition-all duration-300 overflow-hidden"
-              >
-                <div className={`w-14 h-14 ${unit.color} rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  {unit.icon}
-                </div>
-                <h3 className="text-lg font-black text-zus-900 leading-tight mb-2 group-hover:text-zus-gold transition-colors">
-                  {unit.name}
-                </h3>
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Klik untuk mula</p>
-                
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-slate-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const handleBpnpStatChange = (field: string, value: number) => {
     setFormData((prev: any) => ({
@@ -185,7 +143,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
         if (showDataManagement) {
           setShowDataManagement(false);
         } else {
-          setSelectedUnit(null);
+          onBack();
         }
       }}
       onSave={handleSave}

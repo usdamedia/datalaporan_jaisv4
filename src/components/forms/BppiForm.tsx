@@ -19,6 +19,16 @@ interface BppiFormProps {
 }
 
 const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
+  const upkkTrendDefaults = [
+    { year: '2019', calon: '12754', gps: '2.08' },
+    { year: '2020', calon: '25075', gps: '1.83' },
+    { year: '2021', calon: '25075', gps: '1.83' },
+    { year: '2022', calon: '13172', gps: '2.28' },
+    { year: '2023', calon: '12686', gps: '2.28' },
+    { year: '2024', calon: String(BPPI_2024_REFERENCE.kafa.upkk.calon), gps: String(BPPI_2024_REFERENCE.kafa.upkk.gps) },
+    { year: '2025', calon: '', gps: '' },
+  ];
+
   const initialState = {
     tarikh: new Date().toISOString().split('T')[0],
     disediakanOleh: '',
@@ -40,15 +50,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
       kafa: {
         pelajar: '', guru: '', penyelia: '',
         upkk: { calon: '', gps: '' },
-        trendUPKK: [
-          { year: '2019', calon: '', gps: '2.08' },
-          { year: '2020', calon: '', gps: '1.83' },
-          { year: '2021', calon: '', gps: '1.83' },
-          { year: '2022', calon: '', gps: '2.28' },
-          { year: '2023', calon: '', gps: '2.28' },
-          { year: '2024', calon: '', gps: String(BPPI_2024_REFERENCE.kafa.upkk.gps) },
-          { year: '2025', calon: '', gps: '' },
-        ]
+        trendUPKK: upkkTrendDefaults
       },
       kad: {
         guruLelaki: '', guruWanita: '',
@@ -317,17 +319,39 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {formData.bppi.kafa.trendUPKK.map((t: any, idx: number) => (
+                    {formData.bppi.kafa.trendUPKK.map((t: any, idx: number) => {
+                      const calonEditable = t.year === '2024' || t.year === '2025';
+
+                      return (
                       <tr key={t.year} className="border-b border-amber-50 last:border-0">
                         <td className="py-2 text-[10px] font-bold text-zus-900">{t.year}</td>
                         <td className="py-2">
-                          <input type="number" value={t.calon} onChange={(e) => updateArrayItem(['kafa', 'trendUPKK'], idx, 'calon', e.target.value)} className="w-full p-1 bg-gray-50 border border-amber-100 rounded text-[10px] font-bold text-center outline-none focus:ring-1 focus:ring-amber-500" />
+                          <input
+                            type="number"
+                            value={t.calon}
+                            onChange={(e) => updateArrayItem(['kafa', 'trendUPKK'], idx, 'calon', e.target.value)}
+                            readOnly={!calonEditable}
+                            disabled={!calonEditable}
+                            className={`w-full p-1 rounded text-[10px] font-bold text-center outline-none ${
+                              calonEditable
+                                ? 'bg-white border border-amber-200 focus:ring-1 focus:ring-amber-500'
+                                : 'bg-amber-50 border border-amber-100 text-amber-900/80 cursor-not-allowed'
+                            }`}
+                          />
                         </td>
                         <td className="py-2">
-                          <input type="text" value={t.gps} onChange={(e) => updateArrayItem(['kafa', 'trendUPKK'], idx, 'gps', e.target.value)} className="w-full p-1 bg-gray-50 border border-amber-100 rounded text-[10px] font-bold text-center outline-none focus:ring-1 focus:ring-amber-500" placeholder="0.00" />
+                          <input
+                            type="text"
+                            value={t.gps}
+                            readOnly
+                            disabled
+                            className="w-full p-1 rounded text-[10px] font-bold text-center outline-none bg-amber-50 border border-amber-100 text-amber-900/80 cursor-not-allowed"
+                            placeholder="0.00"
+                          />
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
