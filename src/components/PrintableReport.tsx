@@ -7,6 +7,8 @@ interface PrintableReportProps {
 }
 
 const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData }) => {
+  const [mainDept, unitName] = deptName.split(' : ');
+  const targetName = unitName || deptName;
   const isBKIM = deptName.includes('BKIM');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isBPNP = deptName.includes('BPNP');
@@ -21,10 +23,8 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isDHQC = deptName.includes('DHQC');
   const isUPP = deptName.includes('UPP');
   const isIntegriti = deptName.includes('INTEGRITI');
-  const isPentadbiran = deptName.includes('Pentadbiran');
-  const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
-
-  const [mainDept, unitName] = deptName.split(' : ');
+  const isPentadbiran = targetName.includes('Pentadbiran');
+  const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">

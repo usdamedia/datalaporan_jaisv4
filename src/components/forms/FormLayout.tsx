@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Save, FileDown, CheckCircle2, AlertCircle } from 'lucide-react';
-import { pdf } from '@react-pdf/renderer';
-import ReportPDF from '../ReportPDF';
+import { buildReportExportState, exportReportPdf, type PdfExportState } from '../../utils/reportPdfExport';
 
 interface FormLayoutProps {
   deptName: string;
@@ -11,6 +10,7 @@ interface FormLayoutProps {
   showSuccess: boolean;
   saveError?: string | null;
   formData: any;
+  getExportState?: () => PdfExportState;
   children: React.ReactNode;
 }
 
@@ -22,6 +22,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   showSuccess, 
   saveError,
   formData,
+  getExportState,
   children 
 }) => {
   const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -33,22 +34,8 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     setIsExportingPdf(true);
     setExportError(null);
     try {
-      // Generate PDF using @react-pdf/renderer
-      const blob = await pdf(<ReportPDF deptName={deptName} formData={formData} />).toBlob();
-      
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Laporan_JAIS_2025_${deptName.replace(/\s+/g, '_')}.pdf`;
-      
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
-      
-      // Cleanup
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const exportState = getExportState ? getExportState() : buildReportExportState(deptName, formData);
+      await exportReportPdf(deptName, exportState);
     } catch (err) {
       console.error('PDF Export failed:', err);
       setExportError('Gagal menjana PDF. Sila cuba lagi.');

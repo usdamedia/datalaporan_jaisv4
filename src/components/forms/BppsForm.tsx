@@ -4,6 +4,7 @@ import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSect
 import { useFormLogic } from './useFormLogic';
 import TransportManagement from './TransportManagement';
 import { LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE } from '../../constants';
+import { buildReportExportState } from '../../utils/reportPdfExport';
 import { Users, ChevronRight, TrendingUp, DollarSign, Percent, Star, CheckCircle2, XCircle, Activity } from 'lucide-react';
 
 interface BppsFormProps {
@@ -12,8 +13,10 @@ interface BppsFormProps {
 }
 
 const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
-  const isPentadbiran = deptName.includes('Pentadbiran');
-  const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
+  const [, subUnitName = ''] = deptName.split(' : ');
+  const targetName = subUnitName || deptName;
+  const isPentadbiran = targetName.includes('Pentadbiran');
+  const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
 
   const initialState = {
     tarikh: new Date().toISOString().split('T')[0],
@@ -245,6 +248,12 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
   const perhimpunan = leadership.perhimpunan || { tawjihat: '', perdana: '', bulanan: '', total: 0 };
   const panelHR = leadership.panelHR || { biasa: '', khas: '', total: 0 };
   const transport = formData.transport || { van: '', mpv: '', suv: '', bus: '' };
+  const getExportState = () =>
+    buildReportExportState(deptName, formData, {
+      pagination: {
+        scope: 'all-filtered',
+      },
+    });
 
   return (
     <FormLayout
@@ -255,6 +264,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      getExportState={getExportState}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 

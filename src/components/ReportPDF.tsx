@@ -283,6 +283,8 @@ interface ReportPDFProps {
 }
 
 const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
+  const [mainDept, unitName] = deptName.split(' : ');
+  const targetName = unitName || deptName;
   const isBKIM = deptName.includes('BKIM');
   const isBPP = deptName.includes('BPNP');
   const isUPP = deptName.includes('UPP');
@@ -297,14 +299,12 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
   const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
   const isHR = deptName.includes('HR & Latihan');
-  const isPentadbiran = deptName.includes('Pentadbiran');
-  const isFinance = deptName.includes('Kewangan') || deptName.includes('Akaun');
+  const isPentadbiran = targetName.includes('Pentadbiran');
+  const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
   const integritiLinks = formData.integriti?.dokumentasi?.links || [];
   const totalDokumentasiIntegriti =
     (parseInt(formData.integriti?.dokumentasi?.manual) || 0) +
     (parseInt(formData.integriti?.dokumentasi?.polisi) || 0);
-
-  const [mainDept, unitName] = deptName.split(' : ');
 
   return (
     <Document>
