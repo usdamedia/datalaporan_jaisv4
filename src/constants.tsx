@@ -213,6 +213,55 @@ export const BPNP_2024_REFERENCE = {
   }
 };
 
+export const BKSK_2024_REFERENCE = {
+  statistik: {
+    pendaftaranPengislaman: 1485,
+    programAktiviti: 315,
+  },
+  kelasBimbingan: [
+    { name: 'Kuching', kelas: 13, guru: 13 },
+    { name: 'Samarahan', kelas: 6, guru: 6 },
+    { name: 'Serian', kelas: 0, guru: 0 },
+    { name: 'Sri Aman', kelas: 5, guru: 5 },
+    { name: 'Betong', kelas: 4, guru: 4 },
+    { name: 'Sarikei', kelas: 5, guru: 5 },
+    { name: 'Sibu', kelas: 2, guru: 2 },
+    { name: 'Mukah', kelas: 5, guru: 5 },
+    { name: 'Kapit', kelas: 0, guru: 0 },
+    { name: 'Bintulu', kelas: 7, guru: 7 },
+    { name: 'Miri', kelas: 6, guru: 6 },
+    { name: 'Limbang', kelas: 0, guru: 0 },
+  ],
+  urusSetiaProkask: [
+    { name: 'Kuching', urusSetia: 8, prokask: 1 },
+    { name: 'Samarahan', urusSetia: 3, prokask: 1 },
+    { name: 'Serian', urusSetia: 5, prokask: 2 },
+    { name: 'Sri Aman', urusSetia: 15, prokask: 1 },
+    { name: 'Betong', urusSetia: 7, prokask: 1 },
+    { name: 'Sarikei', urusSetia: 2, prokask: 1 },
+    { name: 'Sibu', urusSetia: 5, prokask: 1 },
+    { name: 'Mukah', urusSetia: 5, prokask: 1 },
+    { name: 'Kapit', urusSetia: 5, prokask: 1 },
+    { name: 'Bintulu', urusSetia: 5, prokask: 2 },
+    { name: 'Miri', urusSetia: 9, prokask: 1 },
+    { name: 'Limbang', urusSetia: 2, prokask: 1 },
+  ],
+  kampungNuqaba: [
+    { name: 'Kuching', kampungSaudaraKita: 137, nuqabaMualaf: 19 },
+    { name: 'Samarahan', kampungSaudaraKita: 103, nuqabaMualaf: 11 },
+    { name: 'Serian', kampungSaudaraKita: 78, nuqabaMualaf: 2 },
+    { name: 'Sri Aman', kampungSaudaraKita: 161, nuqabaMualaf: 9 },
+    { name: 'Betong', kampungSaudaraKita: 102, nuqabaMualaf: 11 },
+    { name: 'Sarikei', kampungSaudaraKita: 33, nuqabaMualaf: 10 },
+    { name: 'Sibu', kampungSaudaraKita: 45, nuqabaMualaf: 6 },
+    { name: 'Mukah', kampungSaudaraKita: 56, nuqabaMualaf: 9 },
+    { name: 'Kapit', kampungSaudaraKita: 77, nuqabaMualaf: 0 },
+    { name: 'Bintulu', kampungSaudaraKita: 40, nuqabaMualaf: 5 },
+    { name: 'Miri', kampungSaudaraKita: 47, nuqabaMualaf: 7 },
+    { name: 'Limbang', kampungSaudaraKita: 133, nuqabaMualaf: 5 },
+  ],
+};
+
 
 export const HR_2024_REFERENCE = {
   ringkasan: {

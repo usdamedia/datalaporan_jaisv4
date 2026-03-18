@@ -1,5 +1,5 @@
 import React from 'react';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 interface PrintableReportProps {
   deptName: string;
@@ -23,6 +23,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isDHQC = deptName.includes('DHQC');
   const isUPP = deptName.includes('UPP');
   const isIntegriti = deptName.includes('INTEGRITI');
+  const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
   const isPentadbiran = targetName.includes('Pentadbiran');
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
   const iso9001Status = formData.quality?.iso9001?.status?.trim() || '';
@@ -1331,6 +1332,95 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {isBKSK && formData.bksk && (
+        <div className="space-y-8 mb-8">
+          <div className="rounded-3xl border-b-4 border-teal-900 bg-[#0F766E] p-6 text-white">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black uppercase tracking-tight">Laporan Pengislaman dan Saudara Kita 2025</h3>
+                <p className="mt-1 text-xs font-bold uppercase tracking-widest text-teal-100">Bahagian Kemajuan Saudara Kita (BKSK)</p>
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-black">{formData.bksk.statistik.pendaftaranPengislaman || 0}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Pendaftaran Pengislaman</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-teal-100 bg-teal-50 p-5">
+              <p className="text-[10px] font-black uppercase tracking-widest text-teal-700">Pendaftaran Pengislaman</p>
+              <p className="mt-2 text-3xl font-black text-slate-900">{formData.bksk.statistik.pendaftaranPengislaman || 0}</p>
+              <p className="mt-1 text-[10px] font-bold text-slate-400">Data 2025</p>
+            </div>
+            <div className="rounded-2xl border border-amber-100 bg-[#F5EFE3] p-5">
+              <p className="text-[10px] font-black uppercase tracking-widest text-amber-700">Program / Aktiviti</p>
+              <p className="mt-2 text-3xl font-black text-slate-900">{formData.bksk.statistik.programAktiviti || 0}</p>
+              <p className="mt-1 text-[10px] font-bold text-slate-400">Data 2025</p>
+            </div>
+          </div>
+
+          {[
+            {
+              title: '2. Kelas Bimbingan Saudara Kita',
+              rows2025: formData.bksk.kelasBimbingan,
+              columns: [
+                { label: 'Kelas', key: 'kelas' },
+                { label: 'Guru', key: 'guru' },
+              ],
+            },
+            {
+              title: '3. Urus Setia & Program Angkat (PROKASK)',
+              rows2025: formData.bksk.urusSetiaProkask,
+              columns: [
+                { label: 'Urus Setia', key: 'urusSetia' },
+                { label: 'PROKASK', key: 'prokask' },
+              ],
+            },
+            {
+              title: '4. Kampung Saudara Kita & Nuqaba Mualaf',
+              rows2025: formData.bksk.kampungNuqaba,
+              columns: [
+                { label: 'Kg Saudara Kita', key: 'kampungSaudaraKita' },
+                { label: 'Nuqaba Mualaf', key: 'nuqabaMualaf' },
+              ],
+            },
+          ].map((section) => (
+            <div key={section.title} className="space-y-4">
+              <h3 className="border-l-4 border-teal-600 pl-2 text-sm font-black uppercase text-zus-900">{section.title}</h3>
+              <table className="w-full border-collapse text-[10px]">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border p-2 text-left">Bahagian</th>
+                    {section.columns.map((column) => (
+                      <th key={column.key} className="border p-2 text-center bg-teal-50">{column.label} 2025</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {section.rows2025.map((row: any, index: number) => (
+                    <tr key={row.name}>
+                      <td className="border p-2 font-bold">{row.name}</td>
+                      {section.columns.map((column) => (
+                        <td key={column.key} className="border p-2 text-center font-black bg-teal-50">{row[column.key] || 0}</td>
+                      ))}
+                    </tr>
+                  ))}
+                  <tr className="bg-zus-900 text-white">
+                    <td className="border border-zus-900 p-2 font-black">JUMLAH</td>
+                    {section.columns.map((column) => (
+                      <td key={column.key} className="border border-zus-900 p-2 text-center font-black">
+                        {section.rows2025.reduce((sum: number, row: any) => sum + (parseInt(row[column.key]) || 0), 0)}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ))}
         </div>
       )}
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 // Register fonts if needed, but standard ones are usually fine
 // Font.register({ family: 'Helvetica', src: '...' });
@@ -289,6 +289,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBPP = deptName.includes('BPNP');
   const isUPP = deptName.includes('UPP');
   const isIntegriti = deptName.includes('INTEGRITI');
+  const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
   const isBKKI = deptName.includes('BKKI') || deptName.includes('Keluarga Islam');
   const isBPH = deptName.includes('BPH') || deptName.includes('Halal');
   const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
@@ -1567,6 +1568,97 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
               </>
             )}
+          </>
+        )}
+
+        {isBKSK && formData.bksk && (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Laporan Pengislaman dan Saudara Kita 2025</Text>
+              <View style={[styles.narrativeBox, { backgroundColor: '#0f766e', borderColor: '#0f766e', marginBottom: 12 }]}>
+                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#ffffff', textTransform: 'uppercase', marginBottom: 4 }}>
+                  Bahagian Kemajuan Saudara Kita (BKSK)
+                </Text>
+                <Text style={{ fontSize: 8.5, color: '#ccfbf1', textTransform: 'uppercase', letterSpacing: 1 }}>
+                  Input data tahun 2025
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>1. Statistik Utama</Text>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={[styles.infoCard, { backgroundColor: '#ecfeff', borderColor: '#99f6e4' }]}>
+                    <Text style={[styles.infoCardLabel, { color: '#0f766e' }]}>Pendaftaran Pengislaman</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.bksk.statistik.pendaftaranPengislaman || 0)}</Text>
+                    <Text style={styles.infoCardRef}>Data 2025</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={[styles.infoCard, { backgroundColor: '#f5efe3', borderColor: '#e7d8ba' }]}>
+                    <Text style={[styles.infoCardLabel, { color: '#92400e' }]}>Program / Aktiviti</Text>
+                    <Text style={styles.infoCardValue}>{String(formData.bksk.statistik.programAktiviti || 0)}</Text>
+                    <Text style={styles.infoCardRef}>Data 2025</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {[
+              {
+                title: '2. Kelas Bimbingan Saudara Kita',
+                rows2025: formData.bksk.kelasBimbingan,
+                columns: [
+                  { key: 'kelas', label: 'Kelas' },
+                  { key: 'guru', label: 'Guru' },
+                ],
+              },
+              {
+                title: '3. Urus Setia & Program Angkat (PROKASK)',
+                rows2025: formData.bksk.urusSetiaProkask,
+                columns: [
+                  { key: 'urusSetia', label: 'Urus Setia' },
+                  { key: 'prokask', label: 'PROKASK' },
+                ],
+              },
+              {
+                title: '4. Kampung Saudara Kita & Nuqaba Mualaf',
+                rows2025: formData.bksk.kampungNuqaba,
+                columns: [
+                  { key: 'kampungSaudaraKita', label: 'Kg Saudara Kita' },
+                  { key: 'nuqabaMualaf', label: 'Nuqaba Mualaf' },
+                ],
+              },
+            ].map((section) => (
+              <View key={section.title} style={styles.section}>
+                <Text style={styles.sectionTitle}>{section.title}</Text>
+                <View style={styles.table}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text>Bahagian</Text></View>
+                    {section.columns.map((column) => (
+                      <View key={column.key} style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{column.label} 2025</Text></View>
+                    ))}
+                  </View>
+                  {section.rows2025.map((row: any, index: number) => (
+                    <View key={row.name} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>{row.name}</Text></View>
+                      {section.columns.map((column) => (
+                        <View key={column.key} style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{row[column.key] || 0}</Text></View>
+                      ))}
+                    </View>
+                  ))}
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '40%' }]}><Text>JUMLAH</Text></View>
+                    {section.columns.map((column) => (
+                      <View key={column.key} style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}>
+                        <Text>{section.rows2025.reduce((sum: number, row: any) => sum + (parseInt(row[column.key]) || 0), 0)}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </View>
+            ))}
           </>
         )}
 

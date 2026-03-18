@@ -15,6 +15,7 @@ import BpksForm from './forms/BpksForm';
 import UkokoForm from './forms/UkokoForm';
 import UkokoPublicRelationsForm from './forms/UkokoPublicRelationsForm';
 import DhqcForm from './forms/DhqcForm';
+import BkskForm from './forms/BkskForm';
 import GenericForm from './forms/GenericForm';
 
 interface FormEntryProps {
@@ -45,6 +46,10 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   
   if (normalizedDeptName.includes('BPH')) {
     return <BphForm deptName={deptName} onBack={onBack} />;
+  }
+
+  if (normalizedDeptName.includes('BKSK') || normalizedDeptName.includes('SAUDARA KITA')) {
+    return <BkskForm deptName={deptName} onBack={onBack} />;
   }
   
   if (normalizedDeptName.includes('BPKS')) {
