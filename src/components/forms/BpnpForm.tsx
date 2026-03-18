@@ -1,10 +1,11 @@
 import React from 'react';
-import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, FileSearch, Database, TrendingUp, Star, LayoutDashboard } from 'lucide-react';
+import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, FileSearch, Database, TrendingUp, Star, LayoutDashboard, Printer } from 'lucide-react';
 import { BPNP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import DataManagementDashboard from '../DataManagementDashboard';
+import { usePrintView } from '../../hooks/usePrintView';
 
 interface BpnpFormProps {
   deptName: string;
@@ -14,6 +15,9 @@ interface BpnpFormProps {
 const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   const [selectedUnit, setSelectedUnit] = React.useState<string | null>(null);
   const [showDataManagement, setShowDataManagement] = React.useState(false);
+  const { contentRef: strategicPrintRef, handlePrint: handleStrategicPrint } = usePrintView<HTMLDivElement>({
+    documentTitle: 'BPNP_Unit_Perancangan_Strategik_2025',
+  });
 
   const initialState = {
     tarikh: new Date().toISOString().split('T')[0],
@@ -189,6 +193,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      hideExportButton={selectedUnit === 'UNIT PERANCANGAN STRATEGIK' && !showDataManagement}
     >
       {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' || selectedUnit === 'UNIT AKIDAH TAPISAN' ? (
         showDataManagement ? (
@@ -205,7 +210,14 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
         ) : (
           <>
             {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' && (
-              <div className="mb-8 flex justify-end">
+              <div className="mb-8 flex flex-wrap justify-end gap-3 print-hidden" data-print-hidden="true">
+                <button
+                  onClick={handleStrategicPrint}
+                  className="flex items-center gap-2 px-6 py-3 bg-white text-[#134E4A] border border-teal-200 rounded-2xl font-bold hover:bg-teal-50 transition-all shadow-sm active:scale-95"
+                >
+                  <Printer className="w-5 h-5" />
+                  Cetak View Semasa
+                </button>
                 <button
                   onClick={() => setShowDataManagement(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-[#134E4A] text-white rounded-2xl font-bold hover:bg-teal-900 transition-all shadow-lg active:scale-95"
@@ -215,15 +227,18 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 </button>
               </div>
             )}
-            
+            <div
+              ref={selectedUnit === 'UNIT PERANCANGAN STRATEGIK' ? strategicPrintRef : undefined}
+              className={selectedUnit === 'UNIT PERANCANGAN STRATEGIK' ? 'print-view-root print-page' : undefined}
+            >
             <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
             {selectedUnit === 'UNIT PERANCANGAN STRATEGIK' && (
               <>
           {/* Kajian & Kaji Selidik */}
-          <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+          <section className="print-section-card print-avoid-break bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
-              <div className="flex items-center gap-3">
+              <div className="print-heading flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
                   <Search className="w-5 h-5" />
                 </div>
@@ -231,7 +246,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
               <button 
                 onClick={addKajian}
-                className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs uppercase tracking-wider transition-colors"
+                className="print-hidden flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs uppercase tracking-wider transition-colors"
               >
                 <Plus className="w-4 h-4" /> Tambah Kajian
               </button>
@@ -250,7 +265,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
 
               {formData.bpnp.kajianList.map((kajian: string, index: number) => (
-                <div key={index} className="flex gap-2 group animate-slide-in-right">
+                <div key={index} className="print-avoid-break flex gap-2 group animate-slide-in-right">
                   <div className="flex-1 relative">
                     <input 
                       type="text"
@@ -263,7 +278,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                   {formData.bpnp.kajianList.length > 1 && (
                     <button 
                       onClick={() => removeKajian(index)}
-                      className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                      className="print-hidden p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -274,8 +289,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           </section>
 
           {/* Penulisan Ilmiah */}
-          <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-            <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <section className="print-section-card print-avoid-break bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+            <div className="print-heading flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
               <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
                 <Award className="w-5 h-5" />
               </div>
@@ -587,6 +602,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
             handleSave={handleSave}
             isSaving={isSaving}
           />
+          </div>
         </>)
       ) : (
         <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center shadow-sm">

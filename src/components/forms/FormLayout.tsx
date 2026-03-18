@@ -11,6 +11,7 @@ interface FormLayoutProps {
   saveError?: string | null;
   formData: any;
   getExportState?: () => PdfExportState;
+  hideExportButton?: boolean;
   children: React.ReactNode;
 }
 
@@ -23,6 +24,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   saveError,
   formData,
   getExportState,
+  hideExportButton,
   children 
 }) => {
   const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -77,22 +79,24 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             Simpan Draf
           </button>
 
-          <button
-            onClick={handleExportPdf}
-            disabled={isExportingPdf}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 ${
-              isExportingPdf 
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                : 'bg-white text-zus-900 border border-gray-200 hover:border-zus-gold'
-            }`}
-          >
-            {isExportingPdf ? (
-              <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
-            ) : (
-              <FileDown className="w-4 h-4" />
-            )}
-            {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
-          </button>
+          {!hideExportButton && (
+            <button
+              onClick={handleExportPdf}
+              disabled={isExportingPdf}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all active:scale-95 ${
+                isExportingPdf 
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                  : 'bg-white text-zus-900 border border-gray-200 hover:border-zus-gold'
+              }`}
+            >
+              {isExportingPdf ? (
+                <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
+              ) : (
+                <FileDown className="w-4 h-4" />
+              )}
+              {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
+            </button>
+          )}
         </div>
       </div>
 

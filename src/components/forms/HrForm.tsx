@@ -786,7 +786,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
             <div className="flex-1 space-y-2">
               <h2 className="text-3xl font-black text-zus-900 uppercase tracking-tighter leading-none">
                 Latihan Sumber Manusia <br />
-                <span className="text-teal-600">Unit Latihan BPPS</span>
+                <span className="text-teal-600">Unit HR &amp; Latihan BPPS</span>
               </h2>
               <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Kemasukan Data Latihan 2025</p>
             </div>

@@ -386,24 +386,78 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 12mm;
   }
+
+  html,
   body {
-    background-color: white !important;
+    background: #ffffff !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  body > * {
+
+  .print-hidden,
+  [data-print-hidden="true"],
+  .print-view-root button {
     display: none !important;
   }
-  #print-container, #print-container * {
-    display: block !important;
-    visibility: visible !important;
+
+  .print-view-root,
+  .print-view-root * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  #print-container {
-    position: absolute;
-    left: 0;
-    top: 0;
+
+  .print-view-root {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .print-view-root :is(.shadow-sm, .shadow, .shadow-lg, .shadow-xl, .shadow-2xl) {
+    box-shadow: none !important;
+  }
+
+  .print-view-root :is(.border, .border-gray-100, .border-gray-200, .border-slate-100, .border-slate-200) {
+    border-color: #d1d5db !important;
+  }
+
+  .print-page {
     width: 100%;
+  }
+
+  .print-section-card {
+    box-shadow: none !important;
+    border: 1px solid #d1d5db !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-heading,
+  .print-avoid-break,
+  .print-view-root section,
+  .print-view-root article,
+  .print-view-root .rounded-2xl,
+  .print-view-root .rounded-3xl,
+  .print-view-root table,
+  .print-view-root thead,
+  .print-view-root tbody,
+  .print-view-root tr,
+  .print-view-root h1,
+  .print-view-root h2,
+  .print-view-root h3,
+  .print-view-root h4,
+  .print-view-root h5,
+  .print-view-root h6 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-view-root table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .print-view-root tr {
+    vertical-align: top;
   }
 }
