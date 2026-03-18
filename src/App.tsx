@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
@@ -8,12 +8,86 @@ import { DEPARTMENTS } from './constants';
 import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, ChevronUp, Cpu } from 'lucide-react';
 
+const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
+
 export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [selectedSubUnit, setSelectedSubUnit] = useState<SubUnit | null>(null);
   const [showSubUnitModal, setShowSubUnitModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showDigitalization, setShowDigitalization] = useState(false);
+
+  useEffect(() => {
+    try {
+      const savedNavigation = sessionStorage.getItem(NAVIGATION_STORAGE_KEY);
+      if (!savedNavigation) return;
+
+      const parsed = JSON.parse(savedNavigation) as {
+        selectedDeptId?: string;
+        selectedSubUnitId?: string | null;
+        showSubUnitModal?: boolean;
+        showDigitalization?: boolean;
+      };
+
+      if (parsed.showDigitalization) {
+        setShowDigitalization(true);
+        return;
+      }
+
+      if (!parsed.selectedDeptId) return;
+
+      const restoredDept = DEPARTMENTS.find((dept) => dept.id === parsed.selectedDeptId && dept.active);
+      if (!restoredDept) return;
+
+      setSelectedDept(restoredDept);
+
+      if (parsed.selectedSubUnitId) {
+        const restoredSubUnit = restoredDept.subUnits?.find((unit) => unit.id === parsed.selectedSubUnitId && unit.active);
+        if (restoredSubUnit) {
+          setSelectedSubUnit(restoredSubUnit);
+          setShowSubUnitModal(false);
+          return;
+        }
+      }
+
+      setSelectedSubUnit(null);
+      setShowSubUnitModal(Boolean(parsed.showSubUnitModal && restoredDept.subUnits?.length));
+    } catch (error) {
+      console.error('Failed to restore navigation state', error);
+      sessionStorage.removeItem(NAVIGATION_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (showDigitalization) {
+        sessionStorage.setItem(
+          NAVIGATION_STORAGE_KEY,
+          JSON.stringify({
+            showDigitalization: true,
+          })
+        );
+        return;
+      }
+
+      if (!selectedDept) {
+        sessionStorage.removeItem(NAVIGATION_STORAGE_KEY);
+        return;
+      }
+
+      sessionStorage.setItem(
+        NAVIGATION_STORAGE_KEY,
+        JSON.stringify({
+          selectedDeptId: selectedDept.id,
+          selectedSubUnitId: selectedSubUnit?.id || null,
+          showSubUnitModal,
+          showDigitalization: false,
+        })
+      );
+    } catch (error) {
+      console.error('Failed to persist navigation state', error);
+    }
+  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization]);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;

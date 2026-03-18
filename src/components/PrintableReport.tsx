@@ -1969,6 +1969,62 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                 </div>
               </div>
             </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-blue-600 pl-2">
+                Kakitangan Naik Pangkat (2025)
+              </h3>
+              {formData.hr.naikPangkat && formData.hr.naikPangkat.length > 0 ? (
+                <table className="w-full text-[10px] border-collapse">
+                  <thead>
+                    <tr className="bg-blue-50">
+                      <th className="border border-blue-100 p-2 text-left">Nama Kakitangan</th>
+                      <th className="border border-blue-100 p-2 text-left">Pangkat Semasa</th>
+                      <th className="border border-blue-100 p-2 text-left">Pangkat Baru</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formData.hr.naikPangkat.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td className="border border-blue-100 p-2">{item.nama || '-'}</td>
+                        <td className="border border-blue-100 p-2">{item.pangkatSemasa || '-'}</td>
+                        <td className="border border-blue-100 p-2">{item.pangkatBaru || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="text-[10px] text-gray-400 italic">Tiada rekod kenaikan pangkat.</div>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-purple-600 pl-2">
+                Kakitangan HLDP / Menyambung Pengajian (2025)
+              </h3>
+              {formData.hr.hldp && formData.hr.hldp.length > 0 ? (
+                <table className="w-full text-[10px] border-collapse">
+                  <thead>
+                    <tr className="bg-purple-50">
+                      <th className="border border-purple-100 p-2 text-left">Nama</th>
+                      <th className="border border-purple-100 p-2 text-left">Jawatan</th>
+                      <th className="border border-purple-100 p-2 text-left">Jenis Pengajian</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formData.hr.hldp.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td className="border border-purple-100 p-2">{item.nama || '-'}</td>
+                        <td className="border border-purple-100 p-2">{item.jawatan || '-'}</td>
+                        <td className="border border-purple-100 p-2">{item.jenisPengajian || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="text-[10px] text-gray-400 italic">Tiada rekod HLDP / pengajian.</div>
+              )}
+            </div>
           </div>
 
           <div className="space-y-4">

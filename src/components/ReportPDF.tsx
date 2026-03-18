@@ -1904,6 +1904,50 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Kakitangan Naik Pangkat (2025)</Text>
+              {formData.hr.naikPangkat && formData.hr.naikPangkat.length > 0 ? (
+                <View style={styles.table}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '36%' }]}><Text>Nama Kakitangan</Text></View>
+                    <View style={[styles.tableCell, { width: '32%' }]}><Text>Pangkat Semasa</Text></View>
+                    <View style={[styles.tableCell, { width: '32%' }]}><Text>Pangkat Baru</Text></View>
+                  </View>
+                  {formData.hr.naikPangkat.map((item: any, index: number) => (
+                    <View key={index} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '36%' }]}><Text>{item.nama || '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '32%' }]}><Text>{item.pangkatSemasa || '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '32%' }]}><Text>{item.pangkatBaru || '-'}</Text></View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.emptyState}>Tiada rekod kenaikan pangkat.</Text>
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Kakitangan HLDP / Menyambung Pengajian 2025</Text>
+              {formData.hr.hldp && formData.hr.hldp.length > 0 ? (
+                <View style={styles.table}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '34%' }]}><Text>Nama</Text></View>
+                    <View style={[styles.tableCell, { width: '33%' }]}><Text>Jawatan</Text></View>
+                    <View style={[styles.tableCell, { width: '33%' }]}><Text>Jenis Pengajian</Text></View>
+                  </View>
+                  {formData.hr.hldp.map((item: any, index: number) => (
+                    <View key={index} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '34%' }]}><Text>{item.nama || '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '33%' }]}><Text>{item.jawatan || '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '33%' }]}><Text>{item.jenisPengajian || '-'}</Text></View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.emptyState}>Tiada rekod HLDP / pengajian.</Text>
+              )}
+            </View>
+
+            <View style={styles.section}>
               <Text style={styles.sectionTitle}>Taburan Kakitangan Ibu Pejabat (2025)</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>

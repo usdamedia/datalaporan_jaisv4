@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { buildReportExportState } from '../../utils/reportPdfExport';
 import { HR_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../../constants';
-import { Save, Users, Briefcase, UserPlus, LogOut, GraduationCap, BookOpen, Award } from 'lucide-react';
+import { Save, Users, Briefcase, UserPlus, LogOut, GraduationCap, BookOpen, Award, Plus, Trash2 } from 'lucide-react';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 
 interface HrFormProps {
@@ -85,7 +86,9 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
         totalDaerah: '',
         grandTotal: ''
       },
-      bersara: ''
+      bersara: '',
+      naikPangkat: [],
+      hldp: []
     },
     latihan: {
       ringkasan: {
@@ -234,6 +237,10 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
   const updateNestedField = (section: string, field: string, value: string, subField?: string) => {
     setFormData((prev: any) => {
       const newHr = { ...prev.hr };
+      if (!field) {
+        newHr[section] = value;
+        return { ...prev, hr: newHr };
+      }
       if (subField) {
         newHr[section][field] = { ...newHr[section][field], [subField]: value };
       } else {
@@ -241,6 +248,45 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
       }
       return { ...prev, hr: newHr };
     });
+  };
+
+  const addHrListItem = (section: 'naikPangkat' | 'hldp') => {
+    setFormData((prev: any) => ({
+      ...prev,
+      hr: {
+        ...prev.hr,
+        [section]: [
+          ...(prev.hr[section] || []),
+          section === 'naikPangkat'
+            ? { nama: '', pangkatSemasa: '', pangkatBaru: '' }
+            : { nama: '', jawatan: '', jenisPengajian: '' }
+        ]
+      }
+    }));
+  };
+
+  const updateHrListItem = (section: 'naikPangkat' | 'hldp', index: number, field: string, value: string) => {
+    setFormData((prev: any) => {
+      const nextItems = [...(prev.hr[section] || [])];
+      nextItems[index] = { ...nextItems[index], [field]: value };
+      return {
+        ...prev,
+        hr: {
+          ...prev.hr,
+          [section]: nextItems
+        }
+      };
+    });
+  };
+
+  const removeHrListItem = (section: 'naikPangkat' | 'hldp', index: number) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      hr: {
+        ...prev.hr,
+        [section]: (prev.hr[section] || []).filter((_: any, itemIndex: number) => itemIndex !== index)
+      }
+    }));
   };
 
   const updateDaerah = (index: number, value: string) => {
@@ -272,8 +318,15 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
     });
   };
 
+  const getExportState = () =>
+    buildReportExportState(deptName, formData, {
+      pagination: {
+        scope: 'all-filtered',
+      },
+    });
+
   return (
-    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} showSuccess={showSuccess} saveError={saveError} formData={formData}>
+    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} showSuccess={showSuccess} saveError={saveError} formData={formData} getExportState={getExportState}>
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
       
       <div className="space-y-8 animate-fade-in mt-8">
@@ -603,7 +656,130 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        {/* 6. Latihan Sumber Manusia */}
+        {/* 6. Kakitangan Naik Pangkat */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-blue-800 p-4 flex items-center gap-3">
+            <div className="p-2 bg-blue-700 rounded-lg">
+              <UserPlus className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-white font-bold text-lg">6. Kakitangan Naik Pangkat</h2>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="flex justify-end">
+              <button
+                onClick={() => addHrListItem('naikPangkat')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Tambah Rekod
+              </button>
+            </div>
+            {(formData.hr.naikPangkat || []).length === 0 ? (
+              <div className="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200 text-sm font-medium text-gray-400">
+                Tiada rekod kenaikan pangkat ditambah.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {(formData.hr.naikPangkat || []).map((item: any, index: number) => (
+                  <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-4 p-4 bg-blue-50/40 border border-blue-100 rounded-2xl">
+                    <input
+                      type="text"
+                      value={item.nama}
+                      onChange={(e) => updateHrListItem('naikPangkat', index, 'nama', e.target.value)}
+                      className="w-full p-3 bg-white border border-blue-200 rounded-xl outline-none font-medium"
+                      placeholder="Nama Kakitangan"
+                    />
+                    <input
+                      type="text"
+                      value={item.pangkatSemasa}
+                      onChange={(e) => updateHrListItem('naikPangkat', index, 'pangkatSemasa', e.target.value)}
+                      className="w-full p-3 bg-white border border-blue-200 rounded-xl outline-none font-medium"
+                      placeholder="Pangkat Semasa"
+                    />
+                    <input
+                      type="text"
+                      value={item.pangkatBaru}
+                      onChange={(e) => updateHrListItem('naikPangkat', index, 'pangkatBaru', e.target.value)}
+                      className="w-full p-3 bg-white border border-blue-200 rounded-xl outline-none font-medium"
+                      placeholder="Pangkat Baru"
+                    />
+                    <button
+                      onClick={() => removeHrListItem('naikPangkat', index)}
+                      className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 7. Kakitangan HLDP / Menyambung Pengajian */}
+        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-purple-800 p-4 flex items-center gap-3">
+            <div className="p-2 bg-purple-700 rounded-lg">
+              <GraduationCap className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-white font-bold text-lg">7. Kakitangan HLDP / Menyambung Pengajian 2025</h2>
+          </div>
+          <div className="p-6 space-y-4">
+            <p className="text-xs font-medium text-gray-500">
+              Sekiranya ada, termasuk kakitangan yang sedang melanjutkan pengajian melalui HLDP.
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => addHrListItem('hldp')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 text-white font-bold text-sm hover:bg-purple-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Tambah Rekod
+              </button>
+            </div>
+            {(formData.hr.hldp || []).length === 0 ? (
+              <div className="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200 text-sm font-medium text-gray-400">
+                Tiada rekod HLDP / pengajian ditambah.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {(formData.hr.hldp || []).map((item: any, index: number) => (
+                  <div key={index} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-4 p-4 bg-purple-50/40 border border-purple-100 rounded-2xl">
+                    <input
+                      type="text"
+                      value={item.nama}
+                      onChange={(e) => updateHrListItem('hldp', index, 'nama', e.target.value)}
+                      className="w-full p-3 bg-white border border-purple-200 rounded-xl outline-none font-medium"
+                      placeholder="Nama"
+                    />
+                    <input
+                      type="text"
+                      value={item.jawatan}
+                      onChange={(e) => updateHrListItem('hldp', index, 'jawatan', e.target.value)}
+                      className="w-full p-3 bg-white border border-purple-200 rounded-xl outline-none font-medium"
+                      placeholder="Jawatan"
+                    />
+                    <input
+                      type="text"
+                      value={item.jenisPengajian}
+                      onChange={(e) => updateHrListItem('hldp', index, 'jenisPengajian', e.target.value)}
+                      className="w-full p-3 bg-white border border-purple-200 rounded-xl outline-none font-medium"
+                      placeholder="Jenis: Diploma / Degree / Master"
+                    />
+                    <button
+                      onClick={() => removeHrListItem('hldp', index)}
+                      className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 8. Latihan Sumber Manusia */}
         <section className="space-y-8">
           {/* Z-Pattern Header & Summary Card */}
           <div className="flex flex-col lg:flex-row gap-6 items-start">
