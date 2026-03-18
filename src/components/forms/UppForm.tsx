@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { SARAWAK_DIVISIONS, SCHOOL_LIST, UPP_2024_REFERENCE } from '../../constants';
 
 const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
@@ -20,7 +21,11 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
     handleSave,
     isSaving,
     showSuccess,
-    saveError
+    saveError,
+    handleInputChange,
+    addLawatan,
+    removeLawatan,
+    updateLawatan
   } = useFormLogic('UPP', {
     upp: {
       mesyuarat: {
@@ -113,6 +118,8 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
       saveError={saveError}
       formData={formData}
     >
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+
       {/* Z-Pattern: Header & Top Section */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-teal-600 p-6 rounded-3xl shadow-lg border-b-4 border-teal-800 text-white">
@@ -336,6 +343,17 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
           </table>
         </div>
       </div>
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+
+      <LawatanSection
+        formData={formData}
+        addLawatan={addLawatan}
+        removeLawatan={removeLawatan}
+        updateLawatan={updateLawatan}
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
     </FormLayout>
   );
 };
