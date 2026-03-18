@@ -1,6 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 // Register fonts if needed, but standard ones are usually fine
 // Font.register({ family: 'Helvetica', src: '...' });
@@ -357,6 +357,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
   const isBPPI = deptName.includes('BPPI');
   const isUKOKO = deptName.includes('UKOKO');
+  const isUkokoPR = targetName.toUpperCase().includes('UNIT PERHUBUNGAN AWAM');
+  const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PERAYAAN ISLAM');
   const isDHQC = deptName.includes('DHQC');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
@@ -385,6 +387,42 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     .filter((p: any) => (p.value || 0) > 0)
     .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
   const bkspPuncaKrisisMax = bkspPuncaKrisisData.reduce((max: number, item: any) => Math.max(max, item.value || 0), 0);
+  const ukokoPrData = formData.pr || {};
+  const ukokoPrKategoriEntries = Object.entries(ukokoPrData.aduan?.kategori || {});
+  const ukokoPrCustomKategori = ukokoPrData.aduan?.customKategori || [];
+  const ukokoPrLokasiEntries = Object.entries(ukokoPrData.aduan?.lokasi || {});
+  const ukokoPrTotalSumber =
+    (ukokoPrData.aduan?.sumber?.talikhidmat || 0) +
+    (ukokoPrData.aduan?.sumber?.lain || 0);
+  const ukokoPrTotalKategori =
+    ukokoPrKategoriEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
+    ukokoPrCustomKategori.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+  const ukokoPrTotalLokasi = ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0);
+  const ukokoPrTotalMaklumBalas =
+    (ukokoPrData.maklumBalas?.queueBee?.puas || 0) +
+    (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
+    (ukokoPrData.maklumBalas?.qrCode?.puas || 0) +
+    (ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0);
+  const ukokoPrKategoriLabels: Record<string, string> = {
+    kadNikah: 'Kad Nikah',
+    kafa: 'KAFA',
+    logoHalal: 'Logo Halal',
+    masjid: 'Masjid',
+    ncr: 'NCR',
+    tindakanPenguatkuasaanSyariah: 'Tindakan Penguatkuasaan Syariah',
+    tindakanPengukuhanPendidikanIslam: 'Tindakan Pengukuhan Pendidikan Islam',
+    usk: 'USIK',
+  };
+  const ukokoPrLokasiLabels: Record<string, string> = {
+    hqBkki: 'HQ BKKI',
+    paibBintulu: 'PAIB Bintulu',
+    paibKuching: 'PAIB Kuching',
+    paibMiri: 'PAIB Miri',
+    paibSarikei: 'PAIB Sarikei',
+    paibSibu: 'PAIB Sibu',
+  };
+  const shouldRenderBasicInfo = !isIntegriti;
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isIntegriti);
 
   return (
     <Document>
@@ -401,21 +439,23 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         </View>
 
         {/* Maklumat Asas */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Maklumat Asas</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Disediakan Oleh:</Text>
-            <Text style={styles.value}>{formData.disediakanOleh || '-'}</Text>
+        {shouldRenderBasicInfo && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Maklumat Asas</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Disediakan Oleh:</Text>
+              <Text style={styles.value}>{formData.disediakanOleh || '-'}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Jawatan:</Text>
+              <Text style={styles.value}>{formData.jawatan || '-'}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Tarikh Laporan:</Text>
+              <Text style={styles.value}>{formData.tarikh || '-'}</Text>
+            </View>
           </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Jawatan:</Text>
-            <Text style={styles.value}>{formData.jawatan || '-'}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Tarikh Laporan:</Text>
-            <Text style={styles.value}>{formData.tarikh || '-'}</Text>
-          </View>
-        </View>
+        )}
 
         {/* BPNP Specific Data */}
         {isBPP && formData.bpnp && (
@@ -669,17 +709,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           </>
         )}
 
-        {/* INTEGRITI Specific Data */}
-        {isIntegriti && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Inisiatif Integriti & Kualiti</Text>
-            <View style={styles.row}><Text style={styles.label}>Mesyuarat Tatakelola:</Text><Text style={styles.value}>{formData.bilMesyuaratTatakelola || 0}</Text></View>
-            <View style={styles.row}><Text style={styles.label}>Program Integriti:</Text><Text style={styles.value}>{formData.bilProgramIntegriti || 0}</Text></View>
-            <View style={styles.row}><Text style={styles.label}>Audit ISO 9001:</Text><Text style={styles.value}>{formData.iso9001Finding || '-'}</Text></View>
-            <View style={styles.row}><Text style={styles.label}>Audit ABMS:</Text><Text style={styles.value}>{formData.abmsFinding || '-'}</Text></View>
-          </View>
-        )}
-
         {/* BKIM Specific Data */}
         {isBKIM && formData.bkim && (
           <>
@@ -834,7 +863,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* UKOKO Specific Data */}
-        {isUKOKO && formData.socialMedia && (
+        {isUKOKO && !isUkokoPR && !isUkokoPerayaan && formData.socialMedia && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Statistik Media Sosial & Komunikasi</Text>
             <View style={styles.row}><Text style={styles.label}>FB Followers:</Text><Text style={styles.value}>{formData.socialMedia.fbFollowers || 0}</Text></View>
@@ -1344,7 +1373,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* UKOKO Data */}
-        {isUKOKO && formData.ukoko && (
+        {isUkokoPerayaan && formData.ukoko && (
           <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Laporan Perayaan Islam & Majlis Kesyukuran 2025</Text>
@@ -1396,6 +1425,147 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
           </>
+        )}
+
+        {isUkokoPR && ukokoPrData.aduan && (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Statistik Aduan 2025</Text>
+              <View style={styles.statsGrid}>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Jumlah Aduan</Text>
+                    <Text style={styles.infoCardValue}>{String(ukokoPrTotalSumber)}</Text>
+                    <Text style={styles.infoCardRef}>Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</Text>
+                  </View>
+                </View>
+                <View style={styles.statsColumn}>
+                  <View style={styles.infoCard}>
+                    <Text style={styles.infoCardLabel}>Status Selesai</Text>
+                    <Text style={styles.infoCardValue}>{String(ukokoPrData.aduan.statusSelesai || 0)}</Text>
+                    <Text style={styles.infoCardRef}>Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Ringkasan Aduan & Sumber</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text style={styles.tableCellHeader}>Komponen</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
+                </View>
+                {[
+                  ['Jumlah Aduan', UKOKO_PR_2024_REFERENCE.aduan.jumlah, ukokoPrTotalSumber],
+                  ['SCS Talikhidmat', UKOKO_PR_2024_REFERENCE.aduan.sumber.talikhidmat, ukokoPrData.aduan.sumber?.talikhidmat || 0],
+                  ['Email / Emel / Surat', UKOKO_PR_2024_REFERENCE.aduan.sumber.lain, ukokoPrData.aduan.sumber?.lain || 0],
+                  ['Status Selesai', UKOKO_PR_2024_REFERENCE.aduan.statusSelesai, ukokoPrData.aduan.statusSelesai || 0],
+                ].map(([label, refValue, currentValue]) => (
+                  <View key={String(label)} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{String(label)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(refValue)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(currentValue)}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Aduan Mengikut Kategori</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
+                </View>
+                {ukokoPrKategoriEntries.map(([key, value]: any) => (
+                  <View key={key} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{ukokoPrKategoriLabels[key] || key}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(UKOKO_PR_2024_REFERENCE.aduan.kategori[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.kategori] || 0)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(value || 0)}</Text></View>
+                  </View>
+                ))}
+                {ukokoPrCustomKategori.map((item: any) => (
+                  <View key={item.id} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{item.name || 'Kategori Tambahan'}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>-</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(item.value || 0)}</Text></View>
+                  </View>
+                ))}
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text>JUMLAH</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(UKOKO_PR_2024_REFERENCE.aduan.jumlah)}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(ukokoPrTotalKategori)}</Text></View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Aduan Mengikut Bahagian / PAIB</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text style={styles.tableCellHeader}>Bahagian / PAIB</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
+                </View>
+                {ukokoPrLokasiEntries.map(([key, value]: any) => (
+                  <View key={key} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{ukokoPrLokasiLabels[key] || key}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi] || 0)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(value || 0)}</Text></View>
+                  </View>
+                ))}
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text>JUMLAH</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(UKOKO_PR_2024_REFERENCE.aduan.jumlah)}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(ukokoPrTotalLokasi)}</Text></View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Maklum Balas Pelanggan</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '44%' }]}><Text style={styles.tableCellHeader}>Platform</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text style={styles.tableCellHeader}>2025</Text></View>
+                </View>
+                {[
+                  ['Queue Bee - Puas', UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.puas, ukokoPrData.maklumBalas?.queueBee?.puas || 0],
+                  ['Queue Bee - Tidak Puas', UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.tidakPuas, ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0],
+                  ['Kod QR - Puas', UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.puas, ukokoPrData.maklumBalas?.qrCode?.puas || 0],
+                  ['Kod QR - Tidak Puas', UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.tidakPuas, ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0],
+                  ['Jumlah Maklum Balas', UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah, ukokoPrTotalMaklumBalas],
+                ].map(([label, refValue, currentValue]) => (
+                  <View key={String(label)} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{String(label)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(refValue)}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(currentValue)}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Lawatan Luar</Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>Jumlah Lawatan:</Text>
+                <Text style={styles.value}>{`${ukokoPrData.lawatanLuar || 0} (Ref 2024: ${UKOKO_PR_2024_REFERENCE.lawatanLuar})`}</Text>
+              </View>
+            </View>
+          </>
+        )}
+
+        {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !formData.socialMedia && !formData.ukoko && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Sub Unit UKOKO</Text>
+            <View style={styles.narrativeBox}>
+              <Text style={styles.narrativeText}>Maklumat diperlukan sedang dikemaskini. PDF ini belum mempunyai kandungan khusus untuk sub-unit ini.</Text>
+            </View>
+          </View>
         )}
 
         {/* DHQC Data */}
@@ -2420,29 +2590,35 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Narrative Sections */}
+        {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Ringkasan Pencapaian Utama 2025</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.ringkasan || 'Tiada maklumat disediakan.'}</Text>
           </View>
         </View>
+        )}
 
+        {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Isu & Cabaran</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.isu || 'Tiada maklumat disediakan.'}</Text>
           </View>
         </View>
+        )}
 
+        {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Cadangan Penambahbaikan</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
           </View>
         </View>
+        )}
 
         {/* Lawatan */}
-        {formData.lawatan && formData.lawatan.length > 0 && (
+        {shouldRenderCommonNarrative && formData.lawatan && formData.lawatan.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
             <View style={styles.table} wrap={false}>

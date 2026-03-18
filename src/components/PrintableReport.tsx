@@ -1,5 +1,5 @@
 import React from 'react';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 interface PrintableReportProps {
   deptName: string;
@@ -23,6 +23,8 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
   const isBPPI = deptName.includes('BPPI');
   const isUKOKO = deptName.includes('UKOKO');
+  const isUkokoPR = targetName.toUpperCase().includes('UNIT PERHUBUNGAN AWAM');
+  const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PERAYAAN ISLAM');
   const isDHQC = deptName.includes('DHQC');
   const isUPP = deptName.includes('UPP');
   const isIntegriti = deptName.includes('INTEGRITI');
@@ -46,6 +48,41 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     .filter((p: any) => (p.value || 0) > 0)
     .sort((a: any, b: any) => (b.value || 0) - (a.value || 0));
   const bkspPuncaKrisisMax = bkspPuncaKrisisData.reduce((max: number, item: any) => Math.max(max, item.value || 0), 0);
+  const ukokoPrData = formData.pr || {};
+  const ukokoPrKategoriEntries = Object.entries(ukokoPrData.aduan?.kategori || {});
+  const ukokoPrCustomKategori = ukokoPrData.aduan?.customKategori || [];
+  const ukokoPrLokasiEntries = Object.entries(ukokoPrData.aduan?.lokasi || {});
+  const ukokoPrTotalSumber =
+    (ukokoPrData.aduan?.sumber?.talikhidmat || 0) +
+    (ukokoPrData.aduan?.sumber?.lain || 0);
+  const ukokoPrTotalKategori =
+    ukokoPrKategoriEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
+    ukokoPrCustomKategori.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+  const ukokoPrTotalLokasi = ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0);
+  const ukokoPrTotalMaklumBalas =
+    (ukokoPrData.maklumBalas?.queueBee?.puas || 0) +
+    (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
+    (ukokoPrData.maklumBalas?.qrCode?.puas || 0) +
+    (ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0);
+  const ukokoPrKategoriLabels: Record<string, string> = {
+    kadNikah: 'Kad Nikah',
+    kafa: 'KAFA',
+    logoHalal: 'Logo Halal',
+    masjid: 'Masjid',
+    ncr: 'NCR',
+    tindakanPenguatkuasaanSyariah: 'Tindakan Penguatkuasaan Syariah',
+    tindakanPengukuhanPendidikanIslam: 'Tindakan Pengukuhan Pendidikan Islam',
+    usk: 'USIK',
+  };
+  const ukokoPrLokasiLabels: Record<string, string> = {
+    hqBkki: 'HQ BKKI',
+    paibBintulu: 'PAIB Bintulu',
+    paibKuching: 'PAIB Kuching',
+    paibMiri: 'PAIB Miri',
+    paibSarikei: 'PAIB Sarikei',
+    paibSibu: 'PAIB Sibu',
+  };
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan);
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -372,7 +409,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       )}
 
       {/* UKOKO Specific Layout */}
-      {isUKOKO && formData.ukoko && (
+      {isUkokoPerayaan && formData.ukoko && (
         <div className="space-y-8 mb-8">
           <div className="p-6 bg-emerald-900 text-white rounded-3xl flex justify-between items-center">
             <div>
@@ -1881,39 +1918,208 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       )}
 
       {/* UKOKO Specific Layout */}
-      {isUKOKO && (
+      {isUkokoPR && ukokoPrData.aduan && (
         <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-3 gap-6">
             <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Statistik Media Sosial (2025)
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
+                Statistik Aduan (2025)
               </h3>
               <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-indigo-900 uppercase">FB Followers</span>
-                  <span className="text-xl font-black text-indigo-700">{formData.socialMedia?.fbFollowers || 0}</span>
+                  <span className="text-xs font-bold text-indigo-900 uppercase">Jumlah Aduan</span>
+                  <span className="text-xl font-black text-indigo-700">{ukokoPrTotalSumber}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-indigo-900 uppercase">TikTok Followers</span>
-                  <span className="text-xl font-black text-indigo-700">{formData.socialMedia?.tiktokFollowers || 0}</span>
+                  <span className="text-xs font-bold text-indigo-900 uppercase">Status Selesai</span>
+                  <span className="text-xl font-black text-indigo-700">{ukokoPrData.aduan.statusSelesai || 0}</span>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Pengurusan Aduan (2025)
+                Maklum Balas Pelanggan (2025)
               </h3>
               <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-emerald-900 uppercase">Aduan Diterima</span>
-                  <span className="text-xl font-black text-emerald-700">{formData.aduan?.diterima || 0}</span>
+                  <span className="text-xs font-bold text-emerald-900 uppercase">Jumlah Maklum Balas</span>
+                  <span className="text-xl font-black text-emerald-700">{ukokoPrTotalMaklumBalas.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-emerald-900 uppercase">Aduan Diselesaikan</span>
-                  <span className="text-xl font-black text-emerald-700">{formData.aduan?.diselesaikan || 0}</span>
+                  <span className="text-xs font-bold text-emerald-900 uppercase">Ref 2024</span>
+                  <span className="text-xl font-black text-emerald-700">{UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</span>
                 </div>
               </div>
             </div>
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-purple-600 pl-2">
+                Lawatan Luar (2025)
+              </h3>
+              <div className="p-4 bg-purple-50 border border-purple-100 rounded-xl space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-purple-900 uppercase">Jumlah Lawatan</span>
+                  <span className="text-xl font-black text-purple-700">{ukokoPrData.lawatanLuar || 0}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-purple-900 uppercase">Ref 2024</span>
+                  <span className="text-xl font-black text-purple-700">{UKOKO_PR_2024_REFERENCE.lawatanLuar}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
+                Ringkasan Aduan & Sumber
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-indigo-50">
+                    <th className="border border-indigo-100 p-2 text-left">Komponen</th>
+                    <th className="border border-indigo-100 p-2 text-center">2024</th>
+                    <th className="border border-indigo-100 p-2 text-center bg-indigo-100">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-indigo-100 p-2 font-bold">Jumlah Aduan</td>
+                    <td className="border border-indigo-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
+                    <td className="border border-indigo-100 p-2 text-center font-black bg-indigo-50">{ukokoPrTotalSumber}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-indigo-100 p-2 font-bold">SCS Talikhidmat</td>
+                    <td className="border border-indigo-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.sumber.talikhidmat}</td>
+                    <td className="border border-indigo-100 p-2 text-center">{ukokoPrData.aduan.sumber?.talikhidmat || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-indigo-100 p-2 font-bold">Email / Emel / Surat</td>
+                    <td className="border border-indigo-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.sumber.lain}</td>
+                    <td className="border border-indigo-100 p-2 text-center">{ukokoPrData.aduan.sumber?.lain || 0}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-indigo-100 p-2 font-bold">Status Selesai</td>
+                    <td className="border border-indigo-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.statusSelesai}</td>
+                    <td className="border border-indigo-100 p-2 text-center">{ukokoPrData.aduan.statusSelesai || 0}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-emerald-600 pl-2">
+                Maklum Balas Pelanggan
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-emerald-50">
+                    <th className="border border-emerald-100 p-2 text-left">Platform</th>
+                    <th className="border border-emerald-100 p-2 text-center">Ref 2024</th>
+                    <th className="border border-emerald-100 p-2 text-center bg-emerald-100">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-emerald-100 p-2 font-bold">Queue Bee - Puas</td>
+                    <td className="border border-emerald-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.puas.toLocaleString()}</td>
+                    <td className="border border-emerald-100 p-2 text-center">{(ukokoPrData.maklumBalas?.queueBee?.puas || 0).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-emerald-100 p-2 font-bold">Queue Bee - Tidak Puas</td>
+                    <td className="border border-emerald-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.maklumBalas.queueBee.tidakPuas.toLocaleString()}</td>
+                    <td className="border border-emerald-100 p-2 text-center">{(ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-emerald-100 p-2 font-bold">Kod QR - Puas</td>
+                    <td className="border border-emerald-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.puas.toLocaleString()}</td>
+                    <td className="border border-emerald-100 p-2 text-center">{(ukokoPrData.maklumBalas?.qrCode?.puas || 0).toLocaleString()}</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-emerald-100 p-2 font-bold">Kod QR - Tidak Puas</td>
+                    <td className="border border-emerald-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.maklumBalas.qrCode.tidakPuas.toLocaleString()}</td>
+                    <td className="border border-emerald-100 p-2 text-center">{(ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0).toLocaleString()}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-slate-600 pl-2">
+                Aduan Mengikut Kategori
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-50">
+                    <th className="border border-slate-100 p-2 text-left">Kategori</th>
+                    <th className="border border-slate-100 p-2 text-center">2024</th>
+                    <th className="border border-slate-100 p-2 text-center bg-slate-100">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ukokoPrKategoriEntries.map(([key, value]: any) => (
+                    <tr key={key}>
+                      <td className="border border-slate-100 p-2 font-bold">{ukokoPrKategoriLabels[key] || key}</td>
+                      <td className="border border-slate-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.kategori[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.kategori] || 0}</td>
+                      <td className="border border-slate-100 p-2 text-center">{value || 0}</td>
+                    </tr>
+                  ))}
+                  {ukokoPrCustomKategori.map((item: any) => (
+                    <tr key={item.id}>
+                      <td className="border border-slate-100 p-2 font-bold">{item.name || 'Kategori Tambahan'}</td>
+                      <td className="border border-slate-100 p-2 text-center">-</td>
+                      <td className="border border-slate-100 p-2 text-center">{item.value || 0}</td>
+                    </tr>
+                  ))}
+                  <tr className="bg-slate-50">
+                    <td className="border border-slate-100 p-2 font-black">JUMLAH</td>
+                    <td className="border border-slate-100 p-2 text-center font-black">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
+                    <td className="border border-slate-100 p-2 text-center font-black">{ukokoPrTotalKategori}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-purple-600 pl-2">
+                Aduan Mengikut Bahagian / PAIB
+              </h3>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-purple-50">
+                    <th className="border border-purple-100 p-2 text-left">Bahagian / PAIB</th>
+                    <th className="border border-purple-100 p-2 text-center">2024</th>
+                    <th className="border border-purple-100 p-2 text-center bg-purple-100">2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ukokoPrLokasiEntries.map(([key, value]: any) => (
+                    <tr key={key}>
+                      <td className="border border-purple-100 p-2 font-bold">{ukokoPrLokasiLabels[key] || key}</td>
+                      <td className="border border-purple-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi] || 0}</td>
+                      <td className="border border-purple-100 p-2 text-center">{value || 0}</td>
+                    </tr>
+                  ))}
+                  <tr className="bg-purple-50">
+                    <td className="border border-purple-100 p-2 font-black">JUMLAH</td>
+                    <td className="border border-purple-100 p-2 text-center font-black">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
+                    <td className="border border-purple-100 p-2 text-center font-black">{ukokoPrTotalLokasi}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isUKOKO && !isUkokoPR && !isUkokoPerayaan && (
+        <div className="space-y-8">
+          <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6">
+            <h3 className="text-lg font-black uppercase text-amber-900">Sub Unit UKOKO</h3>
+            <p className="mt-2 text-sm font-medium text-amber-800">
+              Maklumat diperlukan sedang dikemaskini. PDF ini belum mempunyai kandungan khusus untuk sub-unit ini.
+            </p>
           </div>
         </div>
       )}
@@ -2402,6 +2608,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       )}
 
       {/* Narrative Sections (Common) */}
+      {shouldRenderCommonNarrative && (
       <div className="mt-8 space-y-6">
         <div className="space-y-2">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
@@ -2431,9 +2638,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           </div>
         </div>
       </div>
+      )}
 
       {/* Lawatan Section */}
-      {formData.lawatan && formData.lawatan.length > 0 && (
+      {shouldRenderCommonNarrative && formData.lawatan && formData.lawatan.length > 0 && (
         <div className="mt-8 space-y-4">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
             Rekod Lawatan / Penandaarasan
