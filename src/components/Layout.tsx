@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, LayoutDashboard } from 'lucide-react';
 
 interface LayoutProps {
@@ -9,8 +9,48 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) => {
+  const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
+  const fontScaleOptions = useMemo(
+    () => ({
+      small: {
+        header: '1.8rem',
+        subheader: '1rem',
+        body: '0.88rem',
+      },
+      default: {
+        header: '2rem',
+        subheader: '1.125rem',
+        body: '0.95rem',
+      },
+      large: {
+        header: '2.2rem',
+        subheader: '1.25rem',
+        body: '1.03rem',
+      },
+    }),
+    []
+  );
+  const [fontScale, setFontScale] = useState<'small' | 'default' | 'large'>(() => {
+    if (typeof window === 'undefined') return 'default';
+    const saved = window.localStorage.getItem(FONT_SIZE_STORAGE_KEY);
+    return saved === 'small' || saved === 'large' || saved === 'default' ? saved : 'default';
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(FONT_SIZE_STORAGE_KEY, fontScale);
+  }, [fontScale]);
+
+  const appTypographyStyle = useMemo(
+    () => ({
+      '--app-font-header': fontScaleOptions[fontScale].header,
+      '--app-font-subheader': fontScaleOptions[fontScale].subheader,
+      '--app-font-body': fontScaleOptions[fontScale].body,
+    }) as React.CSSProperties,
+    [fontScale, fontScaleOptions]
+  );
+
   return (
-    <div className="app-typography min-h-screen flex flex-col">
+    <div className="app-typography min-h-screen flex flex-col" style={appTypographyStyle}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,6 +82,34 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
             </div>
 
             <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-1.5 py-1 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setFontScale('small')}
+                  aria-label="Kecilkan font"
+                  title="Kecilkan font"
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
+                    fontScale === 'small'
+                      ? 'bg-zus-900 text-white'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                  }`}
+                >
+                  A-
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFontScale('large')}
+                  aria-label="Besarkan font"
+                  title="Besarkan font"
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
+                    fontScale === 'large'
+                      ? 'bg-zus-900 text-white'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                  }`}
+                >
+                  A+
+                </button>
+              </div>
               <div className="hidden sm:block text-right mr-3">
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Status Sistem</p>
                 <p className="text-xs text-green-600 font-bold flex items-center justify-end gap-1">
