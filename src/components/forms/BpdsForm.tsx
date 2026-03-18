@@ -174,6 +174,13 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                        (formData.bpds.pendakwaSyarie.penolongPegawaiSyariah || 0) + 
                        (formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam || 0);
 
+  const displayNumericInput = (value: number | string | undefined | null) => {
+    if (value === 0 || value === '0' || value === undefined || value === null) {
+      return '';
+    }
+    return value;
+  };
+
   return (
     <FormLayout
       deptName={deptName}
@@ -203,7 +210,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.kertasSiasatan.matrimoni}
+              value={displayNumericInput(formData.bpds.kertasSiasatan.matrimoni)}
               onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'matrimoni', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -215,7 +222,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.kertasSiasatan.jenayahSyariah}
+              value={displayNumericInput(formData.bpds.kertasSiasatan.jenayahSyariah)}
               onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'jenayahSyariah', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -244,7 +251,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
               <div className="text-[9px] text-stone-400 font-bold mb-2">Ref 2024: {BPDS_2024_REFERENCE.kesSelesai[idx].value}</div>
               <input 
                 type="number"
-                value={item.value}
+                value={displayNumericInput(item.value)}
                 onChange={(e) => handleBpdsArrayChange('kesSelesai', idx, e.target.value)}
                 className="w-full p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
               />
@@ -275,7 +282,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.pendakwaSyarie.pegawaiSyariah}
+              value={displayNumericInput(formData.bpds.pendakwaSyarie.pegawaiSyariah)}
               onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'pegawaiSyariah', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -287,7 +294,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.pendakwaSyarie.penolongPegawaiSyariah}
+              value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiSyariah)}
               onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiSyariah', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -299,7 +306,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam}
+              value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam)}
               onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiHalEhwalIslam', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -324,7 +331,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.pendaftaranKes.matrimoni}
+              value={displayNumericInput(formData.bpds.pendaftaranKes.matrimoni)}
               onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'matrimoni', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -336,7 +343,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             </div>
             <input 
               type="number"
-              value={formData.bpds.pendaftaranKes.jenayahSyariah}
+              value={displayNumericInput(formData.bpds.pendaftaranKes.jenayahSyariah)}
               onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'jenayahSyariah', e.target.value)}
               className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
             />
@@ -372,7 +379,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                       <input 
                         type="number"
                         step="0.01"
-                        value={item.value}
+                        value={displayNumericInput(item.value)}
                         onChange={(e) => handleBpdsArrayChange('penggubalanKaedah', idx, e.target.value)}
                         className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
                       />
@@ -393,7 +400,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                         <input
                           type="number"
                           step="0.01"
-                          value={draftItem.value || 0}
+                          value={displayNumericInput(draftItem.value)}
                           onChange={(e) => handleBpdsDraftArrayChange(idx, 'value', e.target.value)}
                           className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
                         />
@@ -437,7 +444,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
               <input
                 type="number"
                 step="0.01"
-                value={formData.bpds.derafUndangUndangKemajuan || 0}
+                value={displayNumericInput(formData.bpds.derafUndangUndangKemajuan)}
                 onChange={(e) => handleBpdsTextChange('derafUndangUndangKemajuan', e.target.value)}
                 className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
               />
@@ -474,7 +481,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           </div>
           <input 
             type="number"
-            value={formData.bpds.aktiviti}
+            value={displayNumericInput(formData.bpds.aktiviti)}
             onChange={(e) => handleBpdsSimpleChange('aktiviti', e.target.value)}
             className="w-full p-4 bg-white border border-stone-200 rounded-2xl text-lg font-black text-stone-800 focus:ring-4 focus:ring-stone-500/10 outline-none"
           />
