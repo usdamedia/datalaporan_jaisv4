@@ -175,9 +175,9 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <h3 className="text-white font-bold">1. Statistik Sijil Pengesahan Halal Malaysia (SPHM) 2025</h3>
           </div>
           <div className="p-6 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div className="p-4 bg-olive-50 border border-olive-100 rounded-2xl space-y-2">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <div className="p-4 bg-olive-50 border border-olive-100 rounded-2xl space-y-2 min-h-[180px] flex flex-col justify-center">
                   <label className="text-[10px] font-black text-olive-900 uppercase">Permohonan Sijil (SPHM) 2025</label>
                   <div className="flex items-center justify-between">
                     <span className="text-[9px] font-bold text-olive-400">Ref 24: {BPH_2024_REFERENCE.sphm.permohonan}</span>
@@ -189,67 +189,67 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     />
                   </div>
                 </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Pecahan Skim SPHM Aktif</h4>
-                  <div className="grid grid-cols-1 gap-2">
-                    {[
-                      { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan },
-                      { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk },
-                      { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis },
-                      { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem },
-                      { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik },
-                      { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan },
-                    ].map(item => (
-                      <div key={item.field} className="grid grid-cols-3 items-center gap-4 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                        <label className="text-[10px] font-bold text-gray-500 leading-tight">{item.label}</label>
-                        <div className="text-center text-[9px] font-bold text-gray-400 bg-gray-50 py-0.5 rounded">Ref 24: {item.ref}</div>
-                        <input 
-                          type="number" 
-                          value={formData.bph.sphm.skim[item.field]} 
-                          onChange={(e) => updateBph(['sphm', 'skim', item.field], e.target.value)} 
-                          className="p-1 bg-white border border-gray-200 rounded text-xs font-bold text-center focus:ring-1 focus:ring-olive-500 outline-none" 
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-4 bg-[#5A5A40] text-zus-gold rounded-xl flex justify-between items-center">
-                    <span className="text-xs font-black uppercase">Jumlah Pemilik Sijil Aktif</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-[10px] opacity-60">Ref 24: {BPH_2024_REFERENCE.sphm.aktif}</span>
-                      <span className="text-xl font-black">{sphmTotalAktif}</span>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-xs font-black text-zus-900 uppercase flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-olive-600" />
-                  Perbandingan SPHM (2024 vs 2025)
-                </h4>
-                <div className="h-[300px] w-full bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-                      <Tooltip 
-                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                        cursor={{ fill: '#f3f4f6' }}
+                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Pecahan Skim SPHM Aktif</h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan },
+                    { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk },
+                    { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis },
+                    { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem },
+                    { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik },
+                    { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan },
+                  ].map(item => (
+                    <div key={item.field} className="grid grid-cols-3 items-center gap-4 p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                      <label className="text-[10px] font-bold text-gray-500 leading-tight">{item.label}</label>
+                      <div className="text-center text-[9px] font-bold text-gray-400 bg-gray-50 py-0.5 rounded">Ref 24: {item.ref}</div>
+                      <input 
+                        type="number" 
+                        value={formData.bph.sphm.skim[item.field]} 
+                        onChange={(e) => updateBph(['sphm', 'skim', item.field], e.target.value)} 
+                        className="p-1 bg-white border border-gray-200 rounded text-xs font-bold text-center focus:ring-1 focus:ring-olive-500 outline-none" 
                       />
-                      <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold' }} />
-                      <Bar dataKey="permohonan" name="Permohonan" fill="#5A5A40" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="aktif" name="Aktif" fill="#F27D26" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+                    </div>
+                  ))}
                 </div>
-                <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
-                  <Info className="w-4 h-4 text-blue-500 mt-0.5" />
-                  <p className="text-[10px] text-blue-700 leading-relaxed">
-                    Graf di atas menunjukkan perbandingan prestasi permohonan dan pemilikan sijil aktif antara tahun rujukan 2024 dan data semasa 2025.
-                  </p>
+                <div className="p-4 bg-[#5A5A40] text-zus-gold rounded-xl flex justify-between items-center">
+                  <span className="text-xs font-black uppercase">Jumlah Pemilik Sijil Aktif</span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-[10px] opacity-60">Ref 24: {BPH_2024_REFERENCE.sphm.aktif}</span>
+                    <span className="text-xl font-black">{sphmTotalAktif}</span>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-xs font-black text-zus-900 uppercase flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-olive-600" />
+                Perbandingan SPHM (2024 vs 2025)
+              </h4>
+              <div className="h-[300px] w-full bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                    <Tooltip 
+                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                      cursor={{ fill: '#f3f4f6' }}
+                    />
+                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold' }} />
+                    <Bar dataKey="permohonan" name="Permohonan" fill="#5A5A40" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="aktif" name="Aktif" fill="#F27D26" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
+                <Info className="w-4 h-4 text-blue-500 mt-0.5" />
+                <p className="text-[10px] text-blue-700 leading-relaxed">
+                  Graf di atas menunjukkan perbandingan prestasi permohonan dan pemilikan sijil aktif antara tahun rujukan 2024 dan data semasa 2025.
+                </p>
               </div>
             </div>
           </div>
