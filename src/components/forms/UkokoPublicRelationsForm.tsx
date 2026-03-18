@@ -7,6 +7,7 @@ import {
   AlertCircle,
   TrendingUp,
   Building2,
+  Save,
   Trash2,
   Plus
 } from 'lucide-react';
@@ -40,6 +41,11 @@ interface UkokoPRData {
       paibSibu: number;
     };
     customKategori: Array<{
+      id: string;
+      name: string;
+      value: number;
+    }>;
+    customLokasi: Array<{
       id: string;
       name: string;
       value: number;
@@ -89,7 +95,8 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
           paibSarikei: 0,
           paibSibu: 0
         },
-        customKategori: []
+        customKategori: [],
+        customLokasi: []
       },
       maklumBalas: {
         queueBee: { puas: 0, tidakPuas: 0 },
@@ -125,6 +132,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
         paibSibu: formData.pr?.aduan?.lokasi?.paibSibu || 0,
       },
       customKategori: formData.pr?.aduan?.customKategori || [],
+      customLokasi: formData.pr?.aduan?.customLokasi || [],
     },
     maklumBalas: {
       queueBee: {
@@ -145,6 +153,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     lawatanLuar: formData.pr?.lawatanLuar || 0,
   } as UkokoPRData;
   const [newCustomKategori, setNewCustomKategori] = React.useState('');
+  const [newCustomLokasi, setNewCustomLokasi] = React.useState('');
 
   const updateField = (path: string, value: string) => {
     const numValue = parseInt(value) || 0;
@@ -218,12 +227,71 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     }));
   };
 
+  const addCustomLokasi = () => {
+    const trimmed = newCustomLokasi.trim();
+    if (!trimmed) return;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customLokasi: [
+            ...(prev.pr.aduan.customLokasi || []),
+            {
+              id: `${Date.now()}-${trimmed.toLowerCase().replace(/\s+/g, '-')}`,
+              name: trimmed,
+              value: 0,
+            },
+          ],
+        },
+      },
+    }));
+    setNewCustomLokasi('');
+  };
+
+  const updateCustomLokasi = (id: string, field: 'name' | 'value', value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customLokasi: (prev.pr.aduan.customLokasi || []).map((item: any) =>
+            item.id === id
+              ? {
+                  ...item,
+                  [field]: field === 'value' ? parseInt(value) || 0 : value,
+                }
+              : item
+          ),
+        },
+      },
+    }));
+  };
+
+  const removeCustomLokasi = (id: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        aduan: {
+          ...prev.pr.aduan,
+          customLokasi: (prev.pr.aduan.customLokasi || []).filter((item: any) => item.id !== id),
+        },
+      },
+    }));
+  };
+
   // Calculations
   const totalAduanSumber = prData.aduan.sumber.talikhidmat + prData.aduan.sumber.lain;
   const totalAduanKategori =
     Object.values(prData.aduan.kategori).reduce((a, b) => a + b, 0) +
     (prData.aduan.customKategori || []).reduce((sum, item) => sum + (item.value || 0), 0);
-  const totalAduanLokasi = Object.values(prData.aduan.lokasi).reduce((a, b) => a + b, 0);
+  const totalAduanLokasi =
+    Object.values(prData.aduan.lokasi).reduce((a, b) => a + b, 0) +
+    (prData.aduan.customLokasi || []).reduce((sum, item) => sum + (item.value || 0), 0);
 
   const totalQueueBee = prData.maklumBalas.queueBee.puas + prData.maklumBalas.queueBee.tidakPuas;
   const totalQrCode = prData.maklumBalas.qrCode.puas + prData.maklumBalas.qrCode.tidakPuas;
@@ -528,6 +596,48 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                         </td>
                       </tr>
                     ))}
+                    {(prData.aduan.customLokasi || []).map((item) => (
+                      <tr key={item.id}>
+                        <td className="border border-purple-100 p-2">
+                          <input
+                            type="text"
+                            value={item.name}
+                            onChange={(e) => updateCustomLokasi(item.id, 'name', e.target.value)}
+                            className="w-full rounded-2xl border border-purple-200 bg-white px-4 py-3 font-bold text-slate-800 outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="Bahagian / PAIB tambahan"
+                          />
+                        </td>
+                        <td className="border border-purple-100 p-3 text-center font-bold text-slate-400">-</td>
+                        <td className="border border-purple-100 p-2">
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              value={item.value}
+                              onChange={(e) => updateCustomLokasi(item.id, 'value', e.target.value)}
+                              className="flex-1 rounded-2xl border border-purple-200 bg-white px-4 py-3 text-center font-black text-slate-900 outline-none focus:ring-2 focus:ring-purple-500"
+                              placeholder="0"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleSave}
+                              disabled={isSaving}
+                              className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-4 text-sm font-black text-white transition hover:bg-emerald-700 disabled:opacity-60"
+                              aria-label={`Save ${item.name || 'lokasi'}`}
+                            >
+                              <Save className="h-4 w-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeCustomLokasi(item.id)}
+                              className="inline-flex items-center justify-center rounded-2xl bg-rose-50 px-4 text-sm font-black text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
+                              aria-label={`Delete ${item.name || 'lokasi'}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                     <tr className="bg-purple-50">
                       <td className="border border-purple-100 p-3 font-black text-purple-900">JUMLAH</td>
                       <td className="border border-purple-100 p-3 text-center font-black text-purple-900">{UKOKO_PR_2024_REFERENCE.aduan.jumlah}</td>
@@ -535,6 +645,31 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
                     </tr>
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4 rounded-2xl border border-dashed border-purple-200 bg-purple-50/40 p-4">
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <input
+                    type="text"
+                    value={newCustomLokasi}
+                    onChange={(e) => setNewCustomLokasi(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addCustomLokasi();
+                      }
+                    }}
+                    placeholder="Tambah Bahagian / PAIB baharu"
+                    className="flex-1 rounded-xl border border-purple-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCustomLokasi}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-purple-700"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Tambah Bahagian / PAIB
+                  </button>
+                </div>
               </div>
             </div>
           </div>

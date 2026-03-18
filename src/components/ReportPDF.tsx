@@ -391,13 +391,16 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const ukokoPrKategoriEntries = Object.entries(ukokoPrData.aduan?.kategori || {});
   const ukokoPrCustomKategori = ukokoPrData.aduan?.customKategori || [];
   const ukokoPrLokasiEntries = Object.entries(ukokoPrData.aduan?.lokasi || {});
+  const ukokoPrCustomLokasi = ukokoPrData.aduan?.customLokasi || [];
   const ukokoPrTotalSumber =
     (ukokoPrData.aduan?.sumber?.talikhidmat || 0) +
     (ukokoPrData.aduan?.sumber?.lain || 0);
   const ukokoPrTotalKategori =
     ukokoPrKategoriEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
     ukokoPrCustomKategori.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
-  const ukokoPrTotalLokasi = ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0);
+  const ukokoPrTotalLokasi =
+    ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
+    ukokoPrCustomLokasi.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
   const ukokoPrTotalMaklumBalas =
     (ukokoPrData.maklumBalas?.queueBee?.puas || 0) +
     (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
@@ -1515,6 +1518,13 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                     <View style={[styles.tableCell, { width: '44%' }]}><Text>{ukokoPrLokasiLabels[key] || key}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi] || 0)}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(value || 0)}</Text></View>
+                  </View>
+                ))}
+                {ukokoPrCustomLokasi.map((item: any) => (
+                  <View key={item.id} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '44%' }]}><Text>{item.name || 'Bahagian / PAIB Tambahan'}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>-</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{String(item.value || 0)}</Text></View>
                   </View>
                 ))}
                 <View style={[styles.tableRow, styles.tableHeader]}>

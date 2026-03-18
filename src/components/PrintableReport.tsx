@@ -52,13 +52,16 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const ukokoPrKategoriEntries = Object.entries(ukokoPrData.aduan?.kategori || {});
   const ukokoPrCustomKategori = ukokoPrData.aduan?.customKategori || [];
   const ukokoPrLokasiEntries = Object.entries(ukokoPrData.aduan?.lokasi || {});
+  const ukokoPrCustomLokasi = ukokoPrData.aduan?.customLokasi || [];
   const ukokoPrTotalSumber =
     (ukokoPrData.aduan?.sumber?.talikhidmat || 0) +
     (ukokoPrData.aduan?.sumber?.lain || 0);
   const ukokoPrTotalKategori =
     ukokoPrKategoriEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
     ukokoPrCustomKategori.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
-  const ukokoPrTotalLokasi = ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0);
+  const ukokoPrTotalLokasi =
+    ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
+    ukokoPrCustomLokasi.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
   const ukokoPrTotalMaklumBalas =
     (ukokoPrData.maklumBalas?.queueBee?.puas || 0) +
     (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
@@ -2099,6 +2102,13 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                       <td className="border border-purple-100 p-2 font-bold">{ukokoPrLokasiLabels[key] || key}</td>
                       <td className="border border-purple-100 p-2 text-center">{UKOKO_PR_2024_REFERENCE.aduan.lokasi[key as keyof typeof UKOKO_PR_2024_REFERENCE.aduan.lokasi] || 0}</td>
                       <td className="border border-purple-100 p-2 text-center">{value || 0}</td>
+                    </tr>
+                  ))}
+                  {ukokoPrCustomLokasi.map((item: any) => (
+                    <tr key={item.id}>
+                      <td className="border border-purple-100 p-2 font-bold">{item.name || 'Bahagian / PAIB Tambahan'}</td>
+                      <td className="border border-purple-100 p-2 text-center">-</td>
+                      <td className="border border-purple-100 p-2 text-center">{item.value || 0}</td>
                     </tr>
                   ))}
                   <tr className="bg-purple-50">
