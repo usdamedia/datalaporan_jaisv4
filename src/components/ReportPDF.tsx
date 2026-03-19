@@ -357,8 +357,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBPKS = deptName.includes('BPKS') || deptName.includes('Penguatkuasaan');
   const isBPPI = deptName.includes('BPPI');
   const isUKOKO = deptName.includes('UKOKO');
-  const isUkokoPR = targetName.toUpperCase().includes('UNIT PERHUBUNGAN AWAM');
-  const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PERAYAAN ISLAM');
+  const isUkokoPR = targetName.toUpperCase().includes('UNIT KOMUNIKASI DAN PUSAT SUMBER') || targetName.toUpperCase().includes('(UKPS)');
+  const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PENGURUSAN ACARA');
   const isDHQC = deptName.includes('DHQC');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');

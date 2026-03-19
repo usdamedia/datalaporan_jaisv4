@@ -402,7 +402,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       <div className="space-y-8">
         <section className="rounded-[2rem] bg-[linear-gradient(135deg,#5b6cff_0%,#7c3aed_55%,#5b21b6_100%)] p-8 text-white shadow-xl">
           <p className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-100">Laporan Tahunan Perhubungan Awam</p>
-          <h1 className="mt-3 max-w-4xl text-3xl font-black uppercase tracking-tight">Unit Komunikasi Korporat (UKOKO) · Unit Perhubungan Awam</h1>
+          <h1 className="mt-3 max-w-4xl text-3xl font-black uppercase tracking-tight">Unit Komunikasi Korporat (UKOKO) · Unit Komunikasi dan Pusat Sumber (UKPS)</h1>
           <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-indigo-50">
             Borang ini kini dipaparkan dalam susun atur satu aliran supaya item yang diisi mengikuti turutan komponen yang sama seperti paparan PDF eksport.
           </p>

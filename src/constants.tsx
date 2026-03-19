@@ -57,9 +57,9 @@ export const DEPARTMENTS: Department[] = [
     name: 'Unit Komunikasi Korporat UKOKO',
     active: true,
     subUnits: [
-      { id: 'ukoko-pr', name: 'Unit Perhubungan Awam', active: true },
-      { id: 'ukoko-perayaan', name: 'Unit Perayaan Islam', active: true },
-      { id: 'ukoko-lain', name: 'Sub Unit UKOKO (Kemaskini Kemudian)', active: false },
+      { id: 'ukoko-pr', name: 'Unit Komunikasi dan Pusat Sumber (UKPS)', active: true },
+      { id: 'ukoko-perayaan', name: 'Unit Pengurusan Acara', active: true },
+      { id: 'ukoko-penerbitan', name: 'Unit Penerbitan', active: true },
     ]
   },
 ];

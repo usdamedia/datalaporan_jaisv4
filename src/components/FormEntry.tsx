@@ -61,11 +61,14 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   }
 
   if (normalizedDeptName.includes('UKOKO')) {
-    if (normalizedDeptName.includes('PERHUBUNGAN AWAM')) {
+    if (normalizedDeptName.includes('KOMUNIKASI DAN PUSAT SUMBER') || normalizedDeptName.includes('UKPS')) {
       return <UkokoPublicRelationsForm deptName={deptName} onBack={onBack} />;
     }
-    if (normalizedDeptName.includes('PERAYAAN ISLAM')) {
+    if (normalizedDeptName.includes('PENGURUSAN ACARA')) {
       return <UkokoForm deptName={deptName} onBack={onBack} />;
+    }
+    if (normalizedDeptName.includes('PENERBITAN')) {
+      return <GenericForm deptName={deptName} onBack={onBack} />;
     }
     return <UkokoForm deptName={deptName} onBack={onBack} />;
   }
