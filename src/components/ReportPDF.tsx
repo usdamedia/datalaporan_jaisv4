@@ -390,6 +390,10 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
     (ukokoPrData.maklumBalas?.qrCode?.puas || 0) +
     (ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0);
+  const ukokoPrBookPurchase = formData.pr?.pembelianBukuBaharu || {};
+  const ukokoPrBookCategories = Array.isArray(ukokoPrBookPurchase.kategoriBukuBaharu)
+    ? ukokoPrBookPurchase.kategoriBukuBaharu
+    : [];
   const ukokoPrKategoriLabels: Record<string, string> = {
     kadNikah: 'Kad Nikah',
     kafa: 'KAFA',
@@ -1464,6 +1468,26 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {isUkokoPR && ukokoPrData.aduan && (
           <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Pembelian Buku Baharu</Text>
+              <View style={styles.row}>
+                <Text style={styles.label}>Bilangan:</Text>
+                <Text style={styles.value}>{String(ukokoPrBookPurchase.bilangan || 0)}</Text>
+              </View>
+              <View style={[styles.narrativeBox, { marginTop: 8 }]}>
+                <Text style={[styles.infoCardLabel, { marginBottom: 6 }]}>Kategori Buku Baharu</Text>
+                {ukokoPrBookCategories.length > 0 ? (
+                  ukokoPrBookCategories.map((item: any, index: number) => (
+                    <Text key={item.id || index} style={styles.narrativeText}>
+                      {index + 1}. {item.name || 'Kategori tanpa nama'}
+                    </Text>
+                  ))
+                ) : (
+                  <Text style={styles.emptyState}>Tiada kategori buku baharu dimasukkan.</Text>
+                )}
+              </View>
+            </View>
+
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Statistik Aduan 2025</Text>
               <View style={styles.statsGrid}>

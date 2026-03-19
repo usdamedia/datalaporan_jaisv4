@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer, Star } from 'lucide-react';
+import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer, Star, Lock, ShieldCheck, AlertCircle } from 'lucide-react';
 import { BPNP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
@@ -12,8 +12,14 @@ interface BpnpFormProps {
   onBack: () => void;
 }
 
+const STRATEGIC_PASSWORD = 'bpnpj@is2026';
+const STRATEGIC_AUTH_STORAGE_KEY = 'jais_bpnp_strategik_authenticated_2026';
+
 const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   const [showDataManagement, setShowDataManagement] = React.useState(false);
+  const [strategicPassword, setStrategicPassword] = React.useState('');
+  const [strategicError, setStrategicError] = React.useState('');
+  const [isStrategicAuthenticated, setIsStrategicAuthenticated] = React.useState(false);
   const { contentRef: strategicPrintRef, handlePrint: handleStrategicPrint } = usePrintView<HTMLDivElement>({
     documentTitle: 'BPNP_Unit_Perancangan_Strategik_2025',
   });
@@ -26,6 +32,22 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   const isUnitPenyelidikan = selectedUnit === 'UNIT PENYELIDIKAN';
   const isUnitStrategik = selectedUnit === 'UNIT PERANCANGAN STRATEGIK';
   const isUnitAkidah = selectedUnit === 'UNIT AKIDAH TAPISAN';
+
+  React.useEffect(() => {
+    if (!isUnitStrategik) {
+      setIsStrategicAuthenticated(false);
+      setStrategicPassword('');
+      setStrategicError('');
+      return;
+    }
+
+    try {
+      const savedAuth = sessionStorage.getItem(STRATEGIC_AUTH_STORAGE_KEY);
+      setIsStrategicAuthenticated(savedAuth === 'true');
+    } catch (error) {
+      console.error('Failed to restore strategic auth state', error);
+    }
+  }, [isUnitStrategik]);
 
   const initialState = {
     tarikh: new Date().toISOString().split('T')[0],
@@ -154,6 +176,106 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       };
     });
   };
+
+  const handleStrategicUnlock = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (strategicPassword === STRATEGIC_PASSWORD) {
+      setIsStrategicAuthenticated(true);
+      setStrategicError('');
+      setStrategicPassword('');
+
+      try {
+        sessionStorage.setItem(STRATEGIC_AUTH_STORAGE_KEY, 'true');
+      } catch (error) {
+        console.error('Failed to persist strategic auth state', error);
+      }
+      return;
+    }
+
+    setStrategicError('Kata laluan tidak sah. Sila cuba lagi.');
+  };
+
+  if (isUnitStrategik && !isStrategicAuthenticated) {
+    return (
+      <div className="mx-auto max-w-4xl animate-fade-in">
+        <div className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0f2d48] via-[#113e63] to-[#185c73] text-white shadow-[0_25px_70px_rgba(17,62,99,0.20)]">
+          <div className="grid gap-8 px-6 py-8 md:px-8 lg:grid-cols-[1.2fr_0.9fr]">
+            <div>
+              <p className="mb-3 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-[11px] font-black uppercase tracking-[0.28em] text-[#d8f3ef]">
+                Akses Terhad
+              </p>
+              <h2 className="max-w-3xl text-3xl font-black tracking-tight md:text-5xl">
+                Unit Perancangan Strategik dilindungi dengan kata laluan.
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-white/80 md:text-base">
+                Sila masukkan kata laluan yang sah untuk melihat maklumat yang diperlukan di dalam unit ini.
+              </p>
+            </div>
+
+            <div className="rounded-[1.75rem] border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl bg-white/10 p-3 text-[#d8f3ef]">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#d8f3ef]">Makluman</p>
+                  <p className="mt-3 text-sm font-medium leading-6 text-white/85">
+                    Kandungan Unit Perancangan Strategik hanya akan dipaparkan selepas login berjaya dalam sesi pelayar semasa.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
+              <Lock className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black uppercase tracking-tight text-zus-900">Login Unit Perancangan Strategik</h3>
+              <p className="text-sm font-medium text-slate-500">Masukkan password untuk membuka akses kandungan unit ini.</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleStrategicUnlock} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Password</label>
+              <input
+                type="password"
+                value={strategicPassword}
+                onChange={(event) => {
+                  setStrategicPassword(event.target.value);
+                  if (strategicError) setStrategicError('');
+                }}
+                placeholder="Masukkan kata laluan"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-[#134E4A] focus:ring-4 focus:ring-[#134E4A]/10"
+              />
+            </div>
+
+            {strategicError && (
+              <div className="flex items-center gap-2 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                <AlertCircle className="h-4 w-4" />
+                <span>{strategicError}</span>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 rounded-2xl bg-zus-900 px-6 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition hover:bg-zus-800 active:scale-[0.98]"
+              >
+                <Lock className="h-4 w-4" />
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <FormLayout

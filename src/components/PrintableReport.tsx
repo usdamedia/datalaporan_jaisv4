@@ -54,6 +54,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
     (ukokoPrData.maklumBalas?.qrCode?.puas || 0) +
     (ukokoPrData.maklumBalas?.qrCode?.tidakPuas || 0);
+  const ukokoPrBookPurchase = formData.pr?.pembelianBukuBaharu || {};
+  const ukokoPrBookCategories = Array.isArray(ukokoPrBookPurchase.kategoriBukuBaharu)
+    ? ukokoPrBookPurchase.kategoriBukuBaharu
+    : [];
   const ukokoPrKategoriLabels: Record<string, string> = {
     kadNikah: 'Kad Nikah',
     kafa: 'KAFA',
@@ -1700,6 +1704,38 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       {/* UKOKO Specific Layout */}
       {isUkokoPR && ukokoPrData.aduan && (
         <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-sky-600 pl-2">
+                Pembelian Buku Baharu
+              </h3>
+              <div className="rounded-xl border border-sky-100 bg-sky-50 p-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-sky-900 uppercase">Bilangan</span>
+                  <span className="text-xl font-black text-sky-700">{ukokoPrBookPurchase.bilangan || 0}</span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-slate-600 pl-2">
+                Kategori Buku Baharu
+              </h3>
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                {ukokoPrBookCategories.length > 0 ? (
+                  <ul className="space-y-2">
+                    {ukokoPrBookCategories.map((item: any, index: number) => (
+                      <li key={item.id || index} className="text-sm font-bold text-slate-700">
+                        {index + 1}. {item.name || 'Kategori tanpa nama'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm font-medium text-slate-500">Tiada kategori buku baharu dimasukkan.</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">

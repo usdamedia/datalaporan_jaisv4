@@ -16,6 +16,13 @@ import { useFormLogic } from './useFormLogic';
 import { UKOKO_PR_2024_REFERENCE } from '../../constants';
 
 interface UkokoPRData {
+  pembelianBukuBaharu: {
+    bilangan: number;
+    kategoriBukuBaharu: Array<{
+      id: string;
+      name: string;
+    }>;
+  };
   aduan: {
     sumber: {
       talikhidmat: number;
@@ -74,6 +81,10 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     saveError
   } = useFormLogic(deptName, {
     pr: {
+      pembelianBukuBaharu: {
+        bilangan: 0,
+        kategoriBukuBaharu: []
+      },
       aduan: {
         sumber: { talikhidmat: 0, lain: 0 },
         statusSelesai: 0,
@@ -107,6 +118,10 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   });
 
   const prData = {
+    pembelianBukuBaharu: {
+      bilangan: formData.pr?.pembelianBukuBaharu?.bilangan || 0,
+      kategoriBukuBaharu: formData.pr?.pembelianBukuBaharu?.kategoriBukuBaharu || [],
+    },
     aduan: {
       sumber: {
         talikhidmat: formData.pr?.aduan?.sumber?.talikhidmat || 0,
@@ -154,6 +169,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   } as UkokoPRData;
   const [newCustomKategori, setNewCustomKategori] = React.useState('');
   const [newCustomLokasi, setNewCustomLokasi] = React.useState('');
+  const [newBookCategory, setNewBookCategory] = React.useState('');
 
   const updateField = (path: string, value: string) => {
     const numValue = parseInt(value) || 0;
@@ -284,6 +300,75 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     }));
   };
 
+  const updateBookPurchaseCount = (value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        pembelianBukuBaharu: {
+          ...(prev.pr?.pembelianBukuBaharu || {}),
+          bilangan: parseInt(value) || 0,
+        },
+      },
+    }));
+  };
+
+  const addBookCategory = () => {
+    const trimmed = newBookCategory.trim();
+    if (!trimmed) return;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        pembelianBukuBaharu: {
+          ...(prev.pr?.pembelianBukuBaharu || {}),
+          kategoriBukuBaharu: [
+            ...((prev.pr?.pembelianBukuBaharu?.kategoriBukuBaharu) || []),
+            {
+              id: `${Date.now()}-${trimmed.toLowerCase().replace(/\s+/g, '-')}`,
+              name: trimmed,
+            },
+          ],
+        },
+      },
+    }));
+    setNewBookCategory('');
+  };
+
+  const updateBookCategory = (id: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        pembelianBukuBaharu: {
+          ...(prev.pr?.pembelianBukuBaharu || {}),
+          kategoriBukuBaharu: ((prev.pr?.pembelianBukuBaharu?.kategoriBukuBaharu) || []).map((item: any) =>
+            item.id === id
+              ? {
+                  ...item,
+                  name: value,
+                }
+              : item
+          ),
+        },
+      },
+    }));
+  };
+
+  const removeBookCategory = (id: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      pr: {
+        ...prev.pr,
+        pembelianBukuBaharu: {
+          ...(prev.pr?.pembelianBukuBaharu || {}),
+          kategoriBukuBaharu: ((prev.pr?.pembelianBukuBaharu?.kategoriBukuBaharu) || []).filter((item: any) => item.id !== id),
+        },
+      },
+    }));
+  };
+
   // Calculations
   const totalAduanSumber = prData.aduan.sumber.talikhidmat + prData.aduan.sumber.lain;
   const totalAduanKategori =
@@ -406,6 +491,99 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
           <p className="mt-4 max-w-3xl text-sm font-medium leading-6 text-indigo-50">
             Borang ini kini dipaparkan dalam susun atur satu aliran supaya item yang diisi mengikuti turutan komponen yang sama seperti paparan PDF eksport.
           </p>
+        </section>
+
+        <section className="overflow-hidden rounded-[2rem] border border-sky-100 bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-8 flex items-center gap-3 border-b border-sky-50 pb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
+              <Building2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-sky-950">Pembelian Buku Baharu</h3>
+              <p className="text-xs font-bold uppercase tracking-widest text-sky-400">Unit Komunikasi dan Pusat Sumber</p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+            <div className="rounded-3xl border border-sky-100 bg-sky-50 p-5">
+              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-sky-500">Bilangan</label>
+              <input
+                type="number"
+                value={prData.pembelianBukuBaharu.bilangan}
+                onChange={(e) => updateBookPurchaseCount(e.target.value)}
+                className="mt-3 w-full rounded-2xl border border-sky-200 bg-white px-4 py-3 text-center text-3xl font-black text-sky-950 outline-none focus:ring-2 focus:ring-sky-500"
+                placeholder="0"
+              />
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-black uppercase tracking-[0.18em] text-slate-800">Kategori Buku Baharu</h4>
+                  <p className="mt-1 text-xs font-medium text-slate-500">Admin boleh tambah, simpan, dan padam kategori buku mengikut keperluan.</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {(prData.pembelianBukuBaharu.kategoriBukuBaharu || []).map((item) => (
+                  <div key={item.id} className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-3 md:flex-row">
+                    <input
+                      type="text"
+                      value={item.name}
+                      onChange={(e) => updateBookCategory(item.id, e.target.value)}
+                      placeholder="Masukkan kategori buku baharu"
+                      className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-sky-500"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-emerald-700 disabled:opacity-60"
+                      >
+                        <Save className="h-4 w-4" />
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeBookCategory(item.id)}
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-rose-50 px-4 py-3 text-xs font-black uppercase tracking-widest text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="rounded-2xl border border-dashed border-sky-200 bg-sky-50/40 p-4">
+                  <div className="flex flex-col gap-3 md:flex-row">
+                    <input
+                      type="text"
+                      value={newBookCategory}
+                      onChange={(e) => setNewBookCategory(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          addBookCategory();
+                        }
+                      }}
+                      placeholder="Tambah kategori buku baharu"
+                      className="flex-1 rounded-xl border border-sky-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-sky-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={addBookCategory}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-sky-700"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Tambah Kategori
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="overflow-hidden rounded-[2rem] border border-indigo-100 bg-white p-6 shadow-sm md:p-8">
