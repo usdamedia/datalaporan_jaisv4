@@ -344,6 +344,7 @@ interface ReportPDFProps {
 const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const [mainDept, unitName] = deptName.split(' : ');
   const targetName = unitName || deptName;
+  const isIntegriti = deptName.includes('INTEGRITI');
   const isBKIM = deptName.includes('BKIM');
   const isBPP = deptName.includes('BPNP');
   const isBpnPenyelidikan = targetName.toUpperCase().includes('UNIT PENYELIDIKAN');
@@ -407,8 +408,16 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
-  const shouldRenderBasicInfo = true;
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan);
+  const integritiRows = [
+    { label: 'Mesyuarat Jawatankuasa Tatakelola', reference: 3, value: formData.integriti?.bilMesyuaratTatakelola || 0 },
+    { label: 'Video Integriti', reference: 11, value: formData.integriti?.bilVideoIntegriti || 0 },
+    { label: 'Dokumen Integriti Dikeluarkan', reference: 5, value: formData.integriti?.bilDokumenIntegriti || 0 },
+    { label: 'Manual', reference: 1, value: formData.integriti?.bilManualIntegriti || 0 },
+    { label: 'Polisi', reference: 4, value: formData.integriti?.bilPolisiIntegriti || 0 },
+    { label: 'Program / Aktiviti', reference: 31, value: formData.integriti?.bilProgramIntegriti || 0 },
+  ];
+  const shouldRenderBasicInfo = !isIntegriti;
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isIntegriti);
 
   return (
     <Document>
@@ -441,6 +450,46 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.value}>{formData.tarikh || '-'}</Text>
             </View>
           </View>
+        )}
+
+        {isIntegriti && (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Kemaskini Pencapaian Unit Integriti</Text>
+              <View style={styles.narrativeBox}>
+                <Text style={styles.narrativeText}>
+                  Data 2024 dipaparkan sebagai rujukan statik. Lajur 2025 memaparkan input semasa bagi item yang sama.
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Nota Rujukan 2024</Text>
+              <View style={styles.narrativeBox}>
+                <Text style={styles.narrativeText}>Dokumen integriti tahun 2024 berjumlah 5 dokumen.</Text>
+                <Text style={[styles.narrativeText, { marginTop: 6 }]}>1. 1 manual</Text>
+                <Text style={styles.narrativeText}>2. 4 polisi</Text>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Grid Kemaskini 2025</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Kategori Aktiviti</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Data 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Data 2025</Text></View>
+                </View>
+                {integritiRows.map((row) => (
+                  <View key={row.label} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '50%' }]}><Text>{row.label}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{row.reference}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{row.value}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </>
         )}
 
         {/* BPNP Specific Data */}
