@@ -2,7 +2,6 @@ import React from 'react';
 import BkimForm from './forms/BkimForm';
 import BpnpForm from './forms/BpnpForm';
 import UppForm from './forms/UppForm';
-import IntegritiForm from './forms/IntegritiForm';
 import DakwahForm from './forms/DakwahForm';
 import BkspForm from './forms/BkspForm';
 import BpdsForm from './forms/BpdsForm';
@@ -76,10 +75,6 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
 
   if (normalizedDeptName.includes('UPP')) {
     return <UppForm deptName={deptName} onBack={onBack} />;
-  }
-
-  if (normalizedDeptName.includes('INTEGRITI') || normalizedDeptName.includes('KUALITI')) {
-    return <IntegritiForm deptName={deptName} onBack={onBack} />;
   }
 
   if (normalizedDeptName.includes('DAKWAH') || normalizedDeptName.includes('BDKWH')) {

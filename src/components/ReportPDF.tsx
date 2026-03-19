@@ -1,6 +1,6 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, INTEGRITI_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 // Register fonts if needed, but standard ones are usually fine
 // Font.register({ family: 'Helvetica', src: '...' });
@@ -350,7 +350,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBpnStrategik = targetName.toUpperCase().includes('UNIT PERANCANGAN STRATEGIK');
   const isBpnAkidah = targetName.toUpperCase().includes('UNIT AKIDAH TAPISAN');
   const isUPP = deptName.includes('UPP');
-  const isIntegriti = deptName.includes('INTEGRITI');
   const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
   const isBKKI = deptName.includes('BKKI') || deptName.includes('Keluarga Islam');
   const isBPH = deptName.includes('BPH') || deptName.includes('Halal');
@@ -366,22 +365,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isHR = deptName.includes('HR & Latihan');
   const isPentadbiran = targetName.includes('Pentadbiran');
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
-  const integritiLinks = formData.integriti?.dokumentasi?.links || [];
-  const totalDokumentasiIntegriti =
-    (parseInt(formData.integriti?.dokumentasi?.manual) || 0) +
-    (parseInt(formData.integriti?.dokumentasi?.polisi) || 0);
-  const iso9001Status = formData.quality?.iso9001?.status?.trim() || '';
-  const iso37001Status = formData.quality?.iso37001?.status?.trim() || '';
-  const integritiCertificationStatus =
-    iso9001Status.toLowerCase().includes('recommend') ||
-    iso37001Status.toLowerCase().includes('recommend')
-      ? 'CERTIFIED'
-      : 'PENDING';
-  const activeIntegritiFrameworks = [
-    formData.quality?.frameworks?.mbef ? 'MBEF' : null,
-    formData.quality?.frameworks?.scsScorecard ? 'SCS Scorecard' : null,
-    formData.quality?.frameworks?.eksa ? 'EKSA' : null,
-  ].filter(Boolean);
   const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
   const bkspPuncaKrisisData = (formData.bksp?.puncaKrisis || [])
     .filter((p: any) => (p.value || 0) > 0)
@@ -424,8 +407,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
-  const shouldRenderBasicInfo = !isIntegriti;
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isIntegriti);
+  const shouldRenderBasicInfo = true;
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan);
 
   return (
     <Document>
@@ -1721,222 +1704,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 ))}
               </View>
             </View>
-          </>
-        )}
-
-        {/* Integriti Data */}
-        {isIntegriti && formData.integriti && (
-          <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Laporan Unit Integriti (UI) 2025</Text>
-              <View style={[styles.table, { backgroundColor: '#FDE047' }]}>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: '#0a1e3b', fontWeight: 'bold' }}>JUMLAH PROGRAM / AKTIVITI INTEGRITI</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: '#0a1e3b', fontWeight: 'bold' }}>{String(formData.integriti.tadbirUrus.program || 0)}</Text></View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Ringkasan Utama</Text>
-              <View style={styles.statsGrid}>
-                <View style={styles.statsColumn}>
-                  <View style={[styles.infoCard, { backgroundColor: '#fef9c3', borderColor: '#fde68a' }]}>
-                    <Text style={[styles.infoCardLabel, { color: '#a16207' }]}>Jumlah Program</Text>
-                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.program || 0)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.program)}</Text>
-                  </View>
-                </View>
-                <View style={styles.statsColumn}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoCardLabel}>Mesyuarat Tatakelola</Text>
-                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.mesyuarat || 0)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat)}</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.statsGrid}>
-                <View style={styles.statsColumn}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoCardLabel}>Jumlah Dokumen</Text>
-                    <Text style={styles.infoCardValue}>{String(totalDokumentasiIntegriti)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.dokumentasi.total)}</Text>
-                  </View>
-                </View>
-                <View style={styles.statsColumn}>
-                  <View style={[styles.infoCard, integritiCertificationStatus === 'CERTIFIED' ? { backgroundColor: '#f0fdfa', borderColor: '#99f6e4' } : { backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }]}>
-                    <Text style={styles.infoCardLabel}>Status ISO</Text>
-                    <Text style={styles.infoCardValue}>{integritiCertificationStatus}</Text>
-                    <Text style={styles.infoCardRef}>Berdasarkan syor keputusan audit</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Tadbir Urus & Aktiviti</Text>
-              <View style={styles.statsGrid}>
-                <View style={styles.statsColumn}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoCardLabel}>Mesyuarat Tatakelola</Text>
-                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.mesyuarat || 0)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.mesyuarat)}</Text>
-                  </View>
-                </View>
-                <View style={styles.statsColumn}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoCardLabel}>Program / Aktiviti Integriti</Text>
-                    <Text style={styles.infoCardValue}>{String(formData.integriti.tadbirUrus.program || 0)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.tadbirUrus.program)}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Kandungan Multimedia</Text>
-              <View style={styles.statsGrid}>
-                <View style={styles.statsColumn}>
-                  <View style={styles.infoCard}>
-                    <Text style={styles.infoCardLabel}>Video Dihasilkan</Text>
-                    <Text style={styles.infoCardValue}>{String(formData.integriti.multimedia.video || 0)}</Text>
-                    <Text style={styles.infoCardRef}>REF 2024: {String(INTEGRITI_2024_REFERENCE.multimedia.video)}</Text>
-                  </View>
-                </View>
-                <View style={styles.statsColumn}>
-                  <View style={[styles.infoCard, { backgroundColor: '#fafafa' }]}>
-                    <Text style={styles.infoCardLabel}>Nota</Text>
-                    <Text style={[styles.value, { width: '100%' }]}>Termasuk video pertandingan integriti.</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Dokumentasi Integriti</Text>
-              <View style={styles.infoCard}>
-                <View style={[styles.row, { marginBottom: 6 }]}>
-                  <Text style={styles.infoCardLabel}>Manual</Text>
-                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.integriti.dokumentasi.manual || 0)}</Text>
-                </View>
-                <View style={[styles.row, { marginBottom: 0 }]}>
-                  <Text style={styles.infoCardLabel}>Polisi</Text>
-                  <Text style={[styles.value, { textAlign: 'right', fontWeight: 'bold', color: '#0a1e3b' }]}>{String(formData.integriti.dokumentasi.polisi || 0)}</Text>
-                </View>
-                <View style={styles.totalRow}>
-                  <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#0a1e3b', textTransform: 'uppercase' }}>Jumlah Besar</Text>
-                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#0a1e3b' }}>{String(totalDokumentasiIntegriti)}</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Pautan Dokumen Integriti</Text>
-              {integritiLinks.length > 0 ? (
-                integritiLinks.map((link: any, idx: number) => (
-                  <View key={idx} style={styles.linkCard}>
-                    <Text style={styles.linkTitle}>{link.title || `Dokumen ${idx + 1}`}</Text>
-                    <Text style={styles.linkUrl}>{link.url || '-'}</Text>
-                  </View>
-                ))
-              ) : (
-                <Text style={styles.emptyState}>Tiada pautan dokumen dimasukkan.</Text>
-              )}
-            </View>
-
-            {/* Quality Initiatives inside Integriti */}
-            {formData.quality && (
-              <>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Inisiatif Kualiti</Text>
-                  <View style={[styles.table, { backgroundColor: '#0D9488' }]}>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>STATUS PENSIJILAN ISO</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={{ color: 'white', fontWeight: 'bold' }}>{integritiCertificationStatus}</Text></View>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Audit ISO 9001:2015</Text>
-                  <View style={styles.table} wrap={false}>
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>Maklumat</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Badan Audit</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso9001.badanAudit || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Tarikh Audit</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso9001.tarikhAudit || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Syor Keputusan</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{iso9001Status || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>NCR / OFI</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso9001.ncr || 0} / {formData.quality.iso9001.ofi || 0}</Text></View>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Audit ISO 37001:2016 (ABMS)</Text>
-                  <View style={styles.table} wrap={false}>
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>Maklumat</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Badan Audit</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso37001.badanAudit || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Tarikh Audit</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso37001.tarikhAudit || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Syor Keputusan</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{iso37001Status || '-'}</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>NCR / OFI</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '60%' }]}><Text>{formData.quality.iso37001.ncr || 0} / {formData.quality.iso37001.ofi || 0}</Text></View>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Frameworks & Prestasi</Text>
-                  {activeIntegritiFrameworks.length > 0 ? (
-                    activeIntegritiFrameworks.map((framework) => (
-                      <View key={framework} style={styles.linkCard}>
-                        <Text style={styles.linkTitle}>{framework}</Text>
-                      </View>
-                    ))
-                  ) : (
-                    <Text style={styles.emptyState}>Tiada framework dipilih.</Text>
-                  )}
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Inisiatif Kualiti Tambahan</Text>
-                  {formData.quality.additionalInitiatives.length > 0 ? (
-                    formData.quality.additionalInitiatives.map((initiative: any, idx: number) => (
-                      <View key={idx} style={styles.linkCard}>
-                        <Text style={styles.linkTitle}>{initiative.title || `Inisiatif ${idx + 1}`}</Text>
-                        <Text style={styles.value}>{initiative.status || '-'}</Text>
-                      </View>
-                    ))
-                  ) : (
-                    <Text style={styles.emptyState}>Tiada inisiatif tambahan dimasukkan.</Text>
-                  )}
-                </View>
-              </>
-            )}
           </>
         )}
 

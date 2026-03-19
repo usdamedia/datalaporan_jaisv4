@@ -61,7 +61,6 @@ export const DEPARTMENTS: Department[] = [
       { id: 'ukoko-lain', name: 'Sub Unit UKOKO (Kemaskini Kemudian)', active: false },
     ]
   },
-  { id: '10', name: 'Unit Integriti UI', active: true },
 ];
 
 export const getIconForDept = (name: string) => {
