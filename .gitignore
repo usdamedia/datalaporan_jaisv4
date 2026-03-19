@@ -1,4 +1,7 @@
 node_modules/
+dist/
+dev_server.log
+.Jules/
 .env
 .env.local
 .env.development.local

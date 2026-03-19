@@ -21,6 +21,7 @@ import {
 
 export const DEPARTMENTS: Department[] = [
   { id: '13', name: 'UPP UNIT PENGURUSAN PROJEK', active: true },
+  { id: '17', name: 'UNIT INTEGRITI', active: true },
   {
     id: '1',
     name: 'Bahagian Pentadbiran & Pengurusan Sumber BPPS',
