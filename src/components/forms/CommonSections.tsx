@@ -169,6 +169,7 @@ export const LawatanSection: React.FC<{
             <button 
               onClick={() => removeLawatan(index)}
               className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+              aria-label="Padam lawatan"
             >
               <Trash2 className="w-4 h-4" />
             </button>
