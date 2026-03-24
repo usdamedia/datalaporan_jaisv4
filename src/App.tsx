@@ -137,6 +137,7 @@ export default function App() {
             <div className="relative bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 max-w-md w-full shadow-2xl animate-scale-in max-h-[90vh] overflow-y-auto">
               <button 
                 onClick={resetSelection}
+                aria-label="Tutup"
                 className="absolute top-3 right-3 md:top-4 md:right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors hover:bg-gray-100 rounded-full"
               >
                 <X className="w-5 h-5" />

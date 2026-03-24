@@ -22,10 +22,11 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <label htmlFor="tarikh" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
           <Calendar className="w-3 h-3" /> Tarikh Laporan
         </label>
         <input 
+          id="tarikh"
           type="date"
           name="tarikh"
           value={formData.tarikh}
@@ -34,10 +35,11 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         />
       </div>
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <label htmlFor="disediakanOleh" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
           <User className="w-3 h-3" /> Disediakan Oleh
         </label>
         <input 
+          id="disediakanOleh"
           type="text"
           name="disediakanOleh"
           placeholder="Nama Pegawai"
@@ -47,10 +49,11 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         />
       </div>
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <label htmlFor="jawatan" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
           <Briefcase className="w-3 h-3" /> Jawatan
         </label>
         <input 
+          id="jawatan"
           type="text"
           name="jawatan"
           placeholder="Jawatan Pegawai"
@@ -74,10 +77,11 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
 
     <div className="space-y-6">
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <label htmlFor="ringkasan" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
           Ringkasan Pencapaian Utama 2025
         </label>
         <textarea 
+          id="ringkasan"
           name="ringkasan"
           rows={4}
           placeholder="Nyatakan pencapaian utama bahagian anda..."
@@ -89,10 +93,11 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+          <label htmlFor="isu" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
             <MessageSquare className="w-3 h-3" /> Isu & Cabaran
           </label>
           <textarea 
+            id="isu"
             name="isu"
             rows={3}
             placeholder="Isu yang dihadapi..."
@@ -102,10 +107,11 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           ></textarea>
         </div>
         <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+          <label htmlFor="cadangan" className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
             <Lightbulb className="w-3 h-3" /> Cadangan Penambahbaikan
           </label>
           <textarea 
+            id="cadangan"
             name="cadangan"
             rows={3}
             placeholder="Cadangan untuk 2026..."
@@ -168,6 +174,7 @@ export const LawatanSection: React.FC<{
           <div key={index} className="p-5 border border-gray-100 rounded-2xl bg-gray-50/50 relative group animate-slide-in-right">
             <button 
               onClick={() => removeLawatan(index)}
+              aria-label="Buang Lawatan"
               className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
             >
               <Trash2 className="w-4 h-4" />
@@ -175,8 +182,9 @@ export const LawatanSection: React.FC<{
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis</label>
+                <label htmlFor={`jenis-${index}`} className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis</label>
                 <select 
+                  id={`jenis-${index}`}
                   value={item.jenis}
                   onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
                   className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-zus-gold/20"
@@ -186,8 +194,9 @@ export const LawatanSection: React.FC<{
                 </select>
               </div>
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tajuk Agensi / Program</label>
+                <label htmlFor={`tajukAgensi-${index}`} className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tajuk Agensi / Program</label>
                 <input 
+                  id={`tajukAgensi-${index}`}
                   type="text"
                   value={item.tajukAgensi}
                   onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
@@ -199,16 +208,19 @@ export const LawatanSection: React.FC<{
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tarikh & Tempat</label>
+                <label htmlFor={`tarikh-${index}`} className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tarikh & Tempat</label>
                 <div className="flex gap-2">
                   <input 
+                    id={`tarikh-${index}`}
                     type="date"
                     value={item.tarikh}
                     onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
                     className="flex-1 p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
                   />
                   <input 
+                    id={`tempat-${index}`}
                     type="text"
+                    aria-label={`Tempat untuk lawatan ${index + 1}`}
                     value={item.tempat}
                     onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
                     placeholder="Tempat"
@@ -217,8 +229,9 @@ export const LawatanSection: React.FC<{
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Objektif</label>
+                <label htmlFor={`objektif-${index}`} className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Objektif</label>
                 <input 
+                  id={`objektif-${index}`}
                   type="text"
                   value={item.objektif}
                   onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
