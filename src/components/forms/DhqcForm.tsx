@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { Anchor, BookOpen, Gavel, MapPin, Save, Users } from 'lucide-react';
+import { Anchor, BookOpen, Gavel, MapPin, Plus, Save, Trash2, Users } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { DHQC_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
 
 const DIVISION_FIELD_MAP: Record<string, keyof typeof DHQC_2024_REFERENCE.guruAlQuran> = {
@@ -27,6 +28,10 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     isSaving,
     showSuccess,
     saveError,
+    handleInputChange,
+    addLawatan,
+    removeLawatan,
+    updateLawatan,
   } = useFormLogic('DHQC', {
     dhqc: {
       pusatPemuliaan: [],
@@ -137,6 +142,26 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     });
   };
 
+  const addPusat2025 = () => {
+    setFormData((prev: any) => ({
+      ...prev,
+      dhqc: {
+        ...prev.dhqc,
+        pusatPemuliaan: [...(prev.dhqc.pusatPemuliaan || []), { lokasi: '', bahagian: '' }],
+      },
+    }));
+  };
+
+  const removePusat2025 = (index: number) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      dhqc: {
+        ...prev.dhqc,
+        pusatPemuliaan: (prev.dhqc.pusatPemuliaan || []).filter((_: any, currentIndex: number) => currentIndex !== index),
+      },
+    }));
+  };
+
   const statCards = [
     {
       label: 'Jumlah Guru Al-Quran',
@@ -175,6 +200,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       formData={formData}
     >
       <div className="space-y-8">
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
       <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0d4f45] via-[#0b3c35] to-[#072822] text-white shadow-[0_20px_60px_rgba(7,40,34,0.22)]">
         <div className="grid gap-8 px-6 py-8 md:grid-cols-[1.4fr_0.8fr] md:px-8">
           <div>
@@ -235,60 +261,105 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
           <div>
             <h3 className="text-lg font-black uppercase tracking-tight">Komponen A: Pusat Pemuliaan & Statistik Debu</h3>
-            <p className="text-xs font-semibold text-white/70">Lokasi rujukan 2024 dipaparkan kekal, input 2025 diisi pada ruang sebelah.</p>
+            <p className="text-xs font-semibold text-white/70">Data pusat pemuliaan 2024 kekal sebagai rujukan statik, manakala pusat pemuliaan 2025 ditambah sebagai rekod baharu.</p>
           </div>
         </div>
 
         <div className="grid gap-8 p-6 xl:grid-cols-[1.25fr_0.95fr]">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Pusat Pemuliaan Al-Quran</h4>
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Pusat Pemuliaan Al-Quran 2024</h4>
               <span className="rounded-full bg-[#dff2ea] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#0d4f45]">
-                Total 2025: {totalPusat2025}
+                Ref 2024: {DHQC_2024_REFERENCE.pusatPemuliaan.length}
               </span>
             </div>
 
             <div className="grid gap-4">
-              {DHQC_2024_REFERENCE.pusatPemuliaan.map((item, index) => {
-                const current2025 = formData.dhqc.pusatPemuliaan[index] || { lokasi: '', bahagian: '' };
-
-                return (
-                  <div key={`${item.lokasi}-${item.bahagian}`} className="grid gap-4 rounded-[1.5rem] border border-gray-100 bg-[#fbfcfb] p-4 lg:grid-cols-2">
-                    <div className="rounded-[1.35rem] border border-[#dce7e2] bg-white p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Rujukan 2024</p>
-                      <p className="mt-3 text-sm font-black text-[#0d3b35]">{item.lokasi}</p>
-                      <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#947225]">{item.bahagian}</p>
-                    </div>
-
-                    <div className="space-y-3 rounded-[1.35rem] border border-[#f5e8bb] bg-[#fffaf0] p-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#947225]">Input 2025</p>
-                      <input
-                        type="text"
-                        value={current2025.lokasi}
-                        onChange={(e) => updatePusat(index, 'lokasi', e.target.value)}
-                        placeholder="Masukkan lokasi 2025"
-                        className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
-                      />
-                      <select
-                        value={current2025.bahagian}
-                        onChange={(e) => updatePusat(index, 'bahagian', e.target.value)}
-                        className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
-                      >
-                        <option value="">Pilih Bahagian 2025</option>
-                        {SARAWAK_DIVISIONS.map((division) => (
-                          <option key={division} value={division}>
-                            {division}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+              {DHQC_2024_REFERENCE.pusatPemuliaan.map((item) => (
+                <div key={`${item.lokasi}-${item.bahagian}`} className="rounded-[1.5rem] border border-gray-100 bg-[#fbfcfb] p-4">
+                  <div className="rounded-[1.35rem] border border-[#dce7e2] bg-white p-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Rujukan 2024</p>
+                    <p className="mt-3 text-sm font-black text-[#0d3b35]">{item.lokasi}</p>
+                    <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#947225]">{item.bahagian}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="space-y-4">
+            <div className="rounded-[1.6rem] border border-[#dce7e2] bg-[#f8fcfa] p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-[#dff2ea] p-3 text-[#0d4f45]">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Tambah Pusat Pemuliaan 2025</h4>
+                    <p className="text-xs font-medium text-slate-500">Tambah rekod pusat pemuliaan Al-Quran baharu untuk tahun 2025.</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={addPusat2025}
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0d4f45] px-4 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-[#0b4038]"
+                >
+                  <Plus className="h-4 w-4" />
+                  Tambah
+                </button>
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-black uppercase tracking-[0.16em] text-[#0d3b35]">Senarai 2025</span>
+                  <span className="rounded-full bg-[#dff2ea] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#0d4f45]">
+                    Total 2025: {totalPusat2025}
+                  </span>
+                </div>
+
+                {(formData.dhqc.pusatPemuliaan || []).length === 0 && (
+                  <div className="rounded-[1.35rem] border border-dashed border-[#c9ded6] bg-white px-4 py-5 text-sm font-medium text-slate-500">
+                    Tiada pusat pemuliaan 2025 ditambah lagi. Klik butang <strong>Tambah</strong> untuk menambah rekod baharu.
+                  </div>
+                )}
+
+                {(formData.dhqc.pusatPemuliaan || []).map((item: { lokasi?: string; bahagian?: string }, index: number) => (
+                  <div key={`pusat-2025-${index}`} className="space-y-3 rounded-[1.35rem] border border-[#f5e8bb] bg-[#fffaf0] p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#947225]">Pusat Pemuliaan 2025 #{index + 1}</p>
+                      <button
+                        type="button"
+                        onClick={() => removePusat2025(index)}
+                        className="inline-flex items-center gap-1 rounded-xl bg-rose-50 px-3 py-2 text-[11px] font-black uppercase tracking-widest text-rose-600 ring-1 ring-rose-100 transition hover:bg-rose-100"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Padam
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={item.lokasi || ''}
+                      onChange={(e) => updatePusat(index, 'lokasi', e.target.value)}
+                      placeholder="Masukkan lokasi pusat pemuliaan 2025"
+                      className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
+                    />
+                    <select
+                      value={item.bahagian || ''}
+                      onChange={(e) => updatePusat(index, 'bahagian', e.target.value)}
+                      className="w-full rounded-xl border border-[#eadfb6] bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[#d4ab3a] focus:ring-2 focus:ring-[#f0cf73]/40"
+                    >
+                      <option value="">Pilih bahagian 2025</option>
+                      {SARAWAK_DIVISIONS.map((division) => (
+                        <option key={division} value={division}>
+                          {division}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="rounded-[1.6rem] border border-[#dce7e2] bg-[#f8fcfa] p-5">
               <div className="flex items-center gap-3">
                 <div className="rounded-2xl bg-[#dff2ea] p-3 text-[#0d4f45]">
@@ -489,6 +560,17 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
         </div>
       </section>
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+
+      <LawatanSection
+        formData={formData}
+        addLawatan={addLawatan}
+        removeLawatan={removeLawatan}
+        updateLawatan={updateLawatan}
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
 
       <section className="rounded-[2rem] border border-[#d6e4dd] bg-gradient-to-r from-[#f8fcfa] to-[#fffaf0] p-6 shadow-sm print:hidden">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

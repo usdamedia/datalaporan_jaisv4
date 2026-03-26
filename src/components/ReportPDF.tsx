@@ -1,9 +1,29 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 // Register fonts if needed, but standard ones are usually fine
 // Font.register({ family: 'Helvetica', src: '...' });
+
+const DHQC_DIVISION_FIELD_MAP: Record<string, keyof typeof DHQC_2024_REFERENCE.guruAlQuran> = {
+  Kuching: 'kuching',
+  Samarahan: 'samarahan',
+  Serian: 'serian',
+  'Sri Aman': 'sriAman',
+  Betong: 'betong',
+  Sarikei: 'sarikei',
+  Sibu: 'sibu',
+  Mukah: 'mukah',
+  Kapit: 'kapit',
+  Bintulu: 'bintulu',
+  Miri: 'miri',
+  Limbang: 'limbang',
+};
+
+const formatPdfValue = (value: unknown) => {
+  if (value === '' || value === null || value === undefined) return '0';
+  return String(value);
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -1656,19 +1676,86 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Berat Debu (Tan)</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formData.dhqc.statistikDebu.berat || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.statistikDebu.berat)}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Kekerapan Pemuliaan</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formData.dhqc.statistikDebu.kekerapan || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.statistikDebu.kekerapan)}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Penyelia (Ibu Pejabat)</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formData.dhqc.penyelia.ibuPejabat || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.penyelia.ibuPejabat)}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Penyelia (Bintulu)</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formData.dhqc.penyelia.bintulu || 0}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.penyelia.bintulu)}</Text></View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Komponen B: Guru Al-Quran & Qari/Qariah</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '24%' }]}>
+                    <Text style={styles.tableCellHeader}>Nama Bahagian</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>Guru 2024</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>Guru 2025</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>Qari 2024</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>Qari 2025</Text>
+                  </View>
+                </View>
+                {SARAWAK_DIVISIONS.map((division) => {
+                  const key = DHQC_DIVISION_FIELD_MAP[division];
+
+                  return (
+                    <View key={division} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '24%' }]}>
+                        <Text>{division}</Text>
+                      </View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                        <Text>{formatPdfValue(DHQC_2024_REFERENCE.guruAlQuran[key])}</Text>
+                      </View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                        <Text>{formatPdfValue(formData.dhqc.guruAlQuran[key])}</Text>
+                      </View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                        <Text>{formatPdfValue(DHQC_2024_REFERENCE.qariQariah[key])}</Text>
+                      </View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                        <Text>{formatPdfValue(formData.dhqc.qariQariah[key])}</Text>
+                      </View>
+                    </View>
+                  );
+                })}
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '24%' }]}>
+                    <Text style={styles.tableCellHeader}>Jumlah Keseluruhan</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>{formatPdfValue(DHQC_2024_REFERENCE.guruAlQuran.total)}</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>
+                      {String(Object.values(formData.dhqc.guruAlQuran).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0))}
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>{formatPdfValue(DHQC_2024_REFERENCE.qariQariah.total)}</Text>
+                  </View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '19%' }]}>
+                    <Text style={styles.tableCellHeader}>
+                      {String(Object.values(formData.dhqc.qariQariah).reduce((acc: number, val: any) => acc + (parseFloat(val) || 0), 0))}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
