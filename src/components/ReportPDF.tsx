@@ -25,6 +25,29 @@ const formatPdfValue = (value: unknown) => {
   return String(value);
 };
 
+const normalizeKajianPdfEntry = (entry: any) => {
+  if (typeof entry === 'string') {
+    return {
+      jenis: entry.toLowerCase().includes('kaji selidik') ? 'Kaji Selidik' : 'Kajian',
+      tajuk: entry.replace(/^kajian\s*:|^kaji selidik\s*:/i, '').trim(),
+      bilangan: 1,
+    };
+  }
+
+  return {
+    jenis: entry?.jenis === 'Kaji Selidik' ? 'Kaji Selidik' : 'Kajian',
+    tajuk: entry?.tajuk || '',
+    bilangan: entry?.bilangan ?? 1,
+  };
+};
+
+const normalizePenulisanCompetitionPdfEntry = (entry: any) => ({
+  kategori: entry?.kategori || 'Diploma dan ke bawah',
+  namaPemenang: entry?.namaPemenang || '',
+  tempatDimenangi: entry?.tempatDimenangi || 'Johan',
+  tajukKajian: entry?.tajukKajian || '',
+});
+
 const styles = StyleSheet.create({
   page: {
     paddingTop: 42,
@@ -381,6 +404,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PENGURUSAN ACARA');
   const isDHQC = deptName.includes('DHQC');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
+  const isDakwahUnitAlQuran = targetName.toUpperCase().includes('AL-QURAN');
   const isBKSP = deptName.includes('BKSP') || deptName.includes('Kaunseling');
   const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
   const isHR = deptName.includes('HR & Latihan');
@@ -405,6 +429,30 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const ukokoPrTotalLokasi =
     ukokoPrLokasiEntries.reduce((sum: number, [, value]: any) => sum + (value || 0), 0) +
     ukokoPrCustomLokasi.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+  const bpnpKajian2025 = (formData.bpnp?.kajianList || []).map(normalizeKajianPdfEntry);
+  const bpnpPenulisan2025 = (formData.bpnp?.penulisanList || []).map(normalizePenulisanCompetitionPdfEntry);
+  const bpnpKajian2024 = BPNP_2024_REFERENCE.kajian.map((kajian) => normalizeKajianPdfEntry(kajian));
+  const bpnpUnitActivityTotal2025 = Number(formData.bpnp?.unitActivityTotal2025) || 0;
+  const bpnpPenulisan2024 = [
+    {
+      kategori: 'Diploma dan ke bawah',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.johan.nama,
+      tempatDimenangi: 'Johan',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.johan.tajuk,
+    },
+    {
+      kategori: 'Ijazah dan ke atas',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.naibJohan.nama,
+      tempatDimenangi: 'Naib Johan',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.naibJohan.tajuk,
+    },
+    {
+      kategori: 'Ijazah dan ke atas',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.ketiga.nama,
+      tempatDimenangi: 'Ketiga',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.ketiga.tajuk,
+    },
+  ];
   const ukokoPrTotalMaklumBalas =
     (ukokoPrData.maklumBalas?.queueBee?.puas || 0) +
     (ukokoPrData.maklumBalas?.queueBee?.tidakPuas || 0) +
@@ -522,25 +570,80 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             {isBpnPenyelidikan && (
               <>
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Rujukan Data 2024</Text>
+                  <Text style={styles.sectionTitle}>Jumlah Aktiviti Unit Penyelidikan 2025</Text>
                   <View style={styles.narrativeBox}>
-                    {BPNP_2024_REFERENCE.kajian.map((k: string, i: number) => (
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#0f766e' }}>{bpnpUnitActivityTotal2025}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>{`Rujukan Data 2024 (Jumlah: ${bpnpKajian2024.length})`}</Text>
+                  <View style={styles.narrativeBox}>
+                    {bpnpKajian2024.map((k: any, i: number) => (
                       <View key={i} style={[styles.row, { marginBottom: 6 }]}>
                         <Text style={{ width: '10%', fontWeight: 'bold', color: '#2563eb' }}>{i + 1}.</Text>
-                        <Text style={{ width: '90%', color: '#334155' }}>{k}</Text>
+                        <Text style={{ width: '90%', color: '#334155' }}>{`${k.jenis}: ${k.tajuk} (Bilangan: ${k.bilangan})`}</Text>
                       </View>
                     ))}
                   </View>
                 </View>
 
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Senarai Kajian / Kaji Selidik 2025</Text>
-                  {formData.bpnp.kajianList.map((k: string, i: number) => (
-                    <View key={i} style={styles.row}>
-                      <Text style={{ width: '10%', fontWeight: 'bold' }}>{i+1}.</Text>
-                      <Text style={{ width: '90%' }}>{k || '................................'}</Text>
+                  <Text style={styles.sectionTitle}>Senarai Kajian dan Kaji Selidik Dihasilkan (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '20%' }]}><Text style={styles.tableCellHeader}>Jenis Kajian</Text></View>
+                      <View style={[styles.tableCell, { width: '60%' }]}><Text style={styles.tableCellHeader}>Nama Kajian / Kaji Selidik</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Bilangan</Text></View>
+                    </View>
+                  {bpnpKajian2025.map((k: any, i: number) => (
+                    <View key={i} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '20%' }]}><Text>{k.jenis}</Text></View>
+                      <View style={[styles.tableCell, { width: '60%' }]}><Text>{k.tajuk || '................................'}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formatPdfValue(k.bilangan)}</Text></View>
                     </View>
                   ))}
+                  </View>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>{`Rujukan Data 2024 (Jumlah: ${bpnpPenulisan2024.length})`}</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '24%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                      <View style={[styles.tableCell, { width: '18%' }]}><Text style={styles.tableCellHeader}>Tempat</Text></View>
+                      <View style={[styles.tableCell, { width: '24%' }]}><Text style={styles.tableCellHeader}>Nama Pemenang</Text></View>
+                      <View style={[styles.tableCell, { width: '34%' }]}><Text style={styles.tableCellHeader}>Tajuk Kajian</Text></View>
+                    </View>
+                    {bpnpPenulisan2024.map((item: any, i: number) => (
+                      <View key={i} style={styles.tableRow}>
+                        <View style={[styles.tableCell, { width: '24%' }]}><Text>{item.kategori}</Text></View>
+                        <View style={[styles.tableCell, { width: '18%' }]}><Text>{item.tempatDimenangi}</Text></View>
+                        <View style={[styles.tableCell, { width: '24%' }]}><Text>{item.namaPemenang}</Text></View>
+                        <View style={[styles.tableCell, { width: '34%' }]}><Text>{item.tajukKajian}</Text></View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Senarai Pemenang Pertandingan Penulisan Ilmiah (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '24%' }]}><Text style={styles.tableCellHeader}>Kategori</Text></View>
+                      <View style={[styles.tableCell, { width: '18%' }]}><Text style={styles.tableCellHeader}>Tempat</Text></View>
+                      <View style={[styles.tableCell, { width: '24%' }]}><Text style={styles.tableCellHeader}>Nama Pemenang</Text></View>
+                      <View style={[styles.tableCell, { width: '34%' }]}><Text style={styles.tableCellHeader}>Tajuk Kajian</Text></View>
+                    </View>
+                    {bpnpPenulisan2025.map((item: any, i: number) => (
+                      <View key={i} style={styles.tableRow}>
+                        <View style={[styles.tableCell, { width: '24%' }]}><Text>{item.kategori}</Text></View>
+                        <View style={[styles.tableCell, { width: '18%' }]}><Text>{item.tempatDimenangi}</Text></View>
+                        <View style={[styles.tableCell, { width: '24%' }]}><Text>{item.namaPemenang || '................................'}</Text></View>
+                        <View style={[styles.tableCell, { width: '34%' }]}><Text>{item.tajukKajian || '................................'}</Text></View>
+                      </View>
+                    ))}
+                  </View>
                 </View>
               </>
             )}
@@ -548,11 +651,18 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             {isBpnStrategik && (
               <>
                 <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Jumlah Aktiviti Unit Perancangan Strategik 2025</Text>
+                  <View style={styles.narrativeBox}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#047857' }}>{bpnpUnitActivityTotal2025}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Kajian & Kaji Selidik 2025</Text>
-                  {formData.bpnp.kajianList.map((k: string, i: number) => (
+                  {bpnpKajian2025.map((k: any, i: number) => (
                     <View key={i} style={styles.row}>
                       <Text style={{ width: '10%', fontWeight: 'bold' }}>{i+1}.</Text>
-                      <Text style={{ width: '90%' }}>{k || '................................'}</Text>
+                      <Text style={{ width: '90%' }}>{`${k.jenis}: ${k.tajuk || '................................'} (Bilangan: ${k.bilangan})`}</Text>
                     </View>
                   ))}
                 </View>
@@ -625,6 +735,13 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
             {isBpnAkidah && (
               <>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Jumlah Aktiviti Unit Akidah Tapisan 2025</Text>
+                  <View style={styles.narrativeBox}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#0891b2' }}>{bpnpUnitActivityTotal2025}</Text>
+                  </View>
+                </View>
+
                 <View style={styles.section}>
                   <Text style={styles.sectionTitle}>Statistik Aktiviti & Operasi (2025)</Text>
                   <View style={styles.table} wrap={false}>
@@ -935,6 +1052,53 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* DAKWAH Specific Data */}
         {isDakwah && formData.dakwah && (
           <>
+            {isDakwahUnitAlQuran ? (
+              <>
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Unit Al-Quran: Statistik Debu (2025)</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Berat Debu Al-Quran (Tan)</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{DHQC_2024_REFERENCE.statistikDebu.berat}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formatPdfValue(formData.dakwah.alQuran?.statistikDebu?.berat)}</Text></View>
+                    </View>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kekerapan Pemuliaan</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{DHQC_2024_REFERENCE.statistikDebu.kekerapan}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formatPdfValue(formData.dakwah.alQuran?.statistikDebu?.kekerapan)}</Text></View>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Unit Al-Quran: Pusat Pemuliaan Al-Quran</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '70%' }]}><Text>Lokasi / Masjid</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Bahagian</Text></View>
+                    </View>
+                    {DHQC_2024_REFERENCE.pusatPemuliaan.map((item: any, idx: number) => (
+                      <View key={`ref-${idx}`} style={styles.tableRow}>
+                        <View style={[styles.tableCell, { width: '70%' }]}><Text>{item.lokasi}</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.bahagian}</Text></View>
+                      </View>
+                    ))}
+                    {(formData.dakwah.alQuran?.pusatPemuliaan || []).map((item: any, idx: number) => (
+                      <View key={`current-${idx}`} style={styles.tableRow}>
+                        <View style={[styles.tableCell, { width: '70%' }]}><Text>{item.lokasi || '-'}</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.bahagian || '-'}</Text></View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              </>
+            ) : (
+              <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Statistik Program & Tauliah (2025)</Text>
               <View style={styles.row}><Text style={styles.label}>Program JAIS:</Text><Text style={styles.value}>{formData.dakwah.progJais2025 || 0}</Text></View>
@@ -979,6 +1143,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 ))}
               </View>
             </View>
+              </>
+            )}
           </>
         )}
 
@@ -1668,19 +1834,11 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Statistik Pemuliaan Debu & Penyelia</Text>
+              <Text style={styles.sectionTitle}>Penyelia GAQMIS</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Kategori</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>Nilai</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Berat Debu (Tan)</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.statistikDebu.berat)}</Text></View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Kekerapan Pemuliaan</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.statistikDebu.kekerapan)}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Penyelia (Ibu Pejabat)</Text></View>
@@ -1689,6 +1847,28 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 <View style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '50%' }]}><Text>Penyelia (Bintulu)</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.penyelia.bintulu)}</Text></View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Hakim Tilawah</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Kategori</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>Nilai</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Peringkat Negeri</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.hakim.negeri)}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Peringkat Bahagian</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.hakim.bahagian)}</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Peringkat Daerah</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '50%' }]}><Text>{formatPdfValue(formData.dhqc.hakim.daerah)}</Text></View>
                 </View>
               </View>
             </View>
@@ -1760,21 +1940,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Pusat Pemuliaan Al-Quran</Text>
-              <View style={styles.table} wrap={false}>
-                <View style={[styles.tableRow, styles.tableHeader]}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text>Lokasi / Masjid</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Bahagian</Text></View>
-                </View>
-                {formData.dhqc.pusatPemuliaan.map((item: any, idx: number) => (
-                  <View key={idx} style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '70%' }]}><Text>{item.lokasi}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.bahagian}</Text></View>
-                  </View>
-                ))}
-              </View>
-            </View>
           </>
         )}
 

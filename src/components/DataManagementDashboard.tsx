@@ -24,6 +24,12 @@ interface Data2025 {
 
 interface DataManagementDashboardProps {
   data?: Data2025;
+  aggregatedActivities?: {
+    penyelidikan: number;
+    strategik: number;
+    akidah: number;
+    total: number;
+  };
   onChange?: (data: Data2025) => void;
 }
 
@@ -35,7 +41,7 @@ const INITIAL_2025_DATA: Data2025 = {
   subDataList: ['']
 };
 
-const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data, onChange }) => {
+const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data, aggregatedActivities, onChange }) => {
   const [localData, setLocalData] = useState<Data2025>(data || INITIAL_2025_DATA);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -143,6 +149,38 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
           </motion.div>
         ))}
       </div>
+
+      {aggregatedActivities && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#0f766e] via-[#0d9488] to-[#14b8a6] p-8 text-white shadow-xl shadow-teal-900/20"
+        >
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-teal-100">Jumlah Program / Aktiviti BPNP 2025</p>
+              <h2 className="mt-3 text-5xl font-black tracking-tight text-[#FDE047]">{aggregatedActivities.total}</h2>
+              <p className="mt-3 max-w-2xl text-sm font-medium text-white/85">
+                Jumlah ini ialah campuran input daripada Unit Penyelidikan, Unit Perancangan Strategik dan Unit Akidah Tapisan.
+              </p>
+            </div>
+
+            <div className="grid min-w-full gap-4 sm:grid-cols-3 lg:min-w-[560px]">
+              {[
+                { label: 'Unit Penyelidikan', value: aggregatedActivities.penyelidikan },
+                { label: 'Perancangan Strategik', value: aggregatedActivities.strategik },
+                { label: 'Akidah Tapisan', value: aggregatedActivities.akidah },
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-teal-100">{item.label}</p>
+                  <p className="mt-3 text-3xl font-black text-white">{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* 2024 Sub-Data List */}
       <motion.div 

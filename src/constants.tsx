@@ -42,7 +42,15 @@ export const DEPARTMENTS: Department[] = [
       { id: 'bpnp-akidah', name: 'Unit Akidah Tapisan', active: true }
     ]
   },
-  { id: '2', name: 'Bahagian Dakwah BDAKWAH', active: true },
+  {
+    id: '2',
+    name: 'Bahagian Dakwah BDAKWAH',
+    active: true,
+    subUnits: [
+      { id: 'bdakwah-dashboard', name: 'Dashboard Utama', active: true },
+      { id: 'bdakwah-alquran', name: 'Unit Al-Quran', active: true },
+    ]
+  },
   { id: '3', name: 'Bahagian Kemajuan Institusi Masjid BKIM', active: true },
   { id: '5', name: 'Bahagian Penguatkuasaan Syariah BPKS', active: true },
   { id: '7', name: 'Bahagian Kemajuan Keluarga Islam BKKI', active: true },

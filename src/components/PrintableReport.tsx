@@ -6,11 +6,35 @@ interface PrintableReportProps {
   formData: any;
 }
 
+const normalizeKajianReportEntry = (entry: any) => {
+  if (typeof entry === 'string') {
+    return {
+      jenis: entry.toLowerCase().includes('kaji selidik') ? 'Kaji Selidik' : 'Kajian',
+      tajuk: entry.replace(/^kajian\s*:|^kaji selidik\s*:/i, '').trim(),
+      bilangan: 1,
+    };
+  }
+
+  return {
+    jenis: entry?.jenis === 'Kaji Selidik' ? 'Kaji Selidik' : 'Kajian',
+    tajuk: entry?.tajuk || '',
+    bilangan: entry?.bilangan ?? 1,
+  };
+};
+
+const normalizePenulisanCompetitionReportEntry = (entry: any) => ({
+  kategori: entry?.kategori || 'Diploma dan ke bawah',
+  namaPemenang: entry?.namaPemenang || '',
+  tempatDimenangi: entry?.tempatDimenangi || 'Johan',
+  tajukKajian: entry?.tajukKajian || '',
+});
+
 const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData }) => {
   const [mainDept, unitName] = deptName.split(' : ');
   const targetName = unitName || deptName;
   const isBKIM = deptName.includes('BKIM');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
+  const isDakwahUnitAlQuran = targetName.toUpperCase().includes('AL-QURAN');
   const isBPNP = deptName.includes('BPNP');
   const isBpnPenyelidikan = targetName.toUpperCase().includes('UNIT PENYELIDIKAN');
   const isBpnStrategik = targetName.toUpperCase().includes('UNIT PERANCANGAN STRATEGIK');
@@ -77,6 +101,30 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     paibSibu: 'PAIB Sibu',
   };
   const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan);
+  const bpnpKajian2025 = (formData.bpnp?.kajianList || []).map(normalizeKajianReportEntry);
+  const bpnpPenulisan2025 = (formData.bpnp?.penulisanList || []).map(normalizePenulisanCompetitionReportEntry);
+  const bpnpKajian2024 = BPNP_2024_REFERENCE.kajian.map((kajian) => normalizeKajianReportEntry(kajian));
+  const bpnpUnitActivityTotal2025 = Number(formData.bpnp?.unitActivityTotal2025) || 0;
+  const bpnpPenulisan2024 = [
+    {
+      kategori: 'Diploma dan ke bawah',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.johan.nama,
+      tempatDimenangi: 'Johan',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.johan.tajuk,
+    },
+    {
+      kategori: 'Ijazah dan ke atas',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.naibJohan.nama,
+      tempatDimenangi: 'Naib Johan',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.naibJohan.tajuk,
+    },
+    {
+      kategori: 'Ijazah dan ke atas',
+      namaPemenang: BPNP_2024_REFERENCE.penulisan.ketiga.nama,
+      tempatDimenangi: 'Ketiga',
+      tajukKajian: BPNP_2024_REFERENCE.penulisan.ketiga.tajuk,
+    },
+  ];
 
   return (
     <div id="print-container" className="bg-white text-slate-900 p-12 font-sans">
@@ -501,20 +549,8 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="text-sm font-black text-[#0a1e3b] uppercase border-l-4 border-[#c5a065] pl-2">
-                Statistik Pemuliaan Debu & Penyelia
+                Penyelia GAQMIS
               </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[8px] font-black text-gray-400 uppercase">Berat Debu (Tan)</p>
-                  <p className="text-xl font-black text-[#0a1e3b]">{formData.dhqc.statistikDebu.berat || 0}</p>
-                  <p className="text-[8px] text-gray-400">REF 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[8px] font-black text-gray-400 uppercase">Kekerapan</p>
-                  <p className="text-xl font-black text-[#0a1e3b]">{formData.dhqc.statistikDebu.kekerapan || 0}</p>
-                  <p className="text-[8px] text-gray-400">REF 2024: {DHQC_2024_REFERENCE.statistikDebu.kekerapan}</p>
-                </div>
-              </div>
               <div className="p-4 bg-[#0a1e3b] text-white rounded-2xl">
                 <p className="text-[8px] font-black text-[#c5a065] uppercase mb-2">Penyelia GAQMIS</p>
                 <div className="flex justify-between text-[10px] mb-1">
@@ -530,18 +566,21 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
 
             <div className="space-y-4">
               <h3 className="text-sm font-black text-[#0a1e3b] uppercase border-l-4 border-[#c5a065] pl-2">
-                Pusat Pemuliaan Al-Quran
+                Hakim Tilawah
               </h3>
-              <div className="space-y-2">
-                {formData.dhqc.pusatPemuliaan.map((item: any, idx: number) => (
-                  <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100 flex justify-between items-center">
-                    <span className="text-[10px] font-bold text-gray-700">{item.lokasi}</span>
-                    <span className="text-[8px] font-black text-[#c5a065] uppercase">{item.bahagian}</span>
-                  </div>
-                ))}
-                {formData.dhqc.pusatPemuliaan.length === 0 && (
-                  <p className="text-[10px] text-gray-400 italic text-center py-4">Tiada data lokasi</p>
-                )}
+              <div className="p-4 bg-[#fffaf0] border border-[#f5e8bb] rounded-2xl text-[#7b5c0c] space-y-2">
+                <div className="flex justify-between text-[10px]">
+                  <span>Peringkat Negeri</span>
+                  <span className="font-bold">{formData.dhqc.hakim.negeri || 0}</span>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span>Peringkat Bahagian</span>
+                  <span className="font-bold">{formData.dhqc.hakim.bahagian || 0}</span>
+                </div>
+                <div className="flex justify-between text-[10px]">
+                  <span>Peringkat Daerah</span>
+                  <span className="font-bold">{formData.dhqc.hakim.daerah || 0}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -982,6 +1021,59 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       {/* Dakwah Specific Layout */}
       {isDakwah && formData.dakwah && (
         <div className="space-y-8">
+          {isDakwahUnitAlQuran ? (
+            <div className="grid grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Pusat Pemuliaan Al-Quran
+                </h3>
+                <div className="space-y-2">
+                  {DHQC_2024_REFERENCE.pusatPemuliaan.map((item: any, idx: number) => (
+                    <div key={idx} className="p-3 bg-white border border-slate-200 rounded-xl">
+                      <div className="text-[10px] font-black uppercase text-slate-400">Rujukan 2024</div>
+                      <div className="mt-1 font-bold">{item.lokasi}</div>
+                      <div className="text-[10px] font-black uppercase text-[#947225]">{item.bahagian}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  {(formData.dakwah.alQuran?.pusatPemuliaan || []).map((item: any, idx: number) => (
+                    <div key={idx} className="p-3 bg-gray-50 border border-gray-100 rounded-xl flex justify-between items-center">
+                      <span className="text-[10px] font-bold text-gray-700">{item.lokasi || '................................'}</span>
+                      <span className="text-[8px] font-black text-[#c5a065] uppercase">{item.bahagian || '...'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Statistik Debu Al-Quran
+                </h3>
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border p-2 text-left">Kategori</th>
+                      <th className="border p-2 text-center">2024</th>
+                      <th className="border p-2 text-center bg-blue-50">2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border p-2 font-bold">Berat Debu Al-Quran (Tan)</td>
+                      <td className="border p-2 text-center">{DHQC_2024_REFERENCE.statistikDebu.berat}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.alQuran?.statistikDebu?.berat || 0}</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2 font-bold">Kekerapan Pemuliaan</td>
+                      <td className="border p-2 text-center">{DHQC_2024_REFERENCE.statistikDebu.kekerapan}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.alQuran?.statistikDebu?.kekerapan || 0}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
@@ -1042,6 +1134,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               </table>
             </div>
           </div>
+          )}
         </div>
       )}
 
@@ -1050,13 +1143,26 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         <div className="space-y-8">
           {isBpnPenyelidikan && (
             <div className="space-y-6">
+              <div className="rounded-3xl border border-teal-100 bg-teal-50/70 p-6">
+                <h3 className="text-sm font-black text-teal-800 uppercase tracking-widest">Jumlah Aktiviti Unit Penyelidikan 2025</h3>
+                <p className="mt-3 text-4xl font-black text-zus-900">{bpnpUnitActivityTotal2025}</p>
+              </div>
+
               <div className="rounded-3xl border border-blue-100 bg-blue-50/70 p-6">
-                <h3 className="text-sm font-black text-blue-800 uppercase tracking-widest">Rujukan Data 2024</h3>
+                <h3 className="text-sm font-black text-blue-800 uppercase tracking-widest">Rujukan Data 2024 (Jumlah: {bpnpKajian2024.length})</h3>
                 <div className="mt-4 space-y-2">
-                  {BPNP_2024_REFERENCE.kajian.map((k, i) => (
-                    <div key={i} className="flex gap-3 rounded-2xl border border-blue-100 bg-white px-4 py-3 text-xs text-slate-700">
+                  {bpnpKajian2024.map((k, i) => (
+                    <div key={i} className="rounded-2xl border border-blue-100 bg-white px-4 py-3 text-xs text-slate-700">
+                      <div className="flex gap-3">
                       <span className="font-black text-blue-500">{i + 1}.</span>
-                      <span className="font-medium">{k}</span>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-black uppercase text-blue-700">{k.jenis}</span>
+                            <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-black uppercase text-slate-600">Bilangan: {k.bilangan}</span>
+                          </div>
+                          <span className="font-medium">{k.tajuk || '................................'}</span>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1064,13 +1170,88 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
 
               <div className="space-y-4">
                 <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                  Senarai Kajian / Kaji Selidik 2025
+                  Senarai Kajian dan Kaji Selidik Dihasilkan (2025)
                 </h3>
+                <div className="hidden grid-cols-[120px_1fr_120px] gap-3 rounded-xl bg-slate-100 px-4 py-3 md:grid">
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Jenis Kajian</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Nama Kajian / Kaji Selidik</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Bilangan</span>
+                </div>
                 <div className="space-y-2">
-                  {formData.bpnp.kajianList.map((k: string, i: number) => (
-                    <div key={i} className="text-xs p-3 bg-white border border-slate-200 rounded-xl flex gap-2">
-                      <span className="font-bold text-gray-400">{i+1}.</span>
-                      <span>{k || '................................'}</span>
+                  {bpnpKajian2025.map((k: any, i: number) => (
+                    <div key={i} className="text-xs p-3 bg-white border border-slate-200 rounded-xl">
+                      <div className="hidden grid-cols-[120px_1fr_120px] gap-3 md:grid">
+                        <span className="font-bold text-slate-700">{k.jenis}</span>
+                        <span>{k.tajuk || '................................'}</span>
+                        <span className="font-bold text-slate-700">{k.bilangan}</span>
+                      </div>
+                      <div className="flex gap-2 md:hidden">
+                        <span className="font-bold text-gray-400">{i+1}.</span>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-black uppercase text-blue-700">{k.jenis}</span>
+                            <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-black uppercase text-slate-600">Bilangan: {k.bilangan}</span>
+                          </div>
+                          <span>{k.tajuk || '................................'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-purple-100 bg-purple-50/70 p-6">
+                <h3 className="text-sm font-black text-purple-800 uppercase tracking-widest">Rujukan Data 2024 (Jumlah: {bpnpPenulisan2024.length})</h3>
+                <div className="mt-4 space-y-2">
+                  {bpnpPenulisan2024.map((item, i) => (
+                    <div key={i} className="rounded-2xl border border-purple-100 bg-white px-4 py-3 text-xs text-slate-700">
+                      <div className="flex gap-3">
+                        <span className="font-black text-purple-500">{i + 1}.</span>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-black uppercase text-purple-700">{item.kategori}</span>
+                            <span className="rounded-full bg-cyan-100 px-2 py-1 text-[10px] font-black uppercase text-cyan-700">{item.tempatDimenangi}</span>
+                          </div>
+                          <div className="font-bold">{item.namaPemenang || '................................'}</div>
+                          <div>{item.tajukKajian || '................................'}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+                  Senarai Pemenang Pertandingan Penulisan Ilmiah (2025)
+                </h3>
+                <div className="hidden grid-cols-[180px_140px_1fr] gap-3 rounded-xl bg-slate-100 px-4 py-3 md:grid">
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Kategori / Tempat</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Nama Pemenang</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Tajuk Kajian</span>
+                </div>
+                <div className="space-y-2">
+                  {bpnpPenulisan2025.map((item: any, i: number) => (
+                    <div key={i} className="text-xs p-3 bg-white border border-slate-200 rounded-xl">
+                      <div className="hidden grid-cols-[180px_140px_1fr] gap-3 md:grid">
+                        <div className="space-y-1">
+                          <div className="font-bold text-slate-700">{item.kategori}</div>
+                          <div className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">{item.tempatDimenangi}</div>
+                        </div>
+                        <div className="font-bold">{item.namaPemenang || '................................'}</div>
+                        <div>{item.tajukKajian || '................................'}</div>
+                      </div>
+                      <div className="flex gap-2 md:hidden">
+                        <span className="font-bold text-gray-400">{i+1}.</span>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-black uppercase text-purple-700">{item.kategori}</span>
+                            <span className="rounded-full bg-cyan-100 px-2 py-1 text-[10px] font-black uppercase text-cyan-700">{item.tempatDimenangi}</span>
+                          </div>
+                          <div className="font-bold">{item.namaPemenang || '................................'}</div>
+                          <div>{item.tajukKajian || '................................'}</div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1082,14 +1263,19 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
             <>
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-4">
+                  <div className="rounded-3xl border border-emerald-100 bg-emerald-50/70 p-6">
+                    <h3 className="text-sm font-black text-emerald-800 uppercase tracking-widest">Jumlah Aktiviti Unit Perancangan Strategik 2025</h3>
+                    <p className="mt-3 text-4xl font-black text-zus-900">{bpnpUnitActivityTotal2025}</p>
+                  </div>
+
                   <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                     Kajian & Kaji Selidik 2025
                   </h3>
                   <div className="space-y-2">
-                    {formData.bpnp.kajianList.map((k: string, i: number) => (
+                    {bpnpKajian2025.map((k: any, i: number) => (
                       <div key={i} className="text-xs p-2 bg-gray-50 border border-gray-100 rounded flex gap-2">
                         <span className="font-bold text-gray-400">{i+1}.</span>
-                        <span>{k || '................................'}</span>
+                        <span>{`${k.jenis}: ${k.tajuk || '................................'} (Bilangan: ${k.bilangan})`}</span>
                       </div>
                     ))}
                   </div>
@@ -1168,7 +1354,13 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           )}
 
           {isBpnAkidah && (
-            <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-cyan-100 bg-cyan-50/70 p-6">
+                <h3 className="text-sm font-black text-cyan-800 uppercase tracking-widest">Jumlah Aktiviti Unit Akidah Tapisan 2025</h3>
+                <p className="mt-3 text-4xl font-black text-zus-900">{bpnpUnitActivityTotal2025}</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
               <div className="space-y-4">
                 <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                   Statistik Aktiviti & Operasi (2025)
@@ -1231,6 +1423,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <p className="text-slate-700">{formData.bpnp.penerbitanDigital?.kandunganUtama || '................................'}</p>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           )}

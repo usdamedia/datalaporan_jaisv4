@@ -4,6 +4,7 @@ import { buildReportExportState, exportReportPdf, type PdfExportState } from '..
 
 interface FormLayoutProps {
   deptName: string;
+  exportDeptName?: string;
   onBack: () => void;
   onSave: () => void;
   onExport?: () => void | Promise<void>;
@@ -18,6 +19,7 @@ interface FormLayoutProps {
 
 const FormLayout: React.FC<FormLayoutProps> = ({ 
   deptName, 
+  exportDeptName,
   onBack, 
   onSave, 
   onExport,
@@ -38,11 +40,12 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     setIsExportingPdf(true);
     setExportError(null);
     try {
+      const effectiveExportDeptName = exportDeptName || deptName;
       if (onExport) {
         await onExport();
       } else {
-        const exportState = getExportState ? getExportState() : buildReportExportState(deptName, formData);
-        await exportReportPdf(deptName, exportState);
+        const exportState = getExportState ? getExportState() : buildReportExportState(effectiveExportDeptName, formData);
+        await exportReportPdf(effectiveExportDeptName, exportState);
       }
     } catch (err) {
       console.error('PDF Export failed:', err);
