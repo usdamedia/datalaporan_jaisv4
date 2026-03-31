@@ -1300,6 +1300,80 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <p className="mt-3 text-4xl font-black text-zus-900">{bpnpUnitActivityTotal2025}</p>
                   </div>
 
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-emerald-600 pl-2">
+                    Pelan Strategik Jabatan
+                  </h3>
+                  <table className="w-full text-xs border-collapse">
+                    <tbody>
+                      <tr>
+                        <td className="border p-2 font-bold">Pencapaian Total 2023</td>
+                        <td className="border p-2 text-center font-black bg-emerald-50">{formData.bpnp.strategik?.pelanStrategik?.total2023 ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold">Pencapaian Total 2024</td>
+                        <td className="border p-2 text-center font-black bg-emerald-50">{formData.bpnp.strategik?.pelanStrategik?.total2024 ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold">Pencapaian Total 2025</td>
+                        <td className="border p-2 text-center font-black bg-emerald-50">{formData.bpnp.strategik?.pelanStrategik?.total2025 ?? 0}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-sky-600 pl-2">
+                    Rancangan Operasi Tahunan
+                  </h3>
+                  <table className="w-full text-xs border-collapse">
+                    <tbody>
+                      <tr>
+                        <td className="border p-2 font-bold">Aktiviti Program 2023</td>
+                        <td className="border p-2 text-center font-black bg-sky-50">{formData.bpnp.strategik?.rot?.aktivitiProgram2023 ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold">Aktiviti Program 2024</td>
+                        <td className="border p-2 text-center font-black bg-sky-50">{formData.bpnp.strategik?.rot?.aktivitiProgram2024 ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold">Aktiviti Program 2025</td>
+                        <td className="border p-2 text-center font-black bg-sky-50">{formData.bpnp.strategik?.rot?.aktivitiProgram2025 ?? 0}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-violet-600 pl-2">
+                    Data
+                  </h3>
+                  <table className="w-full text-xs border-collapse">
+                    <tbody>
+                      <tr>
+                        <td className="border p-2 font-bold">Bilangan Pegawai Data</td>
+                        <td className="border p-2 text-center font-black bg-violet-50">{formData.bpnp.strategik?.data?.bilPegawaiData ?? 0}</td>
+                      </tr>
+                      <tr>
+                        <td className="border p-2 font-bold">Bilangan Dashboard Rasmi Baharu Yang Telah Disahkan 2025</td>
+                        <td className="border p-2 text-center font-black bg-violet-50">{formData.bpnp.strategik?.data?.bilDashboardRasmiBaharu2025 ?? 0}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-violet-600 pl-2">
+                      Nama Dashboard Rasmi Baharu
+                    </h3>
+                    {(formData.bpnp.strategik?.data?.namaDashboardBaharu || []).filter((item: string) => item).length > 0 ? (
+                      (formData.bpnp.strategik?.data?.namaDashboardBaharu || []).map((item: string, index: number) =>
+                        item ? (
+                          <div key={index} className="text-xs p-2 bg-violet-50 border border-violet-100 rounded flex gap-2">
+                            <span className="font-bold text-violet-500">{index + 1}.</span>
+                            <span>{item}</span>
+                          </div>
+                        ) : null
+                      )
+                    ) : (
+                      <div className="text-xs p-2 bg-gray-50 border border-gray-100 rounded text-gray-500">Tiada nama dashboard diisi.</div>
+                    )}
+                  </div>
+
                   <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                     Kajian & Kaji Selidik 2025
                   </h3>

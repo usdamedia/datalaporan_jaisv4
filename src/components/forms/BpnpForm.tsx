@@ -190,6 +190,23 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
         dataClusters: 0,
         subDataDashboards: 0,
         subDataList: ['']
+      },
+      strategik: {
+        pelanStrategik: {
+          total2023: 0,
+          total2024: 0,
+          total2025: 0,
+        },
+        rot: {
+          aktivitiProgram2023: 0,
+          aktivitiProgram2024: 0,
+          aktivitiProgram2025: 0,
+        },
+        data: {
+          bilPegawaiData: 0,
+          bilDashboardRasmiBaharu2025: 0,
+          namaDashboardBaharu: [''],
+        },
       }
     }
   };
@@ -255,6 +272,38 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     }));
   }, [formData.bpnp?.kajianList, formData.bpnp?.penulisanList, setFormData]);
 
+  React.useEffect(() => {
+    if (!isUnitStrategik) return;
+
+    const dashboardList = formData.bpnp?.strategik?.data?.namaDashboardBaharu;
+    if (Array.isArray(dashboardList) && dashboardList.length > 0) return;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      bpnp: {
+        ...prev.bpnp,
+        strategik: {
+          ...prev.bpnp?.strategik,
+          pelanStrategik: {
+            total2023: prev.bpnp?.strategik?.pelanStrategik?.total2023 || 0,
+            total2024: prev.bpnp?.strategik?.pelanStrategik?.total2024 || 0,
+            total2025: prev.bpnp?.strategik?.pelanStrategik?.total2025 || 0,
+          },
+          rot: {
+            aktivitiProgram2023: prev.bpnp?.strategik?.rot?.aktivitiProgram2023 || 0,
+            aktivitiProgram2024: prev.bpnp?.strategik?.rot?.aktivitiProgram2024 || 0,
+            aktivitiProgram2025: prev.bpnp?.strategik?.rot?.aktivitiProgram2025 || 0,
+          },
+          data: {
+            bilPegawaiData: prev.bpnp?.strategik?.data?.bilPegawaiData || 0,
+            bilDashboardRasmiBaharu2025: prev.bpnp?.strategik?.data?.bilDashboardRasmiBaharu2025 || 0,
+            namaDashboardBaharu: [''],
+          },
+        },
+      },
+    }));
+  }, [formData.bpnp?.strategik?.data?.namaDashboardBaharu, isUnitStrategik, setFormData]);
+
   const handleBpnpStatChange = (field: string, value: number) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -276,6 +325,75 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
         }
       }
     }));
+  };
+
+  const handleStrategikNumberChange = (section: 'pelanStrategik' | 'rot' | 'data', field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      bpnp: {
+        ...prev.bpnp,
+        strategik: {
+          ...prev.bpnp.strategik,
+          [section]: {
+            ...prev.bpnp.strategik?.[section],
+            [field]: parseInt(value, 10) || 0,
+          },
+        },
+      },
+    }));
+  };
+
+  const addStrategicDashboardName = () => {
+    setFormData((prev: any) => ({
+      ...prev,
+      bpnp: {
+        ...prev.bpnp,
+        strategik: {
+          ...prev.bpnp.strategik,
+          data: {
+            ...prev.bpnp.strategik?.data,
+            namaDashboardBaharu: [...(prev.bpnp.strategik?.data?.namaDashboardBaharu || []), ''],
+          },
+        },
+      },
+    }));
+  };
+
+  const removeStrategicDashboardName = (index: number) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      bpnp: {
+        ...prev.bpnp,
+        strategik: {
+          ...prev.bpnp.strategik,
+          data: {
+            ...prev.bpnp.strategik?.data,
+            namaDashboardBaharu: (prev.bpnp.strategik?.data?.namaDashboardBaharu || []).filter((_: string, currentIndex: number) => currentIndex !== index),
+          },
+        },
+      },
+    }));
+  };
+
+  const updateStrategicDashboardName = (index: number, value: string) => {
+    setFormData((prev: any) => {
+      const currentList = [...(prev.bpnp.strategik?.data?.namaDashboardBaharu || [''])];
+      currentList[index] = value;
+
+      return {
+        ...prev,
+        bpnp: {
+          ...prev.bpnp,
+          strategik: {
+            ...prev.bpnp.strategik,
+            data: {
+              ...prev.bpnp.strategik?.data,
+              namaDashboardBaharu: currentList,
+            },
+          },
+        },
+      };
+    });
   };
 
   const handleUnitActivityTotalChange = (value: number) => {
@@ -941,17 +1059,141 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
             'border-emerald-100 text-emerald-600'
           )}
 
-          <section className="bg-amber-50 border border-amber-200 rounded-2xl p-5 md:p-6 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                <BookOpen className="w-5 h-5" />
+          <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm">
+            <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-teal-50 px-6 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black uppercase tracking-tight text-zus-900">Maklumat Diperlukan</h3>
+                  <p className="text-sm font-medium text-slate-500">
+                    Lengkapkan data utama bagi Unit Perancangan Strategik mengikut tahun dan senarai dashboard rasmi baharu.
+                  </p>
+                </div>
               </div>
+            </div>
+
+            <div className="grid gap-6 p-6 lg:grid-cols-3">
+              <div className="rounded-[1.75rem] border border-emerald-100 bg-emerald-50/60 p-5">
+                <h4 className="text-sm font-black uppercase tracking-[0.18em] text-emerald-900">Pelan Strategik Jabatan</h4>
+                <div className="mt-5 space-y-4">
+                  {[
+                    { field: 'total2023', label: 'Pencapaian Total 2023' },
+                    { field: 'total2024', label: 'Pencapaian Total 2024' },
+                    { field: 'total2025', label: 'Pencapaian Total 2025' },
+                  ].map((item) => (
+                    <div key={item.field} className="rounded-2xl border border-emerald-100 bg-white p-4">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500">{item.label}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.bpnp.strategik?.pelanStrategik?.[item.field] ?? 0}
+                        onChange={(e) => handleStrategikNumberChange('pelanStrategik', item.field, e.target.value)}
+                        className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[1.75rem] border border-sky-100 bg-sky-50/60 p-5">
+                <h4 className="text-sm font-black uppercase tracking-[0.18em] text-sky-900">Rancangan Operasi Tahunan</h4>
+                <div className="mt-5 space-y-4">
+                  {[
+                    { field: 'aktivitiProgram2023', label: 'Aktiviti Program 2023' },
+                    { field: 'aktivitiProgram2024', label: 'Aktiviti Program 2024' },
+                    { field: 'aktivitiProgram2025', label: 'Aktiviti Program 2025' },
+                  ].map((item) => (
+                    <div key={item.field} className="rounded-2xl border border-sky-100 bg-white p-4">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500">{item.label}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.bpnp.strategik?.rot?.[item.field] ?? 0}
+                        onChange={(e) => handleStrategikNumberChange('rot', item.field, e.target.value)}
+                        className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[1.75rem] border border-violet-100 bg-violet-50/60 p-5">
+                <h4 className="text-sm font-black uppercase tracking-[0.18em] text-violet-900">Data</h4>
+                <div className="mt-5 space-y-4">
+                  <div className="rounded-2xl border border-violet-100 bg-white p-4">
+                    <label className="text-xs font-black uppercase tracking-widest text-slate-500">Bilangan Pegawai Data</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={formData.bpnp.strategik?.data?.bilPegawaiData ?? 0}
+                      onChange={(e) => handleStrategikNumberChange('data', 'bilPegawaiData', e.target.value)}
+                      className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                    />
+                  </div>
+
+                  <div className="rounded-2xl border border-violet-100 bg-white p-4">
+                    <label className="text-xs font-black uppercase tracking-widest text-slate-500">
+                      Bilangan Dashboard Rasmi Baharu Yang Telah Disahkan 2025
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={formData.bpnp.strategik?.data?.bilDashboardRasmiBaharu2025 ?? 0}
+                      onChange={(e) => handleStrategikNumberChange('data', 'bilDashboardRasmiBaharu2025', e.target.value)}
+                      className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <h3 className="text-base font-black text-amber-900">Maklumat diperlukan sedang dikemaskini</h3>
-                <p className="mt-1 text-sm font-medium text-amber-800">
-                  Bahagian ini sedang diselaraskan. Sila rujuk kemaskini seterusnya untuk pengisian maklumat lengkap bagi Unit Perancangan Strategik.
-                </p>
+                <h3 className="text-lg font-black uppercase tracking-tight text-zus-900">Nama Dashboard Rasmi Baharu</h3>
+                <p className="mt-1 text-sm font-medium text-slate-500">Masukkan nama dashboard yang telah disahkan bagi tahun 2025.</p>
               </div>
+              <button
+                onClick={addStrategicDashboardName}
+                className="inline-flex items-center gap-2 rounded-2xl bg-violet-600 px-5 py-3 text-sm font-black text-white transition hover:bg-violet-700 active:scale-[0.98]"
+              >
+                <Plus className="h-4 w-4" />
+                Tambah Nama Dashboard
+              </button>
+            </div>
+
+            <div className="mt-5 space-y-4">
+              {(formData.bpnp.strategik?.data?.namaDashboardBaharu || ['']).map((item: string, index: number) => (
+                <div key={`strategik-dashboard-${index}`} className="flex gap-3 rounded-[1.5rem] border border-slate-100 bg-slate-50/70 p-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-sm font-black text-violet-700">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-black uppercase tracking-widest text-slate-500">
+                      {index + 1}. Masukkan Nama Dashboard
+                    </label>
+                    <input
+                      type="text"
+                      value={item || ''}
+                      onChange={(e) => updateStrategicDashboardName(index, e.target.value)}
+                      placeholder="Masukkan nama dashboard rasmi"
+                      className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                    />
+                  </div>
+                  {(formData.bpnp.strategik?.data?.namaDashboardBaharu || []).length > 1 && (
+                    <button
+                      onClick={() => removeStrategicDashboardName(index)}
+                      className="self-start rounded-2xl bg-rose-50 p-3 text-rose-500 transition hover:bg-rose-100"
+                      title="Padam nama dashboard"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
 

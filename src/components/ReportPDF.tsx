@@ -826,48 +826,81 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
             {/* Data Management Dashboard Section */}
             {isBpnStrategik && formData.bpnp.dataManagement && (
+              <>
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Pengurusan Data (Data Management Dashboard)</Text>
+                <Text style={styles.sectionTitle}>Pelan Strategik Jabatan</Text>
                 <View style={styles.table} wrap={false}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
-                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Kategori Pengurusan Data</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>2024</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>2025</Text></View>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Kategori</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Nilai</Text></View>
                   </View>
                   <View style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Mesyuarat DTAWG</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>1</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.dtawgMeetings}</Text></View>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Pencapaian Total 2023</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.pelanStrategik?.total2023 ?? 0}</Text></View>
                   </View>
                   <View style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Integrated Data Management Dashboard</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>1</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.integratedDashboards}</Text></View>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Pencapaian Total 2024</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.pelanStrategik?.total2024 ?? 0}</Text></View>
                   </View>
                   <View style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Kluster Data</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>26</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.dataClusters}</Text></View>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Pencapaian Total 2025</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.pelanStrategik?.total2025 ?? 0}</Text></View>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Rancangan Operasi Tahunan</Text>
+                <View style={styles.table} wrap={false}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Kategori</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Nilai</Text></View>
                   </View>
                   <View style={styles.tableRow}>
-                    <View style={[styles.tableCell, { width: '60%' }]}><Text>Bilangan Sub-Data Dashboard</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>3</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formData.bpnp.dataManagement.subDataDashboards}</Text></View>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Aktiviti Program 2023</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.rot?.aktivitiProgram2023 ?? 0}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Aktiviti Program 2024</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.rot?.aktivitiProgram2024 ?? 0}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Aktiviti Program 2025</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.rot?.aktivitiProgram2025 ?? 0}</Text></View>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Data Strategik</Text>
+                <View style={styles.table} wrap={false}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Kategori Data</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>Nilai</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Bilangan Pegawai Data</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.data?.bilPegawaiData ?? 0}</Text></View>
+                  </View>
+                  <View style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '70%' }]}><Text>Bilangan Dashboard Rasmi Baharu Yang Telah Disahkan 2025</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.strategik?.data?.bilDashboardRasmiBaharu2025 ?? 0}</Text></View>
                   </View>
                 </View>
 
-                {formData.bpnp.dataManagement.subDataList && formData.bpnp.dataManagement.subDataList.length > 0 && (
+                {formData.bpnp.strategik?.data?.namaDashboardBaharu && formData.bpnp.strategik.data.namaDashboardBaharu.length > 0 && (
                   <View style={{ marginTop: 5 }}>
-                    <Text style={{ fontSize: 9, fontWeight: 'bold', marginBottom: 5 }}>Senarai Sub-Data Dashboard (2025):</Text>
-                    {formData.bpnp.dataManagement.subDataList.map((item: string, i: number) => item && (
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', marginBottom: 5 }}>Senarai Nama Dashboard Rasmi Baharu:</Text>
+                    {formData.bpnp.strategik.data.namaDashboardBaharu.map((item: string, i: number) => item && (
                       <View key={i} style={{ flexDirection: 'row', marginLeft: 10, marginBottom: 2 }}>
-                        <Text style={{ width: 10 }}>•</Text>
+                        <Text style={{ width: 14 }}>{i + 1}.</Text>
                         <Text style={{ flex: 1 }}>{item}</Text>
                       </View>
                     ))}
                   </View>
                 )}
               </View>
+              </>
             )}
           </>
         )}
