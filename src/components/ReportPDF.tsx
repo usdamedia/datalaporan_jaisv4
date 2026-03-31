@@ -1140,12 +1140,12 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Dakwah Melalui Media (2025)</Text>
               <View style={styles.row}><Text style={styles.label}>Radio:</Text><Text style={styles.value}>{formData.dakwah.mediaRadio2025 || 0}</Text></View>
               <View style={styles.row}><Text style={styles.label}>Internet:</Text><Text style={styles.value}>{formData.dakwah.mediaInternet2025 || 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Facebook:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.facebook || '-'}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Instagram:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.instagram || '-'}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Thread:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.thread || '-'}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Tiktok:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tiktok || '-'}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Telegram Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.telegramChannel || '-'}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Whatsap Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.whatsappChannel || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Facebook:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.facebook ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Instagram:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.instagram ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Thread:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.thread ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Tiktok:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tiktok ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Telegram Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.telegramChannel ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Whatsap Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.whatsappChannel ?? 0}</Text></View>
             </View>
 
             <View style={styles.section}>

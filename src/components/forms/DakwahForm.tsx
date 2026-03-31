@@ -37,12 +37,12 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       mediaRadio2025: 0,
       mediaInternet2025: 0,
       mediaSosial: {
-        facebook: '',
-        instagram: '',
-        thread: '',
-        tiktok: '',
-        telegramChannel: '',
-        whatsappChannel: '',
+        facebook: 0,
+        instagram: 0,
+        thread: 0,
+        tiktok: 0,
+        telegramChannel: 0,
+        whatsappChannel: 0,
       },
       alQuran: {
         pusatPemuliaan: [],
@@ -89,7 +89,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
         ...prev.dakwah,
         mediaSosial: {
           ...prev.dakwah.mediaSosial,
-          [field]: value,
+          [field]: parseInt(value, 10) || 0,
         },
       },
     }));
@@ -498,17 +498,33 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="mt-8 rounded-[1.75rem] border border-orange-100 bg-orange-50/40 p-5 md:p-6">
-          <div className="mb-5">
-            <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">
+        <div className="mt-8 rounded-[1.9rem] border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-5 md:p-6 shadow-sm">
+          <div className="flex flex-col gap-4 border-b border-orange-100 pb-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">
               Medium Media Sosial (Sekiranya Ada)
-            </h4>
-            <p className="mt-2 text-sm font-medium text-orange-900/70">
-              Isikan maklumat, pautan, atau catatan ringkas bagi medium media sosial yang digunakan pada tahun 2025.
-            </p>
+              </h4>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-orange-900/70">
+                Isikan data berbentuk nombor bagi setiap medium media sosial yang digunakan pada tahun 2025.
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-orange-100 bg-white/80 p-3 text-center">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Platform</p>
+                <p className="mt-1 text-lg font-black text-slate-800">6</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Jenis</p>
+                <p className="mt-1 text-lg font-black text-orange-700">Media Sosial</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Tahun</p>
+                <p className="mt-1 text-lg font-black text-slate-800">2025</p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {[
               { key: 'facebook', label: 'Facebook' },
               { key: 'instagram', label: 'Instagram' },
@@ -517,14 +533,21 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
               { key: 'telegramChannel', label: 'Telegram Channel' },
               { key: 'whatsappChannel', label: 'Whatsap Channel' },
             ].map((item) => (
-              <div key={item.key} className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
+              <div key={item.key} className="rounded-[1.5rem] border border-orange-100 bg-white p-4 shadow-[0_10px_30px_rgba(249,115,22,0.08)]">
+                <div className="flex items-center justify-between gap-3">
+                  <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
+                  <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-orange-700">
+                    Nilai
+                  </span>
+                </div>
                 <input
-                  type="text"
-                  value={formData.dakwah.mediaSosial?.[item.key] || ''}
+                  type="number"
+                  min="0"
+                  inputMode="numeric"
+                  value={formData.dakwah.mediaSosial?.[item.key] ?? 0}
                   onChange={(e) => handleMediaSosialChange(item.key, e.target.value)}
-                  placeholder={`Masukkan ${item.label}`}
-                  className="w-full rounded-xl border border-orange-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-orange-300 focus:ring-2 focus:ring-orange-200/60"
+                  placeholder="0"
+                  className="mt-3 w-full rounded-2xl border border-orange-100 bg-orange-50/30 px-4 py-3 text-center text-lg font-black text-slate-800 outline-none transition focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100"
                 />
               </div>
             ))}

@@ -1135,32 +1135,32 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <tr>
                     <td className="border p-2 font-bold">Facebook</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.facebook || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.facebook ?? 0}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Instagram</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.instagram || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.instagram ?? 0}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Thread</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.thread || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.thread ?? 0}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Tiktok</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tiktok || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tiktok ?? 0}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Telegram Channel</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.telegramChannel || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.telegramChannel ?? 0}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Whatsap Channel</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.whatsappChannel || '-'}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.whatsappChannel ?? 0}</td>
                   </tr>
                 </tbody>
               </table>
