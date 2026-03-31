@@ -868,6 +868,25 @@ export const INTEGRITI_2024_REFERENCE = {
   }
 };
 
+export const INTEGRITI_2025_CURRENT = {
+  tadbirUrus: {
+    mesyuarat: 3,
+    program: 39,
+  },
+  multimedia: {
+    video: 4,
+  },
+  dokumentasi: {
+    manual: 1,
+    polisi: 4,
+    total: 5,
+  },
+  status: {
+    signedBy: 'Ketua Unit Integriti',
+    note: 'Data terkini 2025 yang telah disahkan.',
+  },
+};
+
 export const QUALITY_INITIATIVES_2024_REFERENCE = {
   iso9001: {
     badanAudit: "SIRIM QAS International Sdn. Bhd.",

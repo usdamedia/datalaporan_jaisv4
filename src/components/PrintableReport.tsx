@@ -29,6 +29,8 @@ const normalizePenulisanCompetitionReportEntry = (entry: any) => ({
   tajukKajian: entry?.tajukKajian || '',
 });
 
+const isCompletedProgress = (value: unknown) => Number(value) >= 100;
+
 const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData }) => {
   const [mainDept, unitName] = deptName.split(' : ');
   const targetName = unitName || deptName;
@@ -1130,6 +1132,36 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <td className="border p-2 text-center">{DAKWAH_2024_REFERENCE.media.internet}</td>
                     <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaInternet2025}</td>
                   </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Facebook</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.facebook || '-'}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Instagram</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.instagram || '-'}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Thread</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.thread || '-'}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Tiktok</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tiktok || '-'}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Telegram Channel</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.telegramChannel || '-'}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Whatsap Channel</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.whatsappChannel || '-'}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -1817,7 +1849,14 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <div key={item.name} className="space-y-1">
                     <div className="flex justify-between text-[9px] font-bold uppercase text-stone-700">
                       <span>{item.name}</span>
-                      <span>{item.value}%</span>
+                      <span className="flex items-center gap-2">
+                        <span>{item.value}%</span>
+                        {isCompletedProgress(item.value) && (
+                          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-700 normal-case">
+                            ✓ Lengkap
+                          </span>
+                        )}
+                      </span>
                     </div>
                     <div className="w-full bg-stone-100 rounded-full h-1.5">
                       <div 
@@ -1833,7 +1872,14 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <div key={`draft-${idx}`} className="space-y-1">
                       <div className="flex justify-between text-[9px] font-bold uppercase text-stone-700">
                         <span>{draftItem.name}</span>
-                        <span>{draftItem.value || 0}%</span>
+                        <span className="flex items-center gap-2">
+                          <span>{draftItem.value || 0}%</span>
+                          {isCompletedProgress(draftItem.value) && (
+                            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[8px] font-black text-emerald-700 normal-case">
+                              ✓ Lengkap
+                            </span>
+                          )}
+                        </span>
                       </div>
                       <div className="w-full bg-stone-100 rounded-full h-1.5">
                         <div 

@@ -36,6 +36,14 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       tauliahAktif2025: 0,
       mediaRadio2025: 0,
       mediaInternet2025: 0,
+      mediaSosial: {
+        facebook: '',
+        instagram: '',
+        thread: '',
+        tiktok: '',
+        telegramChannel: '',
+        whatsappChannel: '',
+      },
       alQuran: {
         pusatPemuliaan: [],
         statistikDebu: {
@@ -71,6 +79,19 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
     setFormData((prev: any) => ({
       ...prev,
       dakwah: { ...prev.dakwah, [field]: value }
+    }));
+  };
+
+  const handleMediaSosialChange = (field: string, value: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      dakwah: {
+        ...prev.dakwah,
+        mediaSosial: {
+          ...prev.dakwah.mediaSosial,
+          [field]: value,
+        },
+      },
     }));
   };
 
@@ -474,6 +495,39 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
               onChange={(e) => handleDakwahChange('mediaInternet2025', parseInt(e.target.value) || 0)}
               className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
             />
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-[1.75rem] border border-orange-100 bg-orange-50/40 p-5 md:p-6">
+          <div className="mb-5">
+            <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">
+              Medium Media Sosial (Sekiranya Ada)
+            </h4>
+            <p className="mt-2 text-sm font-medium text-orange-900/70">
+              Isikan maklumat, pautan, atau catatan ringkas bagi medium media sosial yang digunakan pada tahun 2025.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { key: 'facebook', label: 'Facebook' },
+              { key: 'instagram', label: 'Instagram' },
+              { key: 'thread', label: 'Thread' },
+              { key: 'tiktok', label: 'Tiktok' },
+              { key: 'telegramChannel', label: 'Telegram Channel' },
+              { key: 'whatsappChannel', label: 'Whatsap Channel' },
+            ].map((item) => (
+              <div key={item.key} className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
+                <input
+                  type="text"
+                  value={formData.dakwah.mediaSosial?.[item.key] || ''}
+                  onChange={(e) => handleMediaSosialChange(item.key, e.target.value)}
+                  placeholder={`Masukkan ${item.label}`}
+                  className="w-full rounded-xl border border-orange-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-orange-300 focus:ring-2 focus:ring-orange-200/60"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>

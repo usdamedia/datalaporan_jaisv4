@@ -1,4 +1,5 @@
 import React from 'react';
+import { INTEGRITI_2025_CURRENT } from '../constants';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
@@ -47,6 +48,8 @@ const normalizePenulisanCompetitionPdfEntry = (entry: any) => ({
   tempatDimenangi: entry?.tempatDimenangi || 'Johan',
   tajukKajian: entry?.tajukKajian || '',
 });
+
+const isCompletedProgress = (value: unknown) => Number(value) >= 100;
 
 const styles = StyleSheet.create({
   page: {
@@ -481,12 +484,36 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     paibSibu: 'PAIB Sibu',
   };
   const integritiRows = [
-    { label: 'Mesyuarat Jawatankuasa Tatakelola', reference: 3, value: formData.integriti?.bilMesyuaratTatakelola || 0 },
-    { label: 'Video Integriti', reference: 11, value: formData.integriti?.bilVideoIntegriti || 0 },
-    { label: 'Dokumen Integriti Dikeluarkan', reference: 5, value: formData.integriti?.bilDokumenIntegriti || 0 },
-    { label: 'Manual', reference: 1, value: formData.integriti?.bilManualIntegriti || 0 },
-    { label: 'Polisi', reference: 4, value: formData.integriti?.bilPolisiIntegriti || 0 },
-    { label: 'Program / Aktiviti', reference: 31, value: formData.integriti?.bilProgramIntegriti || 0 },
+    {
+      label: 'Mesyuarat Jawatankuasa Tatakelola',
+      reference: 3,
+      value: formData.integriti?.bilMesyuaratTatakelola || INTEGRITI_2025_CURRENT.tadbirUrus.mesyuarat,
+    },
+    {
+      label: 'Video Integriti',
+      reference: 11,
+      value: formData.integriti?.bilVideoIntegriti || INTEGRITI_2025_CURRENT.multimedia.video,
+    },
+    {
+      label: 'Dokumen Integriti Dikeluarkan',
+      reference: 5,
+      value: formData.integriti?.bilDokumenIntegriti || INTEGRITI_2025_CURRENT.dokumentasi.total,
+    },
+    {
+      label: 'Manual',
+      reference: 1,
+      value: formData.integriti?.bilManualIntegriti || INTEGRITI_2025_CURRENT.dokumentasi.manual,
+    },
+    {
+      label: 'Polisi',
+      reference: 4,
+      value: formData.integriti?.bilPolisiIntegriti || INTEGRITI_2025_CURRENT.dokumentasi.polisi,
+    },
+    {
+      label: 'Program / Aktiviti',
+      reference: 31,
+      value: formData.integriti?.bilProgramIntegriti || INTEGRITI_2025_CURRENT.tadbirUrus.program,
+    },
   ];
   const shouldRenderBasicInfo = !isIntegriti;
   const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isIntegriti);
@@ -531,6 +558,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <View style={styles.narrativeBox}>
                 <Text style={styles.narrativeText}>
                   Data 2024 dipaparkan sebagai rujukan statik. Lajur 2025 memaparkan input semasa bagi item yang sama.
+                </Text>
+                <Text style={[styles.narrativeText, { marginTop: 6 }]}>
+                  Data 2025 ini ialah data terkini yang telah disahkan oleh {INTEGRITI_2025_CURRENT.status.signedBy}.
                 </Text>
               </View>
             </View>
@@ -1110,6 +1140,12 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <Text style={styles.sectionTitle}>Dakwah Melalui Media (2025)</Text>
               <View style={styles.row}><Text style={styles.label}>Radio:</Text><Text style={styles.value}>{formData.dakwah.mediaRadio2025 || 0}</Text></View>
               <View style={styles.row}><Text style={styles.label}>Internet:</Text><Text style={styles.value}>{formData.dakwah.mediaInternet2025 || 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Facebook:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.facebook || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Instagram:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.instagram || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Thread:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.thread || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Tiktok:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tiktok || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Telegram Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.telegramChannel || '-'}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Whatsap Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.whatsappChannel || '-'}</Text></View>
             </View>
 
             <View style={styles.section}>
@@ -1319,7 +1355,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 {formData.bpds.penggubalanKaedah.map((item: any) => (
                   <View key={item.name} style={styles.tableRow}>
                     <View style={[styles.tableCell, { width: '70%' }]}><Text>{item.name}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{item.value}%</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}>
+                      <Text>{isCompletedProgress(item.value) ? `${item.value}% | Lengkap` : `${item.value}%`}</Text>
+                    </View>
                   </View>
                 ))}
                 {(formData.bpds.derafUndangUndangList || []).map((item: any, idx: number) => {
@@ -1327,7 +1365,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   return (
                     <View key={`draft-${idx}`} style={styles.tableRow}>
                       <View style={[styles.tableCell, { width: '70%' }]}><Text>{draftItem.name}</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{draftItem.value || 0}%</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}>
+                        <Text>{isCompletedProgress(draftItem.value) ? `${draftItem.value || 0}% | Lengkap` : `${draftItem.value || 0}%`}</Text>
+                      </View>
                     </View>
                   );
                 })}

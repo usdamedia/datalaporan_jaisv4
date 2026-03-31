@@ -2,6 +2,7 @@ import React from 'react';
 import { FileText, ShieldCheck, Video } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { INTEGRITI_2025_CURRENT } from '../../constants';
 
 interface IntegritiFormProps {
   deptName: string;
@@ -59,14 +60,29 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
     disediakanOleh: '',
     jawatan: '',
     integriti: {
-      bilMesyuaratTatakelola: '',
-      bilVideoIntegriti: '',
-      bilDokumenIntegriti: '',
-      bilManualIntegriti: '',
-      bilPolisiIntegriti: '',
-      bilProgramIntegriti: '',
+      bilMesyuaratTatakelola: INTEGRITI_2025_CURRENT.tadbirUrus.mesyuarat,
+      bilVideoIntegriti: INTEGRITI_2025_CURRENT.multimedia.video,
+      bilDokumenIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.total,
+      bilManualIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.manual,
+      bilPolisiIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.polisi,
+      bilProgramIntegriti: INTEGRITI_2025_CURRENT.tadbirUrus.program,
     },
   });
+
+  React.useEffect(() => {
+    setFormData((prev: any) => ({
+      ...prev,
+      integriti: {
+        ...prev.integriti,
+        bilMesyuaratTatakelola: INTEGRITI_2025_CURRENT.tadbirUrus.mesyuarat,
+        bilVideoIntegriti: INTEGRITI_2025_CURRENT.multimedia.video,
+        bilDokumenIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.total,
+        bilManualIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.manual,
+        bilPolisiIntegriti: INTEGRITI_2025_CURRENT.dokumentasi.polisi,
+        bilProgramIntegriti: INTEGRITI_2025_CURRENT.tadbirUrus.program,
+      },
+    }));
+  }, [setFormData]);
 
   const handleNumberChange = (
     field:
@@ -110,6 +126,9 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
               Susun atur ini mengikut format yang anda beri: lajur rujukan `2024` kekal statik, manakala lajur
               `2025 Entry Form` diletakkan di sebelahnya untuk kemaskini data semasa.
             </p>
+            <div className="mt-5 inline-flex items-center rounded-full border border-emerald-200/25 bg-emerald-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-100">
+              {INTEGRITI_2025_CURRENT.status.note} Ditandatangani oleh {INTEGRITI_2025_CURRENT.status.signedBy}.
+            </div>
           </div>
 
           <div className="rounded-[1.75rem] border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
@@ -129,7 +148,7 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
         <div className="border-b border-[#d8e3e8] bg-[#f5fafb] px-6 py-5">
           <h3 className="text-lg font-black uppercase tracking-tight text-[#12344a]">Grid Kemaskini 2025</h3>
           <p className="mt-1 text-sm font-medium text-slate-500">
-            Lajur kedua ialah data rujukan 2024 dan lajur ketiga ialah ruang input untuk data semasa 2025.
+            Lajur kedua ialah data rujukan 2024 dan lajur ketiga ialah data semasa 2025 yang boleh disemak atau dikemas kini.
           </p>
         </div>
 
@@ -181,7 +200,7 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
           <h3 className="text-sm font-black uppercase tracking-[0.18em] text-amber-900">Panduan Teknikal</h3>
           <div className="mt-4 space-y-3 text-sm font-medium leading-6 text-amber-900/85">
             <p>Data 2024 ditetapkan sebagai rujukan statik dan tidak boleh diubah pada page ini.</p>
-            <p>Data 2025 menggunakan kotak input angka yang diletakkan di sebelah lajur rujukan 2024.</p>
+            <p>Data 2025 telah diisi awal dengan rekod terkini yang disahkan oleh Ketua Unit Integriti.</p>
             <p>Setiap perubahan boleh disimpan sebagai draf menggunakan butang simpan di bahagian atas.</p>
           </div>
         </div>
