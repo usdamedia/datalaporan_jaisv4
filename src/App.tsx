@@ -10,6 +10,7 @@ import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3 } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
+const PROGRESS_TRACKER_PASSWORD = 'bpnpj@is2026';
 
 export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
@@ -135,6 +136,18 @@ export default function App() {
     setShowSubUnitModal(false);
     setShowDigitalization(false);
     setShowProgressTracker(false);
+  };
+
+  const handleOpenProgressTracker = () => {
+    const enteredPassword = window.prompt('Masukkan kata laluan untuk akses Progress Tracker:');
+    if (enteredPassword === null) return;
+
+    if (enteredPassword !== PROGRESS_TRACKER_PASSWORD) {
+      window.alert('Kata laluan tidak tepat.');
+      return;
+    }
+
+    setShowProgressTracker(true);
   };
 
   // Logic: Show form if a leaf-node department/unit is selected
@@ -348,7 +361,7 @@ export default function App() {
                 </button>
 
                 <button 
-                  onClick={() => setShowProgressTracker(true)}
+                  onClick={handleOpenProgressTracker}
                   className="flex items-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-800 hover:border-blue-800 active:scale-95 md:px-6 md:py-2.5 md:text-sm"
                 >
                   <BarChart3 className="w-4 h-4" />
