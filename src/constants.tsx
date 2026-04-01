@@ -21,7 +21,7 @@ import {
 
 export const DEPARTMENTS: Department[] = [
   { id: '13', name: 'UPP UNIT PENGURUSAN PROJEK', active: true },
-  { id: '17', name: 'UNIT INTEGRITI', active: true },
+  { id: '17', name: 'UNIT INTEGRITI', active: true, completed: true },
   {
     id: '1',
     name: 'Bahagian Pentadbiran & Pengurusan Sumber BPPS',
@@ -37,7 +37,7 @@ export const DEPARTMENTS: Department[] = [
     name: 'Bahagian Perancangan dan Penyelidikan BPNP',
     active: true,
     subUnits: [
-      { id: 'bpnp-penyelidikan', name: 'Unit Penyelidikan', active: true },
+      { id: 'bpnp-penyelidikan', name: 'Unit Penyelidikan', active: true, completed: true },
       { id: 'bpnp-strategik', name: 'Unit Perancangan Strategik', active: true },
       { id: 'bpnp-akidah', name: 'Unit Akidah Tapisan', active: true }
     ]

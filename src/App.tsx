@@ -3,10 +3,11 @@ import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
 import DigitalizationPage from './components/DigitalizationPage';
+import ProgressTrackerPage from './components/ProgressTrackerPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import { DEPARTMENTS } from './constants';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3 } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
 
@@ -16,6 +17,7 @@ export default function App() {
   const [showSubUnitModal, setShowSubUnitModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(true);
   const [showDigitalization, setShowDigitalization] = useState(false);
+  const [showProgressTracker, setShowProgressTracker] = useState(false);
 
   useEffect(() => {
     try {
@@ -27,10 +29,16 @@ export default function App() {
         selectedSubUnitId?: string | null;
         showSubUnitModal?: boolean;
         showDigitalization?: boolean;
+        showProgressTracker?: boolean;
       };
 
       if (parsed.showDigitalization) {
         setShowDigitalization(true);
+        return;
+      }
+
+      if (parsed.showProgressTracker) {
+        setShowProgressTracker(true);
         return;
       }
 
@@ -65,6 +73,18 @@ export default function App() {
           NAVIGATION_STORAGE_KEY,
           JSON.stringify({
             showDigitalization: true,
+            showProgressTracker: false,
+          })
+        );
+        return;
+      }
+
+      if (showProgressTracker) {
+        sessionStorage.setItem(
+          NAVIGATION_STORAGE_KEY,
+          JSON.stringify({
+            showDigitalization: false,
+            showProgressTracker: true,
           })
         );
         return;
@@ -82,12 +102,13 @@ export default function App() {
           selectedSubUnitId: selectedSubUnit?.id || null,
           showSubUnitModal,
           showDigitalization: false,
+          showProgressTracker: false,
         })
       );
     } catch (error) {
       console.error('Failed to persist navigation state', error);
     }
-  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization]);
+  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker]);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
@@ -113,6 +134,7 @@ export default function App() {
     setSelectedSubUnit(null);
     setShowSubUnitModal(false);
     setShowDigitalization(false);
+    setShowProgressTracker(false);
   };
 
   // Logic: Show form if a leaf-node department/unit is selected
@@ -126,9 +148,9 @@ export default function App() {
   return (
     <MaintenanceGuard>
       <Layout 
-        showBack={isFormMode || showSubUnitModal || showDigitalization} 
+        showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker} 
         onBack={resetSelection}
-        title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : 'Utama'}
+        title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : 'Utama'}
       >
         {showTutorial && (
           <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -241,7 +263,11 @@ export default function App() {
               
               <div className="space-y-2 md:space-y-3">
                 {selectedDept.subUnits?.map((unit, index) => {
-                  const getUnitColor = (name: string) => {
+                  const getUnitColor = (unit: SubUnit) => {
+                    if (unit.completed) {
+                      return 'border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-600 hover:border-emerald-600 hover:text-white';
+                    }
+
                     return 'hover:bg-zus-gold hover:border-zus-gold hover:text-white border-gray-200 bg-white';
                   };
 
@@ -253,12 +279,15 @@ export default function App() {
                       className={`
                         w-full p-3 md:p-4 rounded-xl text-left border flex items-center justify-between group transition-all duration-200
                         ${unit.active 
-                          ? `${getUnitColor(unit.name)} shadow-sm hover:shadow-lg text-gray-700 active:scale-[0.98]` 
+                          ? `${getUnitColor(unit)} shadow-sm hover:shadow-lg active:scale-[0.98]`
                           : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'}
                       `}
                       style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <span className="font-bold text-sm md:text-base">{unit.name}</span>
+                      <div className="flex items-center gap-2">
+                        {unit.completed && <CheckCircle2 className="w-4 h-4 text-emerald-600 group-hover:text-white" />}
+                        <span className="font-bold text-sm md:text-base">{unit.name}</span>
+                      </div>
                       {unit.active && (
                         <ChevronRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-white transition-all group-hover:translate-x-1" />
                       )}
@@ -273,6 +302,8 @@ export default function App() {
         {/* 2. Main View Handling */}
         {showDigitalization ? (
           <DigitalizationPage />
+        ) : showProgressTracker ? (
+          <ProgressTrackerPage />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
@@ -314,6 +345,14 @@ export default function App() {
                 >
                   <Cpu className="w-4 h-4" />
                   Digitalisasi JAIS
+                </button>
+
+                <button 
+                  onClick={() => setShowProgressTracker(true)}
+                  className="flex items-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-800 hover:border-blue-800 active:scale-95 md:px-6 md:py-2.5 md:text-sm"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  Progress Tracker
                 </button>
               </div>
 

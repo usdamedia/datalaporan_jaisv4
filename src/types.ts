@@ -1,13 +1,15 @@
 export interface SubUnit {
   id: string;
   name: string;
-  active: boolean; 
+  active: boolean;
+  completed?: boolean;
 }
 
 export interface Department {
   id: string;
   name: string;
-  active: boolean; 
+  active: boolean;
+  completed?: boolean;
   subUnits?: SubUnit[];
 }
 

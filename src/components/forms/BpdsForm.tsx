@@ -181,6 +181,8 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
     return value;
   };
 
+  const isCompletedProgress = (value: number | string | undefined | null) => Number(value) >= 100;
+
   return (
     <FormLayout
       deptName={deptName}
@@ -375,15 +377,23 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                   <td className="p-4 text-xs font-bold text-stone-700 border-b border-stone-100">{item.name}</td>
                   <td className="p-4 text-xs font-bold text-stone-400 border-b border-stone-100 text-center">{BPDS_2024_REFERENCE.penggubalanKaedah[idx].value}%</td>
                   <td className="p-4 border-b border-stone-100">
-                    <div className="flex items-center gap-3 justify-center">
-                      <input 
-                        type="number"
-                        step="0.01"
-                        value={displayNumericInput(item.value)}
-                        onChange={(e) => handleBpdsArrayChange('penggubalanKaedah', idx, e.target.value)}
-                        className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
-                      />
-                      <span className="text-xs font-bold text-stone-400">%</span>
+                    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                      <div className="flex items-center gap-2">
+                        <input 
+                          type="number"
+                          step="0.01"
+                          value={displayNumericInput(item.value)}
+                          onChange={(e) => handleBpdsArrayChange('penggubalanKaedah', idx, e.target.value)}
+                          className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
+                        />
+                        <span className="text-xs font-bold text-stone-400">%</span>
+                      </div>
+                      {isCompletedProgress(item.value) && (
+                        <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-black text-emerald-700">
+                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                          Lengkap
+                        </span>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -396,15 +406,23 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
                     <td className="p-4 text-xs font-bold text-stone-700 border-b border-stone-100">{draftItem.name}</td>
                     <td className="p-4 text-xs font-bold text-stone-300 border-b border-stone-100 text-center">-</td>
                     <td className="p-4 border-b border-stone-100">
-                      <div className="flex items-center gap-3 justify-center">
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={displayNumericInput(draftItem.value)}
-                          onChange={(e) => handleBpdsDraftArrayChange(idx, 'value', e.target.value)}
-                          className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
-                        />
-                        <span className="text-xs font-bold text-stone-400">%</span>
+                      <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={displayNumericInput(draftItem.value)}
+                            onChange={(e) => handleBpdsDraftArrayChange(idx, 'value', e.target.value)}
+                            className="w-24 p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 text-center focus:ring-2 focus:ring-stone-500/20 outline-none"
+                          />
+                          <span className="text-xs font-bold text-stone-400">%</span>
+                        </div>
+                        {isCompletedProgress(draftItem.value) && (
+                          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-black text-emerald-700">
+                            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                            Lengkap
+                          </span>
+                        )}
                         <button
                           type="button"
                           onClick={() => handleDeleteDeraf(idx)}
