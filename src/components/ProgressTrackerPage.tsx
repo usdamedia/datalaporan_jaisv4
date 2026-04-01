@@ -76,12 +76,29 @@ const buildWhatsappSummary = (
   inProgressItems: number,
   timestamp: Date
 ) => {
-  const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
+  const completedUnits: string[] = [];
 
-  const doneLine = trackerItems
-    .filter((item) => item.progress.percentage === 100)
-    .map((item) => item.name)
-    .join(', ') || '-';
+  // "Selesai" dalam WhatsApp kita mahu ikut aras unit/sub-unit yang sebenarnya siap,
+  // bukan semata-mata bahagian/dept yang percentage jadi 100%.
+  for (const dept of trackerItems) {
+    if (!dept.active) continue;
+
+    if (dept.subUnits?.length) {
+      const activeUnits = dept.subUnits.filter((u) => u.active);
+      for (const unit of activeUnits) {
+        if (isSubUnitCompleted(dept.name, unit)) {
+          completedUnits.push(unit.name);
+        }
+      }
+    } else if (dept.completed || hasSavedProgress(dept.name)) {
+      completedUnits.push(dept.name);
+    }
+  }
+
+  const dedupedCompletedUnits = Array.from(new Set(completedUnits));
+
+  const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
+  const doneUnitsLine = dedupedCompletedUnits.join(', ') || '-';
 
   const inProgressLine = trackerItems
     .filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100)
@@ -95,11 +112,12 @@ const buildWhatsappSummary = (
     '',
     `Tarikh/Masa: ${formatMalayDateTime(timestamp)}`,
     `Purata keseluruhan: ${overallPercentage}%`,
-    `Selesai: ${completedItems} bahagian`,
+    `Unit yang sudah siap: ${doneUnitsLine}`,
+    `Selesai (ikut card 100%): ${completedItems} bahagian`,
     `Sedang berjalan: ${inProgressItems} bahagian`,
     `Belum bermula: ${notStartedItems.length} bahagian`,
     '',
-    `Senarai selesai: ${doneLine}`,
+    `Senarai unit siap: ${doneUnitsLine}`,
     `Senarai sedang berjalan: ${inProgressLine}`,
     `Senarai belum bermula: ${notStartedLine}`,
     '',
