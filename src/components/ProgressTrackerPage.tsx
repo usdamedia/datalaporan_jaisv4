@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Clock3, Gauge, Layers3, Sparkles } from 'lucide-react';
+import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Sparkles } from 'lucide-react';
 import { DEPARTMENTS, getIconForDept } from '../constants';
 import { Department, SubUnit } from '../types';
 
@@ -58,7 +58,59 @@ const getDepartmentProgress = (department: Department) => {
   };
 };
 
+const formatMalayDateTime = (date: Date) =>
+  new Intl.DateTimeFormat('ms-MY', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).format(date);
+
+const buildWhatsappSummary = (
+  trackerItems: Array<Department & { progress: ReturnType<typeof getDepartmentProgress> }>,
+  overallPercentage: number,
+  completedItems: number,
+  inProgressItems: number,
+  timestamp: Date
+) => {
+  const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
+
+  const doneLine = trackerItems
+    .filter((item) => item.progress.percentage === 100)
+    .map((item) => item.name)
+    .join(', ') || '-';
+
+  const inProgressLine = trackerItems
+    .filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100)
+    .map((item) => `${item.name} (${item.progress.percentage}%)`)
+    .join(', ') || '-';
+
+  const notStartedLine = notStartedItems.map((item) => item.name).join(', ') || '-';
+
+  return [
+    'Assalamualaikum Tuan/Puan, berikut kemas kini progress semasa dashboard JAIS:',
+    '',
+    `Tarikh/Masa: ${formatMalayDateTime(timestamp)}`,
+    `Purata keseluruhan: ${overallPercentage}%`,
+    `Selesai: ${completedItems} bahagian`,
+    `Sedang berjalan: ${inProgressItems} bahagian`,
+    `Belum bermula: ${notStartedItems.length} bahagian`,
+    '',
+    `Senarai selesai: ${doneLine}`,
+    `Senarai sedang berjalan: ${inProgressLine}`,
+    `Senarai belum bermula: ${notStartedLine}`,
+    '',
+    'Terima kasih.',
+  ].join('\n');
+};
+
 const ProgressTrackerPage: React.FC = () => {
+  const [summaryTimestamp, setSummaryTimestamp] = React.useState(new Date());
+  const [isCopied, setIsCopied] = React.useState(false);
+
   const trackerItems = React.useMemo(
     () => DEPARTMENTS.filter((department) => department.active).map((department) => ({
       ...department,
@@ -76,6 +128,30 @@ const ProgressTrackerPage: React.FC = () => {
 
   const completedItems = trackerItems.filter((item) => item.progress.percentage === 100).length;
   const inProgressItems = trackerItems.filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100).length;
+  const whatsappSummaryText = React.useMemo(
+    () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp),
+    [trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp]
+  );
+
+  const handleCopySummary = async () => {
+    const latestTimestamp = new Date();
+    const latestText = buildWhatsappSummary(
+      trackerItems,
+      overallPercentage,
+      completedItems,
+      inProgressItems,
+      latestTimestamp
+    );
+
+    try {
+      await navigator.clipboard.writeText(latestText);
+      setSummaryTimestamp(latestTimestamp);
+      setIsCopied(true);
+      window.setTimeout(() => setIsCopied(false), 1800);
+    } catch (error) {
+      console.error('Failed to copy WhatsApp summary', error);
+    }
+  };
 
   return (
     <div className="space-y-8 md:space-y-10">
@@ -113,6 +189,45 @@ const ProgressTrackerPage: React.FC = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm md:p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="max-w-3xl">
+            <p className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
+              <Sparkles className="h-3.5 w-3.5" />
+              Ringkasan WhatsApp
+            </p>
+            <h3 className="mt-3 text-xl font-black text-slate-900 md:text-2xl">
+              Copy Progress Dalam Bentuk Ayat
+            </h3>
+            <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
+              Guna ringkasan ini untuk terus paste ke WhatsApp. Tarikh dan masa akan dikemaskini semasa anda tekan butang copy.
+            </p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700">
+              Timestamp semasa: {formatMalayDateTime(summaryTimestamp)}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleCopySummary}
+            className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition ${
+              isCopied
+                ? 'bg-emerald-600 text-white'
+                : 'border border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-100'
+            }`}
+          >
+            {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {isCopied ? 'Berjaya Disalin' : 'Copy Untuk WhatsApp'}
+          </button>
+        </div>
+
+        <textarea
+          value={whatsappSummaryText}
+          readOnly
+          className="mt-4 h-64 w-full rounded-2xl border border-emerald-200 bg-white p-4 text-sm leading-6 text-slate-700 shadow-inner focus:outline-none"
+        />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
