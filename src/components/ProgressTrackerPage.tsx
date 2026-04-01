@@ -76,6 +76,49 @@ const buildWhatsappSummary = (
   inProgressItems: number,
   timestamp: Date
 ) => {
+  const toSentenceCase = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return trimmed;
+
+    // If it looks like ALL CAPS (common for department labels), convert to Title Case-ish.
+    const words = trimmed.split(/\s+/).filter(Boolean);
+    const isAllCaps = words.every((word) => !/[a-z]/.test(word));
+    if (!isAllCaps) return trimmed;
+
+    return words
+      .map((word) => {
+        const lower = word.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join(' ');
+  };
+
+  const toAbbreviation = (fullName: string) => {
+    const trimmed = fullName.trim();
+
+    // Prefer explicit prefix acronyms, e.g. "UPP UNIT ..." -> UPP
+    const prefix = trimmed.match(/^([A-Z]{2,8})\b/);
+    if (prefix) return prefix[1];
+
+    // Prefer left side of "DHQC - ..." style labels
+    const dashed = trimmed.match(/^([A-Z]{2,8})\s*-\s*/);
+    if (dashed) return dashed[1];
+
+    // Prefer trailing acronym, e.g. "... BPPS" -> BPPS, "... UKOKO" -> UKOKO
+    const trailing = trimmed.match(/\b([A-Z]{2,8})\s*$/);
+    if (trailing) return trailing[1];
+
+    // Fallback: initials from first 3-4 words (e.g. "Unit Integriti" -> UI)
+    const words = trimmed.split(/\s+/).filter(Boolean);
+    const initials = words
+      .slice(0, 4)
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase();
+
+    return initials || 'NA';
+  };
+
   const completedUnits: string[] = [];
 
   // "Selesai" dalam WhatsApp kita mahu ikut aras unit/sub-unit yang sebenarnya siap,
@@ -98,14 +141,24 @@ const buildWhatsappSummary = (
   const dedupedCompletedUnits = Array.from(new Set(completedUnits));
 
   const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
-  const doneUnitsLine = dedupedCompletedUnits.join(', ') || '-';
+  const doneUnitsLine = dedupedCompletedUnits.map(toSentenceCase).join(', ') || '-';
 
   const inProgressLine = trackerItems
     .filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100)
     .map((item) => `${item.name} (${item.progress.percentage}%)`)
     .join(', ') || '-';
 
-  const notStartedLine = notStartedItems.map((item) => item.name).join(', ') || '-';
+  const notStartedRows = notStartedItems
+    .map((item) => {
+      const abbr = toAbbreviation(item.name);
+      return { abbr, full: item.name };
+    })
+    .sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
+
+  const notStartedListBlock =
+    notStartedRows.length > 0
+      ? `- Pengumpulan data:\n${notStartedRows.map((row) => `  - ${row.abbr}_ ${row.full}`).join('\n')}`
+      : '- Pengumpulan data: -';
 
   return [
     'Assalamualaikum Tuan/Puan,',
@@ -120,9 +173,9 @@ const buildWhatsappSummary = (
     `- Dalam pengumpulan data: ${notStartedItems.length} bahagian`,
     '',
     '*Senarai status semasa:*',
-    `- Senarai unit siap: ${doneUnitsLine}`,
+    `Senarai Unit/Bahagian Siap : ${doneUnitsLine}`,
     `- Senarai sedang berjalan: ${inProgressLine}`,
-    `- Pengumpulan data: ${notStartedLine}`,
+    notStartedListBlock,
     '',
     'Terima kasih.',
   ].join('\n');
