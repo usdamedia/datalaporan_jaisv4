@@ -10,6 +10,17 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) => {
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
+  const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const announcementMessages = [
+    {
+      text: 'Data Tidak Ada Disimpan Di Mana-Mana Google Sheet, Anda Perlu Save -> Download PDF -> Tandatangan -> Serah kepada Urus Setia',
+      style: { fontSize: '18.67px', fontWeight: 700, fontStyle: 'normal' } as React.CSSProperties,
+    },
+    {
+      text: 'Dialek Sarawak: Data sik disimpan di mana mana google sheet, save progress di browser tuan puan, kakya boleh edit balit nya disimpan dalam broswer ktk jak, dah ready kakya download PDF print, kakya sign KB/PKB dan serahkan kepada urus setia.',
+      style: { fontSize: '13.33px', fontWeight: 400, fontStyle: 'italic' } as React.CSSProperties,
+    },
+  ];
   const fontScaleOptions = useMemo(
     () => ({
       compact: {
@@ -95,11 +106,10 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                   onClick={() => setFontScale('compact')}
                   aria-label="Kecilkan font lagi"
                   title="Kecilkan font lagi"
-                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
-                    fontScale === 'compact'
-                      ? 'bg-zus-900 text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
-                  }`}
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${fontScale === 'compact'
+                    ? 'bg-zus-900 text-white'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                    }`}
                 >
                   A--
                 </button>
@@ -108,11 +118,10 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                   onClick={() => setFontScale('small')}
                   aria-label="Kecilkan font"
                   title="Kecilkan font"
-                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
-                    fontScale === 'small'
-                      ? 'bg-zus-900 text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
-                  }`}
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${fontScale === 'small'
+                    ? 'bg-zus-900 text-white'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                    }`}
                 >
                   A-
                 </button>
@@ -121,11 +130,10 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                   onClick={() => setFontScale('large')}
                   aria-label="Besarkan font"
                   title="Besarkan font"
-                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${
-                    fontScale === 'large'
-                      ? 'bg-zus-900 text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
-                  }`}
+                  className={`rounded-full px-2 py-1 text-[10px] font-black transition sm:px-2.5 sm:text-[11px] ${fontScale === 'large'
+                    ? 'bg-zus-900 text-white'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-zus-900'
+                    }`}
                 >
                   A+
                 </button>
@@ -146,6 +154,31 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
             </div>
           </div>
         </div>
+        {showAnnouncement && (
+          <div className="w-full bg-red-700 px-4 py-2 text-white">
+            <div className="mx-auto flex max-w-[112rem] items-start gap-3 sm:gap-4">
+              <div className="flex flex-1 flex-wrap items-center justify-center gap-3 text-center leading-tight sm:gap-4">
+                {announcementMessages.map((message, index) => (
+                  <React.Fragment key={message.text}>
+                    {index > 0 && <span className="hidden sm:inline text-red-200">|</span>}
+                    <p style={message.style} className="tracking-[0.01em]">
+                      {message.text}
+                    </p>
+                  </React.Fragment>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAnnouncement(false)}
+                aria-label="Tutup pengumuman"
+                title="Tutup pengumuman"
+                className="mt-0.5 rounded-full border border-white/40 px-2 py-0.5 text-sm font-bold text-white transition hover:bg-white/20"
+              >
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}

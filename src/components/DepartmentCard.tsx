@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight, Layers } from 'lucide-react';
-import { getIconForDept } from '../constants';
+import { getIconForDept } from '../data/departments';
 
 interface DepartmentCardProps {
   id: string;

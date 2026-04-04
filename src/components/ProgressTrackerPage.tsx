@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Sparkles } from 'lucide-react';
-import { DEPARTMENTS, getIconForDept } from '../constants';
+import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 
 const toStorageKey = (name: string) =>
@@ -141,12 +141,12 @@ const buildWhatsappSummary = (
   const dedupedCompletedUnits = Array.from(new Set(completedUnits));
 
   const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
-  const doneUnitsLine = dedupedCompletedUnits.map(toSentenceCase).join(', ') || '-';
+  const doneUnitsList = dedupedCompletedUnits.map(toSentenceCase).sort((a, b) => a.localeCompare(b, 'ms-MY'));
 
-  const inProgressLine = trackerItems
+  const inProgressList = trackerItems
     .filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100)
     .map((item) => `${item.name} (${item.progress.percentage}%)`)
-    .join(', ') || '-';
+    .sort((a, b) => a.localeCompare(b, 'ms-MY'));
 
   const notStartedRows = notStartedItems
     .map((item) => {
@@ -155,10 +155,8 @@ const buildWhatsappSummary = (
     })
     .sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
 
-  const notStartedListBlock =
-    notStartedRows.length > 0
-      ? `- Pengumpulan data:\n${notStartedRows.map((row) => `  - ${row.abbr}_ ${row.full}`).join('\n')}`
-      : '- Pengumpulan data: -';
+  const asBulletedList = (items: string[]) =>
+    items.length > 0 ? items.map((item) => `• ${item}`).join('\n') : '• -';
 
   return [
     'Assalamualaikum Tuan/Puan,',
@@ -173,9 +171,14 @@ const buildWhatsappSummary = (
     `- Dalam pengumpulan data: ${notStartedItems.length} bahagian`,
     '',
     '*Senarai status semasa:*',
-    `Senarai Unit/Bahagian Siap : ${doneUnitsLine}`,
-    `- Senarai sedang berjalan: ${inProgressLine}`,
-    notStartedListBlock,
+    '✅ Unit/Bahagian Siap:',
+    asBulletedList(doneUnitsList),
+    '',
+    '🔄 Sedang Berjalan:',
+    asBulletedList(inProgressList),
+    '',
+    '⏳ Pengumpulan Data:',
+    asBulletedList(notStartedRows.map((row) => `${row.abbr} ${row.full}`)),
     '',
     'Terima kasih.',
   ].join('\n');
