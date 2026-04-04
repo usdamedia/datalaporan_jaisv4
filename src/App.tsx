@@ -5,7 +5,8 @@ import FormEntry from './components/FormEntry';
 import DigitalizationPage from './components/DigitalizationPage';
 import ProgressTrackerPage from './components/ProgressTrackerPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
-import { DEPARTMENTS } from './constants';
+import WebViewOnlyGuard from './components/WebViewOnlyGuard';
+import { DEPARTMENTS } from './data/departments';
 import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3 } from 'lucide-react';
 
@@ -159,12 +160,13 @@ export default function App() {
     : selectedDept?.name;
 
   return (
-    <MaintenanceGuard>
-      <Layout 
-        showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker} 
-        onBack={resetSelection}
-        title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : 'Utama'}
-      >
+    <WebViewOnlyGuard>
+      <MaintenanceGuard>
+        <Layout 
+          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker} 
+          onBack={resetSelection}
+          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : 'Utama'}
+        >
         {showTutorial && (
           <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
             <div
@@ -389,7 +391,8 @@ export default function App() {
             </div>
           </div>
         )}
-      </Layout>
-    </MaintenanceGuard>
+        </Layout>
+      </MaintenanceGuard>
+    </WebViewOnlyGuard>
   );
 }
