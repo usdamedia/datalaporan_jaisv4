@@ -26,6 +26,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     setFormData,
     handleSave,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,
@@ -143,6 +144,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

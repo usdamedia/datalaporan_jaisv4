@@ -108,7 +108,8 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
   const { 
     formData, 
     setFormData, 
-    isSaving, 
+    isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleSave,
@@ -326,7 +327,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
     });
 
   return (
-    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} showSuccess={showSuccess} saveError={saveError} formData={formData} getExportState={getExportState}>
+    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} isAutoSaving={isAutoSaving} showSuccess={showSuccess} saveError={saveError} formData={formData} getExportState={getExportState}>
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
       
       <div className="space-y-8 animate-fade-in mt-8">

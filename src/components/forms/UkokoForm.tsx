@@ -19,6 +19,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
     setFormData,
     handleSave,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError
   } = useFormLogic(deptName, {
@@ -80,6 +81,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

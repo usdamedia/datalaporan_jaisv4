@@ -77,6 +77,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     setFormData,
     handleSave,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError
   } = useFormLogic(deptName, {
@@ -480,6 +481,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

@@ -81,6 +81,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
     formData,
     setFormData,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,
@@ -261,6 +262,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

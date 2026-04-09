@@ -9,6 +9,7 @@ interface FormLayoutProps {
   onSave: () => void;
   onExport?: () => void | Promise<void>;
   isSaving: boolean;
+  isAutoSaving?: boolean;
   showSuccess: boolean;
   saveError?: string | null;
   formData: any;
@@ -24,6 +25,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   onSave, 
   onExport,
   isSaving, 
+  isAutoSaving,
   showSuccess, 
   saveError,
   formData,
@@ -68,9 +70,17 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Kembali ke Utama
           </button>
-          <h2 className="text-2xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
-            {deptName}
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
+              {deptName}
+            </h2>
+            {isAutoSaving && (
+              <div className="flex items-center gap-2 animate-pulse bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                <div className="w-1.5 h-1.5 bg-teal-500 rounded-full"></div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Menyimpan...</span>
+              </div>
+            )}
+          </div>
           <p className="mt-3 max-w-4xl text-sm font-medium text-gray-500 md:text-base">
             Sila lengkapkan maklumat laporan tahunan di bawah.
           </p>
@@ -141,8 +151,8 @@ const FormLayout: React.FC<FormLayoutProps> = ({
         {/* Footer Info */}
         <div className="flex items-start gap-4 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-6 text-blue-700">
           <AlertCircle className="mt-0.5 h-5 w-5" />
-          <p className="text-[10px] md:text-[11px] font-medium">
-            Nota: Data anda disimpan secara automatik dalam pelayar ini. Pastikan anda menekan butang <strong>Simpan Draf</strong> sebelum menutup tab.
+          <p className="text-[10px] md:text-[11px] font-bold leading-relaxed">
+            Progress disimpan secara automatik dalam storage peranti anda sahaja. Data tidak dihantar ke server selagi butang eksport tidak digunakan. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk keselamatan data jangka panjang.
           </p>
         </div>
       </div>

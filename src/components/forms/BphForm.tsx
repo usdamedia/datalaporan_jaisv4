@@ -87,6 +87,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     formData,
     setFormData,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,
@@ -175,7 +176,8 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       deptName={deptName} 
       onBack={onBack} 
       onSave={handleSave} 
-      isSaving={isSaving} 
+      isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

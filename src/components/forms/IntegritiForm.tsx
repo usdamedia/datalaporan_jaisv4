@@ -55,7 +55,7 @@ const REFERENCE_ROWS = [
 ] as const;
 
 const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
-  const { formData, setFormData, handleSave, isSaving, showSuccess, saveError } = useFormLogic(deptName, {
+  const { formData, setFormData, handleSave, isSaving, isAutoSaving, showSuccess, saveError } = useFormLogic(deptName, {
     tarikh: new Date().toISOString().split('T')[0],
     disediakanOleh: '',
     jawatan: '',
@@ -109,6 +109,7 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

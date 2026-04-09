@@ -50,6 +50,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
   const {
     formData,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,
@@ -84,6 +85,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

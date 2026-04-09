@@ -3,10 +3,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 export const useFormLogic = (deptName: string, initialState: any) => {
   const [formData, setFormData] = useState<any>(initialState);
   const [isSaving, setIsSaving] = useState(false);
+  const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const saveTimeoutRef = useRef<number | null>(null);
+  const autoSaveTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
+  const isInitialMount = useRef(true);
   const storageKey = useMemo(() => {
     const normalizedDeptName = deptName
       .trim()
@@ -75,12 +78,44 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       if (saveTimeoutRef.current) {
         window.clearTimeout(saveTimeoutRef.current);
       }
-
+      if (autoSaveTimeoutRef.current) {
+        window.clearTimeout(autoSaveTimeoutRef.current);
+      }
       if (successTimeoutRef.current) {
         window.clearTimeout(successTimeoutRef.current);
       }
     };
   }, [deptName, storageKey]);
+
+  // Handle Auto-Save
+  useEffect(() => {
+    // Avoid saving on first load
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (autoSaveTimeoutRef.current) {
+      window.clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    setIsAutoSaving(true);
+    autoSaveTimeoutRef.current = window.setTimeout(() => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(formData));
+        setIsAutoSaving(false);
+      } catch (error) {
+        console.error('Error auto-saving data', error);
+        setIsAutoSaving(false);
+      }
+    }, 1500); // Debounce delay 1.5s
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        window.clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [formData, storageKey]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -147,6 +182,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     formData,
     setFormData,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,

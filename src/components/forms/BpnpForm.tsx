@@ -244,6 +244,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   const {
     formData,
     isSaving,
+    isAutoSaving,
     showSuccess,
     saveError,
     handleInputChange,
@@ -611,6 +612,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       }}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}

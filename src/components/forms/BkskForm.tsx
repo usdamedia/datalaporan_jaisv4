@@ -62,6 +62,7 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
     addLawatan,
     removeLawatan,
     updateLawatan,
+    isAutoSaving,
   } = useFormLogic(deptName, createInitialState());
 
   const handleStatChange = (field: string, value: string) => {
@@ -209,6 +210,7 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
       onBack={onBack}
       onSave={handleSave}
       isSaving={isSaving}
+      isAutoSaving={isAutoSaving}
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
