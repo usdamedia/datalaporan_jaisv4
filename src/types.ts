@@ -309,6 +309,12 @@ export interface BookCategory {
     jumlah: number | string;
 }
 
+export interface PublicationItem {
+    nama: string;
+    jenis: string;
+    bahagian: string;
+}
+
 // Data spesifik untuk UKOKO
 export interface UkokoData extends ReportData {
     socialMedia: {
@@ -351,6 +357,6 @@ export interface UkokoData extends ReportData {
     };
     // New Section: Penerbitan
     penerbitan?: {
-        kategoriBuku: BookCategory[];
+        senaraiPenerbitan: PublicationItem[];
     };
 }

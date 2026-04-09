@@ -517,7 +517,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     },
   ];
   const shouldRenderBasicInfo = !isIntegriti;
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isIntegriti);
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isIntegriti);
 
   return (
     <Document>
@@ -1812,34 +1812,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           </>
         )}
 
-        {isUKOKO && isUkokoPenerbitan && formData.penerbitan && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Laporan Unit Penerbitan 2025</Text>
-            <View style={[styles.infoCard, { backgroundColor: '#312e81', borderColor: '#312e81', marginBottom: 12 }]}>
-              <Text style={[styles.infoCardLabel, { color: '#c7d2fe' }]}>Jumlah Kategori Buku 2025</Text>
-              <Text style={[styles.infoCardValue, { color: '#ffffff', fontSize: 24 }]}>{String(formData.penerbitan.kategoriBuku?.length || 0)}</Text>
-            </View>
-
-            <Text style={styles.subSectionTitle}>Kategori Baharu Buku Tahun 2025</Text>
-            <View style={styles.table} wrap={false}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <View style={[styles.tableCell, { width: '70%' }]}><Text style={styles.tableCellHeader}>Nama Kategori Buku</Text></View>
-                <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Bilangan 2025</Text></View>
-              </View>
-              {(formData.penerbitan.kategoriBuku || []).map((cat: any, idx: number) => (
-                <View key={idx} style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ fontWeight: 'bold' }}>{cat.nama}</Text></View>
-                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%', backgroundColor: '#f5f3ff' }]}><Text style={{ fontWeight: 'bold' }}>{String(cat.jumlah || 0)}</Text></View>
-                </View>
-              ))}
-              {(formData.penerbitan.kategoriBuku || []).length === 0 && (
-                <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '100%', textAlign: 'center' }]}><Text style={styles.emptyState}>Tiada data dimasukkan</Text></View>
-                </View>
-              )}
-            </View>
-          </View>
-        )}
 
         {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !isUkokoPenerbitan && !formData.socialMedia && !formData.ukoko && (
           <View style={styles.section}>
@@ -2747,6 +2719,66 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
           </View>
         </View>
+        )}
+
+        {isUkokoPenerbitan && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Penerbitan JAIS 2025</Text>
+            <View style={[styles.infoCard, { backgroundColor: '#312e81', borderColor: '#312e81', marginBottom: 12 }]}>
+              <Text style={[styles.infoCardLabel, { color: '#c7d2fe' }]}>Jumlah Penerbitan 2025</Text>
+              <Text style={[styles.infoCardValue, { color: '#ffffff', fontSize: 24 }]}>{String(formData.penerbitan?.senaraiPenerbitan?.length || 0)}</Text>
+            </View>
+
+            <Text style={styles.subSectionTitle}>Senarai Penerbitan JAIS Secara Total</Text>
+            <View style={styles.table} wrap={false}>
+              <View style={[styles.tableRow, styles.tableHeader]}>
+                <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Nama Penerbitan</Text></View>
+                <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Jenis</Text></View>
+                <View style={[styles.tableCell, { width: '30%' }]}><Text style={styles.tableCellHeader}>Bahagian</Text></View>
+              </View>
+              {(formData.penerbitan?.senaraiPenerbitan || []).map((item: any, idx: number) => (
+                <View key={idx} style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text style={{ fontWeight: 'bold' }}>{item.nama}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%', backgroundColor: '#f5f3ff' }]}><Text style={{ fontWeight: 'bold', color: '#4338ca' }}>{item.jenis}</Text></View>
+                  <View style={[styles.tableCell, { width: '30%' }]}><Text>{item.bahagian}</Text></View>
+                </View>
+              ))}
+              {(formData.penerbitan?.senaraiPenerbitan || []).length === 0 && (
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '100%', textAlign: 'center' }]}><Text style={styles.emptyState}>Tiada data dimasukkan</Text></View>
+                </View>
+              )}
+            </View>
+
+            <View style={{ marginTop: 20 }}>
+              <Text style={styles.sectionTitle}>Cadangan Penambahbaikan</Text>
+              <View style={styles.narrativeBox}>
+                <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {isUkokoPenerbitan && formData.lawatan && formData.lawatan.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
+            <View style={styles.table} wrap={false}>
+              <View style={[styles.tableRow, styles.tableHeader]}>
+                <View style={[styles.tableCell, { width: '15%' }]}><Text style={styles.tableCellHeader}>Jenis</Text></View>
+                <View style={[styles.tableCell, { width: '35%' }]}><Text style={styles.tableCellHeader}>Tajuk / Agensi</Text></View>
+                <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Tarikh & Tempat</Text></View>
+                <View style={[styles.tableCell, { width: '25%' }]}><Text style={styles.tableCellHeader}>Objektif</Text></View>
+              </View>
+              {formData.lawatan.map((item: any, idx: number) => (
+                <View key={idx} style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '15%' }]}><Text style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{item.jenis}</Text></View>
+                  <View style={[styles.tableCell, { width: '35%' }]}><Text>{item.tajukAgensi}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.tarikh} @ {item.tempat}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.objektif}</Text></View>
+                </View>
+              ))}
+            </View>
+          </View>
         )}
 
         {/* Lawatan */}

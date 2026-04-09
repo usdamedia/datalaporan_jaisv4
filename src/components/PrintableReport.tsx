@@ -103,7 +103,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan);
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan);
   const bpnpKajian2025 = (formData.bpnp?.kajianList || []).map(normalizeKajianReportEntry);
   const bpnpPenulisan2025 = (formData.bpnp?.penulisanList || []).map(normalizePenulisanCompetitionReportEntry);
   const bpnpKajian2024 = BPNP_2024_REFERENCE.kajian.map((kajian) => normalizeKajianReportEntry(kajian));
@@ -2170,47 +2170,6 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         </div>
       )}
 
-      {isUKOKO && isUkokoPenerbitan && formData.penerbitan && (
-        <div className="space-y-8 mb-8">
-          <div className="p-6 bg-indigo-900 text-white rounded-3xl flex justify-between items-center border-b-4 border-indigo-700">
-            <div>
-              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Unit Penerbitan 2025</h3>
-              <p className="text-indigo-300 text-xs font-bold uppercase tracking-widest mt-1">Unit Komunikasi Korporat (UKOKO)</p>
-            </div>
-            <div className="text-right">
-              <p className="text-3xl font-black">{formData.penerbitan.kategoriBuku?.length || 0}</p>
-              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Kategori Buku 2025</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
-              Kategori Baharu Buku Tahun 2025
-            </h3>
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="border p-2 text-left">Nama Kategori Buku</th>
-                  <th className="border p-2 text-center bg-indigo-50">Bilangan Buku 2025</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(formData.penerbitan.kategoriBuku || []).map((cat: any, idx: number) => (
-                  <tr key={idx}>
-                    <td className="border p-2 font-bold">{cat.nama}</td>
-                    <td className="border p-2 text-center font-black bg-indigo-50">{cat.jumlah || 0}</td>
-                  </tr>
-                ))}
-                {(formData.penerbitan.kategoriBuku || []).length === 0 && (
-                  <tr>
-                    <td colSpan={2} className="border p-4 text-center text-gray-400 italic">Tiada data dimasukkan</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
 
       {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !isUkokoPenerbitan && (
         <div className="space-y-8">
@@ -2739,8 +2698,61 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       </div>
       )}
 
+      {isUkokoPenerbitan && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-indigo-900 text-white rounded-3xl flex justify-between items-center border-b-4 border-indigo-700">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Penerbitan JAIS 2025</h3>
+              <p className="text-indigo-300 text-xs font-bold uppercase tracking-widest mt-1">Unit Komunikasi Korporat (UKOKO)</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black">{formData.penerbitan?.senaraiPenerbitan?.length || 0}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Penerbitan 2025</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
+              Senarai Penerbitan JAIS Secara Total
+            </h3>
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-gray-50 uppercase text-[10px] font-black">
+                  <th className="border p-2 text-left">Nama Penerbitan</th>
+                  <th className="border p-2 text-center w-1/4">Jenis</th>
+                  <th className="border p-2 text-left w-1/4">Bahagian</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(formData.penerbitan?.senaraiPenerbitan || []).map((item: any, idx: number) => (
+                  <tr key={idx}>
+                    <td className="border p-2 font-bold">{item.nama}</td>
+                    <td className="border p-2 text-center font-black bg-indigo-50/30 text-indigo-700">{item.jenis}</td>
+                    <td className="border p-2">{item.bahagian}</td>
+                  </tr>
+                ))}
+                {(formData.penerbitan?.senaraiPenerbitan || []).length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="border p-4 text-center text-gray-400 italic">Tiada maklumat penerbitan disediakan.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Cadangan Penambahbaikan
+            </h3>
+            <p className="text-xs text-gray-700 leading-relaxed text-justify">
+              {formData.cadangan || 'Tiada maklumat disediakan.'}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Lawatan Section */}
-      {shouldRenderCommonNarrative && formData.lawatan && formData.lawatan.length > 0 && (
+      {(shouldRenderCommonNarrative || isUkokoPenerbitan) && formData.lawatan && formData.lawatan.length > 0 && (
         <div className="mt-8 space-y-4">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
             Rekod Lawatan / Penandaarasan
