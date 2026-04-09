@@ -1,0 +1,37 @@
+{
+  "name": "jais-report-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "packageManager": "npm@10.8.2",
+  "scripts": {
+    "dev": "vite",
+    "dev:live": "vite --host 0.0.0.0 --open",
+    "build": "vite build",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^4.3.2",
+    "@tailwindcss/vite": "^4.2.1",
+    "lucide-react": "^0.344.0",
+    "motion": "^12.35.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-to-print": "^3.3.0",
+    "recharts": "^2.12.2",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react": "^4.2.1",
+    "playwright": "^1.58.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.6",
+    "vite-plugin-singlefile": "^2.3.2"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
