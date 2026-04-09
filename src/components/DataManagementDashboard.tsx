@@ -234,9 +234,11 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
               <div className="md:w-1/2">
                 <input 
                   type="number" 
-                  value={localData[field.id as keyof Data2025] as number}
+                  step="any"
+                  placeholder="0"
+                  value={localData[field.id as keyof Data2025] || ''}
                   readOnly={field.readOnly}
-                  onChange={(e) => handleDataChange({ ...localData, [field.id]: parseInt(e.target.value) || 0 })}
+                  onChange={(e) => handleDataChange({ ...localData, [field.id]: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                   className={`w-full px-6 py-4 rounded-2xl border-2 border-gray-100 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition-all font-black text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
                 />
               </div>

@@ -364,7 +364,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           ...prev.bpnp.strategik,
           [section]: {
             ...prev.bpnp.strategik?.[section],
-            [field]: value === '' ? 0 : parseFloat(value),
+            [field]: value === '' ? '' : parseFloat(value),
           },
         },
       },
@@ -424,7 +424,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     });
   };
 
-  const handleUnitActivityTotalChange = (value: number) => {
+  const handleUnitActivityTotalChange = (value: number | string) => {
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -541,8 +541,9 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           type="number"
           min="0"
           step="any"
-          value={formData.bpnp.unitActivityTotal2025 ?? 0}
-          onChange={(e) => handleUnitActivityTotalChange(parseFloat(e.target.value) || 0)}
+          placeholder="0"
+          value={formData.bpnp.unitActivityTotal2025 || ''}
+          onChange={(e) => handleUnitActivityTotalChange(e.target.value === '' ? '' : parseFloat(e.target.value))}
           className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-center text-2xl font-black text-zus-900 outline-none transition-all focus:border-teal-300 focus:ring-4 focus:ring-teal-100"
         />
       </div>
@@ -961,7 +962,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                         type="number"
                         min="0"
                         step="any"
-                        value={formData.bpnp.strategik?.pelanStrategik?.[item.field] ?? 0}
+                        placeholder="0"
+                        value={formData.bpnp.strategik?.pelanStrategik?.[item.field] || ''}
                         onChange={(e) => handleStrategikNumberChange('pelanStrategik', item.field, e.target.value)}
                         className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
                       />
@@ -984,7 +986,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                         type="number"
                         min="0"
                         step="any"
-                        value={formData.bpnp.strategik?.rot?.[item.field] ?? 0}
+                        placeholder="0"
+                        value={formData.bpnp.strategik?.rot?.[item.field] || ''}
                         onChange={(e) => handleStrategikNumberChange('rot', item.field, e.target.value)}
                         className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
                       />
@@ -1002,7 +1005,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                       type="number"
                       min="0"
                       step="any"
-                      value={formData.bpnp.strategik?.data?.bilPegawaiData ?? 0}
+                      placeholder="0"
+                      value={formData.bpnp.strategik?.data?.bilPegawaiData || ''}
                       onChange={(e) => handleStrategikNumberChange('data', 'bilPegawaiData', e.target.value)}
                       className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
                     />
@@ -1016,7 +1020,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                       type="number"
                       min="0"
                       step="any"
-                      value={formData.bpnp.strategik?.data?.bilDashboardRasmiBaharu2025 ?? 0}
+                      placeholder="0"
+                      value={formData.bpnp.strategik?.data?.bilDashboardRasmiBaharu2025 || ''}
                       onChange={(e) => handleStrategikNumberChange('data', 'bilDashboardRasmiBaharu2025', e.target.value)}
                       className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xl font-black text-zus-900 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
                     />
