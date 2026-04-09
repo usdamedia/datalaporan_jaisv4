@@ -142,7 +142,7 @@ export const LawatanSection: React.FC<{
           <button 
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-1.5 bg-zus-900 text-white px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all hover:bg-zus-700 active:scale-95 disabled:opacity-70"
+            className="flex items-center gap-1.5 bg-zus-900 text-white px-4 py-2 rounded-xl font-bold text-xs sentence-case tracking-wider transition-all hover:bg-zus-700 active:scale-95 disabled:opacity-70"
           >
             {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             Simpan rekod
@@ -150,7 +150,7 @@ export const LawatanSection: React.FC<{
         )}
         <button 
           onClick={addLawatan}
-          className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs uppercase tracking-wider transition-colors"
+          className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs sentence-case tracking-wider transition-colors"
         >
           <Plus className="w-4 h-4" /> Tambah lawatan
         </button>

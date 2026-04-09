@@ -34,8 +34,8 @@ Aplikasi menyokong pelarasan saiz font secara dinamik untuk keselesaan pengguna.
 
 ## 3. Kapitalisasi (Capitalization)
 
-*   **Format:** Gunakan **Title Case** (`+ sentence cap`).
-    *   Hanya huruf pertama dalam ayat atau kata nama khas yang menggunakan huruf besar.
+*   **Format:** Gunakan **Capitalize Each Word** (Huruf Besar Bagi Setiap Perkataan).
+    *   Setiap huruf pertama bagi setiap perkataan menggunakan huruf besar.
     *   Kekalkan konsistensi ini bagi semua tajuk, subtajuk, dan kandungan teks.
 
 ---

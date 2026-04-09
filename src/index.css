@@ -68,12 +68,9 @@
     letter-spacing: normal; /* Font indent adalah normal */
   }
 
-  /* Utility for Sentence Case */
+  /* Utility for Capitalize Each Word (Title Case) */
   .sentence-case {
-    text-transform: lowercase;
-  }
-  .sentence-case::first-letter {
-    text-transform: uppercase;
+    text-transform: capitalize;
   }
 
   .app-typography :is(h1, h2, h3, [data-font-level="header"]) {

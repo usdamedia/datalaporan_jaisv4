@@ -694,8 +694,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                               <span className="text-2xl font-black leading-none text-blue-500">{index + 1}.</span>
                               <div className="flex-1">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-blue-700">{kajian.jenis}</span>
-                                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-600">Bilangan: {kajian.bilangan}</span>
+                                  <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-black sentence-case tracking-wider text-blue-700">{kajian.jenis}</span>
+                                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black sentence-case tracking-wider text-slate-600">Bilangan: {kajian.bilangan}</span>
                                 </div>
                                 <p className="mt-3 text-base font-medium leading-8 text-slate-700">{kajian.tajuk}</p>
                               </div>
@@ -726,8 +726,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                                 <span className="text-2xl font-black leading-none text-blue-500">{index + 1}.</span>
                                 <div className="flex-1">
                                   <div className="flex flex-wrap items-center gap-2">
-                                    <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-blue-700">{normalizedKajian.jenis}</span>
-                                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-600">Bilangan: {normalizedKajian.bilangan}</span>
+                                    <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-black sentence-case tracking-wider text-blue-700">{normalizedKajian.jenis}</span>
+                                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black sentence-case tracking-wider text-slate-600">Bilangan: {normalizedKajian.bilangan}</span>
                                   </div>
                                   <p className="mt-3 text-base font-medium leading-8 text-slate-700">{normalizedKajian.tajuk}</p>
                                 </div>
@@ -1182,7 +1182,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
             <BookOpen className="w-10 h-10" />
           </div>
-          <h3 className="text-xl font-black text-zus-900 mb-2 uppercase tracking-tight">{selectedUnit}</h3>
+          <h3 className="text-xl font-black text-zus-900 mb-2 sentence-case tracking-tight">{selectedUnit}</h3>
           <p className="text-slate-500 font-medium max-w-md mx-auto">
             Borang untuk unit ini sedang dalam pembangunan atau tiada data khusus yang diperlukan buat masa ini.
           </p>
