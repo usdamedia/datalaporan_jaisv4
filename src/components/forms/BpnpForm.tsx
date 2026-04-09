@@ -922,30 +922,39 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </>
             )}
 
-            {isUnitStrategik && (
-              <>
-          {renderUnitActivitySection(
-            'Jumlah Aktiviti Unit Perancangan Strategik (2025)',
-            'Masukkan total program atau aktiviti yang dilaksanakan oleh Unit Perancangan Strategik.',
-            'border-emerald-100 text-emerald-600'
-          )}
+          {isUnitStrategik && (
+            <div ref={strategicPrintRef} className="space-y-8">
+              {renderUnitActivitySection(
+                'Jumlah Aktiviti Unit Perancangan Strategik (2025)',
+                'Masukkan total program atau aktiviti yang dilaksanakan oleh Unit Perancangan Strategik.',
+                'border-emerald-100 text-emerald-600'
+              )}
 
-          {renderBpnpActivityLinkedSummary()}
+              {renderBpnpActivityLinkedSummary()}
 
-          <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm">
-            <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-teal-50 px-6 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-                  <BookOpen className="h-5 w-5" />
+              <section className="overflow-hidden rounded-[2rem] border border-emerald-100 bg-white shadow-sm">
+                <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-teal-50 px-6 py-5">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                        <BookOpen className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-black tracking-tight text-zus-900 sentence-case">Maklumat diperlukan</h3>
+                        <p className="text-sm font-medium text-slate-500">
+                          Lengkapkan data utama bagi Unit Perancangan Strategik mengikut tahun dan senarai dashboard rasmi baharu.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleStrategicPrint}
+                      className="print-hidden flex items-center gap-2 self-start rounded-2xl bg-slate-900 px-5 py-3 text-xs font-black text-white shadow-lg transition-all hover:bg-slate-800 hover:shadow-xl active:scale-95 sentence-case"
+                    >
+                      <Printer className="h-4 w-4" />
+                      Export to PDF
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-black tracking-tight text-zus-900 sentence-case">Maklumat diperlukan</h3>
-                  <p className="text-sm font-medium text-slate-500">
-                    Lengkapkan data utama bagi Unit Perancangan Strategik mengikut tahun dan senarai dashboard rasmi baharu.
-                  </p>
-                </div>
-              </div>
-            </div>
 
             <div className="grid gap-6 p-6 lg:grid-cols-3">
               <div className="rounded-[1.75rem] border border-emerald-100 bg-emerald-50/60 p-5">
@@ -1078,11 +1087,11 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
             </div>
           </section>
 
-          {/* Kajian & Kaji Selidik */}
-              </>
-            )}
+              {/* Kajian & Kaji Selidik */}
+            </div>
+          )}
 
-            {isUnitAkidah && (
+          {isUnitAkidah && (
               <>
           {renderUnitActivitySection(
             'Jumlah Aktiviti Unit Akidah Tapisan (2025)',
