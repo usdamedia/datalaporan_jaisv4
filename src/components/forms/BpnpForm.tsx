@@ -797,11 +797,11 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                           <p className="mt-1 text-xs font-medium">Pilih kategori yang tepat, sama ada <strong>Diploma dan ke bawah</strong> atau <strong>Ijazah dan ke atas</strong>.</p>
                         </div>
                         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                          <p className="font-black text-zus-900">Tempat Dimenangi</p>
-                          <p className="mt-1 text-xs font-medium">Nyatakan kedudukan sebenar seperti <strong>Johan</strong>, <strong>Naib Johan</strong>, <strong>Ketiga</strong> atau <strong>Saguhati</strong>.</p>
+                          <p className="font-black text-zus-900 sentence-case">Tempat dimenangi</p>
+                          <p className="mt-1 text-xs font-medium">Nyatakan kedudukan sebenar seperti <strong>Johan</strong>, <strong>Naib johan</strong>, <strong>Ketiga</strong> atau <strong>Saguhati</strong>.</p>
                         </div>
                         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-                          <p className="font-black text-zus-900">Nama & Tajuk Kajian</p>
+                          <p className="font-black text-zus-900 sentence-case">Nama & tajuk kajian</p>
                           <p className="mt-1 text-xs font-medium">Masukkan nama pemenang dan tajuk penuh kerana maklumat ini akan dipaparkan semula dalam laporan eksport.</p>
                         </div>
                       </div>
@@ -952,9 +952,9 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 <h4 className="text-sm font-black text-emerald-900 sentence-case">Pelan strategik jabatan</h4>
                 <div className="mt-5 space-y-4">
                   {[
-                    { field: 'total2023', label: 'Pencapaian Total 2023' },
-                    { field: 'total2024', label: 'Pencapaian Total 2024' },
-                    { field: 'total2025', label: 'Pencapaian Total 2025' },
+                    { field: 'total2023', label: 'Pencapaian total 2023' },
+                    { field: 'total2024', label: 'Pencapaian total 2024' },
+                    { field: 'total2025', label: 'Pencapaian total 2025' },
                   ].map((item) => (
                     <div key={item.field} className="rounded-2xl border border-emerald-100 bg-white p-4">
                       <label className="text-xs font-black text-slate-500 sentence-case">{item.label}</label>
@@ -976,9 +976,9 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 <h4 className="text-sm font-black text-sky-900 sentence-case">Rancangan operasi tahunan</h4>
                 <div className="mt-5 space-y-4">
                   {[
-                    { field: 'aktivitiProgram2023', label: 'Aktiviti Program 2023' },
-                    { field: 'aktivitiProgram2024', label: 'Aktiviti Program 2024' },
-                    { field: 'aktivitiProgram2025', label: 'Aktiviti Program 2025' },
+                    { field: 'aktivitiProgram2023', label: 'Aktiviti program 2023' },
+                    { field: 'aktivitiProgram2024', label: 'Aktiviti program 2024' },
+                    { field: 'aktivitiProgram2025', label: 'Aktiviti program 2025' },
                   ].map((item) => (
                     <div key={item.field} className="rounded-2xl border border-sky-100 bg-white p-4">
                       <label className="text-xs font-black text-slate-500 sentence-case">{item.label}</label>
@@ -1042,7 +1042,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 className="inline-flex items-center gap-2 rounded-2xl bg-violet-600 px-5 py-3 text-sm font-black text-white transition hover:bg-violet-700 active:scale-[0.98]"
               >
                 <Plus className="h-4 w-4" />
-                Tambah Nama Dashboard
+                Tambah nama dashboard
               </button>
             </div>
 
@@ -1097,17 +1097,17 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
                   <Activity className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-zus-900">Statistik Aktiviti & Operasi (2025)</h3>
+                <h3 className="text-lg font-bold text-zus-900 sentence-case">Statistik aktiviti & operasi (2025)</h3>
               </div>
               <div className="space-y-4">
                 {[
-                  { label: 'Penapisan Bahan Berunsur Islam', field: 'penapisan', ref: BPNP_2024_REFERENCE.statistik.penapisan },
-                  { label: 'Kluster Data Bersepadu', field: 'kluster', ref: BPNP_2024_REFERENCE.statistik.kluster },
-                  { label: 'Program / Aktiviti', field: 'program', ref: BPNP_2024_REFERENCE.statistik.program },
+                  { label: 'Penapisan bahan berunsur Islam', field: 'penapisan', ref: BPNP_2024_REFERENCE.statistik.penapisan },
+                  { label: 'Kluster data bersepadu', field: 'kluster', ref: BPNP_2024_REFERENCE.statistik.kluster },
+                  { label: 'Program / aktiviti', field: 'program', ref: BPNP_2024_REFERENCE.statistik.program },
                 ].map((item) => (
                   <div key={item.field} className="grid grid-cols-2 items-center gap-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-500">{item.label}</label>
+                      <label className="text-xs font-bold text-gray-500 sentence-case">{item.label}</label>
                       <div className="text-[10px] font-bold text-gray-400">2024: {item.ref}</div>
                     </div>
                     <input 
@@ -1126,13 +1126,13 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
                   <Image className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-zus-900">Penerbitan Digital (2025)</h3>
+                <h3 className="text-lg font-bold text-zus-900 sentence-case">Penerbitan digital (2025)</h3>
               </div>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-4">
                   <div className="space-y-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-500">Infografik Akidah</label>
+                      <label className="text-xs font-bold text-gray-500 sentence-case">Infografik akidah</label>
                       <div className="text-[10px] font-bold text-indigo-400">2024: {BPNP_2024_REFERENCE.statistik.infografik}</div>
                     </div>
                     <input 

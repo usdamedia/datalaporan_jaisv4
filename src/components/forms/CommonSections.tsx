@@ -17,13 +17,13 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
       <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
         <Info className="w-5 h-5" />
       </div>
-      <h3 className="text-lg font-bold text-zus-900">Maklumat Asas</h3>
+      <h3 className="text-lg font-bold text-zus-900 sentence-case">Maklumat asas</h3>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-          <Calendar className="w-3 h-3" /> Tarikh Laporan
+        <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
+          <Calendar className="w-3 h-3" /> Tarikh laporan
         </label>
         <input 
           type="date"
@@ -34,26 +34,26 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         />
       </div>
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-          <User className="w-3 h-3" /> Disediakan Oleh
+        <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
+          <User className="w-3 h-3" /> Disediakan oleh
         </label>
         <input 
           type="text"
           name="disediakanOleh"
-          placeholder="Nama Pegawai"
+          placeholder="Nama pegawai"
           value={formData.disediakanOleh}
           onChange={handleInputChange}
           className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
         />
       </div>
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
           <Briefcase className="w-3 h-3" /> Jawatan
         </label>
         <input 
           type="text"
           name="jawatan"
-          placeholder="Jawatan Pegawai"
+          placeholder="Jawatan pegawai"
           value={formData.jawatan}
           onChange={handleInputChange}
           className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
@@ -69,13 +69,13 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
       <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
         <FileText className="w-5 h-5" />
       </div>
-      <h3 className="text-lg font-bold text-zus-900">Ringkasan & Analisis</h3>
+      <h3 className="text-lg font-bold text-zus-900 sentence-case">Ringkasan & analisis</h3>
     </div>
 
     <div className="space-y-6">
       <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-          Ringkasan Pencapaian Utama 2025
+        <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
+          Ringkasan pencapaian utama 2025
         </label>
         <textarea 
           name="ringkasan"
@@ -89,8 +89,8 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-            <MessageSquare className="w-3 h-3" /> Isu & Cabaran
+          <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
+            <MessageSquare className="w-3 h-3" /> Isu & cabaran
           </label>
           <textarea 
             name="isu"
@@ -102,8 +102,8 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           ></textarea>
         </div>
         <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-            <Lightbulb className="w-3 h-3" /> Cadangan Penambahbaikan
+          <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
+            <Lightbulb className="w-3 h-3" /> Cadangan penambahbaikan
           </label>
           <textarea 
             name="cadangan"
@@ -135,7 +135,7 @@ export const LawatanSection: React.FC<{
         <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
           <Calendar className="w-5 h-5" />
         </div>
-        <h3 className="text-lg font-bold text-zus-900">Rekod Lawatan</h3>
+        <h3 className="text-lg font-bold text-zus-900 sentence-case">Rekod lawatan</h3>
       </div>
       <div className="flex items-center gap-4">
         {formData.lawatan && formData.lawatan.length > 0 && handleSave && (
@@ -145,14 +145,14 @@ export const LawatanSection: React.FC<{
             className="flex items-center gap-1.5 bg-zus-900 text-white px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all hover:bg-zus-700 active:scale-95 disabled:opacity-70"
           >
             {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-            Simpan Rekod
+            Simpan rekod
           </button>
         )}
         <button 
           onClick={addLawatan}
           className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs uppercase tracking-wider transition-colors"
         >
-          <Plus className="w-4 h-4" /> Tambah Lawatan
+          <Plus className="w-4 h-4" /> Tambah lawatan
         </button>
       </div>
     </div>
@@ -160,7 +160,7 @@ export const LawatanSection: React.FC<{
     {(!formData.lawatan || formData.lawatan.length === 0) ? (
       <div className="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
         <AlertCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-        <p className="text-sm text-gray-400 font-medium">Tiada rekod lawatan ditambah.</p>
+        <p className="text-sm text-gray-400 font-medium sentence-case">Tiada rekod lawatan ditambah.</p>
       </div>
     ) : (
       <div className="space-y-4">
@@ -175,7 +175,7 @@ export const LawatanSection: React.FC<{
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis</label>
+                <label className="text-[10px] font-bold text-gray-400 sentence-case">Jenis</label>
                 <select 
                   value={item.jenis}
                   onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
@@ -186,7 +186,7 @@ export const LawatanSection: React.FC<{
                 </select>
               </div>
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tajuk Agensi / Program</label>
+                <label className="text-[10px] font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
                 <input 
                   type="text"
                   value={item.tajukAgensi}
@@ -199,7 +199,7 @@ export const LawatanSection: React.FC<{
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tarikh & Tempat</label>
+                <label className="text-[10px] font-bold text-gray-400 sentence-case">Tarikh & tempat</label>
                 <div className="flex gap-2">
                   <input 
                     type="date"
@@ -217,7 +217,7 @@ export const LawatanSection: React.FC<{
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Objektif</label>
+                <label className="text-[10px] font-bold text-gray-400 sentence-case">Objektif</label>
                 <input 
                   type="text"
                   value={item.objektif}
