@@ -17,9 +17,45 @@ export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [selectedSubUnit, setSelectedSubUnit] = useState<SubUnit | null>(null);
   const [showSubUnitModal, setShowSubUnitModal] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [showDigitalization, setShowDigitalization] = useState(false);
   const [showProgressTracker, setShowProgressTracker] = useState(false);
+
+  // Auto-show tutorial logic (max 3 times per day)
+  useEffect(() => {
+    const TUTORIAL_VIEW_KEY = 'jais_tutorial_views_2025';
+    const today = new Date().toISOString().split('T')[0];
+    
+    try {
+      const stored = localStorage.getItem(TUTORIAL_VIEW_KEY);
+      let viewData = { date: '', count: 0 };
+      
+      if (stored) {
+        viewData = JSON.parse(stored);
+      }
+      
+      if (viewData.date === today) {
+        if (viewData.count < 3) {
+          setShowTutorial(true);
+          localStorage.setItem(TUTORIAL_VIEW_KEY, JSON.stringify({
+            date: today,
+            count: viewData.count + 1
+          }));
+        }
+      } else {
+        // New day or first time
+        setShowTutorial(true);
+        localStorage.setItem(TUTORIAL_VIEW_KEY, JSON.stringify({
+          date: today,
+          count: 1
+        }));
+      }
+    } catch (e) {
+      console.error('Tutorial storage error', e);
+      // Fallback: show it anyway if storage fails
+      setShowTutorial(true);
+    }
+  }, []);
 
   useEffect(() => {
     try {
