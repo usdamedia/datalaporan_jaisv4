@@ -304,6 +304,11 @@ export interface AduanDivision {
     value: number;
 }
 
+export interface BookCategory {
+    nama: string;
+    jumlah: number | string;
+}
+
 // Data spesifik untuk UKOKO
 export interface UkokoData extends ReportData {
     socialMedia: {
@@ -343,5 +348,9 @@ export interface UkokoData extends ReportData {
             qrCode: { happy: number; unhappy: number };
         };
         lawatanAgensi: number;
+    };
+    // New Section: Penerbitan
+    penerbitan?: {
+        kategoriBuku: BookCategory[];
     };
 }

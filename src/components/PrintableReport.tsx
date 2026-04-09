@@ -1,5 +1,5 @@
 import React from 'react';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, UKOKO_PENERBITAN_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 
 interface PrintableReportProps {
   deptName: string;
@@ -51,6 +51,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isUKOKO = deptName.includes('UKOKO');
   const isUkokoPR = targetName.toUpperCase().includes('UNIT KOMUNIKASI DAN PUSAT SUMBER') || targetName.toUpperCase().includes('(UKPS)');
   const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PENGURUSAN ACARA');
+  const isUkokoPenerbitan = targetName.toUpperCase().includes('UNIT PENERBITAN');
   const isDHQC = deptName.includes('DHQC');
   const isUPP = deptName.includes('UPP');
   const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
@@ -2169,7 +2170,49 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         </div>
       )}
 
-      {isUKOKO && !isUkokoPR && !isUkokoPerayaan && (
+      {isUKOKO && isUkokoPenerbitan && formData.penerbitan && (
+        <div className="space-y-8 mb-8">
+          <div className="p-6 bg-indigo-900 text-white rounded-3xl flex justify-between items-center border-b-4 border-indigo-700">
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight">Laporan Unit Penerbitan 2025</h3>
+              <p className="text-indigo-300 text-xs font-bold uppercase tracking-widest mt-1">Unit Komunikasi Korporat (UKOKO)</p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black">{formData.penerbitan.kategoriBuku?.length || 0}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">Jumlah Kategori Buku 2025</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-indigo-600 pl-2">
+              Kategori Baharu Buku Tahun 2025
+            </h3>
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="border p-2 text-left">Nama Kategori Buku</th>
+                  <th className="border p-2 text-center bg-indigo-50">Bilangan Buku 2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(formData.penerbitan.kategoriBuku || []).map((cat: any, idx: number) => (
+                  <tr key={idx}>
+                    <td className="border p-2 font-bold">{cat.nama}</td>
+                    <td className="border p-2 text-center font-black bg-indigo-50">{cat.jumlah || 0}</td>
+                  </tr>
+                ))}
+                {(formData.penerbitan.kategoriBuku || []).length === 0 && (
+                  <tr>
+                    <td colSpan={2} className="border p-4 text-center text-gray-400 italic">Tiada data dimasukkan</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !isUkokoPenerbitan && (
         <div className="space-y-8">
           <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6">
             <h3 className="text-lg font-black uppercase text-amber-900">Sub Unit UKOKO</h3>

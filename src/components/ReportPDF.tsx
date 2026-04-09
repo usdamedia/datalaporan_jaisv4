@@ -405,6 +405,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isUKOKO = deptName.includes('UKOKO');
   const isUkokoPR = targetName.toUpperCase().includes('UNIT KOMUNIKASI DAN PUSAT SUMBER') || targetName.toUpperCase().includes('(UKPS)');
   const isUkokoPerayaan = targetName.toUpperCase().includes('UNIT PENGURUSAN ACARA');
+  const isUkokoPenerbitan = targetName.toUpperCase().includes('UNIT PENERBITAN');
   const isDHQC = deptName.includes('DHQC');
   const isDakwah = deptName.includes('DAKWAH') || deptName.includes('BDKWH');
   const isDakwahUnitAlQuran = targetName.toUpperCase().includes('AL-QURAN');
@@ -1811,7 +1812,36 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           </>
         )}
 
-        {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !formData.socialMedia && !formData.ukoko && (
+        {isUKOKO && isUkokoPenerbitan && formData.penerbitan && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Laporan Unit Penerbitan 2025</Text>
+            <View style={[styles.infoCard, { backgroundColor: '#312e81', borderColor: '#312e81', marginBottom: 12 }]}>
+              <Text style={[styles.infoCardLabel, { color: '#c7d2fe' }]}>Jumlah Kategori Buku 2025</Text>
+              <Text style={[styles.infoCardValue, { color: '#ffffff', fontSize: 24 }]}>{String(formData.penerbitan.kategoriBuku?.length || 0)}</Text>
+            </View>
+
+            <Text style={styles.subSectionTitle}>Kategori Baharu Buku Tahun 2025</Text>
+            <View style={styles.table} wrap={false}>
+              <View style={[styles.tableRow, styles.tableHeader]}>
+                <View style={[styles.tableCell, { width: '70%' }]}><Text style={styles.tableCellHeader}>Nama Kategori Buku</Text></View>
+                <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text style={styles.tableCellHeader}>Bilangan 2025</Text></View>
+              </View>
+              {(formData.penerbitan.kategoriBuku || []).map((cat: any, idx: number) => (
+                <View key={idx} style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ fontWeight: 'bold' }}>{cat.nama}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%', backgroundColor: '#f5f3ff' }]}><Text style={{ fontWeight: 'bold' }}>{String(cat.jumlah || 0)}</Text></View>
+                </View>
+              ))}
+              {(formData.penerbitan.kategoriBuku || []).length === 0 && (
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '100%', textAlign: 'center' }]}><Text style={styles.emptyState}>Tiada data dimasukkan</Text></View>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {isUKOKO && !isUkokoPR && !isUkokoPerayaan && !isUkokoPenerbitan && !formData.socialMedia && !formData.ukoko && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Sub Unit UKOKO</Text>
             <View style={styles.narrativeBox}>

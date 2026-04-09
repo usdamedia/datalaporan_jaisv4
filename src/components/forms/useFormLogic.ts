@@ -68,6 +68,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           upp: prev.upp ? { ...prev.upp, ...parsed.upp } : prev.upp,
           integriti: prev.integriti ? { ...prev.integriti, ...parsed.integriti } : prev.integriti,
           quality: prev.quality ? { ...prev.quality, ...parsed.quality } : prev.quality,
+          penerbitan: prev.penerbitan ? { ...prev.penerbitan, ...parsed.penerbitan } : prev.penerbitan,
         }));
       } catch (e) {
         console.error("Error parsing saved data", e);

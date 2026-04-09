@@ -653,6 +653,10 @@ export const UKOKO_PR_2024_REFERENCE = {
   lawatanLuar: 44,
 };
 
+export const UKOKO_PENERBITAN_2024_REFERENCE = {
+  kategoriBuku: 0
+};
+
 export const DHQC_2024_REFERENCE = {
   pusatPemuliaan: [
     { lokasi: "Masjid Ikhwanul Islam, Taman Sukma", bahagian: "Kuching" },

@@ -12,6 +12,7 @@ import BppiForm from './forms/BppiForm';
 import BphForm from './forms/BphForm';
 import BpksForm from './forms/BpksForm';
 import UkokoForm from './forms/UkokoForm';
+import UkokoPenerbitanForm from './forms/UkokoPenerbitanForm';
 import UkokoPublicRelationsForm from './forms/UkokoPublicRelationsForm';
 import DhqcForm from './forms/DhqcForm';
 import BkskForm from './forms/BkskForm';
@@ -68,7 +69,7 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
       return <UkokoForm deptName={deptName} onBack={onBack} />;
     }
     if (normalizedDeptName.includes('PENERBITAN')) {
-      return <GenericForm deptName={deptName} onBack={onBack} />;
+      return <UkokoPenerbitanForm deptName={deptName} onBack={onBack} />;
     }
     return <UkokoForm deptName={deptName} onBack={onBack} />;
   }
