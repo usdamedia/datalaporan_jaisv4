@@ -22,6 +22,9 @@ function getIsMobileView(minWidthPx: number) {
 }
 
 const WebViewOnlyGuard: React.FC<WebViewOnlyGuardProps> = ({ children, minWidthPx = 640 }) => {
+  // Mobile blocking is disabled to support iPhone and other mobile views.
+  // Set to false if we need to restore the original guard behavior.
+  const MOBILE_BLOCK_DISABLED = true;
   const [isMobileView, setIsMobileView] = useState(() => getIsMobileView(minWidthPx));
 
   const title = useMemo(() => 'Paparan Mudah Alih Tidak Disokong', []);
@@ -46,6 +49,7 @@ const WebViewOnlyGuard: React.FC<WebViewOnlyGuardProps> = ({ children, minWidthP
     };
   }, [minWidthPx]);
 
+  if (MOBILE_BLOCK_DISABLED) return <>{children}</>;
   if (!isMobileView) return <>{children}</>;
 
   return (
@@ -94,4 +98,3 @@ const WebViewOnlyGuard: React.FC<WebViewOnlyGuardProps> = ({ children, minWidthP
 };
 
 export default WebViewOnlyGuard;
-
