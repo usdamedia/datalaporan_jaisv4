@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
@@ -37,7 +38,7 @@ const REGIONS = [
 
 const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

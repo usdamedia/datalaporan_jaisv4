@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { FileText, ShieldCheck, Video } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
@@ -56,7 +57,7 @@ const REFERENCE_ROWS = [
 
 const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
   const { formData, setFormData, handleSave, isSaving, isAutoSaving, showSuccess, saveError } = useFormLogic(deptName, {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     integriti: {

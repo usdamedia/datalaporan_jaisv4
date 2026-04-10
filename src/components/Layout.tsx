@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { getTodayIsoMY } from '../utils/dateFormat';
 import { ChevronLeft, LayoutDashboard } from 'lucide-react';
 
 interface LayoutProps {
@@ -60,7 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   }, [fontScale]);
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayIsoMY();
 
     try {
       const stored = window.localStorage.getItem(ANNOUNCEMENT_VIEW_KEY);

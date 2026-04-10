@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Heart, Users, BarChart3, CheckSquare, Activity, Info } from 'lucide-react';
 import { BKSP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
@@ -21,7 +22,7 @@ interface BkspFormProps {
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

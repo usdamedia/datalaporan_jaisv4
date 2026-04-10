@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { 
   Users, 
   Globe, 
@@ -23,7 +24,7 @@ interface DakwahFormProps {
 const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const isUnitAlQuran = deptName.toUpperCase().includes('AL-QURAN');
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

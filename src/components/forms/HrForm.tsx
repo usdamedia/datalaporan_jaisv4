@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { buildReportExportState } from '../../utils/reportPdfExport';
@@ -13,7 +14,7 @@ interface HrFormProps {
 
 const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

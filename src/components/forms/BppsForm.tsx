@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
@@ -19,7 +20,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
 
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

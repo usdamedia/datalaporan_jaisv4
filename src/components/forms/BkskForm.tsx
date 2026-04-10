@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { BookOpenCheck, HandHelping, Home, Sparkles, Users } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, LawatanSection, NarrativeSection } from './CommonSections';
@@ -11,7 +12,7 @@ interface BkskFormProps {
 }
 
 const createInitialState = () => ({
-  tarikh: new Date().toISOString().split('T')[0],
+  tarikh: getTodayIsoMY(),
   disediakanOleh: '',
   jawatan: '',
   ringkasan: '',

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getTodayIsoMY } from './utils/dateFormat';
 import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
@@ -24,7 +25,7 @@ export default function App() {
   // Auto-show tutorial logic (max 3 times per day)
   useEffect(() => {
     const TUTORIAL_VIEW_KEY = 'jais_tutorial_views_2025';
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayIsoMY();
     
     try {
       const stored = localStorage.getItem(TUTORIAL_VIEW_KEY);

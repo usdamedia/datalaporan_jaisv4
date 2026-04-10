@@ -1,5 +1,6 @@
 import React from 'react';
 import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, UKOKO_PENERBITAN_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { formatDateDDMMYYYYMY, formatNowDDMMYYYYMY } from '../utils/dateFormat';
 
 interface PrintableReportProps {
   deptName: string;
@@ -147,7 +148,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               Laporan Tahunan 2025 • Jabatan Agama Islam Sarawak
             </p>
             <p className="text-[10px] font-bold text-gray-400 uppercase">
-              Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}
+              Tarikh Cetakan: {formatNowDDMMYYYYMY()}
             </p>
           </div>
         </div>
@@ -486,7 +487,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   {formData.ukoko.perayaanIslam.map((event: any, idx: number) => (
                     <tr key={idx}>
                       <td className="border p-2 font-bold">{event.nama}</td>
-                      <td className="border p-2 text-center">{event.tarikh}</td>
+                      <td className="border p-2 text-center">{formatDateDDMMYYYYMY(event.tarikh)}</td>
                       <td className="border p-2 text-center font-bold text-emerald-600">{event.tuanRumah}</td>
                       <td className="border p-2 text-center">{event.mesyuarat}</td>
                     </tr>
@@ -518,7 +519,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
                     <tr key={idx}>
                       <td className="border p-2 font-bold">{event.nama}</td>
-                      <td className="border p-2 text-center">{event.tarikh}</td>
+                      <td className="border p-2 text-center">{formatDateDDMMYYYYMY(event.tarikh)}</td>
                       <td className="border p-2 text-center font-bold text-teal-600">{event.tuanRumah}</td>
                       <td className="border p-2 text-center">{event.mesyuarat}</td>
                     </tr>
@@ -2757,7 +2758,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
             Rekod Lawatan / Penandaarasan
           </h3>
-          <table className="w-full text-[10px] border-collapse">
+          <table className="w-full table-fixed text-[10px] border-collapse">
             <thead>
               <tr className="bg-gray-100">
                 <th className="border p-2 text-left w-1/6">Jenis</th>
@@ -2769,10 +2770,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
             <tbody>
               {formData.lawatan.map((item: any, idx: number) => (
                 <tr key={idx}>
-                  <td className="border p-2 font-bold uppercase text-zus-900">{item.jenis}</td>
-                  <td className="border p-2">{item.tajukAgensi}</td>
-                  <td className="border p-2">{item.tarikh} @ {item.tempat}</td>
-                  <td className="border p-2">{item.objektif}</td>
+                  <td className="border p-2 align-top font-bold uppercase text-zus-900 break-words whitespace-pre-wrap">{item.jenis}</td>
+                  <td className="border p-2 align-top break-words whitespace-pre-wrap">{item.tajukAgensi}</td>
+                  <td className="border p-2 align-top break-words whitespace-pre-wrap">{`${formatDateDDMMYYYYMY(item.tarikh)} @ ${item.tempat || '-'}`}</td>
+                  <td className="border p-2 align-top break-words whitespace-pre-wrap">{item.objektif}</td>
                 </tr>
               ))}
             </tbody>
@@ -2791,7 +2792,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           <div className="space-y-1">
             <div className="text-[10px] font-bold text-zus-900">Nama: <span className="font-medium">{formData.disediakanOleh || '................................'}</span></div>
             <div className="text-[10px] font-bold text-zus-900">Jawatan: <span className="font-medium">{formData.jawatan || '................................'}</span></div>
-            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">{formData.tarikh || '................................'}</span></div>
+            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">{formData.tarikh ? formatDateDDMMYYYYMY(formData.tarikh) : '................................'}</span></div>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Gavel, FileText, CheckCircle2, Users, ClipboardList, Activity, Info, Trash2 } from 'lucide-react';
 import { BPDS_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
@@ -12,7 +13,7 @@ interface BpdsFormProps {
 
 const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

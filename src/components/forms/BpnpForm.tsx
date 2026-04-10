@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Search, BookOpen, Award, Activity, Image, Plus, Trash2, LayoutDashboard, Printer } from 'lucide-react';
 import { BPNP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
@@ -181,7 +182,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   const isUnitAkidah = selectedUnit === 'UNIT AKIDAH TAPISAN';
 
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

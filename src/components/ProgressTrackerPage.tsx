@@ -2,6 +2,7 @@ import React from 'react';
 import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Sparkles } from 'lucide-react';
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
+import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
 
 const toStorageKey = (name: string) =>
   `jais_2025_${name
@@ -59,15 +60,13 @@ const getDepartmentProgress = (department: Department) => {
 };
 
 const formatMalayDateTime = (date: Date) =>
-  new Intl.DateTimeFormat('ms-MY', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
+  `${formatDateDDMMYYYYMY(date.toISOString())} ${new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kuala_Lumpur',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-  }).format(date);
+    hour12: false,
+  }).format(date)}`;
 
 const buildWhatsappSummary = (
   trackerItems: Array<Department & { progress: ReturnType<typeof getDepartmentProgress> }>,

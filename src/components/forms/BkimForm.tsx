@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Building2, Home, Users, MapPin, Star } from 'lucide-react';
 import { BKIM_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
 import FormLayout from './FormLayout';
@@ -12,7 +13,7 @@ interface BkimFormProps {
 
 const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
+    tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
     ringkasan: '',

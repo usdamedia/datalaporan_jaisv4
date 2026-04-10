@@ -2,6 +2,7 @@ import React from 'react';
 import { INTEGRITI_2025_CURRENT } from '../constants';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { formatDateDDMMYYYYMY, formatNowDDMMYYYYMY } from '../utils/dateFormat';
 
 // Register fonts if needed, but standard ones are usually fine
 // Font.register({ family: 'Helvetica', src: '...' });
@@ -25,6 +26,8 @@ const formatPdfValue = (value: unknown) => {
   if (value === '' || value === null || value === undefined) return '0';
   return String(value);
 };
+
+const wrapLongPdfText = (value: unknown) => String(value || '').replace(/(\S{22})(?=\S)/g, '$1\u200B');
 
 const normalizeKajianPdfEntry = (entry: any) => {
   if (typeof entry === 'string') {
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
     minHeight: 26,
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
   tableHeader: {
     backgroundColor: '#eef4fb',
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#d6dde8',
     height: '100%',
     justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   tableCellHeader: {
     fontWeight: 'bold',
@@ -530,7 +534,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           <Text style={styles.reportEyebrow}>Data Laporan Tahunan JAIS 2025</Text>
           <Text style={styles.simpleDeptName}>{mainDept}</Text>
           {unitName && <Text style={styles.simpleSubUnit}>{unitName}</Text>}
-          <Text style={styles.tarikhKecil}>Tarikh Cetakan: {new Date().toLocaleDateString('ms-MY')}</Text>
+          <Text style={styles.tarikhKecil}>Tarikh Cetakan: {formatNowDDMMYYYYMY()}</Text>
         </View>
 
         {/* Maklumat Asas */}
@@ -547,7 +551,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Tarikh Laporan:</Text>
-              <Text style={styles.value}>{formData.tarikh || '-'}</Text>
+              <Text style={styles.value}>{formatDateDDMMYYYYMY(formData.tarikh)}</Text>
             </View>
           </View>
         )}
@@ -1623,7 +1627,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 {formData.ukoko.perayaanIslam.map((event: any, idx: number) => (
                   <View key={idx} style={styles.tableRow}>
                     <View style={[styles.tableCell, { width: '40%' }]}><Text style={{ fontWeight: 'bold' }}>{event.nama}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tarikh}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formatDateDDMMYYYYMY(event.tarikh)}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tuanRumah}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.mesyuarat}</Text></View>
                   </View>
@@ -1643,7 +1647,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
                   <View key={idx} style={styles.tableRow}>
                     <View style={[styles.tableCell, { width: '40%' }]}><Text style={{ fontWeight: 'bold' }}>{event.nama}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tarikh}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{formatDateDDMMYYYYMY(event.tarikh)}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.tuanRumah}</Text></View>
                     <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{event.mesyuarat}</Text></View>
                   </View>
@@ -2730,7 +2734,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <Text style={styles.subSectionTitle}>Senarai Penerbitan JAIS Secara Total</Text>
-            <View style={styles.table} wrap={false}>
+            <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
                 <View style={[styles.tableCell, { width: '50%' }]}><Text style={styles.tableCellHeader}>Nama Penerbitan</Text></View>
                 <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text style={styles.tableCellHeader}>Jenis</Text></View>
@@ -2772,9 +2776,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               {formData.lawatan.map((item: any, idx: number) => (
                 <View key={idx} style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '15%' }]}><Text style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{item.jenis}</Text></View>
-                  <View style={[styles.tableCell, { width: '35%' }]}><Text>{item.tajukAgensi}</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.tarikh} @ {item.tempat}</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.objektif}</Text></View>
+                  <View style={[styles.tableCell, { width: '35%' }]}><Text>{wrapLongPdfText(item.tajukAgensi)}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{`${formatDateDDMMYYYYMY(item.tarikh)} @ ${wrapLongPdfText(item.tempat)}`}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{wrapLongPdfText(item.objektif)}</Text></View>
                 </View>
               ))}
             </View>
@@ -2785,7 +2789,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {shouldRenderCommonNarrative && formData.lawatan && formData.lawatan.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
-            <View style={styles.table} wrap={false}>
+            <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
                 <View style={[styles.tableCell, { width: '15%' }]}><Text style={styles.tableCellHeader}>Jenis</Text></View>
                 <View style={[styles.tableCell, { width: '35%' }]}><Text style={styles.tableCellHeader}>Tajuk/Agensi</Text></View>
@@ -2795,9 +2799,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               {formData.lawatan.map((item: any, idx: number) => (
                 <View key={idx} style={styles.tableRow}>
                   <View style={[styles.tableCell, { width: '15%' }]}><Text>{item.jenis}</Text></View>
-                  <View style={[styles.tableCell, { width: '35%' }]}><Text style={{ fontWeight: 'bold' }}>{item.tajukAgensi}</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.tarikh} @ {item.tempat}</Text></View>
-                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.objektif}</Text></View>
+                  <View style={[styles.tableCell, { width: '35%' }]}><Text style={{ fontWeight: 'bold' }}>{wrapLongPdfText(item.tajukAgensi)}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{`${formatDateDDMMYYYYMY(item.tarikh)} @ ${wrapLongPdfText(item.tempat)}`}</Text></View>
+                  <View style={[styles.tableCell, { width: '25%' }]}><Text>{wrapLongPdfText(item.objektif)}</Text></View>
                 </View>
               ))}
             </View>
@@ -2813,7 +2817,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <View style={styles.signatureLine} />
             <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
             <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Tarikh: {formData.tarikh || '................................'}</Text>
+            <Text style={styles.signatureDetail}>Tarikh: {formData.tarikh ? formatDateDDMMYYYYMY(formData.tarikh) : '................................'}</Text>
           </View>
 
           {/* Right: Disahkan Oleh */}
