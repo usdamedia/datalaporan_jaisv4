@@ -100,7 +100,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
   return (
     <div className="space-y-10 animate-fade-in pb-20">
       {/* Header */}
-      <div className="text-center space-y-4 max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl space-y-4 text-center">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -113,27 +113,27 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-5xl font-black text-zus-900 tracking-tighter"
+          className="text-3xl font-black tracking-tighter text-zus-900 sm:text-4xl md:text-5xl"
         >
           Data Management <span className="text-teal-600">Dashboard</span>
         </motion.h1>
       </div>
 
       {/* Z-Pattern Overview (2024 Stats) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
         {stats2024.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-[#134E4A] rounded-[2rem] p-8 text-white shadow-xl shadow-teal-900/20 relative overflow-hidden group"
+            className="group relative overflow-hidden rounded-[2rem] bg-[#134E4A] p-6 text-white shadow-xl shadow-teal-900/20 sm:p-8"
           >
             <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
               {stat.icon}
             </div>
             <p className="text-xs font-bold text-teal-200 mb-2 sentence-case">{stat.label}</p>
-            <h3 className="text-5xl font-black text-[#FDE047] tracking-tighter">{stat.value}</h3>
+            <h3 className="text-4xl font-black tracking-tighter text-[#FDE047] sm:text-5xl">{stat.value}</h3>
             <div className="mt-4 flex items-center gap-2 text-[10px] font-bold text-teal-100/60 sentence-case">
               <CalendarCheck className="w-3 h-3" />
               Data tahun 2024
@@ -147,18 +147,18 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#0f766e] via-[#0d9488] to-[#14b8a6] p-8 text-white shadow-xl shadow-teal-900/20"
+          className="overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#0f766e] via-[#0d9488] to-[#14b8a6] p-6 text-white shadow-xl shadow-teal-900/20 sm:p-8"
         >
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-black text-teal-100 sentence-case">Jumlah program / aktiviti BPNP 2025</p>
-              <h2 className="mt-3 text-5xl font-black tracking-tight text-[#FDE047]">{aggregatedActivities.total}</h2>
+              <h2 className="mt-3 text-4xl font-black tracking-tight text-[#FDE047] sm:text-5xl">{aggregatedActivities.total}</h2>
               <p className="mt-3 max-w-2xl text-sm font-medium text-white/85">
                 Jumlah ini ialah campuran input daripada Unit Penyelidikan, Unit Perancangan Strategik dan Unit Akidah Tapisan.
               </p>
             </div>
 
-            <div className="grid min-w-full gap-4 sm:grid-cols-3 lg:min-w-[560px]">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-3 lg:min-w-[560px]">
               {[
                 { label: 'Unit Penyelidikan', value: aggregatedActivities.penyelidikan },
                 { label: 'Perancangan Strategik', value: aggregatedActivities.strategik },
@@ -179,7 +179,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm"
+        className="rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
       >
         <h3 className="text-lg font-black text-zus-900 mb-6 flex items-center gap-2">
           <Info className="w-5 h-5 text-teal-600" />
@@ -200,7 +200,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-white border border-gray-100 rounded-[2rem] p-8 md:p-12 shadow-sm"
+        className="rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm md:p-12"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div className="space-y-1">
@@ -209,7 +209,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
           </div>
           <button 
             onClick={handleSave}
-            className={`px-8 py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${isSaved ? 'bg-green-500 text-white' : 'bg-[#134E4A] text-white hover:bg-teal-900 active:scale-95'}`}
+            className={`flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-black shadow-lg transition-all md:w-auto md:px-8 ${isSaved ? 'bg-green-500 text-white' : 'bg-[#134E4A] text-white hover:bg-teal-900 active:scale-95'}`}
           >
             {isSaved ? 'Berjaya Disimpan!' : 'Simpan Data 2025'}
             <Save className="w-4 h-4" />
@@ -239,7 +239,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
                   value={localData[field.id as keyof Data2025] === 0 ? '' : localData[field.id as keyof Data2025]}
                   readOnly={field.readOnly}
                   onChange={(e) => handleDataChange({ ...localData, [field.id]: e.target.value === '' ? '' : parseFloat(e.target.value) })}
-                  className={`w-full px-6 py-4 rounded-2xl border-2 border-gray-100 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition-all font-black text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
+                  className={`w-full rounded-2xl border-2 border-gray-100 px-4 py-3 text-base font-black outline-none transition-all focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 md:px-6 md:py-4 md:text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
                 />
               </div>
             </div>

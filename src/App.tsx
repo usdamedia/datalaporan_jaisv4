@@ -381,10 +381,10 @@ export default function App() {
                 Sistem pengumpulan data berpusat untuk penerbitan buku laporan tahunan Jabatan Agama Islam Sarawak.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+              <div className="mb-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <button 
                   onClick={() => setShowTutorial(true)}
-                  className="flex items-center gap-2 rounded-full border border-red-500 bg-red-600 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-red-200 transition-all hover:bg-red-700 hover:border-red-700 active:scale-95 md:px-8 md:py-2 md:text-sm"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-red-500 bg-red-600 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-red-200 transition-all hover:border-red-700 hover:bg-red-700 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
                 >
                   <Info className="w-4 h-4" />
                   Panduan Pengguna
@@ -393,7 +393,7 @@ export default function App() {
                 {/* Digitalization Page Button */}
                 <button 
                   onClick={() => setShowDigitalization(true)}
-                  className="flex items-center gap-2 px-6 py-2 md:px-8 md:py-2 rounded-full text-xs md:text-sm font-bold bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all active:scale-95 border border-teal-500"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-teal-500 bg-teal-600 px-5 py-2 text-xs font-bold text-white shadow-lg transition-all hover:bg-teal-700 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
                 >
                   <Cpu className="w-4 h-4" />
                   Digitalisasi JAIS
@@ -401,7 +401,7 @@ export default function App() {
 
                 <button 
                   onClick={handleOpenProgressTracker}
-                  className="flex items-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-800 hover:border-blue-800 active:scale-95 md:px-8 md:py-2 md:text-sm"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:border-blue-800 hover:bg-blue-800 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
                 >
                   <BarChart3 className="w-4 h-4" />
                   Progress Tracker
@@ -412,7 +412,7 @@ export default function App() {
 
             <div className="border-t border-gray-200 pt-6 md:pt-10">
               <h2 className="text-lg md:text-2xl font-bold text-zus-900 mb-4 md:mb-6 px-2 border-l-4 border-zus-gold ml-1">Senarai Bahagian</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 pb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 pb-8">
                   {DEPARTMENTS.map((dept, index) => (
                   <div key={dept.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in-up">
                       <DepartmentCard

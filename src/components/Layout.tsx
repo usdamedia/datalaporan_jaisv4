@@ -253,7 +253,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                 © 2025 Jabatan Agama Islam Sarawak (JAIS). Hak Cipta Terpelihara.
               </p>
             </div>
-            <div className="flex items-center gap-4 md:gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6">
               <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Dasar Privasi</a>
               <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Terma Penggunaan</a>
               <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Bantuan</a>

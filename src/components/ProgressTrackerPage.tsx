@@ -266,7 +266,7 @@ const ProgressTrackerPage: React.FC = () => {
           <button
             type="button"
             onClick={handleCopySummary}
-            className={`inline-flex min-w-[216px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-black transition ${
+            className={`inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-black transition sm:w-auto sm:min-w-[216px] ${
               isCopied
                 ? 'bg-emerald-600 text-white'
                 : 'border border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-100'
@@ -285,7 +285,7 @@ const ProgressTrackerPage: React.FC = () => {
       </section>
 
       <section>
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-lg font-black tracking-tight text-slate-900 md:text-xl">Status Bahagian & Unit</h3>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{trackerItems.length} kad aktif</p>
         </div>

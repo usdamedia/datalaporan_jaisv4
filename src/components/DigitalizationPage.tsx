@@ -233,7 +233,7 @@ const DigitalizationPage: React.FC = () => {
         viewport={{ once: true }}
         className="max-w-4xl mx-auto"
       >
-        <div className="bg-[#0D9488] rounded-[2rem] p-8 md:p-12 text-white shadow-2xl shadow-teal-900/40 relative overflow-hidden group">
+        <div className="group relative overflow-hidden rounded-[2rem] bg-[#0D9488] p-6 text-white shadow-2xl shadow-teal-900/40 md:p-12">
           {/* Background Decorative Elements */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-all duration-700"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-400/10 rounded-full -ml-24 -mb-24 blur-2xl"></div>
@@ -250,25 +250,25 @@ const DigitalizationPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl text-center hover:bg-white/20 transition-colors">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 text-center backdrop-blur-md transition-colors hover:bg-white/20 md:p-6">
                 <div className="p-3 bg-teal-400/20 rounded-2xl inline-flex mb-3">
                   <Database className="w-6 h-6 text-teal-200" />
                 </div>
-                <p className="text-5xl font-black mb-1">8</p>
+                <p className="mb-1 text-4xl font-black sm:text-5xl">8</p>
                 <p className="text-[10px] font-black uppercase tracking-widest text-teal-200">Kluster</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl text-center hover:bg-white/20 transition-colors">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-5 text-center backdrop-blur-md transition-colors hover:bg-white/20 md:p-6">
                 <div className="p-3 bg-teal-400/20 rounded-2xl inline-flex mb-3">
                   <MousePointer2 className="w-6 h-6 text-teal-200" />
                 </div>
-                <p className="text-5xl font-black mb-1 tracking-tighter">617k</p>
+                <p className="mb-1 text-4xl font-black tracking-tighter sm:text-5xl">617k</p>
                 <p className="text-[10px] font-black uppercase tracking-widest text-teal-200">Pelawat</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+          <div className="relative z-10 mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
             <div className="flex items-center gap-4">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map((i) => (
@@ -279,7 +279,7 @@ const DigitalizationPage: React.FC = () => {
               </div>
               <p className="text-xs font-bold text-teal-100">617,080 Pelawat Keseluruhan (2024)</p>
             </div>
-            <button className="px-6 py-3 bg-white text-teal-900 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-teal-50 transition-colors shadow-lg active:scale-95">
+            <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-black text-teal-900 shadow-lg transition-colors hover:bg-teal-50 active:scale-95 sm:w-auto">
               Layari KISWA
               <ArrowRight className="w-4 h-4" />
             </button>
