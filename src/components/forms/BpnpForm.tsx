@@ -145,6 +145,50 @@ const UNIT_PENYELIDIKAN_CURRENT_2025 = {
   },
 };
 
+const UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025 = {
+  tarikh: '2026-04-09',
+  disediakanOleh: 'ROSMINA BINTI LUIS',
+  jawatan: 'PENOLONG PEGAWAI HAL EHWAL ISLAM',
+  lawatan: [
+    {
+      jenis: 'keluar',
+      tajukAgensi: 'Lawatan Kerja Penandaarasan Konsultasi Bahagian Perancangan & Penyelidikan',
+      tarikh: '2025-09-17',
+      tempat: 'Jabatan Digital Negara, JAKIM, JAIS Selangor, Majlis Agama Islam Wilayah Persekutuan',
+      objektif: 'Sesi perkongsian pengurusan maklumat dan data jabatan / PSJ & Laporan Tahunan',
+    },
+    {
+      jenis: 'keluar',
+      tajukAgensi: 'Jaulah Penyerahan Al-Quran Terjemahan dalam Bahasa Etnik ke Masjid dan Surau Perkampungan Saudara Kita',
+      tarikh: '2025-12-03',
+      tempat: 'Pakan dan Julau',
+      objektif: '',
+    },
+  ],
+  bpnp: {
+    unitActivityTotal2025: 9,
+    strategik: {
+      pelanStrategik: {
+        total2023: 6.77,
+        total2024: 6.73,
+        total2025: 7.8,
+      },
+      rot: {
+        aktivitiProgram2023: 22,
+        aktivitiProgram2024: 21,
+        aktivitiProgram2025: 83,
+      },
+      data: {
+        bilPegawaiData: 0,
+        bilDashboardRasmiBaharu2025: 0,
+        namaDashboardBaharu: [''],
+      },
+    },
+  },
+};
+
+const STRATEGIK_LOCKED_FIELDS = new Set(['tarikh', 'disediakanOleh', 'jawatan']);
+
 const toBpnpStorageKey = (unitName: string) =>
   `jais_2025_${unitName
     .trim()
@@ -230,17 +274,46 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const mergedInitialState = React.useMemo(() => {
-    if (!isUnitPenyelidikan) return initialState;
+    if (isUnitPenyelidikan) {
+      return {
+        ...initialState,
+        ...UNIT_PENYELIDIKAN_CURRENT_2025,
+        bpnp: {
+          ...initialState.bpnp,
+          ...UNIT_PENYELIDIKAN_CURRENT_2025.bpnp,
+        },
+      };
+    }
 
-    return {
-      ...initialState,
-      ...UNIT_PENYELIDIKAN_CURRENT_2025,
-      bpnp: {
-        ...initialState.bpnp,
-        ...UNIT_PENYELIDIKAN_CURRENT_2025.bpnp,
-      },
-    };
-  }, [isUnitPenyelidikan]);
+    if (isUnitStrategik) {
+      return {
+        ...initialState,
+        ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025,
+        bpnp: {
+          ...initialState.bpnp,
+          ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025.bpnp,
+          strategik: {
+            ...initialState.bpnp.strategik,
+            ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025.bpnp.strategik,
+            pelanStrategik: {
+              ...initialState.bpnp.strategik.pelanStrategik,
+              ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025.bpnp.strategik.pelanStrategik,
+            },
+            rot: {
+              ...initialState.bpnp.strategik.rot,
+              ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025.bpnp.strategik.rot,
+            },
+            data: {
+              ...initialState.bpnp.strategik.data,
+              ...UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025.bpnp.strategik.data,
+            },
+          },
+        },
+      };
+    }
+
+    return initialState;
+  }, [isUnitPenyelidikan, isUnitStrategik]);
 
   const {
     formData,
@@ -255,6 +328,56 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     updateLawatan,
     setFormData
   } = useFormLogic(selectedUnit || deptName, mergedInitialState);
+
+  React.useEffect(() => {
+    if (!isUnitStrategik) return;
+
+    setFormData((prev: any) => {
+      const approved = UNIT_PERANCANGAN_STRATEGIK_CURRENT_2025;
+      const next = {
+        ...prev,
+        tarikh: approved.tarikh,
+        disediakanOleh: approved.disediakanOleh,
+        jawatan: approved.jawatan,
+        lawatan: approved.lawatan,
+        bpnp: {
+          ...prev.bpnp,
+          unitActivityTotal2025: approved.bpnp.unitActivityTotal2025,
+          strategik: {
+            ...prev.bpnp?.strategik,
+            ...approved.bpnp.strategik,
+            pelanStrategik: {
+              ...prev.bpnp?.strategik?.pelanStrategik,
+              ...approved.bpnp.strategik.pelanStrategik,
+            },
+            rot: {
+              ...prev.bpnp?.strategik?.rot,
+              ...approved.bpnp.strategik.rot,
+            },
+            data: {
+              ...prev.bpnp?.strategik?.data,
+              ...approved.bpnp.strategik.data,
+            },
+          },
+        },
+      };
+
+      const same =
+        prev.tarikh === next.tarikh &&
+        prev.disediakanOleh === next.disediakanOleh &&
+        prev.jawatan === next.jawatan &&
+        Number(prev.bpnp?.unitActivityTotal2025 || 0) === Number(next.bpnp?.unitActivityTotal2025 || 0) &&
+        JSON.stringify(prev.bpnp?.strategik || {}) === JSON.stringify(next.bpnp?.strategik || {}) &&
+        JSON.stringify(prev.lawatan || []) === JSON.stringify(next.lawatan || []);
+
+      return same ? prev : next;
+    });
+  }, [isUnitStrategik, setFormData]);
+
+  const handleBasicInfoInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isUnitStrategik && STRATEGIK_LOCKED_FIELDS.has(e.target.name)) return;
+    handleInputChange(e);
+  };
   const aggregatedActivityTotals = React.useMemo(() => {
     const penyelidikan = UNIT_PENYELIDIKAN_CURRENT_2025.bpnp.unitActivityTotal2025;
     const strategik = selectedUnit === 'UNIT PERANCANGAN STRATEGIK'
@@ -358,6 +481,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const handleStrategikNumberChange = (section: 'pelanStrategik' | 'rot' | 'data', field: string, value: string) => {
+    if (isUnitStrategik) return;
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -374,6 +498,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const addStrategicDashboardName = () => {
+    if (isUnitStrategik) return;
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -390,6 +515,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const removeStrategicDashboardName = (index: number) => {
+    if (isUnitStrategik) return;
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -406,6 +532,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const updateStrategicDashboardName = (index: number, value: string) => {
+    if (isUnitStrategik) return;
     setFormData((prev: any) => {
       const currentList = [...(prev.bpnp.strategik?.data?.namaDashboardBaharu || [''])];
       currentList[index] = value;
@@ -427,6 +554,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
   };
 
   const handleUnitActivityTotalChange = (value: number | string) => {
+    if (isUnitStrategik) return;
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -546,7 +674,8 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           placeholder="0"
           value={formData.bpnp.unitActivityTotal2025 || ''}
           onChange={(e) => handleUnitActivityTotalChange(e.target.value === '' ? '' : parseFloat(e.target.value))}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-center text-2xl font-black text-zus-900 outline-none transition-all focus:border-teal-300 focus:ring-4 focus:ring-teal-100"
+          readOnly={isUnitStrategik}
+          className={`w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-center text-2xl font-black text-zus-900 outline-none transition-all ${isUnitStrategik ? 'cursor-not-allowed opacity-80' : 'focus:border-teal-300 focus:ring-4 focus:ring-teal-100'}`}
         />
       </div>
     </section>
@@ -655,7 +784,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               ref={isUnitStrategik ? strategicPrintRef : undefined}
               className={isUnitStrategik ? 'print-view-root print-page' : undefined}
             >
-            <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+            <BasicInfoSection formData={formData} handleInputChange={handleBasicInfoInputChange} />
 
             {isUnitPenyelidikan && (
               <>
@@ -1050,6 +1179,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
               <button
                 onClick={addStrategicDashboardName}
+                disabled={isUnitStrategik}
                 className="inline-flex items-center gap-2 rounded-2xl bg-violet-600 px-5 py-3 text-sm font-black text-white transition hover:bg-violet-700 active:scale-[0.98]"
               >
                 <Plus className="h-4 w-4" />
@@ -1071,13 +1201,15 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                       type="text"
                       value={item || ''}
                       onChange={(e) => updateStrategicDashboardName(index, e.target.value)}
+                      readOnly={isUnitStrategik}
                       placeholder="Masukkan nama dashboard rasmi"
-                      className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 outline-none transition focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                      className={`mt-3 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 outline-none transition ${isUnitStrategik ? 'cursor-not-allowed bg-slate-100 opacity-80' : 'bg-white focus:border-violet-300 focus:ring-4 focus:ring-violet-100'}`}
                     />
                   </div>
                   {(formData.bpnp.strategik?.data?.namaDashboardBaharu || []).length > 1 && (
                     <button
                       onClick={() => removeStrategicDashboardName(index)}
+                      disabled={isUnitStrategik}
                       className="self-start rounded-2xl bg-rose-50 p-3 text-rose-500 transition hover:bg-rose-100"
                       title="Padam nama dashboard"
                     >

@@ -168,6 +168,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                       <td className="px-4 py-4">
                         <input
                           type="date"
+                          lang="en-GB"
                           value={event.tarikh}
                           onChange={(e) => updateEvent('perayaanIslam', idx, 'tarikh', e.target.value)}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600"
@@ -259,6 +260,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                       <td className="px-4 py-4">
                         <input
                           type="date"
+                          lang="en-GB"
                           value={event.tarikh}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'tarikh', e.target.value)}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600"

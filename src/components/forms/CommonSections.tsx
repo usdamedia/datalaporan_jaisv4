@@ -33,6 +33,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         </label>
         <input 
           type="date"
+          lang="en-GB"
           name="tarikh"
           value={formData.tarikh}
           onChange={handleInputChange}
@@ -211,6 +212,7 @@ export const LawatanSection: React.FC<{
                 <div className="flex gap-2">
                   <input 
                     type="date"
+                    lang="en-GB"
                     value={item.tarikh}
                     onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
                     className="flex-1 p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
