@@ -405,7 +405,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       saveError={saveError}
       formData={formData}
     >
-      <div className="bph-guideline-typography">
+      <div>
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
       <div className="mt-8 space-y-8 animate-fade-in">

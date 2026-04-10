@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   const fontScaleOptions = useMemo(
     () => ({
       small: {
-        header: '12pt',
+        header: '14pt', // title kekal normal, a- hanya untuk subtajuk/isi
         subheader: '8pt', // a- requirement
         body: '8pt',
       },
@@ -37,13 +37,13 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
       },
       large: {
         header: '16pt', // A+ requirement (step 1)
-        subheader: '11pt',
-        body: '11pt',
+        subheader: '10pt', // subtajuk kekal 10pt ikut guideline
+        body: '10pt',
       },
       extraLarge: {
         header: '20pt', // A+ requirement (step 2)
-        subheader: '12pt',
-        body: '12pt',
+        subheader: '10pt', // subtajuk kekal 10pt ikut guideline
+        body: '10pt',
       },
     }),
     []
