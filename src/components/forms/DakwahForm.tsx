@@ -557,14 +557,12 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                     2025
                   </span>
                 </div>
-                <input
-                  type="number"
-                  min="0"
-                  inputMode="numeric"
-                  value={formData.dakwah.mediaSosial?.[item.key] ?? item.value}
-                  readOnly
-                  className="mt-3 w-full rounded-2xl border border-orange-100 bg-orange-50/40 px-4 py-3 text-center text-lg font-black text-slate-800 outline-none"
-                />
+                <div className="mt-3 rounded-2xl border border-orange-100 bg-orange-50/40 px-4 py-3 text-center">
+                  <p className="text-2xl font-black leading-none text-slate-900">
+                    {formData.dakwah.mediaSosial?.[item.key] ?? item.value}
+                  </p>
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Jumlah</p>
+                </div>
               </div>
             ))}
           </div>
