@@ -367,7 +367,7 @@ export default function App() {
             {/* HERO HEADER & INSTRUCTIONS */}
             <div className="text-center max-w-5xl mx-auto pt-2 md:pt-6 px-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-blue-50 border border-blue-100 text-zus-900 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 animate-scale-in shadow-sm">
-                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-zus-gold animate-pulse"></span> Edisi 2025
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-zus-gold"></span> Edisi 2025
               </div>
               
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-3 md:mb-4 text-zus-900 leading-tight">

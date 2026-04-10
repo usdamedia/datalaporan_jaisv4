@@ -180,7 +180,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
               <div className="hidden sm:block text-right mr-3">
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Status Sistem</p>
                 <p className="text-xs text-green-600 font-bold flex items-center justify-end gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                   Aktif
                 </p>
               </div>

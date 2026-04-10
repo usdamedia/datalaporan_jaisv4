@@ -11,6 +11,12 @@ interface CommonSectionsProps {
   isSaving?: boolean;
 }
 
+const autoGrowTextarea = (element: HTMLTextAreaElement | null) => {
+  if (!element) return;
+  element.style.height = 'auto';
+  element.style.height = `${element.scrollHeight}px`;
+};
+
 export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
@@ -190,9 +196,11 @@ export const LawatanSection: React.FC<{
                 <textarea 
                   value={item.tajukAgensi}
                   onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
+                  onInput={(e) => autoGrowTextarea(e.currentTarget)}
+                  ref={(el) => autoGrowTextarea(el)}
                   placeholder="Contoh: Lawatan Kerja ke MIS"
-                  rows={2}
-                  className="w-full min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
+                  rows={1}
+                  className="w-full min-h-[44px] overflow-hidden p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-none"
                 />
               </div>
             </div>
@@ -221,9 +229,11 @@ export const LawatanSection: React.FC<{
                 <textarea 
                   value={item.objektif}
                   onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
+                  onInput={(e) => autoGrowTextarea(e.currentTarget)}
+                  ref={(el) => autoGrowTextarea(el)}
                   placeholder="Tujuan lawatan..."
-                  rows={2}
-                  className="w-full min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
+                  rows={1}
+                  className="w-full min-h-[44px] overflow-hidden p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-none"
                 />
               </div>
             </div>
