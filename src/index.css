@@ -107,6 +107,44 @@
     line-height: 1.6 !important;
     letter-spacing: normal !important;
   }
+
+  /* Font guideline khusus untuk Bahagian Pengurusan Halal (BPH). */
+  .bph-guideline-typography :is(h1, h2, h3, [data-font-level="header"]) {
+    font-size: var(--app-font-header) !important;
+    letter-spacing: normal !important;
+    text-transform: capitalize !important;
+  }
+
+  .bph-guideline-typography :is(h4, h5, h6, label, th, [data-font-level="subheader"]) {
+    /* Kekalkan 10pt untuk Normal/A+/A++, turun ke 8pt bila a- */
+    font-size: clamp(8pt, var(--app-font-subheader), 10pt) !important;
+    line-height: 1.5 !important;
+    letter-spacing: normal !important;
+    text-transform: capitalize !important;
+  }
+
+  .bph-guideline-typography :is(
+    p,
+    span,
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    td,
+    li,
+    small,
+    strong,
+    em,
+    figcaption,
+    [data-font-level="body"]
+  ) {
+    /* Kekalkan 10pt untuk Normal/A+/A++, turun ke 8pt bila a- */
+    font-size: clamp(8pt, var(--app-font-body), 10pt) !important;
+    line-height: 1.6 !important;
+    letter-spacing: normal !important;
+    text-transform: capitalize !important;
+  }
 }
 
 @layer utilities {

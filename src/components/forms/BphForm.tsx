@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
@@ -33,6 +33,26 @@ interface BphFormProps {
 }
 
 const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
+  const FIXED_ACTIVITY_VALUES = useMemo(
+    () => ({
+      ziarahHalal: 40,
+      taklimat: 26,
+      kursus: 22,
+      total: 40 + 26 + 22
+    }),
+    []
+  );
+  const FIXED_MONITORING_VALUES = useMemo(
+    () => ({
+      patuh: 277,
+      amaran: 62,
+      gantung: 68,
+      tarikBalik: 5,
+      total: 277 + 62 + 68 + 5
+    }),
+    []
+  );
+
   const initialState = {
     tarikh: '2026-04-06',
     disediakanOleh: 'EFFA RINA BINTI ABD SALAM',
@@ -106,6 +126,66 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     return totalSkim || (parseInt(formData.bph?.sphm?.permohonan) || 0);
   }, [formData.bph?.sphm?.permohonanSkim, formData.bph?.sphm?.permohonan]);
 
+  useEffect(() => {
+    setFormData((prev: any) => {
+      if (!prev?.bph) return prev;
+
+      const currentAktiviti = prev.bph.aktiviti || {};
+      const needsUpdate =
+        String(prev.bph.ziarahHalal ?? '') !== String(FIXED_ACTIVITY_VALUES.ziarahHalal) ||
+        String(currentAktiviti.taklimat ?? '') !== String(FIXED_ACTIVITY_VALUES.taklimat) ||
+        String(currentAktiviti.kursus ?? '') !== String(FIXED_ACTIVITY_VALUES.kursus) ||
+        String(currentAktiviti.total ?? '') !== String(FIXED_ACTIVITY_VALUES.total);
+
+      if (!needsUpdate) return prev;
+
+      return {
+        ...prev,
+        bph: {
+          ...prev.bph,
+          ziarahHalal: String(FIXED_ACTIVITY_VALUES.ziarahHalal),
+          aktiviti: {
+            ...currentAktiviti,
+            taklimat: String(FIXED_ACTIVITY_VALUES.taklimat),
+            kursus: String(FIXED_ACTIVITY_VALUES.kursus),
+            total: String(FIXED_ACTIVITY_VALUES.total)
+          }
+        }
+      };
+    });
+  }, [FIXED_ACTIVITY_VALUES, setFormData]);
+
+  useEffect(() => {
+    setFormData((prev: any) => {
+      if (!prev?.bph) return prev;
+
+      const currentPemantauan = prev.bph.pemantauan || {};
+      const needsUpdate =
+        String(currentPemantauan.patuh ?? '') !== String(FIXED_MONITORING_VALUES.patuh) ||
+        String(currentPemantauan.amaran ?? '') !== String(FIXED_MONITORING_VALUES.amaran) ||
+        String(currentPemantauan.gantung ?? '') !== String(FIXED_MONITORING_VALUES.gantung) ||
+        String(currentPemantauan.tarikBalik ?? '') !== String(FIXED_MONITORING_VALUES.tarikBalik) ||
+        String(currentPemantauan.lain ?? '') !== '0';
+
+      if (!needsUpdate) return prev;
+
+      return {
+        ...prev,
+        bph: {
+          ...prev.bph,
+          pemantauan: {
+            ...currentPemantauan,
+            patuh: String(FIXED_MONITORING_VALUES.patuh),
+            amaran: String(FIXED_MONITORING_VALUES.amaran),
+            gantung: String(FIXED_MONITORING_VALUES.gantung),
+            tarikBalik: String(FIXED_MONITORING_VALUES.tarikBalik),
+            lain: '0'
+          }
+        }
+      };
+    });
+  }, [FIXED_MONITORING_VALUES, setFormData]);
+
   const updateBph = (path: string[], value: any) => {
     setFormData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
@@ -139,9 +219,10 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       saveError={saveError}
       formData={formData}
     >
+      <div className="bph-guideline-typography">
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
-      <div className="space-y-8 animate-fade-in mt-8">
+      <div className="mt-8 space-y-8 animate-fade-in">
         {/* 1. SPHM Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-[#5A5A40] p-4 flex items-center gap-3">
@@ -315,36 +396,42 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 space-y-4">
                 <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Hasil Pemantauan 2025</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[
-                    { label: 'Mematuhi Piawaian', field: 'patuh', ref: BPH_2024_REFERENCE.pemantauan.patuh, icon: CheckCircle2 },
-                    { label: 'Diberi Amaran', field: 'amaran', ref: BPH_2024_REFERENCE.pemantauan.amaran, icon: AlertCircle },
-                    { label: 'Digantung SPHM', field: 'gantung', ref: BPH_2024_REFERENCE.pemantauan.gantung, icon: AlertTriangle },
-                    { label: 'Ditarik Balik SPHM', field: 'tarikBalik', ref: BPH_2024_REFERENCE.pemantauan.tarikBalik, icon: XCircle },
-                    { label: 'Lain-lain', field: 'lain', ref: BPH_2024_REFERENCE.pemantauan.lain, icon: Info },
-                  ].map(item => (
-                    <div key={item.field} className="p-4 rounded-2xl border bg-emerald-50/50 border-emerald-100 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <item.icon className="w-4 h-4 text-emerald-500" />
-                        <span className="text-[10px] font-black text-gray-700 uppercase">{item.label}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-bold text-gray-400">Ref 24: {item.ref}</span>
-                        <input 
-                          type="number" 
-                          value={formData.bph.pemantauan[item.field]} 
-                          onChange={(e) => updateBph(['pemantauan', item.field], e.target.value)} 
-                          readOnly
-                          className="w-20 p-1.5 border border-emerald-200 bg-emerald-100/50 rounded-lg text-xs font-bold text-center text-emerald-900 outline-none pointer-events-none" 
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <div className="p-4 rounded-2xl bg-emerald-600 text-white flex flex-col justify-center items-center gap-1 shadow-lg shadow-emerald-100">
-                    <span className="text-[10px] font-black uppercase opacity-60">Jumlah Pemantauan</span>
-                    <div className="text-2xl font-black">{BPH_2025_REFERENCE.pemantauan.total}</div>
-                    <span className="text-[9px] font-bold opacity-40">Ref 24: {BPH_2024_REFERENCE.pemantauan.total}</span>
-                  </div>
+                <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50/80 border-b border-gray-100">
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500">Kategori</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">2024</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-zus-900 text-center">2025</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {[
+                        { label: 'Mematuhi Piawaian', ref2024: BPH_2024_REFERENCE.pemantauan.patuh, value2025: FIXED_MONITORING_VALUES.patuh, icon: CheckCircle2 },
+                        { label: 'Diberi Amaran', ref2024: BPH_2024_REFERENCE.pemantauan.amaran, value2025: FIXED_MONITORING_VALUES.amaran, icon: AlertCircle },
+                        { label: 'Digantung SPHM', ref2024: BPH_2024_REFERENCE.pemantauan.gantung, value2025: FIXED_MONITORING_VALUES.gantung, icon: AlertTriangle },
+                        { label: 'Ditarik Balik SPHM', ref2024: BPH_2024_REFERENCE.pemantauan.tarikBalik, value2025: FIXED_MONITORING_VALUES.tarikBalik, icon: XCircle },
+                      ].map(item => (
+                        <tr key={item.label} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <item.icon className="h-4 w-4 text-emerald-600" />
+                              <span className="text-[10px] font-bold text-gray-700">{item.label}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-xs font-black text-gray-500 text-center">{item.ref2024}</td>
+                          <td className="px-4 py-3 text-sm font-black text-emerald-700 text-center">{item.value2025}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-emerald-50 border-t border-emerald-100">
+                        <td className="px-4 py-3 text-[10px] font-black uppercase text-emerald-900">Jumlah Pemantauan</td>
+                        <td className="px-4 py-3 text-xs font-black text-emerald-700 text-center">{BPH_2024_REFERENCE.pemantauan.total}</td>
+                        <td className="px-4 py-3 text-base font-black text-emerald-900 text-center">{FIXED_MONITORING_VALUES.total}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
               </div>
 
@@ -460,20 +547,20 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
           <div className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { label: 'Ziarah Halal', field: 'ziarahHalal', ref: BPH_2024_REFERENCE.ziarahHalal },
-                { label: 'Taklimat Halal', field: 'taklimat', ref: BPH_2024_REFERENCE.aktiviti.taklimat, sub: 'aktiviti' },
-                { label: 'Kursus Kesedaran', field: 'kursus', ref: BPH_2024_REFERENCE.aktiviti.kursus, sub: 'aktiviti' },
-                { label: 'Jumlah Besar Aktiviti', field: 'total', ref: BPH_2024_REFERENCE.aktiviti.total, sub: 'aktiviti', highlight: true },
+                { label: 'Ziarah Halal', value: FIXED_ACTIVITY_VALUES.ziarahHalal, ref: BPH_2024_REFERENCE.ziarahHalal },
+                { label: 'Taklimat Halal', value: FIXED_ACTIVITY_VALUES.taklimat, ref: BPH_2024_REFERENCE.aktiviti.taklimat },
+                { label: 'Kursus Kesedaran Halal', value: FIXED_ACTIVITY_VALUES.kursus, ref: BPH_2024_REFERENCE.aktiviti.kursus },
+                { label: 'Jumlah Besar Aktiviti', value: FIXED_ACTIVITY_VALUES.total, ref: BPH_2024_REFERENCE.aktiviti.total, highlight: true },
               ].map(item => (
-                <div key={item.field} className={`p-4 rounded-2xl border ${item.highlight ? 'bg-[#5A5A40] text-zus-gold border-[#5A5A40]' : 'bg-gray-50 border-gray-100'} space-y-3`}>
+                <div key={item.label} className={`p-4 rounded-2xl border ${item.highlight ? 'bg-[#5A5A40] text-zus-gold border-[#5A5A40]' : 'bg-gray-50 border-gray-100'} space-y-3`}>
                   <label className={`text-[10px] font-black uppercase ${item.highlight ? 'opacity-60' : 'text-gray-500'}`}>{item.label}</label>
                   <div className="flex items-center justify-between">
                     <span className={`text-[9px] font-bold ${item.highlight ? 'opacity-40' : 'text-gray-400'}`}>Ref 24: {item.ref}</span>
                     <input 
                       type="number" 
-                      value={item.sub ? formData.bph.aktiviti[item.field] : formData.bph[item.field]} 
-                      onChange={(e) => updateBph(item.sub ? ['aktiviti', item.field] : [item.field], e.target.value)} 
-                      className={`w-20 p-1.5 rounded-lg text-xs font-bold text-center outline-none focus:ring-2 ${item.highlight ? 'bg-white/10 border-white/20 text-white focus:ring-white/30' : 'bg-white border-gray-200 text-zus-900 focus:ring-olive-500'}`} 
+                      value={item.value}
+                      readOnly
+                      className={`w-20 p-1.5 rounded-lg text-xs font-bold text-center outline-none pointer-events-none ${item.highlight ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gray-200 text-zus-900'}`} 
                     />
                   </div>
                 </div>
@@ -492,6 +579,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
           handleSave={handleSave}
           isSaving={isSaving}
         />
+      </div>
       </div>
     </FormLayout>
   );
