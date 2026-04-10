@@ -2,15 +2,12 @@ import React, { useMemo } from 'react';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
-import { BPH_2024_REFERENCE } from '../../constants';
+import { BPH_2024_REFERENCE, BPH_2025_REFERENCE } from '../../constants';
 import { 
   ShieldCheck, 
   FileText, 
   Activity, 
   MapPin, 
-  Plus, 
-  Save,
-  Trash2, 
   TrendingUp,
   AlertCircle,
   CheckCircle2,
@@ -37,16 +34,16 @@ interface BphFormProps {
 
 const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
   const initialState = {
-    tarikh: new Date().toISOString().split('T')[0],
-    disediakanOleh: '',
-    jawatan: '',
+    tarikh: '2026-04-06',
+    disediakanOleh: 'EFFA RINA BINTI ABD SALAM',
+    jawatan: 'Ketua Bahagian Pengurusan Halal',
     ringkasan: '',
     isu: '',
     cadangan: '',
     lawatan: [],
     bph: {
       sphm: {
-        permohonan: '',
+        permohonan: BPH_2025_REFERENCE.sphm.permohonan.toString(),
         permohonanSkim: {
           rumahSembelihan: '',
           produk: '',
@@ -65,16 +62,16 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
         }
       },
       pemantauan: {
-        patuh: '',
-        amaran: '',
-        gantung: '',
-        tarikBalik: '',
+        patuh: BPH_2025_REFERENCE.pemantauan.patuh.toString(),
+        amaran: BPH_2025_REFERENCE.pemantauan.amaran.toString(),
+        gantung: BPH_2025_REFERENCE.pemantauan.gantung.toString(),
+        tarikBalik: BPH_2025_REFERENCE.pemantauan.tarikBalik.toString(),
         lain: ''
       },
       penguatkuasaan: '',
       aduan: '',
       ziarahHalal: '',
-      zonHalal: BPH_2024_REFERENCE.zonHalal,
+      zonHalal: BPH_2025_REFERENCE.zonHalal,
       aktiviti: {
         taklimat: '',
         kursus: '',
@@ -109,12 +106,6 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     return totalSkim || (parseInt(formData.bph?.sphm?.permohonan) || 0);
   }, [formData.bph?.sphm?.permohonanSkim, formData.bph?.sphm?.permohonan]);
 
-  // Auto-sum Pemantauan
-  const pemantauanTotal = useMemo(() => {
-    const p = formData.bph?.pemantauan || {};
-    return Object.values(p).reduce((acc: number, val: any) => acc + (parseInt(val) || 0), 0);
-  }, [formData.bph?.pemantauan]);
-
   const updateBph = (path: string[], value: any) => {
     setFormData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
@@ -130,43 +121,9 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     });
   };
 
-  const addZonHalal = () => {
-    setFormData((prev: any) => ({
-      ...prev,
-      bph: {
-        ...prev.bph,
-        zonHalal: [...(prev.bph?.zonHalal || []), '']
-      }
-    }));
-  };
-
-  const removeZonHalal = (index: number) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      bph: {
-        ...prev.bph,
-        zonHalal: prev.bph.zonHalal.filter((_: any, i: number) => i !== index)
-      }
-    }));
-  };
-
-  const updateZonHalal = (index: number, value: string) => {
-    setFormData((prev: any) => {
-      const newZon = [...prev.bph.zonHalal];
-      newZon[index] = value;
-      return {
-        ...prev,
-        bph: {
-          ...prev.bph,
-          zonHalal: newZon
-        }
-      };
-    });
-  };
-
   const chartData = [
     { name: '2024', permohonan: BPH_2024_REFERENCE.sphm.permohonan, aktif: BPH_2024_REFERENCE.sphm.aktif },
-    { name: '2025', permohonan: sphmTotalPermohonan, aktif: sphmTotalAktif }
+    { name: '2025', permohonan: sphmTotalPermohonan || BPH_2025_REFERENCE.sphm.permohonan, aktif: sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif }
   ];
 
   if (!formData.bph) return null;
@@ -251,37 +208,79 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                   <span className="text-xs font-black uppercase">Jumlah Pemilik Sijil Aktif</span>
                   <div className="flex items-center gap-4">
                     <span className="text-[10px] opacity-60">Ref 24: {BPH_2024_REFERENCE.sphm.aktif}</span>
-                    <span className="text-xl font-black">{sphmTotalAktif}</span>
+                    <span className="text-xl font-black">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h4 className="text-xs font-black text-zus-900 uppercase flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-olive-600" />
                 Perbandingan SPHM (2024 vs 2025)
               </h4>
-              <div className="h-[300px] w-full bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
-                    <Tooltip 
-                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                      cursor={{ fill: '#f3f4f6' }}
-                    />
-                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold' }} />
-                    <Bar dataKey="permohonan" name="Permohonan" fill="#5A5A40" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="aktif" name="Aktif" fill="#F27D26" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="h-[300px] w-full bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold' }} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10 }} />
+                      <Tooltip 
+                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                        cursor={{ fill: '#f3f4f6' }}
+                      />
+                      <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 'bold' }} />
+                      <Bar dataKey="permohonan" name="Permohonan" fill="#5A5A40" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="aktif" name="Aktif" fill="#F27D26" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50/50">
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500">Tahun</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">Permohonan</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-400 text-center">+/-</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">Pemilik Aktif</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-400 text-center">+/-</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      <tr>
+                        <td className="px-4 py-4 text-xs font-bold text-gray-500">2024 (Ref)</td>
+                        <td className="px-4 py-4 text-xs font-black text-center text-zus-900">{BPH_2024_REFERENCE.sphm.permohonan}</td>
+                        <td className="px-4 py-4 text-center">-</td>
+                        <td className="px-4 py-4 text-xs font-black text-center text-zus-900">{BPH_2024_REFERENCE.sphm.aktif}</td>
+                        <td className="px-4 py-4 text-center">-</td>
+                      </tr>
+                      <tr className="bg-olive-50/30">
+                        <td className="px-4 py-4 text-xs font-bold text-olive-900">2025 (Semasa)</td>
+                        <td className="px-4 py-4 text-sm font-black text-center text-olive-900">{sphmTotalPermohonan || BPH_2025_REFERENCE.sphm.permohonan}</td>
+                        <td className="px-4 py-4 text-center">
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${(sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan) >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                            {(sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan) > 0 ? '+' : ''}{sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-sm font-black text-center text-olive-900">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</td>
+                        <td className="px-4 py-4 text-center">
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${(sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif) >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                            {(sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif) > 0 ? '+' : ''}{sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
+              
               <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
                 <Info className="w-4 h-4 text-blue-500 mt-0.5" />
                 <p className="text-[10px] text-blue-700 leading-relaxed">
-                  Graf di atas menunjukkan perbandingan prestasi permohonan dan pemilikan sijil aktif antara tahun rujukan 2024 dan data semasa 2025.
+                  Data 2024 adalah sebagai rujukan prestasi jabatan. Data 2025 adalah data semasa yang direkodkan melalui sistem.
                 </p>
               </div>
             </div>
@@ -300,15 +299,15 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                 <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Hasil Pemantauan 2025</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
-                    { label: 'Mematuhi Piawaian', field: 'patuh', ref: BPH_2024_REFERENCE.pemantauan.patuh, icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                    { label: 'Diberi Amaran', field: 'amaran', ref: BPH_2024_REFERENCE.pemantauan.amaran, icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-50' },
-                    { label: 'Digantung SPHM', field: 'gantung', ref: BPH_2024_REFERENCE.pemantauan.gantung, icon: AlertTriangle, color: 'text-orange-500', bg: 'bg-orange-50' },
-                    { label: 'Ditarik Balik SPHM', field: 'tarikBalik', ref: BPH_2024_REFERENCE.pemantauan.tarikBalik, icon: XCircle, color: 'text-red-500', bg: 'bg-red-50' },
-                    { label: 'Lain-lain', field: 'lain', ref: BPH_2024_REFERENCE.pemantauan.lain, icon: Info, color: 'text-gray-500', bg: 'bg-gray-50' },
+                    { label: 'Mematuhi Piawaian', field: 'patuh', ref: BPH_2024_REFERENCE.pemantauan.patuh, icon: CheckCircle2 },
+                    { label: 'Diberi Amaran', field: 'amaran', ref: BPH_2024_REFERENCE.pemantauan.amaran, icon: AlertCircle },
+                    { label: 'Digantung SPHM', field: 'gantung', ref: BPH_2024_REFERENCE.pemantauan.gantung, icon: AlertTriangle },
+                    { label: 'Ditarik Balik SPHM', field: 'tarikBalik', ref: BPH_2024_REFERENCE.pemantauan.tarikBalik, icon: XCircle },
+                    { label: 'Lain-lain', field: 'lain', ref: BPH_2024_REFERENCE.pemantauan.lain, icon: Info },
                   ].map(item => (
-                    <div key={item.field} className={`p-4 rounded-2xl border border-gray-100 ${item.bg} space-y-3`}>
+                    <div key={item.field} className="p-4 rounded-2xl border bg-emerald-50/50 border-emerald-100 space-y-3">
                       <div className="flex items-center gap-2">
-                        <item.icon className={`w-4 h-4 ${item.color}`} />
+                        <item.icon className="w-4 h-4 text-emerald-500" />
                         <span className="text-[10px] font-black text-gray-700 uppercase">{item.label}</span>
                       </div>
                       <div className="flex items-center justify-between">
@@ -317,14 +316,15 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                           type="number" 
                           value={formData.bph.pemantauan[item.field]} 
                           onChange={(e) => updateBph(['pemantauan', item.field], e.target.value)} 
-                          className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none" 
+                          readOnly
+                          className="w-20 p-1.5 border border-emerald-200 bg-emerald-100/50 rounded-lg text-xs font-bold text-center text-emerald-900 outline-none pointer-events-none" 
                         />
                       </div>
                     </div>
                   ))}
-                  <div className="p-4 rounded-2xl bg-[#5A5A40] text-zus-gold flex flex-col justify-center items-center gap-1">
+                  <div className="p-4 rounded-2xl bg-emerald-600 text-white flex flex-col justify-center items-center gap-1 shadow-lg shadow-emerald-100">
                     <span className="text-[10px] font-black uppercase opacity-60">Jumlah Pemantauan</span>
-                    <div className="text-2xl font-black">{pemantauanTotal}</div>
+                    <div className="text-2xl font-black">{BPH_2025_REFERENCE.pemantauan.total}</div>
                     <span className="text-[9px] font-bold opacity-40">Ref 24: {BPH_2024_REFERENCE.pemantauan.total}</span>
                   </div>
                 </div>
@@ -373,104 +373,63 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
               <div>
                 <h3 className="text-white font-bold">3. Zon Halal 2025</h3>
                 <p className="text-[11px] font-semibold text-white/60">
-                  Tambah, kemas kini, simpan, atau padam senarai zon halal aktif.
+                  Data zon halal tahun 2025 yang telah disahkan.
                 </p>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <div className="rounded-full bg-emerald-500/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100 ring-1 ring-emerald-500/30">
+                Data Terkunci (Sah)
+              </div>
               <div className="rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/70 ring-1 ring-white/10">
                 {formData.bph.zonHalal.length} Zon Direkodkan
               </div>
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#5A5A40] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <Save className={`h-3.5 w-3.5 ${isSaving ? 'animate-pulse' : ''}`} />
-                {isSaving ? 'Menyimpan...' : 'Simpan Zon'}
-              </button>
-              <button 
-                onClick={addZonHalal}
-                className="inline-flex items-center gap-2 rounded-xl bg-zus-gold px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-zus-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ffd39a] hover:shadow-md"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Tambah Zon
-              </button>
             </div>
           </div>
           <div className="p-6 space-y-5 bg-gradient-to-b from-[#faf8f1] via-white to-white">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
               <div className="rounded-2xl border border-[#e7dfc9] bg-white/90 p-4 shadow-sm">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d7657]">
-                  Senarai Zon Halal
+                  Senarai Zon Halal 2025
                 </p>
                 <p className="mt-2 text-xs font-medium leading-6 text-gray-500">
-                  Gunakan ruang ini untuk menyusun zon halal tahun 2025. Setiap zon boleh disimpan bersama draf utama dan dipadam terus dari kad masing-masing.
+                  Senarai ini merupakan zon halal rujukan bagi tahun 2025 yang telah ditandatangani oleh Ketua Bahagian.
                 </p>
               </div>
               <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-4 shadow-sm">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
-                  Status Simpanan
+                  Status Pengesahan
                 </p>
                 <div className="mt-3 flex items-center gap-2">
-                  <CheckCircle2 className={`h-4 w-4 ${showSuccess ? 'text-emerald-600' : 'text-emerald-300'}`} />
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   <span className="text-xs font-bold text-emerald-800">
-                    {showSuccess ? 'Perubahan zon berjaya disimpan.' : 'Klik "Simpan Zon" selepas selesai mengemas kini senarai.'}
+                    Telah disahkan oleh Ketua Bahagian Pengurusan Halal.
                   </span>
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {formData.bph.zonHalal.map((zon: string, idx: number) => (
-                <div key={idx} className="group rounded-2xl border border-[#e9e3d2] bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-within:border-[#c8b07a]">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f8f3e4] text-[#8d7742]">
-                        <MapPin className="w-4 h-4 shrink-0" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#8d7742]">
-                          Zon {idx + 1}
-                        </p>
-                        <p className="text-[11px] font-semibold text-gray-400">
-                          Rekod lokasi halal
-                        </p>
-                      </div>
+                <div key={idx} className="group rounded-2xl border border-emerald-100 bg-emerald-50/30 p-4 shadow-sm transition-all duration-200">
+                  <div className="mb-3 flex items-center gap-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                      <MapPin className="w-4 h-4 shrink-0" />
                     </div>
-                    <button 
-                      type="button"
-                      onClick={() => removeZonHalal(idx)}
-                      className="inline-flex items-center gap-1 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-red-600 transition hover:border-red-300 hover:bg-red-100"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      Delete
-                    </button>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-700">
+                        Zon {idx + 1}
+                      </p>
+                    </div>
                   </div>
                   <input 
                     type="text" 
                     value={zon} 
-                    onChange={(e) => updateZonHalal(idx, e.target.value)} 
-                    placeholder="Contoh: Zon Kuching Tengah"
-                    className="w-full rounded-xl border border-gray-200 bg-[#fcfcfa] px-4 py-3 text-sm font-bold text-gray-700 outline-none transition focus:border-[#c8b07a] focus:ring-2 focus:ring-[#efe3bd]"
+                    readOnly 
+                    className="w-full rounded-xl border border-emerald-100 bg-white px-4 py-3 text-sm font-bold text-emerald-900 outline-none pointer-events-none"
                   />
-                  <div className="mt-3 flex items-center justify-between text-[11px] font-semibold text-gray-400">
-                    <span>Masukkan nama zon yang jelas</span>
-                    <span>{zon.trim().length} aksara</span>
-                  </div>
                 </div>
               ))}
             </div>
-            {formData.bph.zonHalal.length === 0 && (
-              <div className="rounded-3xl border-2 border-dashed border-[#e1d8c3] bg-[#fbf8f0] py-12 text-center">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
-                  <MapPin className="w-7 h-7 text-[#c4ab73]" />
-                </div>
-                <p className="text-sm font-black text-[#766d52]">Tiada zon halal direkodkan lagi</p>
-                <p className="mt-2 text-xs font-medium text-gray-400">
-                  Klik butang `Tambah Zon` untuk mula membina senarai zon halal 2025.
-                </p>
-              </div>
-            )}
           </div>
         </section>
 

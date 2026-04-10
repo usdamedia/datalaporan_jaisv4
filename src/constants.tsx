@@ -493,7 +493,7 @@ export const BPPI_2024_REFERENCE = {
 
 export const BPH_2024_REFERENCE = {
   sphm: {
-    permohonan: 722,
+    permohonan: 512,
     aktif: 935,
     skim: {
       rumahSembelihan: 25,
@@ -506,7 +506,7 @@ export const BPH_2024_REFERENCE = {
   },
   trend: {
     y2023: { permohonan: 383, aktif: 823 },
-    y2024: { permohonan: 722, aktif: 935 }
+    y2024: { permohonan: 512, aktif: 935 }
   },
   pemantauan: {
     patuh: 339,
@@ -533,6 +533,28 @@ export const BPH_2024_REFERENCE = {
     kursus: 48,
     total: 57
   }
+};
+
+export const BPH_2025_REFERENCE = {
+  sphm: {
+    permohonan: 677,
+    aktif: 1076
+  },
+  pemantauan: {
+    patuh: 277,
+    amaran: 62,
+    gantung: 68,
+    tarikBalik: 5,
+    total: 461
+  },
+  zonHalal: [
+    "Food court majma mall kuching",
+    "Medan selera lundu kuching",
+    "Taman selera harmoni sibu",
+    "Medan selera taman seroja, miri",
+    "Anjurng sari dan medan selera lawas, limbang",
+    "Medan selera boyan & gersik, Kuching"
+  ]
 };
 
 export const BPKS_2024_REFERENCE = {

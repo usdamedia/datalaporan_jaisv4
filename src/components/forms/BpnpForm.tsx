@@ -616,7 +616,6 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
-      hideExportButton={isUnitStrategik && !showDataManagement}
     >
       {isUnitPenyelidikan || isUnitStrategik || isUnitAkidah ? (
         showDataManagement ? (

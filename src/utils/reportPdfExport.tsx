@@ -1,6 +1,7 @@
 import React from 'react';
 import { pdf } from '@react-pdf/renderer';
 import ReportPDF from '../components/ReportPDF';
+import { BPH_2025_REFERENCE } from '../constants';
 
 export type PdfExportScope = 'current-page' | 'all-filtered';
 
@@ -137,6 +138,66 @@ const normalizeHrExportData = (data: any) => {
   };
 };
 
+const normalizeBphExportData = (data: any) => {
+  const bph = data.bph || {};
+  const sphm = bph.sphm || {};
+  const permohonanSkim = sphm.permohonanSkim || {};
+  const skim = sphm.skim || {};
+  const pemantauan = bph.pemantauan || {};
+  const aktiviti = bph.aktiviti || {};
+
+  // If data is empty, use 2025 reference data as fallback
+  const permohonanSkimTotal = Object.values(permohonanSkim).reduce((acc: number, val: any) => acc + toInt(val), 0);
+  const sphmTotalPermohonan = permohonanSkimTotal || toInt(sphm.permohonan) || BPH_2025_REFERENCE.sphm.permohonan;
+  
+  const skimTotal = Object.values(skim).reduce((acc: number, val: any) => acc + toInt(val), 0) || BPH_2025_REFERENCE.sphm.aktif;
+  
+  const patuh = toInt(pemantauan.patuh) || BPH_2025_REFERENCE.pemantauan.patuh;
+  const amaran = toInt(pemantauan.amaran) || BPH_2025_REFERENCE.pemantauan.amaran;
+  const gantung = toInt(pemantauan.gantung) || BPH_2025_REFERENCE.pemantauan.gantung;
+  const tarikBalik = toInt(pemantauan.tarikBalik) || BPH_2025_REFERENCE.pemantauan.tarikBalik;
+  const lain = toInt(pemantauan.lain) || 0;
+  
+  const pemantauanTotal = patuh + amaran + gantung + tarikBalik + lain;
+  
+  const ziarah = toInt(bph.ziarahHalal) || 0;
+  const taklimat = toInt(aktiviti.taklimat) || 0;
+  const kursus = toInt(aktiviti.kursus) || 0;
+  const aktivitiTotal = ziarah + taklimat + kursus;
+
+  return {
+    ...data,
+    bph: {
+      ...bph,
+      sphm: {
+        ...sphm,
+        permohonan: String(sphmTotalPermohonan),
+        skim: {
+          ...skim,
+          total: String(skimTotal)
+        }
+      },
+      pemantauan: {
+        ...pemantauan,
+        patuh: String(patuh),
+        amaran: String(amaran),
+        gantung: String(gantung),
+        tarikBalik: String(tarikBalik),
+        lain: String(lain),
+        total: String(pemantauanTotal)
+      },
+      zonHalal: bph.zonHalal && bph.zonHalal.length > 0 ? bph.zonHalal : BPH_2025_REFERENCE.zonHalal,
+      aktiviti: {
+        ...aktiviti,
+        taklimat: String(taklimat),
+        kursus: String(kursus),
+        total: String(aktivitiTotal)
+      },
+      ziarahHalal: String(ziarah)
+    }
+  };
+};
+
 const normalizeReportExportData = (deptName: string, formData: any) => {
   let normalizedData = cloneExportData(formData);
   const normalizedDeptName = deptName.toUpperCase();
@@ -147,6 +208,10 @@ const normalizeReportExportData = (deptName: string, formData: any) => {
 
   if (normalizedDeptName.includes('HR')) {
     normalizedData = normalizeHrExportData(normalizedData);
+  }
+
+  if (normalizedDeptName.includes('BPH') || normalizedDeptName.includes('HALAL')) {
+    normalizedData = normalizeBphExportData(normalizedData);
   }
 
   return normalizedData;
