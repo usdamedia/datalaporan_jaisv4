@@ -2842,7 +2842,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       {/* Footer */}
       <div className="mt-12 pt-6 border-t border-gray-200 flex justify-between items-end">
         <div className="text-[10px] text-gray-400 font-bold">
-          © 2025 Jabatan Agama Islam Sarawak (JAIS)<br/>
+          Keperluan Data 2025 bagi Jabatan Agama Islam Sarawak - Terbit 2026<br/>
           Laporan ini dijana secara digital.
         </div>
       </div>

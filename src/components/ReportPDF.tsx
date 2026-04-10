@@ -2833,7 +2833,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 Jabatan Agama Islam Sarawak (JAIS)</Text>
+          <Text style={styles.footerText}>Keperluan Data 2025 bagi Jabatan Agama Islam Sarawak - Terbit 2026</Text>
           <Text style={styles.footerText} render={({ pageNumber, totalPages }) => (
             `Halaman ${pageNumber} dari ${totalPages}`
           )} />
