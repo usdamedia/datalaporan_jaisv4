@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
-import { 
+import {
   Users, 
   Globe, 
   Radio, 
@@ -11,7 +11,7 @@ import {
   Plus,
   Trash2
 } from 'lucide-react';
-import { DAKWAH_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
+import { DAKWAH_2024_REFERENCE, DAKWAH_2025_MEDIA_CURRENT, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
@@ -23,6 +23,16 @@ interface DakwahFormProps {
 
 const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const isUnitAlQuran = deptName.toUpperCase().includes('AL-QURAN');
+  const mediaSosialLockedItems = [
+    { key: 'fb', label: 'FB', value: DAKWAH_2025_MEDIA_CURRENT.sosial.fb },
+    { key: 'ig', label: 'IG', value: DAKWAH_2025_MEDIA_CURRENT.sosial.ig },
+    { key: 'tiktok', label: 'TikTok', value: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok },
+    { key: 'kiswa', label: 'KISWA', value: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa },
+    { key: 'tvs', label: 'TVS', value: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs },
+    { key: 'poster', label: 'Poster', value: DAKWAH_2025_MEDIA_CURRENT.sosial.poster },
+    { key: 'video', label: 'Video', value: DAKWAH_2025_MEDIA_CURRENT.sosial.video },
+  ] as const;
+
   const initialState = {
     tarikh: getTodayIsoMY(),
     disediakanOleh: '',
@@ -35,15 +45,16 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       progJais2025: 0,
       progAgensi2025: 0,
       tauliahAktif2025: 0,
-      mediaRadio2025: 0,
-      mediaInternet2025: 0,
+      mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
+      mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
       mediaSosial: {
-        facebook: 0,
-        instagram: 0,
-        thread: 0,
-        tiktok: 0,
-        telegramChannel: 0,
-        whatsappChannel: 0,
+        fb: DAKWAH_2025_MEDIA_CURRENT.sosial.fb,
+        ig: DAKWAH_2025_MEDIA_CURRENT.sosial.ig,
+        tiktok: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok,
+        kiswa: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa,
+        tvs: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs,
+        poster: DAKWAH_2025_MEDIA_CURRENT.sosial.poster,
+        video: DAKWAH_2025_MEDIA_CURRENT.sosial.video,
       },
       alQuran: {
         pusatPemuliaan: [],
@@ -84,18 +95,26 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
     }));
   };
 
-  const handleMediaSosialChange = (field: string, value: string) => {
+  React.useEffect(() => {
     setFormData((prev: any) => ({
       ...prev,
       dakwah: {
         ...prev.dakwah,
+        mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
+        mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
         mediaSosial: {
-          ...prev.dakwah.mediaSosial,
-          [field]: parseInt(value, 10) || 0,
+          ...(prev.dakwah.mediaSosial || {}),
+          fb: DAKWAH_2025_MEDIA_CURRENT.sosial.fb,
+          ig: DAKWAH_2025_MEDIA_CURRENT.sosial.ig,
+          tiktok: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok,
+          kiswa: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa,
+          tvs: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs,
+          poster: DAKWAH_2025_MEDIA_CURRENT.sosial.poster,
+          video: DAKWAH_2025_MEDIA_CURRENT.sosial.video,
         },
       },
     }));
-  };
+  }, [setFormData]);
 
   const handleDivisionChange = (listField: string, index: number, field: string, value: any) => {
     setFormData((prev: any) => {
@@ -483,7 +502,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
             <input 
               type="number"
               value={formData.dakwah.mediaRadio2025}
-              onChange={(e) => handleDakwahChange('mediaRadio2025', parseInt(e.target.value) || 0)}
+              readOnly
               className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
             />
           </div>
@@ -495,7 +514,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
             <input 
               type="number"
               value={formData.dakwah.mediaInternet2025}
-              onChange={(e) => handleDakwahChange('mediaInternet2025', parseInt(e.target.value) || 0)}
+              readOnly
               className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
             />
           </div>
@@ -508,13 +527,13 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
               Medium Media Sosial (Sekiranya Ada)
               </h4>
               <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-orange-900/70">
-                Isikan data berbentuk nombor bagi setiap medium media sosial yang digunakan pada tahun 2025.
+                Data media sosial tahun 2025 ini telah disahkan dan dikunci sebagai rujukan rasmi.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2 rounded-2xl border border-orange-100 bg-white/80 p-3 text-center">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Platform</p>
-                <p className="mt-1 text-lg font-black text-slate-800">6</p>
+                <p className="mt-1 text-lg font-black text-slate-800">{mediaSosialLockedItems.length}</p>
               </div>
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Jenis</p>
@@ -528,14 +547,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {[
-              { key: 'facebook', label: 'Facebook' },
-              { key: 'instagram', label: 'Instagram' },
-              { key: 'thread', label: 'Thread' },
-              { key: 'tiktok', label: 'Tiktok' },
-              { key: 'telegramChannel', label: 'Telegram Channel' },
-              { key: 'whatsappChannel', label: 'Whatsap Channel' },
-            ].map((item) => (
+            {mediaSosialLockedItems.map((item) => (
               <div key={item.key} className="rounded-[1.5rem] border border-orange-100 bg-white p-4 shadow-[0_10px_30px_rgba(249,115,22,0.08)]">
                 <div className="flex items-center justify-between gap-3">
                   <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
@@ -547,8 +559,8 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                   type="number"
                   min="0"
                   inputMode="numeric"
-                  value={formData.dakwah.mediaSosial?.[item.key] ?? 0}
-                  onChange={(e) => handleMediaSosialChange(item.key, e.target.value)}
+                  value={formData.dakwah.mediaSosial?.[item.key] ?? item.value}
+                  readOnly
                   placeholder="0"
                   className="mt-3 w-full rounded-2xl border border-orange-100 bg-orange-50/30 px-4 py-3 text-center text-lg font-black text-slate-800 outline-none transition focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100"
                 />

@@ -231,8 +231,8 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-b from-red-50 via-white to-rose-50 px-5 py-5 md:px-8 md:py-7">
-                <div className="grid grid-cols-1 gap-3 text-left sm:grid-cols-2 xl:grid-cols-5 md:gap-4">
+              <div className="bg-gradient-to-b from-red-50 via-white to-rose-50 px-4 py-4 md:px-8 md:py-8">
+                <div className="grid grid-cols-1 gap-4 text-left sm:grid-cols-2 xl:grid-cols-5 md:gap-4">
                   <div className="relative overflow-hidden rounded-2xl border border-red-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
                     <div className="absolute right-3 top-2 text-5xl font-black text-red-100">1</div>
                     <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-red-100 text-red-600">
@@ -284,7 +284,7 @@ export default function App() {
                 <div className="mt-5 flex justify-end">
                   <button
                     onClick={() => setShowTutorial(false)}
-                    className="rounded-full bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 active:scale-95"
+                  className="rounded-full bg-red-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 active:scale-95"
                   >
                     Faham, tutup panduan
                   </button>
@@ -365,7 +365,7 @@ export default function App() {
           <div className="animate-fade-in-up space-y-6 md:space-y-12">
             
             {/* HERO HEADER & INSTRUCTIONS */}
-            <div className="text-center max-w-5xl mx-auto pt-2 md:pt-6 px-2">
+            <div className="text-center max-w-5xl mx-auto pt-4 md:pt-8 px-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-blue-50 border border-blue-100 text-zus-900 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 animate-scale-in shadow-sm">
                   <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-zus-gold"></span> Edisi 2025
               </div>
@@ -381,10 +381,10 @@ export default function App() {
                 Sistem pengumpulan data berpusat untuk penerbitan buku laporan tahunan Jabatan Agama Islam Sarawak.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-8">
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
                 <button 
                   onClick={() => setShowTutorial(true)}
-                  className="flex items-center gap-2 rounded-full border border-red-500 bg-red-600 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-red-200 transition-all hover:bg-red-700 hover:border-red-700 active:scale-95 md:px-6 md:py-2.5 md:text-sm"
+                  className="flex items-center gap-2 rounded-full border border-red-500 bg-red-600 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-red-200 transition-all hover:bg-red-700 hover:border-red-700 active:scale-95 md:px-8 md:py-2 md:text-sm"
                 >
                   <Info className="w-4 h-4" />
                   Panduan Pengguna
@@ -393,7 +393,7 @@ export default function App() {
                 {/* Digitalization Page Button */}
                 <button 
                   onClick={() => setShowDigitalization(true)}
-                  className="flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs md:text-sm font-bold bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all active:scale-95 border border-teal-500"
+                  className="flex items-center gap-2 px-6 py-2 md:px-8 md:py-2 rounded-full text-xs md:text-sm font-bold bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all active:scale-95 border border-teal-500"
                 >
                   <Cpu className="w-4 h-4" />
                   Digitalisasi JAIS
@@ -401,7 +401,7 @@ export default function App() {
 
                 <button 
                   onClick={handleOpenProgressTracker}
-                  className="flex items-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-800 hover:border-blue-800 active:scale-95 md:px-6 md:py-2.5 md:text-sm"
+                  className="flex items-center gap-2 rounded-full border border-blue-700 bg-blue-700 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-blue-200 transition-all hover:bg-blue-800 hover:border-blue-800 active:scale-95 md:px-8 md:py-2 md:text-sm"
                 >
                   <BarChart3 className="w-4 h-4" />
                   Progress Tracker
@@ -412,7 +412,7 @@ export default function App() {
 
             <div className="border-t border-gray-200 pt-6 md:pt-10">
               <h2 className="text-lg md:text-2xl font-bold text-zus-900 mb-4 md:mb-6 px-2 border-l-4 border-zus-gold ml-1">Senarai Bahagian</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 pb-10">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 pb-8">
                   {DEPARTMENTS.map((dept, index) => (
                   <div key={dept.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in-up">
                       <DepartmentCard

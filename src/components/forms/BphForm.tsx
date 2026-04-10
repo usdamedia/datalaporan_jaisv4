@@ -408,10 +408,10 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       <div>
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
-      <div className="mt-8 space-y-8 animate-fade-in">
+      <div className="mt-8 space-y-8 animate-fade-in px-4 md:px-8">
         {/* 1. SPHM Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-[#5A5A40] p-4 flex items-center gap-3">
+          <div className="bg-[#5A5A40] p-4 flex items-center gap-4">
             <ShieldCheck className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">1. Statistik Sijil Pengesahan Halal Malaysia (SPHM) 2025</h3>
           </div>
@@ -420,7 +420,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
               {/* Table 1: Permohonan Sijil */}
               <div className="space-y-4">
-                <div className="flex items-center gap-2 border-l-4 border-zus-gold pl-3">
+                <div className="flex items-center gap-4 border-l-4 border-zus-gold pl-4">
                   <h4 className="text-[11px] font-black text-zus-900 uppercase tracking-wider">Statistik Permohonan SPHM</h4>
                 </div>
                 <div className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
@@ -449,7 +449,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                               type="number" 
                               value={item.value}
                               readOnly
-                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
+                              className="w-full max-w-[80px] mx-auto block p-2 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
                             />
                           </td>
                         </tr>
@@ -467,7 +467,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
               {/* Table 2: Pemilik Sijil Aktif */}
               <div className="space-y-4">
-                <div className="flex items-center gap-2 border-l-4 border-zus-gold pl-3">
+                <div className="flex items-center gap-4 border-l-4 border-zus-gold pl-4">
                   <h4 className="text-[11px] font-black text-zus-900 uppercase tracking-wider">Pemilik Sijil (SPHM) Aktif</h4>
                 </div>
                 <div className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
@@ -496,7 +496,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                               type="number" 
                               value={item.value}
                               readOnly
-                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
+                              className="w-full max-w-[80px] mx-auto block p-2 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
                             />
                           </td>
                         </tr>
@@ -562,7 +562,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                 </div>
               </div>
               
-              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
+              <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-4">
                 <Info className="w-4 h-4 text-blue-500 mt-0.5" />
                 <p className="text-[10px] text-blue-700 leading-relaxed">
                   Data 2024 adalah sebagai rujukan prestasi jabatan. Data 2025 adalah data semasa yang direkodkan melalui sistem.
@@ -574,14 +574,14 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
         {/* 2. Pemantauan Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-[#5A5A40] p-4 flex items-center gap-3">
+          <div className="bg-[#5A5A40] p-4 flex items-center gap-4">
             <Activity className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">2. Pemantauan, Penguatkuasaan & Aduan</h3>
           </div>
           <div className="p-6 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 space-y-4">
-                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Hasil Pemantauan 2025</h4>
+                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-4">Hasil Pemantauan 2025</h4>
                 <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                   <table className="w-full text-left">
                     <thead>
@@ -622,7 +622,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Penguatkuasaan & Aduan</h4>
+                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-4">Penguatkuasaan & Aduan</h4>
                 <div className="space-y-4">
                   <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
                     <label className="text-[10px] font-black text-gray-500 uppercase">Kes Penguatkuasaan</label>
@@ -657,27 +657,27 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
         {/* 3. Zon Halal Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-[#5A5A40] p-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
                 <MapPin className="w-5 h-5 text-zus-gold" />
               </div>
               <div>
                 <h3 className="text-white font-bold">3. Zon Halal 2025</h3>
-                <p className="text-[11px] font-semibold text-white/60">
+                <p className="text-[10px] font-semibold text-white/60">
                   Data zon halal tahun 2025 yang telah disahkan.
                 </p>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <div className="rounded-full bg-emerald-500/20 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100 ring-1 ring-emerald-500/30">
+              <div className="rounded-full bg-emerald-500/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100 ring-1 ring-emerald-500/30">
                 Data Terkunci (Sah)
               </div>
-              <div className="rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/70 ring-1 ring-white/10">
+              <div className="rounded-full bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white/70 ring-1 ring-white/10">
                 {formData.bph.zonHalal.length} Zon Direkodkan
               </div>
             </div>
           </div>
-          <div className="p-6 space-y-5 bg-gradient-to-b from-[#faf8f1] via-white to-white">
+          <div className="p-6 space-y-6 bg-gradient-to-b from-[#faf8f1] via-white to-white">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
               <div className="rounded-2xl border border-[#e7dfc9] bg-white/90 p-4 shadow-sm">
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d7657]">
@@ -691,7 +691,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
                   Status Pengesahan
                 </p>
-                <div className="mt-3 flex items-center gap-2">
+                <div className="mt-4 flex items-center gap-4">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
                   <span className="text-xs font-bold text-emerald-800">
                     Telah disahkan oleh Ketua Bahagian Pengurusan Halal.
@@ -702,7 +702,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {formData.bph.zonHalal.map((zon: string, idx: number) => (
                 <div key={idx} className="group rounded-2xl border border-emerald-100 bg-emerald-50/30 p-4 shadow-sm transition-all duration-200">
-                  <div className="mb-3 flex items-center gap-2">
+                  <div className="mb-4 flex items-center gap-4">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
                       <MapPin className="w-4 h-4 shrink-0" />
                     </div>
@@ -726,7 +726,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
         {/* 4. Aktiviti Section */}
         <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-[#5A5A40] p-4 flex items-center gap-3">
+          <div className="bg-[#5A5A40] p-4 flex items-center gap-4">
             <BarChart3 className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">4. Program & Aktiviti Halal</h3>
           </div>
@@ -746,7 +746,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                       type="number" 
                       value={item.value}
                       readOnly
-                      className={`w-20 p-1.5 rounded-lg text-xs font-bold text-center outline-none pointer-events-none ${item.highlight ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gray-200 text-zus-900'}`} 
+                      className={`w-20 p-2 rounded-lg text-xs font-bold text-center outline-none pointer-events-none ${item.highlight ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gray-200 text-zus-900'}`} 
                     />
                   </div>
                 </div>

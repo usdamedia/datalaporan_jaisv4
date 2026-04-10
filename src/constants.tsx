@@ -49,6 +49,20 @@ export const DAKWAH_2024_REFERENCE = {
   }
 };
 
+export const DAKWAH_2025_MEDIA_CURRENT = {
+  radio: 365,
+  internet: 306,
+  sosial: {
+    fb: 222,
+    ig: 29,
+    tiktok: 18,
+    kiswa: 12,
+    tvs: 25,
+    poster: 242,
+    video: 59,
+  },
+} as const;
+
 export const SARAWAK_DIVISIONS = [
   "Kuching", "Samarahan", "Serian", "Sri Aman", "Betong", 
   "Sarikei", "Sibu", "Kapit", "Mukah", "Bintulu", "Miri", "Limbang"

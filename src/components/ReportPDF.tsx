@@ -1,7 +1,6 @@
 import React from 'react';
-import { INTEGRITI_2025_CURRENT } from '../constants';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, DAKWAH_2025_MEDIA_CURRENT, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE, INTEGRITI_2025_CURRENT } from '../constants';
 import { formatDateDDMMYYYYMY, formatNowDDMMYYYYMY } from '../utils/dateFormat';
 
 // Register fonts if needed, but standard ones are usually fine
@@ -1103,14 +1102,15 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Dakwah Melalui Media (2025)</Text>
-              <View style={styles.row}><Text style={styles.label}>Radio:</Text><Text style={styles.value}>{formData.dakwah.mediaRadio2025 || 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Internet:</Text><Text style={styles.value}>{formData.dakwah.mediaInternet2025 || 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Facebook:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.facebook ?? 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Instagram:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.instagram ?? 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Thread:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.thread ?? 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Tiktok:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tiktok ?? 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Telegram Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.telegramChannel ?? 0}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Whatsap Channel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.whatsappChannel ?? 0}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Radio:</Text><Text style={styles.value}>{formData.dakwah.mediaRadio2025 ?? DAKWAH_2025_MEDIA_CURRENT.radio}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Internet:</Text><Text style={styles.value}>{formData.dakwah.mediaInternet2025 ?? DAKWAH_2025_MEDIA_CURRENT.internet}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>FB:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.fb ?? DAKWAH_2025_MEDIA_CURRENT.sosial.fb}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>IG:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.ig ?? DAKWAH_2025_MEDIA_CURRENT.sosial.ig}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>TikTok:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tiktok ?? DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>KISWA:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.kiswa ?? DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>TVS:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tvs ?? DAKWAH_2025_MEDIA_CURRENT.sosial.tvs}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Poster:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.poster ?? DAKWAH_2025_MEDIA_CURRENT.sosial.poster}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Video:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.video ?? DAKWAH_2025_MEDIA_CURRENT.sosial.video}</Text></View>
             </View>
 
             <View style={styles.section}>

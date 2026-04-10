@@ -1,5 +1,5 @@
 import React from 'react';
-import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, UKOKO_PENERBITAN_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
+import { BKIM_2024_REFERENCE, DAKWAH_2024_REFERENCE, DAKWAH_2025_MEDIA_CURRENT, BPNP_2024_REFERENCE, BKSK_2024_REFERENCE, BKSP_2024_REFERENCE, BPDS_2024_REFERENCE, HR_2024_REFERENCE, LEADERSHIP_2024_REFERENCE, FINANCE_2024_REFERENCE, BKKI_2024_REFERENCE, BPPI_2024_REFERENCE, BPH_2024_REFERENCE, BPKS_2024_REFERENCE, UKOKO_2024_REFERENCE, UKOKO_PR_2024_REFERENCE, UKOKO_PENERBITAN_2024_REFERENCE, DHQC_2024_REFERENCE, SARAWAK_DIVISIONS, UPP_2024_REFERENCE, QUALITY_INITIATIVES_2024_REFERENCE, LATIHAN_2024_REFERENCE } from '../constants';
 import { formatDateDDMMYYYYMY, formatNowDDMMYYYYMY } from '../utils/dateFormat';
 
 interface PrintableReportProps {
@@ -1127,42 +1127,47 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <tr>
                     <td className="border p-2 font-bold">Radio</td>
                     <td className="border p-2 text-center">{DAKWAH_2024_REFERENCE.media.radio}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaRadio2025}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaRadio2025 ?? DAKWAH_2025_MEDIA_CURRENT.radio}</td>
                   </tr>
                   <tr>
                     <td className="border p-2 font-bold">Internet</td>
                     <td className="border p-2 text-center">{DAKWAH_2024_REFERENCE.media.internet}</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaInternet2025}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaInternet2025 ?? DAKWAH_2025_MEDIA_CURRENT.internet}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Facebook</td>
+                    <td className="border p-2 font-bold">FB</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.facebook ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.fb ?? DAKWAH_2025_MEDIA_CURRENT.sosial.fb}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Instagram</td>
+                    <td className="border p-2 font-bold">IG</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.instagram ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.ig ?? DAKWAH_2025_MEDIA_CURRENT.sosial.ig}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Thread</td>
+                    <td className="border p-2 font-bold">TikTok</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.thread ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tiktok ?? DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Tiktok</td>
+                    <td className="border p-2 font-bold">KISWA</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tiktok ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.kiswa ?? DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Telegram Channel</td>
+                    <td className="border p-2 font-bold">TVS</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.telegramChannel ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.tvs ?? DAKWAH_2025_MEDIA_CURRENT.sosial.tvs}</td>
                   </tr>
                   <tr>
-                    <td className="border p-2 font-bold">Whatsap Channel</td>
+                    <td className="border p-2 font-bold">Poster</td>
                     <td className="border p-2 text-center">-</td>
-                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.whatsappChannel ?? 0}</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.poster ?? DAKWAH_2025_MEDIA_CURRENT.sosial.poster}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Video</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.video ?? DAKWAH_2025_MEDIA_CURRENT.sosial.video}</td>
                   </tr>
                 </tbody>
               </table>

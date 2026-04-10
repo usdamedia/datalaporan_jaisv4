@@ -19,7 +19,7 @@ const autoGrowTextarea = (element: HTMLTextAreaElement | null) => {
 
 export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-    <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+    <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
       <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
         <Info className="w-5 h-5" />
       </div>
@@ -68,7 +68,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
       </div>
     </div>
 
-    <div className="mt-6 border-t border-gray-100 pt-6">
+    <div className="mt-8 border-t border-gray-100 pt-8">
       <h4 className="text-sm font-black text-zus-900 sentence-case">Disahkan Oleh</h4>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
@@ -111,7 +111,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
 
 export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-    <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+    <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
       <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
         <FileText className="w-5 h-5" />
       </div>
@@ -177,8 +177,8 @@ export const LawatanSection: React.FC<{
   formData, addLawatan, removeLawatan, updateLawatan, handleSave, isSaving, readOnly = false
 }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-    <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
-      <div className="flex items-center gap-3">
+    <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+      <div className="flex items-center gap-4">
         <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
           <Calendar className="w-5 h-5" />
         </div>
@@ -189,7 +189,7 @@ export const LawatanSection: React.FC<{
           <button 
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-1.5 bg-zus-900 text-white px-4 py-2 rounded-xl font-bold text-xs sentence-case tracking-wider transition-all hover:bg-zus-700 active:scale-95 disabled:opacity-70"
+            className="flex items-center gap-2 bg-zus-900 text-white px-4 py-2 rounded-xl font-bold text-xs sentence-case tracking-wider transition-all hover:bg-zus-700 active:scale-95 disabled:opacity-70"
           >
             {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             Simpan rekod
@@ -198,7 +198,7 @@ export const LawatanSection: React.FC<{
         {!readOnly && (
           <button 
             onClick={addLawatan}
-            className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs sentence-case tracking-wider transition-colors"
+            className="flex items-center gap-2 text-zus-gold hover:text-zus-900 font-bold text-xs sentence-case tracking-wider transition-colors"
           >
             <Plus className="w-4 h-4" /> Tambah lawatan
           </button>
@@ -207,7 +207,7 @@ export const LawatanSection: React.FC<{
     </div>
 
     {(!formData.lawatan || formData.lawatan.length === 0) ? (
-      <div className="text-center py-10 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+      <div className="text-center py-8 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
         <AlertCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
         <p className="text-sm text-gray-400 font-medium sentence-case">Tiada rekod lawatan ditambah.</p>
       </div>

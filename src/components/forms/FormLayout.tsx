@@ -70,7 +70,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Kembali ke Utama
           </button>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <h2 className="text-2xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
               {deptName}
             </h2>
@@ -90,7 +90,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           <button
             onClick={onSave}
             disabled={isSaving}
-            className="flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] bg-zus-900 px-8 py-5 text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
+            className="flex min-w-[224px] items-center justify-center gap-4 rounded-[1.35rem] bg-zus-900 px-8 py-4 text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
           >
             {isSaving ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -104,7 +104,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <button
               onClick={handleExportPdf}
               disabled={isExportingPdf}
-              className={`flex min-w-[220px] items-center justify-center gap-3 rounded-[1.35rem] px-7 py-5 text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
+              className={`flex min-w-[224px] items-center justify-center gap-4 rounded-[1.35rem] px-8 py-4 text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
                 isExportingPdf 
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                   : 'border border-gray-200 bg-white text-zus-900 hover:border-zus-gold hover:bg-slate-50'
@@ -123,7 +123,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
       {/* Error Notification */}
       {exportError && (
-        <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-700 animate-scale-in">
+        <div className="mb-8 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-4 text-red-700 animate-scale-in">
           <AlertCircle className="w-5 h-5" />
           <span className="text-sm font-bold">{exportError}</span>
         </div>
@@ -131,14 +131,14 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
       {/* Success Notification */}
       {showSuccess && (
-        <div className="mb-6 bg-green-50 border border-green-100 p-4 rounded-2xl flex items-center gap-3 text-green-700 animate-scale-in">
+        <div className="mb-8 bg-green-50 border border-green-100 p-4 rounded-2xl flex items-center gap-4 text-green-700 animate-scale-in">
           <CheckCircle2 className="w-5 h-5" />
           <span className="text-sm font-bold">Data telah berjaya disimpan secara lokal!</span>
         </div>
       )}
 
       {saveError && (
-        <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-700 animate-scale-in">
+        <div className="mb-8 bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-4 text-red-700 animate-scale-in">
           <AlertCircle className="w-5 h-5" />
           <span className="text-sm font-bold">{saveError}</span>
         </div>
