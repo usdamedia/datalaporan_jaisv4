@@ -59,7 +59,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 
   return (
     <>
-      <div className="mx-auto max-w-[80rem] animate-fade-in pb-28">
+      <div className="mx-auto max-w-[62.5rem] animate-fade-in pb-28">
       {/* Form Header */}
       <div className="mb-12 flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">

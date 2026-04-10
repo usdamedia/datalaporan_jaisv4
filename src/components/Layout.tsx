@@ -107,7 +107,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
     <div className="app-typography min-h-screen flex flex-col" style={appTypographyStyle}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div className="mx-auto max-w-[112rem] px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto max-w-[62.5rem] px-5 sm:px-8 lg:px-12 xl:px-16">
           <div className="flex justify-between items-center h-16 md:h-20 lg:h-22">
             <div className="flex items-center gap-3 md:gap-4">
               {showBack && (
@@ -195,7 +195,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
         </div>
         {showAnnouncement && (
           <div className="w-full bg-red-700 px-4 py-2 text-white">
-            <div className="mx-auto flex max-w-[112rem] items-start gap-3 sm:gap-4">
+            <div className="mx-auto flex max-w-[62.5rem] items-start gap-3 sm:gap-4">
               <div className="flex flex-1 flex-wrap items-center justify-center gap-3 text-center leading-tight sm:gap-4">
                 {announcementMessages.map((message, index) => (
                   <React.Fragment key={message.text}>
@@ -222,14 +222,14 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
 
       {/* Main Content */}
       <main className="flex-grow">
-        <div className="mx-auto max-w-[112rem] px-5 py-8 sm:px-8 md:py-12 lg:px-12 xl:px-16">
+        <div className="mx-auto max-w-[62.5rem] px-5 py-8 sm:px-8 md:py-12 lg:px-12 xl:px-16">
           {children}
         </div>
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-6 md:py-8">
-        <div className="mx-auto max-w-[112rem] px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto max-w-[62.5rem] px-5 sm:px-8 lg:px-12 xl:px-16">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-left">
               <p className="text-xs md:text-sm text-gray-500 font-medium">
