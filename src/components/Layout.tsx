@@ -10,7 +10,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) => {
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
-  const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const ANNOUNCEMENT_VIEW_KEY = 'jais_announcement_views_2025';
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const announcementMessages = [
     {
       text: 'Data Tidak Ada Disimpan Di Mana-Mana Google Sheet, Anda Perlu Save -> Download PDF -> Tandatangan -> Serah kepada Urus Setia',
@@ -57,6 +58,40 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   useEffect(() => {
     window.localStorage.setItem(FONT_SIZE_STORAGE_KEY, fontScale);
   }, [fontScale]);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+
+    try {
+      const stored = window.localStorage.getItem(ANNOUNCEMENT_VIEW_KEY);
+      let viewData = { date: '', count: 0 };
+
+      if (stored) {
+        viewData = JSON.parse(stored);
+      }
+
+      if (viewData.date === today) {
+        if (viewData.count < 3) {
+          setShowAnnouncement(true);
+          window.localStorage.setItem(
+            ANNOUNCEMENT_VIEW_KEY,
+            JSON.stringify({ date: today, count: viewData.count + 1 })
+          );
+        } else {
+          setShowAnnouncement(false);
+        }
+      } else {
+        setShowAnnouncement(true);
+        window.localStorage.setItem(
+          ANNOUNCEMENT_VIEW_KEY,
+          JSON.stringify({ date: today, count: 1 })
+        );
+      }
+    } catch (error) {
+      console.error('Announcement storage error', error);
+      setShowAnnouncement(true);
+    }
+  }, []);
 
   const appTypographyStyle = useMemo(
     () => ({
