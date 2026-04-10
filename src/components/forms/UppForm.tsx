@@ -3,10 +3,7 @@ import {
   HardHat, 
   Building2, 
   School, 
-  Users, 
   TrendingUp, 
-  CheckCircle2, 
-  Clock,
   LayoutDashboard
 } from 'lucide-react';
 import FormLayout from './FormLayout';
@@ -122,56 +119,66 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
-      {/* Z-Pattern: Header & Top Section */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-teal-600 p-6 rounded-3xl shadow-lg border-b-4 border-teal-800 text-white">
-          <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-5 h-5 text-teal-200" />
-            <p className="text-teal-100 text-[10px] font-black uppercase tracking-widest">KPI Peratus Siap</p>
-          </div>
-          <h3 className="text-3xl font-black">{peratusSiapTahunan}%</h3>
-          <p className="text-teal-200/60 text-[10px] mt-1">Ref 2024: {UPP_2024_REFERENCE.kpi.peratusSiap}%</p>
+      {/* Ringkasan 2024 vs 2025 */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <div className="p-6 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
+          <TrendingUp className="w-5 h-5 text-teal-600" />
+          <h3 className="text-sm font-black text-zus-900 uppercase">Ringkasan KPI 2024 & Input 2025</h3>
         </div>
-
-        <div className="bg-zus-gold p-6 rounded-3xl shadow-lg border-b-4 border-zus-gold-dark text-zus-900">
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5 text-zus-900/40" />
-            <p className="text-zus-900/60 text-[10px] font-black uppercase tracking-widest">Jumlah Mesyuarat</p>
-          </div>
-          <h3 className="text-3xl font-black">{totalMesyuarat}</h3>
-          <p className="text-zus-900/40 text-[10px] mt-1">Ref 2024: {UPP_2024_REFERENCE.mesyuarat.total}</p>
-        </div>
-
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3 mb-2">
-            <Clock className="w-5 h-5 text-orange-500" />
-            <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Projek Dijalankan</p>
-          </div>
-          <input
-            type="number"
-            min="0"
-            value={formData.upp.statistikTahunan.dijalankan}
-            onChange={(e) => handleNestedInputChange('statistikTahunan', 'dijalankan', e.target.value)}
-            className="text-3xl font-black text-zus-900 bg-transparent border-none p-0 w-full focus:ring-0"
-            placeholder="0"
-          />
-          <p className="text-gray-300 text-[10px] mt-1">Ref 2024: {UPP_2024_REFERENCE.statistikTahunan.dijalankan}</p>
-        </div>
-
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle2 className="w-5 h-5 text-green-500" />
-            <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Projek Siap</p>
-          </div>
-          <input
-            type="number"
-            min="0"
-            value={formData.upp.statistikTahunan.siap}
-            onChange={(e) => handleNestedInputChange('statistikTahunan', 'siap', e.target.value)}
-            className="text-3xl font-black text-zus-900 bg-transparent border-none p-0 w-full focus:ring-0"
-            placeholder="0"
-          />
-          <p className="text-gray-300 text-[10px] mt-1">Ref 2024: {UPP_2024_REFERENCE.statistikTahunan.siap}</p>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-widest text-gray-500">Perkara</th>
+                <th className="px-6 py-4 text-center text-[11px] font-black uppercase tracking-widest text-gray-500">Rujukan 2024</th>
+                <th className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-widest text-gray-500">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              <tr>
+                <td className="px-6 py-4 font-semibold text-zus-900">KPI Peratus Siap (%)</td>
+                <td className="px-6 py-4 text-center font-black text-teal-700">{UPP_2024_REFERENCE.kpi.peratusSiap}%</td>
+                <td className="px-6 py-4">
+                  <div className="font-black text-zus-900">{peratusSiapTahunan}%</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-zus-900">Jumlah Mesyuarat</td>
+                <td className="px-6 py-4 text-center font-black text-zus-900">{UPP_2024_REFERENCE.mesyuarat.total}</td>
+                <td className="px-6 py-4">
+                  <div className="font-black text-zus-900">{totalMesyuarat}</div>
+                </td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-zus-900">Projek Dijalankan</td>
+                <td className="px-6 py-4 text-center font-black text-zus-900">{UPP_2024_REFERENCE.statistikTahunan.dijalankan}</td>
+                <td className="px-6 py-4">
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.upp.statistikTahunan.dijalankan}
+                    onChange={(e) => handleNestedInputChange('statistikTahunan', 'dijalankan', e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-bold text-zus-900 focus:ring-2 focus:ring-teal-500"
+                    placeholder="0"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-zus-900">Projek Siap</td>
+                <td className="px-6 py-4 text-center font-black text-zus-900">{UPP_2024_REFERENCE.statistikTahunan.siap}</td>
+                <td className="px-6 py-4">
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.upp.statistikTahunan.siap}
+                    onChange={(e) => handleNestedInputChange('statistikTahunan', 'siap', e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-bold text-zus-900 focus:ring-2 focus:ring-teal-500"
+                    placeholder="0"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 

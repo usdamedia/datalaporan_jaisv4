@@ -207,31 +207,42 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           <h3 className="text-lg font-bold text-stone-900">Kertas Siasatan (IP) 2025</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-black text-stone-700 uppercase">Matrimoni</label>
-              <span className="text-[10px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.kertasSiasatan.matrimoni}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.kertasSiasatan.matrimoni)}
-              onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'matrimoni', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-black text-stone-700 uppercase">Jenayah Syariah</label>
-              <span className="text-[10px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.kertasSiasatan.jenayahSyariah}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.kertasSiasatan.jenayahSyariah)}
-              onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'jenayahSyariah', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
+        <div className="overflow-x-auto rounded-xl border border-stone-200">
+          <table className="w-full min-w-[480px] text-sm border-collapse">
+            <thead className="bg-stone-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Kategori</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-stone-800">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Matrimoni</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.kertasSiasatan.matrimoni}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.kertasSiasatan.matrimoni)}
+                    onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'matrimoni', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Jenayah Syariah</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.kertasSiasatan.jenayahSyariah}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.kertasSiasatan.jenayahSyariah)}
+                    onChange={(e) => handleBpdsNestedChange('kertasSiasatan', 'jenayahSyariah', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -249,19 +260,32 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {formData.bpds.kesSelesai.map((item: any, idx: number) => (
-            <div key={item.name} className="p-4 bg-stone-50/50 border border-stone-100 rounded-xl hover:bg-stone-50 transition-colors">
-              <label className="block text-[10px] font-black text-stone-900 uppercase tracking-wider mb-1">{item.name}</label>
-              <div className="text-[9px] text-stone-400 font-bold mb-2">Ref 2024: {BPDS_2024_REFERENCE.kesSelesai[idx].value}</div>
-              <input 
-                type="number"
-                value={displayNumericInput(item.value)}
-                onChange={(e) => handleBpdsArrayChange('kesSelesai', idx, e.target.value)}
-                className="w-full p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-              />
-            </div>
-          ))}
+        <div className="overflow-x-auto rounded-xl border border-stone-200">
+          <table className="w-full min-w-[540px] text-sm border-collapse">
+            <thead className="bg-stone-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Bahagian</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-stone-800">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formData.bpds.kesSelesai.map((item: any, idx: number) => (
+                <tr key={item.name} className="border-t border-stone-100">
+                  <td className="px-4 py-3 font-semibold text-stone-800">{item.name}</td>
+                  <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.kesSelesai[idx].value}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={displayNumericInput(item.value)}
+                      onChange={(e) => handleBpdsArrayChange('kesSelesai', idx, e.target.value)}
+                      className="w-full p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -279,43 +303,54 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[10px] font-black text-stone-700 uppercase">Pegawai Syariah</label>
-              <span className="text-[9px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.pendakwaSyarie.pegawaiSyariah}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.pendakwaSyarie.pegawaiSyariah)}
-              onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'pegawaiSyariah', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[10px] font-black text-stone-700 uppercase">Penolong Pegawai Syariah</label>
-              <span className="text-[9px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.pendakwaSyarie.penolongPegawaiSyariah}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiSyariah)}
-              onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiSyariah', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[10px] font-black text-stone-700 uppercase tracking-tighter">Penolong Pegawai Hal Ehwal Islam</label>
-              <span className="text-[9px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.pendakwaSyarie.penolongPegawaiHalEhwalIslam}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam)}
-              onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiHalEhwalIslam', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
+        <div className="overflow-x-auto rounded-xl border border-stone-200">
+          <table className="w-full min-w-[560px] text-sm border-collapse">
+            <thead className="bg-stone-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Jawatan</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-stone-800">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Pegawai Syariah</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.pendakwaSyarie.pegawaiSyariah}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.pendakwaSyarie.pegawaiSyariah)}
+                    onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'pegawaiSyariah', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Penolong Pegawai Syariah</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.pendakwaSyarie.penolongPegawaiSyariah}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiSyariah)}
+                    onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiSyariah', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Penolong Pegawai Hal Ehwal Islam</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.pendakwaSyarie.penolongPegawaiHalEhwalIslam}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam)}
+                    onChange={(e) => handleBpdsNestedChange('pendakwaSyarie', 'penolongPegawaiHalEhwalIslam', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -328,31 +363,42 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           <h3 className="text-lg font-bold text-stone-900">Pendaftaran Kes ke Mahkamah Syariah 2025</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-black text-stone-700 uppercase">Matrimoni</label>
-              <span className="text-[10px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.pendaftaranKes.matrimoni}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.pendaftaranKes.matrimoni)}
-              onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'matrimoni', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
-          <div className="p-4 bg-stone-50 border border-stone-100 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-black text-stone-700 uppercase">Jenayah Syariah</label>
-              <span className="text-[10px] font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.pendaftaranKes.jenayahSyariah}</span>
-            </div>
-            <input 
-              type="number"
-              value={displayNumericInput(formData.bpds.pendaftaranKes.jenayahSyariah)}
-              onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'jenayahSyariah', e.target.value)}
-              className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
-            />
-          </div>
+        <div className="overflow-x-auto rounded-xl border border-stone-200">
+          <table className="w-full min-w-[480px] text-sm border-collapse">
+            <thead className="bg-stone-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Kategori</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-stone-800">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Matrimoni</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.pendaftaranKes.matrimoni}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.pendaftaranKes.matrimoni)}
+                    onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'matrimoni', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Jenayah Syariah</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.pendaftaranKes.jenayahSyariah}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.pendaftaranKes.jenayahSyariah)}
+                    onChange={(e) => handleBpdsNestedChange('pendaftaranKes', 'jenayahSyariah', e.target.value)}
+                    className="w-full p-2.5 bg-white border border-stone-200 rounded-lg text-sm font-bold text-stone-700 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -370,7 +416,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
             <thead>
               <tr className="bg-stone-50">
                 <th className="p-4 text-xs font-black text-stone-900 uppercase tracking-wider border-b border-stone-200">Jenis Kaedah</th>
-                <th className="p-4 text-xs font-black text-stone-900 uppercase tracking-wider border-b border-stone-200 text-center">Ref 2024 (%)</th>
+                <th className="p-4 text-xs font-black text-stone-900 uppercase tracking-wider border-b border-stone-200 text-center">Rujukan 2024 (%)</th>
                 <th className="p-4 text-xs font-black text-stone-900 uppercase tracking-wider border-b border-stone-200 text-center">Kemajuan 2025 (%)</th>
               </tr>
             </thead>
@@ -495,17 +541,30 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           <h3 className="text-lg font-bold text-stone-900">Program / Aktiviti 2025</h3>
         </div>
 
-        <div className="p-6 bg-stone-50 border border-stone-100 rounded-2xl max-w-md">
-          <div className="flex items-center justify-between mb-4">
-            <label className="text-sm font-black text-stone-700 uppercase">Jumlah Keseluruhan Program</label>
-            <span className="text-xs font-bold text-stone-400">Ref 2024: {BPDS_2024_REFERENCE.aktiviti}</span>
-          </div>
-          <input 
-            type="number"
-            value={displayNumericInput(formData.bpds.aktiviti)}
-            onChange={(e) => handleBpdsSimpleChange('aktiviti', e.target.value)}
-            className="w-full p-4 bg-white border border-stone-200 rounded-2xl text-lg font-black text-stone-800 focus:ring-4 focus:ring-stone-500/10 outline-none"
-          />
+        <div className="overflow-x-auto rounded-xl border border-stone-200 max-w-2xl">
+          <table className="w-full min-w-[460px] text-sm border-collapse">
+            <thead className="bg-stone-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Perkara</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-stone-800">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-stone-800">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-stone-100">
+                <td className="px-4 py-3 font-semibold text-stone-800">Jumlah Keseluruhan Program</td>
+                <td className="px-4 py-3 text-center font-black text-stone-700">{BPDS_2024_REFERENCE.aktiviti}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={displayNumericInput(formData.bpds.aktiviti)}
+                    onChange={(e) => handleBpdsSimpleChange('aktiviti', e.target.value)}
+                    className="w-full p-3 bg-white border border-stone-200 rounded-xl text-sm font-bold text-stone-800 focus:ring-2 focus:ring-stone-500/20 outline-none"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         
         <div className="mt-6 p-4 bg-stone-100 border border-stone-200 rounded-xl flex items-start gap-3">

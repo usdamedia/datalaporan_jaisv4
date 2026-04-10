@@ -9,6 +9,7 @@ import {
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { BasicInfoSection, LawatanSection } from './CommonSections';
+import { UKOKO_PENERBITAN_2024_REFERENCE } from '../../constants';
 
 const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
   const {
@@ -93,6 +94,28 @@ const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = 
           <BookOpen className="absolute -bottom-4 -right-4 w-24 h-24 text-white/10 group-hover:rotate-12 transition-transform" />
         </div>
       </div>
+
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-8">
+        <h3 className="text-sm font-black text-zus-900 uppercase tracking-tight mb-4">Ringkasan Penerbitan</h3>
+        <div className="overflow-x-auto rounded-xl border border-gray-100">
+          <table className="w-full min-w-[420px] text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              <tr>
+                <td className="px-4 py-3 text-xs font-bold text-gray-700">Jumlah Kategori Buku / Penerbitan</td>
+                <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{UKOKO_PENERBITAN_2024_REFERENCE.kategoriBuku}</td>
+                <td className="px-4 py-3 text-center text-sm font-black text-indigo-700">{totalPublications}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       {/* Penerbitan JAIS 2025 Section */}
       <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">

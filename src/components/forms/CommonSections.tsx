@@ -17,6 +17,43 @@ const autoGrowTextarea = (element: HTMLTextAreaElement | null) => {
   element.style.height = `${element.scrollHeight}px`;
 };
 
+const LAWATAN_MONTH_OPTIONS = [
+  { value: '01', label: 'Januari' },
+  { value: '02', label: 'Februari' },
+  { value: '03', label: 'Mac' },
+  { value: '04', label: 'April' },
+  { value: '05', label: 'Mei' },
+  { value: '06', label: 'Jun' },
+  { value: '07', label: 'Julai' },
+  { value: '08', label: 'Ogos' },
+  { value: '09', label: 'September' },
+  { value: '10', label: 'Oktober' },
+  { value: '11', label: 'November' },
+  { value: '12', label: 'Disember' }
+];
+
+const LAWATAN_DAY_OPTIONS = Array.from({ length: 31 }, (_, index) => String(index + 1).padStart(2, '0'));
+const CURRENT_YEAR = new Date().getFullYear();
+const LAWATAN_YEAR_OPTIONS = Array.from({ length: 21 }, (_, index) => String(CURRENT_YEAR - 5 + index));
+
+const parseIsoDateParts = (value: string) => {
+  const matched = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+  if (!matched) {
+    return { year: '', month: '', day: '' };
+  }
+
+  return {
+    year: matched[1],
+    month: matched[2],
+    day: matched[3]
+  };
+};
+
+const buildIsoDate = (year: string, month: string, day: string) => {
+  if (!year || !month || !day) return '';
+  return `${year}-${month}-${day}`;
+};
+
 export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
@@ -223,71 +260,106 @@ export const LawatanSection: React.FC<{
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
+            {(() => {
+              const tarikhParts = parseIsoDateParts(item.tarikh || '');
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 sentence-case">Jenis</label>
-                <select 
-                  value={item.jenis}
-                  onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
-                  disabled={readOnly}
-                  className={`w-full p-2.5 border border-gray-200 rounded-xl text-xs font-bold outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                >
-                  <option value="keluar">Lawatan Keluar</option>
-                  <option value="masuk">Lawatan Masuk</option>
-                </select>
-              </div>
-              <div className="md:col-span-2 space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
-                <textarea 
-                  value={item.tajukAgensi}
-                  onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
-                  onInput={(e) => autoGrowTextarea(e.currentTarget)}
-                  ref={(el) => autoGrowTextarea(el)}
-                  placeholder="Contoh: Lawatan Kerja ke MIS"
-                  rows={1}
-                  readOnly={readOnly}
-                  className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                />
-              </div>
-            </div>
+              return (
+                <>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 sentence-case">Tarikh & tempat</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="date"
-                    lang="en-GB"
-                    value={item.tarikh}
-                    onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
-                    disabled={readOnly}
-                    className={`flex-1 p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                  />
-                  <textarea 
-                    value={item.tempat}
-                    onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
-                    placeholder="Tempat"
-                    rows={2}
-                    readOnly={readOnly}
-                    className={`flex-1 min-h-[74px] p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-y ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                  />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-gray-400 sentence-case">Objektif</label>
-                <textarea 
-                  value={item.objektif}
-                  onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
-                  onInput={(e) => autoGrowTextarea(e.currentTarget)}
-                  ref={(el) => autoGrowTextarea(el)}
-                  placeholder="Tujuan lawatan..."
-                  rows={1}
-                  readOnly={readOnly}
-                  className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                />
-              </div>
-            </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Jenis</label>
+                      <select 
+                        value={item.jenis}
+                        onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
+                        disabled={readOnly}
+                        className={`w-full p-2.5 border border-gray-200 rounded-xl text-xs font-bold outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                      >
+                        <option value="keluar">Lawatan Keluar</option>
+                        <option value="masuk">Lawatan Masuk</option>
+                      </select>
+                    </div>
+                    <div className="md:col-span-2 space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
+                      <textarea 
+                        value={item.tajukAgensi}
+                        onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
+                        onInput={(e) => autoGrowTextarea(e.currentTarget)}
+                        ref={(el) => autoGrowTextarea(el)}
+                        placeholder="Contoh: Lawatan Kerja ke MIS"
+                        rows={1}
+                        readOnly={readOnly}
+                        className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Tarikh & tempat</label>
+                      <div className="flex gap-2">
+                        <div className="flex-1 grid grid-cols-3 gap-2">
+                          <select
+                            value={tarikhParts.day}
+                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(tarikhParts.year, tarikhParts.month, e.target.value))}
+                            disabled={readOnly}
+                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                          >
+                            <option value="">Hari</option>
+                            {LAWATAN_DAY_OPTIONS.map((day) => (
+                              <option key={day} value={day}>{day}</option>
+                            ))}
+                          </select>
+                          <select
+                            value={tarikhParts.month}
+                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(tarikhParts.year, e.target.value, tarikhParts.day))}
+                            disabled={readOnly}
+                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                          >
+                            <option value="">Bulan</option>
+                            {LAWATAN_MONTH_OPTIONS.map((month) => (
+                              <option key={month.value} value={month.value}>{month.label}</option>
+                            ))}
+                          </select>
+                          <select
+                            value={tarikhParts.year}
+                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(e.target.value, tarikhParts.month, tarikhParts.day))}
+                            disabled={readOnly}
+                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                          >
+                            <option value="">Tahun</option>
+                            {LAWATAN_YEAR_OPTIONS.map((year) => (
+                              <option key={year} value={year}>{year}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <textarea 
+                          value={item.tempat}
+                          onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
+                          placeholder="Tempat"
+                          rows={2}
+                          readOnly={readOnly}
+                          className={`flex-1 min-h-[74px] p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-y ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Objektif</label>
+                      <textarea 
+                        value={item.objektif}
+                        onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
+                        onInput={(e) => autoGrowTextarea(e.currentTarget)}
+                        ref={(el) => autoGrowTextarea(el)}
+                        placeholder="Tujuan lawatan..."
+                        rows={1}
+                        readOnly={readOnly}
+                        className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                      />
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         ))}
       </div>

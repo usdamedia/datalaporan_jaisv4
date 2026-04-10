@@ -231,7 +231,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-black uppercase tracking-[0.18em] text-[#0d3b35]">Pusat Pemuliaan Al-Quran 2024</h4>
                 <span className="rounded-full bg-[#dff2ea] px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#0d4f45]">
-                  Ref 2024: {DHQC_2024_REFERENCE.pusatPemuliaan.length}
+                  Rujukan 2024: {DHQC_2024_REFERENCE.pusatPemuliaan.length}
                 </span>
               </div>
 
@@ -336,7 +336,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                   <div className="grid grid-cols-[1.2fr_0.7fr_0.9fr] items-center gap-3">
                     <label className="text-sm font-bold text-slate-600">Berat Debu Al-Quran (Tan)</label>
                     <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
-                      Ref 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}
+                      Rujukan 2024: {DHQC_2024_REFERENCE.statistikDebu.berat}
                     </div>
                     <input
                       type="number"
@@ -352,7 +352,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                   <div className="grid grid-cols-[1.2fr_0.7fr_0.9fr] items-center gap-3">
                     <label className="text-sm font-bold text-slate-600">Kekerapan Pemuliaan ke Lautan</label>
                     <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
-                      Ref 2024: {DHQC_2024_REFERENCE.statistikDebu.kekerapan}
+                      Rujukan 2024: {DHQC_2024_REFERENCE.statistikDebu.kekerapan}
                     </div>
                     <input
                       type="number"

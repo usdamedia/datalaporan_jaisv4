@@ -154,19 +154,32 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {formData.bksp.permohonan.map((item: any, idx: number) => (
-            <div key={item.name} className="p-4 bg-pink-50/30 border border-pink-100 rounded-xl hover:bg-pink-50 transition-colors">
-              <label className="block text-[10px] font-black text-pink-900 uppercase tracking-wider mb-1">{item.name}</label>
-              <div className="text-[9px] text-pink-400 font-bold mb-2">Ref 2024: {BKSP_2024_REFERENCE.permohonan[idx].value}</div>
-              <input 
-                type="number"
-                value={item.value}
-                onChange={(e) => handleBkspChange('permohonan', idx, e.target.value)}
-                className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-              />
-            </div>
-          ))}
+        <div className="overflow-x-auto rounded-xl border border-pink-100">
+          <table className="w-full min-w-[560px] text-sm border-collapse">
+            <thead className="bg-pink-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Bahagian</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-pink-900">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formData.bksp.permohonan.map((item: any, idx: number) => (
+                <tr key={item.name} className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">{item.name}</td>
+                  <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.permohonan[idx].value}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={item.value}
+                      onChange={(e) => handleBkspChange('permohonan', idx, e.target.value)}
+                      className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -184,19 +197,32 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {formData.bksp.pegawai.map((item: any, idx: number) => (
-            <div key={item.name} className="p-4 bg-pink-50/30 border border-pink-100 rounded-xl hover:bg-pink-50 transition-colors">
-              <label className="block text-[10px] font-black text-pink-900 uppercase tracking-wider mb-1">{item.name}</label>
-              <div className="text-[9px] text-pink-400 font-bold mb-2">Ref 2024: {BKSP_2024_REFERENCE.pegawai[idx].value}</div>
-              <input 
-                type="number"
-                value={item.value}
-                onChange={(e) => handleBkspChange('pegawai', idx, e.target.value)}
-                className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-              />
-            </div>
-          ))}
+        <div className="overflow-x-auto rounded-xl border border-pink-100">
+          <table className="w-full min-w-[560px] text-sm border-collapse">
+            <thead className="bg-pink-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Bahagian</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-pink-900">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              {formData.bksp.pegawai.map((item: any, idx: number) => (
+                <tr key={item.name} className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">{item.name}</td>
+                  <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.pegawai[idx].value}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={item.value}
+                      onChange={(e) => handleBkspChange('pegawai', idx, e.target.value)}
+                      className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -216,31 +242,42 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="p-4 bg-pink-50/30 border border-pink-100 rounded-xl">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-black text-pink-900 uppercase">Kaunseling Syarie</label>
-                <span className="text-[10px] font-bold text-pink-400">Ref 2024: {BKSP_2024_REFERENCE.statistik.kaunselingSyarie}</span>
-              </div>
-              <input 
-                type="number"
-                value={formData.bksp.statistik.kaunselingSyarie}
-                onChange={(e) => handleStatistikChange('kaunselingSyarie', e.target.value)}
-                className="w-full p-3 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-              />
-            </div>
-            <div className="p-4 bg-pink-50/30 border border-pink-100 rounded-xl">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-black text-pink-900 uppercase">Psikologi</label>
-                <span className="text-[10px] font-bold text-pink-400">Ref 2024: {BKSP_2024_REFERENCE.statistik.psikologi}</span>
-              </div>
-              <input 
-                type="number"
-                value={formData.bksp.statistik.psikologi}
-                onChange={(e) => handleStatistikChange('psikologi', e.target.value)}
-                className="w-full p-3 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-              />
-            </div>
+          <div className="overflow-x-auto rounded-xl border border-pink-100">
+            <table className="w-full min-w-[500px] text-sm border-collapse">
+              <thead className="bg-pink-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Kategori</th>
+                  <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-pink-900">Rujukan 2024</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Input 2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">Kaunseling Syarie</td>
+                  <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statistik.kaunselingSyarie}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bksp.statistik.kaunselingSyarie}
+                      onChange={(e) => handleStatistikChange('kaunselingSyarie', e.target.value)}
+                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+                <tr className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">Psikologi</td>
+                  <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statistik.psikologi}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bksp.statistik.psikologi}
+                      onChange={(e) => handleStatistikChange('psikologi', e.target.value)}
+                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
 
@@ -253,31 +290,42 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
             <h3 className="text-lg font-bold text-zus-900">Status Kes 2025</h3>
           </div>
 
-          <div className="space-y-4">
-            <div className="p-4 bg-pink-50/30 border border-pink-100 rounded-xl">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-black text-pink-900 uppercase">Kes Diterima</label>
-                <span className="text-[10px] font-bold text-pink-400">Ref 2024: {BKSP_2024_REFERENCE.statusKes.diterima}</span>
-              </div>
-              <input 
-                type="number"
-                value={formData.bksp.statusKes.diterima}
-                onChange={(e) => handleStatusKesChange('diterima', e.target.value)}
-                className="w-full p-3 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-              />
-            </div>
-            <div className="p-4 bg-emerald-50/30 border border-emerald-100 rounded-xl">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-black text-emerald-900 uppercase">Kes Diselesaikan</label>
-                <span className="text-[10px] font-bold text-emerald-400">Ref 2024: {BKSP_2024_REFERENCE.statusKes.diselesaikan}</span>
-              </div>
-              <input 
-                type="number"
-                value={formData.bksp.statusKes.diselesaikan}
-                onChange={(e) => handleStatusKesChange('diselesaikan', e.target.value)}
-                className="w-full p-3 bg-white border border-emerald-200 rounded-xl text-sm font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500/20 outline-none"
-              />
-            </div>
+          <div className="overflow-x-auto rounded-xl border border-pink-100">
+            <table className="w-full min-w-[500px] text-sm border-collapse">
+              <thead className="bg-pink-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Kategori</th>
+                  <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-pink-900">Rujukan 2024</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-pink-900">Input 2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">Kes Diterima</td>
+                  <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statusKes.diterima}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bksp.statusKes.diterima}
+                      onChange={(e) => handleStatusKesChange('diterima', e.target.value)}
+                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+                <tr className="border-t border-pink-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">Kes Diselesaikan</td>
+                  <td className="px-4 py-3 text-center font-black text-emerald-700">{BKSP_2024_REFERENCE.statusKes.diselesaikan}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bksp.statusKes.diselesaikan}
+                      onChange={(e) => handleStatusKesChange('diselesaikan', e.target.value)}
+                      className="w-full p-2.5 bg-white border border-emerald-200 rounded-xl text-sm font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </div>

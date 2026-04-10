@@ -1242,25 +1242,36 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                 </div>
                 <h3 className="text-lg font-bold text-zus-900 sentence-case">Statistik aktiviti & operasi (2025)</h3>
               </div>
-              <div className="space-y-4">
-                {[
-                  { label: 'Penapisan bahan berunsur Islam', field: 'penapisan', ref: BPNP_2024_REFERENCE.statistik.penapisan },
-                  { label: 'Kluster data bersepadu', field: 'kluster', ref: BPNP_2024_REFERENCE.statistik.kluster },
-                  { label: 'Program / aktiviti', field: 'program', ref: BPNP_2024_REFERENCE.statistik.program },
-                ].map((item) => (
-                  <div key={item.field} className="grid grid-cols-2 items-center gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-500 sentence-case">{item.label}</label>
-                      <div className="text-[10px] font-bold text-gray-400">2024: {item.ref}</div>
-                    </div>
-                    <input 
-                      type="number"
-                      value={formData.bpnp.statistik[item.field]}
-                      onChange={(e) => handleBpnpStatChange(item.field, parseInt(e.target.value) || 0)}
-                      className="p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none transition-all"
-                    />
-                  </div>
-                ))}
+              <div className="overflow-x-auto rounded-xl border border-gray-100">
+                <table className="w-full min-w-[500px] text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                      <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {[
+                      { label: 'Penapisan bahan berunsur Islam', field: 'penapisan', ref: BPNP_2024_REFERENCE.statistik.penapisan },
+                      { label: 'Kluster data bersepadu', field: 'kluster', ref: BPNP_2024_REFERENCE.statistik.kluster },
+                      { label: 'Program / aktiviti', field: 'program', ref: BPNP_2024_REFERENCE.statistik.program },
+                    ].map((item) => (
+                      <tr key={item.field}>
+                        <td className="px-4 py-3 text-xs font-bold text-gray-600">{item.label}</td>
+                        <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{item.ref}</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.bpnp.statistik[item.field]}
+                            onChange={(e) => handleBpnpStatChange(item.field, parseInt(e.target.value) || 0)}
+                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none transition-all"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
 
@@ -1273,17 +1284,28 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
               </div>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-4">
-                  <div className="space-y-4 rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-gray-500 sentence-case">Infografik akidah</label>
-                      <div className="text-[10px] font-bold text-indigo-400">2024: {BPNP_2024_REFERENCE.statistik.infografik}</div>
-                    </div>
-                    <input 
-                      type="number"
-                      value={formData.bpnp.statistik.infografik}
-                      onChange={(e) => handleBpnpStatChange('infografik', parseInt(e.target.value) || 0)}
-                      className="w-full p-3 bg-white border border-indigo-100 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-                    />
+                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr>
+                          <th className="pb-2 text-left text-[10px] font-black uppercase text-indigo-500">Rujukan 2024</th>
+                          <th className="pb-2 text-left text-[10px] font-black uppercase text-indigo-700">Input 2025</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="pr-2 text-xs font-black text-indigo-400 align-middle">{BPNP_2024_REFERENCE.statistik.infografik}</td>
+                          <td>
+                            <input
+                              type="number"
+                              value={formData.bpnp.statistik.infografik}
+                              onChange={(e) => handleBpnpStatChange('infografik', parseInt(e.target.value) || 0)}
+                              className="w-full p-2.5 bg-white border border-indigo-100 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                   <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
                     <h4 className="text-[10px] font-black text-indigo-500 sentence-case mb-1">Kandungan utama / tajuk koleksi</h4>

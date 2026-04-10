@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
-import { Building2, Home, Users, MapPin, Star } from 'lucide-react';
+import { Building2, MapPin, Star } from 'lucide-react';
 import { BKIM_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
@@ -80,6 +80,42 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
     });
   };
 
+  const renderReferenceTable = (
+    title: string,
+    items: Array<{ label: string; field: string; ref: number }>
+  ) => (
+    <div className="space-y-4">
+      <h4 className="text-sm font-extrabold text-zus-900">{title}</h4>
+      <div className="overflow-x-auto rounded-xl border border-gray-100">
+        <table className="w-full min-w-[460px] text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+              <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+              <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {items.map((item) => (
+              <tr key={item.field}>
+                <td className="px-4 py-3 text-xs font-bold text-gray-600">{item.label}</td>
+                <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{item.ref}</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    value={formData.bkim[item.field]}
+                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
+                    className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
   return (
     <FormLayout
       deptName={deptName}
@@ -103,59 +139,19 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
-              <Home className="w-4 h-4 text-zus-gold" /> Bilangan Fasiliti
-            </h4>
-            <div className="space-y-3">
-              {[
-                { label: 'Masjid', field: 'bilMasjid', ref: BKIM_2024_REFERENCE.fasiliti.masjid },
-                { label: 'Surau', field: 'bilSurau', ref: BKIM_2024_REFERENCE.fasiliti.surau },
-                { label: 'Musolla', field: 'bilMusolla', ref: BKIM_2024_REFERENCE.fasiliti.musolla },
-              ].map((item) => (
-                <div key={item.field} className="grid grid-cols-3 items-center gap-4">
-                  <label className="text-xs font-bold text-gray-500">{item.label}</label>
-                  <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-                    2024: {item.ref}
-                  </div>
-                  <input 
-                    type="number"
-                    value={formData.bkim[item.field]}
-                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
-                    className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          {renderReferenceTable('Bilangan Fasiliti', [
+            { label: 'Masjid', field: 'bilMasjid', ref: BKIM_2024_REFERENCE.fasiliti.masjid },
+            { label: 'Surau', field: 'bilSurau', ref: BKIM_2024_REFERENCE.fasiliti.surau },
+            { label: 'Musolla', field: 'bilMusolla', ref: BKIM_2024_REFERENCE.fasiliti.musolla },
+          ])}
 
-          <div className="space-y-4">
-            <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
-              <Users className="w-4 h-4 text-zus-gold" /> Pegawai Masjid
-            </h4>
-            <div className="space-y-3">
-              {[
-                { label: 'Imam I', field: 'imam1', ref: BKIM_2024_REFERENCE.perjawatan.imam1 },
-                { label: 'Imam II', field: 'imam2', ref: BKIM_2024_REFERENCE.perjawatan.imam2 },
-                { label: 'Imam III', field: 'imam3', ref: BKIM_2024_REFERENCE.perjawatan.imam3 },
-                { label: 'Bilal', field: 'bilal', ref: BKIM_2024_REFERENCE.perjawatan.bilal },
-                { label: 'Marbot', field: 'marbot', ref: BKIM_2024_REFERENCE.perjawatan.marbot },
-              ].map((item) => (
-                <div key={item.field} className="grid grid-cols-3 items-center gap-4">
-                  <label className="text-xs font-bold text-gray-500">{item.label}</label>
-                  <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-                    2024: {item.ref}
-                  </div>
-                  <input 
-                    type="number"
-                    value={formData.bkim[item.field]}
-                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
-                    className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          {renderReferenceTable('Pegawai Masjid', [
+            { label: 'Imam I', field: 'imam1', ref: BKIM_2024_REFERENCE.perjawatan.imam1 },
+            { label: 'Imam II', field: 'imam2', ref: BKIM_2024_REFERENCE.perjawatan.imam2 },
+            { label: 'Imam III', field: 'imam3', ref: BKIM_2024_REFERENCE.perjawatan.imam3 },
+            { label: 'Bilal', field: 'bilal', ref: BKIM_2024_REFERENCE.perjawatan.bilal },
+            { label: 'Marbot', field: 'marbot', ref: BKIM_2024_REFERENCE.perjawatan.marbot },
+          ])}
         </div>
       </section>
 
@@ -169,27 +165,12 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
               </div>
               <h3 className="text-md font-bold text-zus-900">Tanah Perkuburan</h3>
             </div>
-            <div className="space-y-3">
-              {[
-                { label: 'MIS', field: 'kuburMis', ref: BKIM_2024_REFERENCE.kubur.mis },
-                { label: 'Tanah Kerajaan', field: 'kuburKerajaan', ref: BKIM_2024_REFERENCE.kubur.kerajaan },
-                { label: 'LAK', field: 'kuburLak', ref: BKIM_2024_REFERENCE.kubur.lak },
-                { label: 'Lain-Lain', field: 'kuburLain', ref: BKIM_2024_REFERENCE.kubur.lain },
-              ].map((item) => (
-                <div key={item.field} className="grid grid-cols-3 items-center gap-4">
-                  <label className="text-xs font-bold text-gray-500">{item.label}</label>
-                  <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-                    2024: {item.ref}
-                  </div>
-                  <input 
-                    type="number"
-                    value={formData.bkim[item.field]}
-                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
-                    className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                  />
-                </div>
-              ))}
-            </div>
+            {renderReferenceTable('Tanah Perkuburan', [
+              { label: 'MIS', field: 'kuburMis', ref: BKIM_2024_REFERENCE.kubur.mis },
+              { label: 'Tanah Kerajaan', field: 'kuburKerajaan', ref: BKIM_2024_REFERENCE.kubur.kerajaan },
+              { label: 'LAK', field: 'kuburLak', ref: BKIM_2024_REFERENCE.kubur.lak },
+              { label: 'Lain-Lain', field: 'kuburLain', ref: BKIM_2024_REFERENCE.kubur.lain },
+            ])}
           </div>
 
           <div className="space-y-4">
@@ -199,29 +180,14 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
               </div>
               <h3 className="text-md font-bold text-zus-900">Penarafan Bintang</h3>
             </div>
-            <div className="space-y-3">
-              {[
-                { label: '5 Bintang', field: 'star5', ref: BKIM_2024_REFERENCE.bintang.star5 },
-                { label: '4 Bintang', field: 'star4', ref: BKIM_2024_REFERENCE.bintang.star4 },
-                { label: '3 Bintang', field: 'star3', ref: BKIM_2024_REFERENCE.bintang.star3 },
-                { label: '2 Bintang', field: 'star2', ref: BKIM_2024_REFERENCE.bintang.star2 },
-                { label: '1 Bintang', field: 'star1', ref: BKIM_2024_REFERENCE.bintang.star1 },
-                { label: 'Tiada Bintang', field: 'star0', ref: BKIM_2024_REFERENCE.bintang.star0 },
-              ].map((item) => (
-                <div key={item.field} className="grid grid-cols-3 items-center gap-4">
-                  <label className="text-xs font-bold text-gray-500">{item.label}</label>
-                  <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-                    2024: {item.ref}
-                  </div>
-                  <input 
-                    type="number"
-                    value={formData.bkim[item.field]}
-                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
-                    className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                  />
-                </div>
-              ))}
-            </div>
+            {renderReferenceTable('Penarafan Bintang', [
+              { label: '5 Bintang', field: 'star5', ref: BKIM_2024_REFERENCE.bintang.star5 },
+              { label: '4 Bintang', field: 'star4', ref: BKIM_2024_REFERENCE.bintang.star4 },
+              { label: '3 Bintang', field: 'star3', ref: BKIM_2024_REFERENCE.bintang.star3 },
+              { label: '2 Bintang', field: 'star2', ref: BKIM_2024_REFERENCE.bintang.star2 },
+              { label: '1 Bintang', field: 'star1', ref: BKIM_2024_REFERENCE.bintang.star1 },
+              { label: 'Tiada Bintang', field: 'star0', ref: BKIM_2024_REFERENCE.bintang.star0 },
+            ])}
           </div>
         </div>
       </section>
@@ -239,48 +205,24 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
           <thead>
             <tr className="bg-gray-50 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest border-b border-gray-100">
               <th className="p-4">Bahagian</th>
-              <th className="p-4 text-center">Program/Aktiviti</th>
-              <th className="p-4 text-center">Guru Takmir</th>
-              <th className="p-4 text-center">LAK</th>
+              <th className="p-4 text-center">Program/Aktiviti Rujukan 2024</th>
+              <th className="p-4 text-center">Program/Aktiviti Input 2025</th>
+              <th className="p-4 text-center">Guru Takmir Rujukan 2024</th>
+              <th className="p-4 text-center">Guru Takmir Input 2025</th>
+              <th className="p-4 text-center">LAK Rujukan 2024</th>
+              <th className="p-4 text-center">LAK Input 2025</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {formData.bkim.bkimDivisions.map((div: any, idx: number) => (
               <tr key={div.name} className="hover:bg-slate-50/50 transition-colors">
                 <td className="p-4 text-xs font-bold text-zus-900">{div.name}</td>
-                <td className="p-4">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[9px] text-gray-400 font-bold">2024: {BKIM_2024_REFERENCE.divisions[idx]?.program || 0}</span>
-                    <input 
-                      type="number"
-                      value={div.program}
-                      onChange={(e) => handleBkimDivisionChange(idx, 'program', e.target.value)}
-                      className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                    />
-                  </div>
-                </td>
-                <td className="p-4">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[9px] text-gray-400 font-bold">2024: {BKIM_2024_REFERENCE.divisions[idx]?.guruTakmir || 0}</span>
-                    <input 
-                      type="number"
-                      value={div.guruTakmir}
-                      onChange={(e) => handleBkimDivisionChange(idx, 'guruTakmir', e.target.value)}
-                      className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                    />
-                  </div>
-                </td>
-                <td className="p-4">
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-[9px] text-gray-400 font-bold">2024: {BKIM_2024_REFERENCE.divisions[idx]?.lak || 0}</span>
-                    <input 
-                      type="number"
-                      value={div.lak}
-                      onChange={(e) => handleBkimDivisionChange(idx, 'lak', e.target.value)}
-                      className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                    />
-                  </div>
-                </td>
+                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.program || 0}</td>
+                <td className="p-4 text-center"><input type="number" value={div.program} onChange={(e) => handleBkimDivisionChange(idx, 'program', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.guruTakmir || 0}</td>
+                <td className="p-4 text-center"><input type="number" value={div.guruTakmir} onChange={(e) => handleBkimDivisionChange(idx, 'guruTakmir', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.lak || 0}</td>
+                <td className="p-4 text-center"><input type="number" value={div.lak} onChange={(e) => handleBkimDivisionChange(idx, 'lak', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
               </tr>
             ))}
           </tbody>

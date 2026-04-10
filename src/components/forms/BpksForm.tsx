@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { 
   Zap, 
   Users, 
@@ -134,6 +134,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   ];
 
   const COLORS = ['#0D9488', '#2DD4BF']; // Teal 600, Teal 400
+  const formatLabel = (value: string) => value.replace(/([A-Z])/g, ' $1').trim();
 
   return (
     <FormLayout
@@ -159,37 +160,44 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           </div>
           
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">BTAM Diterima</label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={formData.bpks.statistik.btam}
-                  onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'btam', e.target.value)}
-                  className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                  placeholder="0"
-                />
-                <span className="absolute right-4 top-3 text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">
-                  Ref 24: {BPKS_2024_REFERENCE.statistik.btam}
-                </span>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Rondaan & Operasi</label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={formData.bpks.statistik.rondaan}
-                  onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'rondaan', e.target.value)}
-                  className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                  placeholder="0"
-                />
-                <span className="absolute right-4 top-3 text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">
-                  Ref 24: {BPKS_2024_REFERENCE.statistik.rondaan}
-                </span>
-              </div>
-            </div>
+          <div className="overflow-x-auto rounded-2xl border border-teal-100">
+            <table className="w-full min-w-[460px] text-sm">
+              <thead className="bg-teal-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Perkara</th>
+                  <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-teal-900">Rujukan 2024</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Input 2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-teal-100">
+                  <td className="px-4 py-3 font-semibold text-gray-800">BTAM Diterima</td>
+                  <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.btam}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bpks.statistik.btam}
+                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'btam', e.target.value)}
+                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+                <tr className="border-t border-teal-100">
+                  <td className="px-4 py-3 font-semibold text-gray-800">Rondaan & Operasi</td>
+                  <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.rondaan}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bpks.statistik.rondaan}
+                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'rondaan', e.target.value)}
+                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -274,35 +282,44 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-            {Object.keys(formData.bpks.borang5.bahagian).map((div) => (
-              <div key={div}>
-                <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">
-                  {div}
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={formData.bpks.borang5.bahagian[div]}
-                    onChange={(e) => {
-                      const newBahagian = { ...formData.bpks.borang5.bahagian, [div]: e.target.value };
-                      setFormData((prev: any) => ({
-                        ...prev,
-                        bpks: { 
-                          ...prev.bpks, 
-                          borang5: { ...prev.bpks.borang5, bahagian: newBahagian } 
-                        }
-                      }));
-                    }}
-                    className="w-full bg-gray-50 border-none rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-2 top-2 text-[8px] font-bold text-teal-400">
-                    Ref: {BPKS_2024_REFERENCE.borang5.bahagian[div as keyof typeof BPKS_2024_REFERENCE.borang5.bahagian] || 0}
-                  </span>
-                </div>
-              </div>
-            ))}
+          <div className="mb-8 overflow-x-auto rounded-2xl border border-teal-100">
+            <table className="w-full min-w-[520px] text-sm">
+              <thead className="bg-teal-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Bahagian</th>
+                  <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-teal-900">Rujukan 2024</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Input 2025</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(formData.bpks.borang5.bahagian).map((div) => (
+                  <tr key={div} className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">{formatLabel(div)}</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">
+                      {BPKS_2024_REFERENCE.borang5.bahagian[div as keyof typeof BPKS_2024_REFERENCE.borang5.bahagian] || 0}
+                    </td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.borang5.bahagian[div]}
+                        onChange={(e) => {
+                          const newBahagian = { ...formData.bpks.borang5.bahagian, [div]: e.target.value };
+                          setFormData((prev: any) => ({
+                            ...prev,
+                            bpks: {
+                              ...prev.bpks,
+                              borang5: { ...prev.bpks.borang5, bahagian: newBahagian }
+                            }
+                          }));
+                        }}
+                        className="w-full bg-gray-50 border-none rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className="p-6 bg-teal-50 rounded-2xl border border-teal-100">
@@ -310,27 +327,44 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <TrendingUp className="w-4 h-4" />
               Pecahan Kategori
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Matrimoni</label>
-                <input
-                  type="number"
-                  value={formData.bpks.borang5.kategori.matrimoni}
-                  onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'matrimoni', e.target.value)}
-                  className="w-full bg-white border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Jenayah Syariah</label>
-                <input
-                  type="number"
-                  value={formData.bpks.borang5.kategori.jenayahSyariah}
-                  onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'jenayahSyariah', e.target.value)}
-                  className="w-full bg-white border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
-                  placeholder="0"
-                />
-              </div>
+            <div className="overflow-x-auto rounded-2xl border border-teal-100 bg-white">
+              <table className="w-full min-w-[460px] text-sm">
+                <thead className="bg-teal-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Kategori</th>
+                    <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-teal-900">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">Matrimoni</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.borang5.kategori.matrimoni}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.borang5.kategori.matrimoni}
+                        onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'matrimoni', e.target.value)}
+                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                  <tr className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">Jenayah Syariah</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.borang5.kategori.jenayahSyariah}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.borang5.kategori.jenayahSyariah}
+                        onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'jenayahSyariah', e.target.value)}
+                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {!isBorang5Valid && (totalBorang5Bahagian > 0 || totalBorang5Kategori > 0) && (
@@ -388,37 +422,44 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Matrimoni</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={formData.bpks.kertasSiasatan.matrimoni}
-                    onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'matrimoni', e.target.value)}
-                    className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-4 top-3 text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">
-                    Ref 24: {BPKS_2024_REFERENCE.kertasSiasatan.matrimoni}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Jenayah Syariah</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={formData.bpks.kertasSiasatan.jenayahSyariah}
-                    onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'jenayahSyariah', e.target.value)}
-                    className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-4 top-3 text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">
-                    Ref 24: {BPKS_2024_REFERENCE.kertasSiasatan.jenayahSyariah}
-                  </span>
-                </div>
-              </div>
+            <div className="overflow-x-auto rounded-2xl border border-teal-100">
+              <table className="w-full min-w-[460px] text-sm">
+                <thead className="bg-teal-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Kategori</th>
+                    <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-teal-900">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">Matrimoni</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.kertasSiasatan.matrimoni}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.kertasSiasatan.matrimoni}
+                        onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'matrimoni', e.target.value)}
+                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                  <tr className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">Jenayah Syariah</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.kertasSiasatan.jenayahSyariah}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.kertasSiasatan.jenayahSyariah}
+                        onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'jenayahSyariah', e.target.value)}
+                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="h-[200px]">
@@ -456,17 +497,31 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
             </div>
             
-            <div className="relative">
-              <input
-                type="number"
-                value={formData.bpks.aktiviti.total}
-                onChange={(e) => handleNestedInputChange('bpks', 'aktiviti', 'total', e.target.value)}
-                className="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                placeholder="0"
-              />
-              <span className="absolute right-4 top-3 text-[10px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">
-                Ref 24: {BPKS_2024_REFERENCE.aktiviti.total}
-              </span>
+            <div className="overflow-x-auto rounded-2xl border border-teal-100">
+              <table className="w-full min-w-[430px] text-sm">
+                <thead className="bg-teal-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Perkara</th>
+                    <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-teal-900">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-teal-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-teal-100">
+                    <td className="px-4 py-3 font-semibold text-gray-800">Jumlah Program / Aktiviti</td>
+                    <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.aktiviti.total}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        value={formData.bpks.aktiviti.total}
+                        onChange={(e) => handleNestedInputChange('bpks', 'aktiviti', 'total', e.target.value)}
+                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                        placeholder="0"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 

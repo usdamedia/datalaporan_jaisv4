@@ -595,7 +595,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
             <div>
               <h3 className="text-xl font-black text-indigo-950 uppercase tracking-tight">Statistik Aduan 2025</h3>
-              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Pengurusan Aduan Awam • Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
+              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Pengurusan Aduan Awam • Rujukan 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
             </div>
           </div>
 
@@ -603,7 +603,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             <div className="rounded-3xl border border-indigo-100 bg-indigo-50 p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-indigo-500">Jumlah Aduan 2025</p>
               <p className="mt-2 text-4xl font-black text-indigo-950">{totalAduanSumber}</p>
-              <p className="mt-2 text-xs font-semibold text-indigo-400">Ref 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
+              <p className="mt-2 text-xs font-semibold text-indigo-400">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.aduan.jumlah}</p>
             </div>
             <div className={`rounded-3xl border p-5 ${isAduanBalanced ? 'border-emerald-100 bg-emerald-50 text-emerald-900' : 'border-rose-100 bg-rose-50 text-rose-900'}`}>
               <p className="text-[10px] font-black uppercase tracking-[0.25em]">Semakan Auto-Sum</p>
@@ -872,7 +872,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
             <div>
               <h3 className="text-xl font-black text-purple-950 uppercase tracking-tight">Maklum Balas Pelanggan</h3>
-              <p className="text-xs text-purple-400 font-bold uppercase tracking-widest">Kepuasan Perkhidmatan • Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
+              <p className="text-xs text-purple-400 font-bold uppercase tracking-widest">Kepuasan Perkhidmatan • Rujukan 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
             </div>
           </div>
 
@@ -880,7 +880,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             <div className="rounded-3xl border border-emerald-100 bg-emerald-50 p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Jumlah Maklum Balas</p>
               <p className="mt-2 text-4xl font-black text-emerald-950">{totalMaklumBalas.toLocaleString()}</p>
-              <p className="mt-2 text-xs font-semibold text-emerald-700">Ref 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
+              <p className="mt-2 text-xs font-semibold text-emerald-700">Rujukan 2024: {UKOKO_PR_2024_REFERENCE.maklumBalas.jumlah.toLocaleString()}</p>
             </div>
             <div className="rounded-3xl border border-emerald-100 bg-white p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Puas Hati</p>
@@ -939,7 +939,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
             <div>
               <h3 className="text-xl font-black text-indigo-950 uppercase tracking-tight">Lawatan Luar</h3>
-              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Agensi / Badan / NGO / Syarikat • Ref 2024: {UKOKO_PR_2024_REFERENCE.lawatanLuar}</p>
+              <p className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Agensi / Badan / NGO / Syarikat • Rujukan 2024: {UKOKO_PR_2024_REFERENCE.lawatanLuar}</p>
             </div>
           </div>
 

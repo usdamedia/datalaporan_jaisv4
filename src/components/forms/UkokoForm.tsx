@@ -92,7 +92,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
           <div className="relative z-10">
             <p className="text-emerald-300 text-[10px] font-black uppercase tracking-widest mb-1">Jumlah Keseluruhan Acara</p>
             <h3 className="text-4xl font-black">{totalEvents}</h3>
-            <p className="text-emerald-100/60 text-[10px] mt-2">Ref 2024: {UKOKO_2024_REFERENCE.total} Acara</p>
+            <p className="text-emerald-100/60 text-[10px] mt-2">Rujukan 2024: {UKOKO_2024_REFERENCE.total} Acara</p>
           </div>
           <Star className="absolute -bottom-4 -right-4 w-24 h-24 text-emerald-800/50 group-hover:rotate-12 transition-transform" />
         </div>

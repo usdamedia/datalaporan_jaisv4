@@ -761,10 +761,10 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               </table>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Data KAFA & UPKK 2025
-              </h3>
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Data KAFA & UPKK 2025
+            </h3>
               <table className="w-full text-[10px] border-collapse">
                 <tbody>
                   <tr>
@@ -786,6 +786,30 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                 </tbody>
               </table>
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Trend Tahunan UPKK (2019 - 2025)
+            </h3>
+            <table className="w-full text-[9px] border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-1.5 text-left">Tahun</th>
+                  <th className="border p-1.5 text-center">Bil. Calon</th>
+                  <th className="border p-1.5 text-center">GPS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(formData.bppi.kafa.trendUPKK || []).map((t: any) => (
+                  <tr key={t.year}>
+                    <td className="border p-1.5 font-bold">{t.year}</td>
+                    <td className="border p-1.5 text-center">{t.calon || '-'}</td>
+                    <td className="border p-1.5 text-center">{t.gps || '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className="space-y-4">

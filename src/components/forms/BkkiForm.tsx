@@ -149,114 +149,40 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Perkahwinan */}
-          <div className="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-emerald-600" />
-                <label className="text-[10px] font-black text-emerald-900 uppercase">Perkahwinan Didaftar</label>
-              </div>
-              <span className="text-[9px] font-bold text-emerald-400">Ref 24: {BKKI_2024_REFERENCE.stats.bilPerkahwinan}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.bilPerkahwinan}
-              onChange={(e) => updateStat('bilPerkahwinan', e.target.value)}
-              className="w-full p-2.5 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
-
-          {/* Perceraian */}
-          <div className="p-5 bg-rose-50 border border-rose-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <UserMinus className="w-4 h-4 text-rose-600" />
-                <label className="text-[10px] font-black text-rose-900 uppercase">Perceraian Didaftar</label>
-              </div>
-              <span className="text-[9px] font-bold text-rose-400">Ref 24: {BKKI_2024_REFERENCE.stats.bilPerceraian}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.bilPerceraian}
-              onChange={(e) => updateStat('bilPerceraian', e.target.value)}
-              className="w-full p-2.5 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
-
-          {/* Ruju' */}
-          <div className="p-5 bg-teal-50 border border-teal-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <UserPlus className="w-4 h-4 text-teal-600" />
-                <label className="text-[10px] font-black text-teal-900 uppercase">Ruju' Didaftar</label>
-              </div>
-              <span className="text-[9px] font-bold text-teal-400">Ref 24: {BKKI_2024_REFERENCE.stats.bilRuju}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.bilRuju}
-              onChange={(e) => updateStat('bilRuju', e.target.value)}
-              className="w-full p-2.5 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
-
-          {/* Kad Nikah */}
-          <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-blue-600" />
-                <label className="text-[10px] font-black text-blue-900 uppercase">Kad Nikah Dikeluarkan</label>
-              </div>
-              <span className="text-[9px] font-bold text-blue-400">Ref 24: {BKKI_2024_REFERENCE.stats.bilKadNikah}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.bilKadNikah}
-              onChange={(e) => updateStat('bilKadNikah', e.target.value)}
-              className="w-full p-2.5 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
-
-          {/* Peserta Kursus */}
-          <div className="p-5 bg-indigo-50 border border-indigo-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-indigo-600" />
-                <label className="text-[10px] font-black text-indigo-900 uppercase">Peserta Kursus Pra-Nikah</label>
-              </div>
-              <span className="text-[9px] font-bold text-indigo-400">Ref 24: {BKKI_2024_REFERENCE.stats.jumPesertaKursus}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.jumPesertaKursus}
-              onChange={(e) => updateStat('jumPesertaKursus', e.target.value)}
-              className="w-full p-2.5 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
-
-          {/* Program */}
-          <div className="p-5 bg-amber-50 border border-amber-100 rounded-2xl space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-amber-600" />
-                <label className="text-[10px] font-black text-amber-900 uppercase">Program / Aktiviti</label>
-              </div>
-              <span className="text-[9px] font-bold text-amber-400">Ref 24: {BKKI_2024_REFERENCE.stats.bilProgram}</span>
-            </div>
-            <input
-              type="number"
-              value={formData.stats.bilProgram}
-              onChange={(e) => updateStat('bilProgram', e.target.value)}
-              className="w-full p-2.5 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none font-bold text-sm"
-              placeholder="0"
-            />
-          </div>
+        <div className="overflow-x-auto rounded-2xl border border-gray-200">
+          <table className="w-full min-w-[560px] text-sm border-collapse">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-gray-700">Perkara</th>
+                <th className="px-4 py-3 text-center text-[11px] font-black uppercase tracking-wider text-gray-700">Rujukan 2024</th>
+                <th className="px-4 py-3 text-left text-[11px] font-black uppercase tracking-wider text-gray-700">Input 2025</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { label: 'Perkahwinan Didaftar', key: 'bilPerkahwinan', ref: BKKI_2024_REFERENCE.stats.bilPerkahwinan },
+                { label: 'Perceraian Didaftar', key: 'bilPerceraian', ref: BKKI_2024_REFERENCE.stats.bilPerceraian },
+                { label: "Ruju' Didaftar", key: 'bilRuju', ref: BKKI_2024_REFERENCE.stats.bilRuju },
+                { label: 'Kad Nikah Dikeluarkan', key: 'bilKadNikah', ref: BKKI_2024_REFERENCE.stats.bilKadNikah },
+                { label: 'Peserta Kursus Pra-Nikah', key: 'jumPesertaKursus', ref: BKKI_2024_REFERENCE.stats.jumPesertaKursus },
+                { label: 'Program / Aktiviti', key: 'bilProgram', ref: BKKI_2024_REFERENCE.stats.bilProgram }
+              ].map((item) => (
+                <tr key={item.key} className="border-t border-gray-100">
+                  <td className="px-4 py-3 font-semibold text-zus-900">{item.label}</td>
+                  <td className="px-4 py-3 text-center font-black text-gray-700">{item.ref}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.stats[item.key as keyof typeof formData.stats]}
+                      onChange={(e) => updateStat(item.key, e.target.value)}
+                      className="w-full p-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none font-bold text-sm"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 

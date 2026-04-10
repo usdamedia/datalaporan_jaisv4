@@ -189,19 +189,31 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {statCards.map((card) => (
-          <div key={card.label} className="rounded-[1.6rem] border border-[#d7e7e0] bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="rounded-2xl bg-[#dff2ea] p-3 text-[#0d4f45]">{card.icon}</div>
-              <span className="rounded-full bg-[#f8eab6] px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#7b5c0c]">
-                Ref 2024: {card.ref}
-              </span>
-            </div>
-            <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-400">{card.label}</p>
-            <p className="mt-2 text-4xl font-black tracking-tight text-[#0d3b35]">{card.value}</p>
-          </div>
-        ))}
+      <section className="overflow-hidden rounded-[2rem] border border-[#d6e4dd] bg-white shadow-sm">
+        <div className="px-6 py-5">
+          <h3 className="text-lg font-black uppercase tracking-tight text-[#0d3b35]">Ringkasan 2024 vs 2025</h3>
+          <p className="text-xs font-semibold text-slate-500">Rujukan 2024 dipaparkan bersama data semasa 2025 secara side-by-side.</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="bg-[#f6faf8] text-left text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">
+                <th className="px-5 py-4">Komponen</th>
+                <th className="px-5 py-4 text-center">Rujukan 2024</th>
+                <th className="px-5 py-4 text-center">Data 2025</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {statCards.map((card) => (
+                <tr key={card.label} className="hover:bg-[#fbfcfb]">
+                  <td className="px-5 py-4 font-black text-[#0d3b35]">{card.label}</td>
+                  <td className="px-5 py-4 text-center font-black text-[#947225]">{card.ref}</td>
+                  <td className="px-5 py-4 text-center font-black text-[#0d3b35]">{card.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="overflow-hidden rounded-[2rem] border border-[#d6e4dd] bg-white shadow-sm">
@@ -308,7 +320,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div key={item.field} className="grid grid-cols-[1fr_0.7fr_0.8fr] items-center gap-3">
                   <label className="text-sm font-bold text-slate-600">{item.label}</label>
                   <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
-                    Ref 2024: {item.ref}
+                    Rujukan 2024: {item.ref}
                   </div>
                   <input
                     type="number"
@@ -340,7 +352,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div key={item.field} className="grid grid-cols-[1fr_0.7fr_0.8fr] items-center gap-3">
                   <label className="text-sm font-bold text-slate-600">{item.label}</label>
                   <div className="rounded-xl bg-white px-3 py-2 text-center text-xs font-black uppercase tracking-widest text-slate-400">
-                    Ref 2024: {item.ref}
+                    Rujukan 2024: {item.ref}
                   </div>
                   <input
                     type="number"

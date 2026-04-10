@@ -343,71 +343,43 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
           </div>
           {/* Z-Pattern Layout: Left to Right, Top to Bottom */}
           <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-              {/* Kiri: Perjawatan Bajet */}
-              <div className="space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                <label className="text-sm md:text-base font-bold text-gray-700 whitespace-normal break-words block">Perjawatan (Bajet)</label>
-                <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanBajet}</div>
-                <input
-                  type="number"
-                  value={formData.hr.ringkasan.perjawatanBajet}
-                  onChange={(e) => updateNestedField('ringkasan', 'perjawatanBajet', e.target.value)}
-                  className="w-full max-w-xs p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold"
-                  placeholder="0"
-                />
-              </div>
-              
-              {/* Tengah: Perjawatan Diisi */}
-              <div className="space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                <label className="text-sm md:text-base font-bold text-gray-700 whitespace-normal break-words block">Perjawatan Diisi</label>
-                <div className="text-[10px] font-bold text-gray-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</div>
-                <input
-                  type="number"
-                  value={formData.hr.ringkasan.perjawatanDiisi}
-                  onChange={(e) => updateNestedField('ringkasan', 'perjawatanDiisi', e.target.value)}
-                  className="w-full max-w-xs p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-bold"
-                  placeholder="0"
-                />
-              </div>
-
-              {/* Kanan: Keseluruhan Warga Kerja (Auto-Sum) */}
-              <div className="space-y-2 bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-                <label className="text-sm md:text-base font-bold text-emerald-900 whitespace-normal break-words block">Keseluruhan Warga Kerja JAIS</label>
-                <div className="text-[10px] font-bold text-emerald-600 mb-1">Auto-Kira (Lelaki + Wanita) | Ref 24: {HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</div>
-                <input
-                  type="number"
-                  readOnly
-                  value={formData.hr.ringkasan.jumlahWargaKerja}
-                  className="w-full max-w-xs p-3 bg-white border border-emerald-200 rounded-xl text-emerald-700 font-black outline-none"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            {/* Demografi Jantina */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-100 pt-6">
-              <div className="space-y-2">
-                <label className="text-sm md:text-base font-bold text-blue-900 whitespace-normal break-words block">Lelaki</label>
-                <div className="text-[10px] font-bold text-blue-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.demografi.lelaki}</div>
-                <input
-                  type="number"
-                  value={formData.hr.demografi.lelaki}
-                  onChange={(e) => updateNestedField('demografi', 'lelaki', e.target.value)}
-                  className="w-full max-w-xs p-3 bg-white border-2 border-blue-100 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none font-bold transition-all"
-                  placeholder="0"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm md:text-base font-bold text-pink-900 whitespace-normal break-words block">Wanita</label>
-                <div className="text-[10px] font-bold text-pink-400 mb-1">Rujukan 2024: {HR_2024_REFERENCE.demografi.wanita}</div>
-                <input
-                  type="number"
-                  value={formData.hr.demografi.wanita}
-                  onChange={(e) => updateNestedField('demografi', 'wanita', e.target.value)}
-                  className="w-full max-w-xs p-3 bg-white border-2 border-pink-100 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none font-bold transition-all"
-                  placeholder="0"
-                />
-              </div>
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
+              <table className="w-full min-w-[560px] text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-slate-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 font-bold text-gray-700">Perjawatan (Bajet)</td>
+                    <td className="px-4 py-3 text-center font-black text-gray-500">{HR_2024_REFERENCE.ringkasan.perjawatanBajet}</td>
+                    <td className="px-4 py-3"><input type="number" value={formData.hr.ringkasan.perjawatanBajet} onChange={(e) => updateNestedField('ringkasan', 'perjawatanBajet', e.target.value)} className="w-full max-w-xs p-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-bold text-gray-700">Perjawatan Diisi</td>
+                    <td className="px-4 py-3 text-center font-black text-gray-500">{HR_2024_REFERENCE.ringkasan.perjawatanDiisi}</td>
+                    <td className="px-4 py-3"><input type="number" value={formData.hr.ringkasan.perjawatanDiisi} onChange={(e) => updateNestedField('ringkasan', 'perjawatanDiisi', e.target.value)} className="w-full max-w-xs p-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold" placeholder="0" /></td>
+                  </tr>
+                  <tr className="bg-emerald-50/60">
+                    <td className="px-4 py-3 font-black text-emerald-900">Keseluruhan Warga Kerja JAIS (Auto)</td>
+                    <td className="px-4 py-3 text-center font-black text-emerald-700">{HR_2024_REFERENCE.ringkasan.jumlahWargaKerja}</td>
+                    <td className="px-4 py-3"><input type="number" readOnly value={formData.hr.ringkasan.jumlahWargaKerja} className="w-full max-w-xs p-2.5 bg-white border border-emerald-200 rounded-xl text-emerald-700 font-black outline-none" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-bold text-blue-900">Lelaki</td>
+                    <td className="px-4 py-3 text-center font-black text-blue-500">{HR_2024_REFERENCE.demografi.lelaki}</td>
+                    <td className="px-4 py-3"><input type="number" value={formData.hr.demografi.lelaki} onChange={(e) => updateNestedField('demografi', 'lelaki', e.target.value)} className="w-full max-w-xs p-2.5 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-bold text-pink-900">Wanita</td>
+                    <td className="px-4 py-3 text-center font-black text-pink-500">{HR_2024_REFERENCE.demografi.wanita}</td>
+                    <td className="px-4 py-3"><input type="number" value={formData.hr.demografi.wanita} onChange={(e) => updateNestedField('demografi', 'wanita', e.target.value)} className="w-full max-w-xs p-2.5 bg-white border border-pink-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold" placeholder="0" /></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
@@ -420,8 +392,18 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
             </div>
             <h2 className="text-white font-bold text-lg">2. Skim Perkhidmatan</h2>
           </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
+          <div className="p-6">
+            <div className="overflow-x-auto rounded-xl border border-emerald-100">
+              <table className="w-full min-w-[560px] text-sm">
+                <thead className="bg-emerald-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-emerald-800">Skim</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-emerald-800">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-emerald-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-emerald-100">
+                  {[
               { label: 'Jusa', field: 'jusa', ref: HR_2024_REFERENCE.skim.jusa },
               { label: 'Hal Ehwal Islam', field: 'halEhwalIslam', ref: HR_2024_REFERENCE.skim.halEhwalIslam },
               { label: 'Perundangan dan Kehakiman', field: 'perundangan', ref: HR_2024_REFERENCE.skim.perundangan },
@@ -431,23 +413,24 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
               { label: 'Kejuruteraan', field: 'kejuruteraan', ref: HR_2024_REFERENCE.skim.kejuruteraan },
               { label: 'Pentadbiran dan Sokongan', field: 'pentadbiran', ref: HR_2024_REFERENCE.skim.pentadbiran },
               { label: 'Pembantu Am dan Pemandu', field: 'pembantuAm', ref: HR_2024_REFERENCE.skim.pembantuAm },
-            ].map((item) => (
-              <div key={item.field} className="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors flex flex-col justify-between h-full">
-                <div className="mb-3">
-                  <label className="text-sm md:text-base font-bold text-emerald-900 whitespace-normal break-words block leading-tight">
-                    {item.label}
-                  </label>
-                  <span className="text-[10px] font-bold text-emerald-600/70 mt-1 block">Ref 24: {item.ref}</span>
-                </div>
-                <input
-                  type="number"
-                  value={formData.hr.skim[item.field as keyof typeof formData.hr.skim]}
-                  onChange={(e) => updateNestedField('skim', item.field, e.target.value)}
-                  className="w-full max-w-xs p-3 bg-white border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
-                  placeholder="0"
-                />
-              </div>
-            ))}
+                ].map((item) => (
+                    <tr key={item.field}>
+                      <td className="px-4 py-3 text-sm font-bold text-emerald-900">{item.label}</td>
+                      <td className="px-4 py-3 text-center text-xs font-black text-emerald-700">{item.ref}</td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="number"
+                          value={formData.hr.skim[item.field as keyof typeof formData.hr.skim]}
+                          onChange={(e) => updateNestedField('skim', item.field, e.target.value)}
+                          className="w-full max-w-xs p-2.5 bg-white border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm transition-all"
+                          placeholder="0"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
@@ -466,22 +449,31 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                 <div className="w-2 h-6 bg-slate-700 rounded-full"></div>
                 <h3 className="font-bold text-slate-800 text-base md:text-lg">Majlis Islam Sarawak (MIS)</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="flex flex-col justify-between h-full">
-                  <div className="mb-3">
-                    <label className="text-sm md:text-base font-bold text-slate-700 whitespace-normal break-words block leading-tight">
-                      Pekhidmat MIS
-                    </label>
-                    <span className="text-[10px] font-bold text-slate-500 mt-1 block">Rujukan 2024: {HR_2024_REFERENCE.sangkutan.mis}</span>
-                  </div>
-                  <input
-                    type="number"
-                    value={formData.hr.sangkutan.mis}
-                    onChange={(e) => updateNestedField('sangkutan', 'mis', e.target.value)}
-                    className="w-full max-w-xs p-3 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
-                    placeholder="0"
-                  />
-                </div>
+              <div className="overflow-x-auto rounded-xl border border-slate-200">
+                <table className="w-full min-w-[430px] text-sm">
+                  <thead className="bg-slate-100">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-slate-600">Perkara</th>
+                      <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-slate-600">Rujukan 2024</th>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-slate-800">Input 2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-slate-200">
+                      <td className="px-4 py-3 font-bold text-slate-700">Pekhidmat MIS</td>
+                      <td className="px-4 py-3 text-center font-black text-slate-500">{HR_2024_REFERENCE.sangkutan.mis}</td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="number"
+                          value={formData.hr.sangkutan.mis}
+                          onChange={(e) => updateNestedField('sangkutan', 'mis', e.target.value)}
+                          className="w-full max-w-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm transition-all"
+                          placeholder="0"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -491,28 +483,37 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                 <div className="w-2 h-6 bg-cyan-500 rounded-full"></div>
                 <h3 className="font-bold text-cyan-900 text-base md:text-lg">JAKIM</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
+              <div className="overflow-x-auto rounded-xl border border-cyan-200">
+                <table className="w-full min-w-[560px] text-sm">
+                  <thead className="bg-cyan-100/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-cyan-800">Perkara</th>
+                      <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-cyan-800">Rujukan 2024</th>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-cyan-900">Input 2025</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-cyan-200">
+                    {[
                   { label: 'Penyelia KAFA', field: 'penyeliaKafa', ref: HR_2024_REFERENCE.sangkutan.jakim.penyeliaKafa },
                   { label: 'Penggerak Masyarakat Saudara Kita', field: 'penggerak', ref: HR_2024_REFERENCE.sangkutan.jakim.penggerak },
                   { label: 'Pegawai Takmir, Pembantu Takmir dan Penyelaras Pentadbiran Masjid Daerah', field: 'takmir', ref: HR_2024_REFERENCE.sangkutan.jakim.takmir },
                 ].map((item) => (
-                  <div key={item.field} className="flex flex-col justify-between h-full">
-                    <div className="mb-3">
-                      <label className="text-sm md:text-base font-bold text-cyan-900 whitespace-normal break-words block leading-tight">
-                        {item.label}
-                      </label>
-                      <span className="text-[10px] font-bold text-cyan-600 mt-1 block">Rujukan 2024: {item.ref}</span>
-                    </div>
-                    <input
-                      type="number"
-                      value={formData.hr.sangkutan.jakim[item.field as keyof typeof formData.hr.sangkutan.jakim]}
-                      onChange={(e) => updateNestedField('sangkutan', 'jakim', e.target.value, item.field)}
-                      className="w-full max-w-xs p-3 bg-white border border-cyan-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-base transition-all"
-                      placeholder="0"
-                    />
-                  </div>
+                      <tr key={item.field}>
+                        <td className="px-4 py-3 font-bold text-cyan-900">{item.label}</td>
+                        <td className="px-4 py-3 text-center font-black text-cyan-700">{item.ref}</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.hr.sangkutan.jakim[item.field as keyof typeof formData.hr.sangkutan.jakim]}
+                            onChange={(e) => updateNestedField('sangkutan', 'jakim', e.target.value, item.field)}
+                            className="w-full max-w-xs p-2.5 bg-white border border-cyan-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm transition-all"
+                            placeholder="0"
+                          />
+                        </td>
+                      </tr>
                 ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -597,7 +598,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                         placeholder="0"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-300">
-                        Ref 24: {HR_2024_REFERENCE.taburan.daerah[idx].value}
+                        Rujukan 2024: {HR_2024_REFERENCE.taburan.daerah[idx].value}
                       </div>
                     </div>
                   </div>
@@ -635,24 +636,32 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
             <h2 className="text-white font-bold text-lg">5. Kakitangan Bersara</h2>
           </div>
           <div className="p-6">
-            <div className="bg-red-50 p-6 rounded-2xl border border-red-100 max-w-md mx-auto">
-              <div className="mb-4 text-center">
-                <label className="text-sm md:text-base font-bold text-red-900 whitespace-normal break-words block leading-tight">
-                  Kakitangan Bersara
-                </label>
-                <span className="text-xs font-bold text-red-500 mt-1 block">Rujukan 2024: {HR_2024_REFERENCE.bersara}</span>
-              </div>
-              <div className="relative w-full max-w-xs mx-auto">
-                <input
-                  type="number"
-                  value={formData.hr.bersara}
-                  onChange={(e) => updateNestedField('bersara', '', e.target.value)}
-                  className="w-full p-4 bg-white border-2 border-red-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none text-2xl font-black text-red-700 text-center transition-all"
-                  placeholder="0"
-                />
-                <div className="absolute -top-3 -right-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">
-                  WAJIB ISI
-                </div>
+            <div className="bg-red-50 p-6 rounded-2xl border border-red-100 max-w-2xl mx-auto">
+              <div className="overflow-x-auto rounded-xl border border-red-100">
+                <table className="w-full min-w-[430px] text-sm">
+                  <thead className="bg-red-100/40">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-red-700">Perkara</th>
+                      <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-red-700">Rujukan 2024</th>
+                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-red-900">Input 2025</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-t border-red-100">
+                      <td className="px-4 py-3 text-sm font-bold text-red-900">Kakitangan Bersara</td>
+                      <td className="px-4 py-3 text-center text-xs font-black text-red-600">{HR_2024_REFERENCE.bersara}</td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="number"
+                          value={formData.hr.bersara}
+                          onChange={(e) => updateNestedField('bersara', '', e.target.value)}
+                          className="w-full max-w-xs p-3 bg-white border-2 border-red-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none text-base font-black text-red-700 transition-all"
+                          placeholder="0"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -806,7 +815,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                         className="bg-transparent border-none p-0 text-5xl font-black focus:ring-0 w-24"
                         placeholder="0"
                       />
-                      <span className="text-teal-200 text-xs font-bold">Ref 24: {LATIHAN_2024_REFERENCE.ringkasan.jumlah}</span>
+                      <span className="text-teal-200 text-xs font-bold">Rujukan 2024: {LATIHAN_2024_REFERENCE.ringkasan.jumlah}</span>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -894,7 +903,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                                 <span className="text-[8px] font-black text-teal-400">%</span>
                               </div>
                             </div>
-                            <p className="text-[8px] text-gray-300 font-bold text-center italic">Ref 24: {row.ref[col as keyof typeof row.ref]} ({row.ref[`${col}Pct` as keyof typeof row.ref]}%)</p>
+                            <p className="text-[8px] text-gray-300 font-bold text-center italic">Rujukan 2024: {row.ref[col as keyof typeof row.ref]} ({row.ref[`${col}Pct` as keyof typeof row.ref]}%)</p>
                           </div>
                         </td>
                       ))}
@@ -918,7 +927,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                               <span className="text-[8px] font-black text-teal-200">%</span>
                             </div>
                           </div>
-                          <p className="text-[8px] text-teal-300 font-bold text-center italic">Ref 24: {row.ref.total} ({row.ref.totalPct}%)</p>
+                          <p className="text-[8px] text-teal-300 font-bold text-center italic">Rujukan 2024: {row.ref.total} ({row.ref.totalPct}%)</p>
                         </div>
                       </td>
                     </tr>

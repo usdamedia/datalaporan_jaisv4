@@ -159,8 +159,8 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
             <thead>
               <tr className="bg-[#12344a] text-white">
                 <th className="px-6 py-4 text-left text-sm font-black uppercase tracking-[0.18em]">Kategori Aktiviti</th>
-                <th className="px-6 py-4 text-center text-sm font-black uppercase tracking-[0.18em]">Data 2024 (Rujukan)</th>
-                <th className="px-6 py-4 text-left text-sm font-black uppercase tracking-[0.18em]">2025 Entry Form</th>
+                <th className="px-6 py-4 text-center text-sm font-black uppercase tracking-[0.18em]">Rujukan 2024</th>
+                <th className="px-6 py-4 text-left text-sm font-black uppercase tracking-[0.18em]">Input 2025</th>
               </tr>
             </thead>
             <tbody>

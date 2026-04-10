@@ -434,12 +434,12 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {[
-                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.rumahSembelihan },
-                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.produk },
-                        { label: 'Premis Makanan', field: 'premis', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.premis },
-                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.oem },
-                        { label: 'Logistik', field: 'logistik', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.logistik },
-                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan },
+                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.rumahSembelihan },
+                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.produk },
+                        { label: 'Premis Makanan', field: 'premis', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.premis },
+                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.oem },
+                        { label: 'Logistik', field: 'logistik', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.logistik },
+                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan },
                       ].map(item => (
                         <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
@@ -623,31 +623,42 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
               <div className="space-y-4">
                 <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-4">Penguatkuasaan & Aduan</h4>
-                <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
-                    <label className="text-[10px] font-black text-gray-500 uppercase">Kes Penguatkuasaan</label>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold text-gray-400">Ref 24: {BPH_2024_REFERENCE.penguatkuasaan}</span>
-                      <input 
-                        type="number" 
-                        value={formData.bph.penguatkuasaan} 
-                        onChange={(e) => updateBph(['penguatkuasaan'], e.target.value)} 
-                        className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none" 
-                      />
-                    </div>
-                  </div>
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
-                    <label className="text-[10px] font-black text-gray-500 uppercase">Jumlah Aduan Diterima</label>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold text-gray-400">Ref 24: {BPH_2024_REFERENCE.aduan}</span>
-                      <input 
-                        type="number" 
-                        value={formData.bph.aduan} 
-                        onChange={(e) => updateBph(['aduan'], e.target.value)} 
-                        className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none" 
-                      />
-                    </div>
-                  </div>
+                <div className="overflow-x-auto rounded-2xl border border-gray-100">
+                  <table className="w-full min-w-[430px] text-sm">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                        <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                        <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      <tr>
+                        <td className="px-4 py-3 text-xs font-bold text-gray-700">Kes Penguatkuasaan</td>
+                        <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPH_2024_REFERENCE.penguatkuasaan}</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.bph.penguatkuasaan}
+                            onChange={(e) => updateBph(['penguatkuasaan'], e.target.value)}
+                            className="w-full max-w-[120px] p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 text-xs font-bold text-gray-700">Jumlah Aduan Diterima</td>
+                        <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPH_2024_REFERENCE.aduan}</td>
+                        <td className="px-4 py-3">
+                          <input
+                            type="number"
+                            value={formData.bph.aduan}
+                            onChange={(e) => updateBph(['aduan'], e.target.value)}
+                            className="w-full max-w-[120px] p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -731,26 +742,37 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <h3 className="text-white font-bold">4. Program & Aktiviti Halal</h3>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { label: 'Ziarah Halal', value: FIXED_ACTIVITY_VALUES.ziarahHalal, ref: BPH_2024_REFERENCE.ziarahHalal },
-                { label: 'Taklimat Halal', value: FIXED_ACTIVITY_VALUES.taklimat, ref: BPH_2024_REFERENCE.aktiviti.taklimat },
-                { label: 'Kursus Kesedaran Halal', value: FIXED_ACTIVITY_VALUES.kursus, ref: BPH_2024_REFERENCE.aktiviti.kursus },
-                { label: 'Jumlah Besar Aktiviti', value: FIXED_ACTIVITY_VALUES.total, ref: BPH_2024_REFERENCE.aktiviti.total, highlight: true },
-              ].map(item => (
-                <div key={item.label} className={`p-4 rounded-2xl border ${item.highlight ? 'bg-[#5A5A40] text-zus-gold border-[#5A5A40]' : 'bg-gray-50 border-gray-100'} space-y-3`}>
-                  <label className={`text-[10px] font-black uppercase ${item.highlight ? 'opacity-60' : 'text-gray-500'}`}>{item.label}</label>
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[9px] font-bold ${item.highlight ? 'opacity-40' : 'text-gray-400'}`}>Ref 24: {item.ref}</span>
-                    <input 
-                      type="number" 
-                      value={item.value}
-                      readOnly
-                      className={`w-20 p-2 rounded-lg text-xs font-bold text-center outline-none pointer-events-none ${item.highlight ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gray-200 text-zus-900'}`} 
-                    />
-                  </div>
-                </div>
-              ))}
+            <div className="overflow-x-auto rounded-2xl border border-gray-100">
+              <table className="w-full min-w-[500px] text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-zus-900">Data 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {[
+                    { label: 'Ziarah Halal', value: FIXED_ACTIVITY_VALUES.ziarahHalal, ref: BPH_2024_REFERENCE.ziarahHalal },
+                    { label: 'Taklimat Halal', value: FIXED_ACTIVITY_VALUES.taklimat, ref: BPH_2024_REFERENCE.aktiviti.taklimat },
+                    { label: 'Kursus Kesedaran Halal', value: FIXED_ACTIVITY_VALUES.kursus, ref: BPH_2024_REFERENCE.aktiviti.kursus },
+                    { label: 'Jumlah Besar Aktiviti', value: FIXED_ACTIVITY_VALUES.total, ref: BPH_2024_REFERENCE.aktiviti.total, highlight: true },
+                  ].map(item => (
+                    <tr key={item.label} className={item.highlight ? 'bg-[#5A5A40] text-zus-gold' : ''}>
+                      <td className="px-4 py-3 text-xs font-black">{item.label}</td>
+                      <td className={`px-4 py-3 text-center text-xs font-black ${item.highlight ? 'text-zus-gold/80' : 'text-gray-500'}`}>{item.ref}</td>
+                      <td className="px-4 py-3 text-center">
+                        <input
+                          type="number"
+                          value={item.value}
+                          readOnly
+                          className={`w-24 p-2 rounded-lg text-xs font-bold text-center outline-none pointer-events-none ${item.highlight ? 'bg-white/10 border border-white/20 text-white' : 'bg-white border border-gray-200 text-zus-900'}`}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

@@ -459,49 +459,52 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Prestasi Perbelanjaan */}
-              <div className="p-6 bg-rose-50/50 border border-rose-100 rounded-2xl space-y-4">
-                <div className="flex justify-between items-start">
-                  <label className="text-sm font-black text-rose-900 uppercase leading-tight whitespace-normal">
-                    Peratusan Perbelanjaan 2025
-                  </label>
-                  <span className="text-xs font-bold text-rose-400">Ref 24: {FINANCE_2024_REFERENCE.percentageBelanja}%</span>
-                </div>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={formData.finance?.percentageBelanja || ''}
-                    onChange={(e) => updateFinanceField('percentageBelanja', e.target.value)}
-                    className="w-full p-4 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none font-black text-2xl pr-12 text-rose-700"
-                    placeholder="0.00"
-                  />
-                  <Percent className="w-6 h-6 text-rose-400 absolute right-4 top-1/2 -translate-y-1/2" />
-                </div>
-                <p className="text-xs text-rose-600/70 font-medium italic">Dikira secara automatik: (Belanja / Lulus) * 100</p>
-              </div>
-
-              {/* eCSA */}
-              <div className="p-6 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-4">
-                <div className="flex justify-between items-start">
-                  <label className="text-sm font-black text-indigo-900 uppercase leading-tight whitespace-normal">
-                    Pencapaian eCSA (Electronic Compliance Self Assessment) 2025
-                  </label>
-                  <span className="text-xs font-bold text-indigo-400">Ref 24: {FINANCE_2024_REFERENCE.percentageEcsa}%</span>
-                </div>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={formData.finance?.percentageEcsa || ''}
-                    onChange={(e) => updateFinanceField('percentageEcsa', e.target.value)}
-                    className="w-full p-4 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-black text-2xl pr-12 text-indigo-700"
-                    placeholder="0.0"
-                  />
-                  <Percent className="w-6 h-6 text-indigo-400 absolute right-4 top-1/2 -translate-y-1/2" />
-                </div>
-              </div>
+            <div className="overflow-x-auto rounded-2xl border border-gray-100">
+              <table className="w-full min-w-[580px] text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">KPI</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-rose-900">Peratusan Perbelanjaan 2025</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-rose-500">{FINANCE_2024_REFERENCE.percentageBelanja}%</td>
+                    <td className="px-4 py-3">
+                      <div className="relative max-w-xs">
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={formData.finance?.percentageBelanja || ''}
+                          onChange={(e) => updateFinanceField('percentageBelanja', e.target.value)}
+                          className="w-full p-3 bg-white border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none font-black text-lg pr-10 text-rose-700"
+                          placeholder="0.00"
+                        />
+                        <Percent className="w-5 h-5 text-rose-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-indigo-900">Pencapaian eCSA 2025</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-indigo-500">{FINANCE_2024_REFERENCE.percentageEcsa}%</td>
+                    <td className="px-4 py-3">
+                      <div className="relative max-w-xs">
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={formData.finance?.percentageEcsa || ''}
+                          onChange={(e) => updateFinanceField('percentageEcsa', e.target.value)}
+                          className="w-full p-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-black text-lg pr-10 text-indigo-700"
+                          placeholder="0.0"
+                        />
+                        <Percent className="w-5 h-5 text-indigo-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
         </div>
@@ -529,49 +532,33 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* JPTO */}
-            <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-blue-900 uppercase leading-tight">J.P.T.O</label>
-                <span className="text-[9px] font-bold text-blue-400">Ref 24: {LEADERSHIP_2024_REFERENCE.jpto}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.jpto}
-                onChange={(e) => updateLeadershipField('jpto', e.target.value)}
-                className="w-full p-2.5 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
-            </div>
-
-            {/* MPJ */}
-            <div className="p-5 bg-emerald-50/50 border border-emerald-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-emerald-900 uppercase leading-tight">M.P.J</label>
-                <span className="text-[9px] font-bold text-emerald-400">Ref 24: {LEADERSHIP_2024_REFERENCE.mpj}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.mpj}
-                onChange={(e) => updateLeadershipField('mpj', e.target.value)}
-                className="w-full p-2.5 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
-            </div>
-
-            {/* Pegawai Agama */}
-            <div className="p-5 bg-purple-50/50 border border-purple-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-purple-900 uppercase leading-tight">Pegawai Agama Bahagian</label>
-                <span className="text-[9px] font-bold text-purple-400">Ref 24: {LEADERSHIP_2024_REFERENCE.pegawaiAgama}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.pegawaiAgama}
-                onChange={(e) => updateLeadershipField('pegawaiAgama', e.target.value)}
-                className="w-full p-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
+            <div className="md:col-span-3 overflow-x-auto rounded-2xl border border-gray-100">
+              <table className="w-full min-w-[540px] text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-blue-900">J.P.T.O</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-blue-500">{LEADERSHIP_2024_REFERENCE.jpto}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.jpto} onChange={(e) => updateLeadershipField('jpto', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-emerald-900">M.P.J</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-emerald-500">{LEADERSHIP_2024_REFERENCE.mpj}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.mpj} onChange={(e) => updateLeadershipField('mpj', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-purple-900">Pegawai Agama Bahagian</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-purple-500">{LEADERSHIP_2024_REFERENCE.pegawaiAgama}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.pegawaiAgama} onChange={(e) => updateLeadershipField('pegawaiAgama', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Perhimpunan Bersama Pengurusan (Complex) */}
@@ -579,7 +566,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
               <div className="flex items-center justify-between border-b border-orange-100 pb-2">
                 <h4 className="text-xs font-black text-orange-900 uppercase">Perhimpunan Bersama Pengurusan</h4>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold text-orange-400 uppercase">Ref 24: {LEADERSHIP_2024_REFERENCE.perhimpunan.total}</span>
+                  <span className="text-[9px] font-bold text-orange-400 uppercase">Rujukan 2024: {LEADERSHIP_2024_REFERENCE.perhimpunan.total}</span>
                   <div className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-black text-xs">
                     JUMLAH: {perhimpunan.total}
                   </div>
@@ -619,64 +606,38 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
               </div>
             </div>
 
-            {/* Aset */}
-            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-slate-900 uppercase leading-tight">Pengurusan Aset Alih</label>
-                <span className="text-[9px] font-bold text-slate-400">Ref 24: {LEADERSHIP_2024_REFERENCE.aset}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.aset}
-                onChange={(e) => updateLeadershipField('aset', e.target.value)}
-                className="w-full p-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
-            </div>
-
-            {/* Keselamatan */}
-            <div className="p-5 bg-red-50/50 border border-red-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-red-900 uppercase leading-tight">Keselamatan</label>
-                <span className="text-[9px] font-bold text-red-400">Ref 24: {LEADERSHIP_2024_REFERENCE.keselamatan}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.keselamatan}
-                onChange={(e) => updateLeadershipField('keselamatan', e.target.value)}
-                className="w-full p-2.5 bg-white border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
-            </div>
-
-            {/* Kader */}
-            <div className="p-5 bg-teal-50/50 border border-teal-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-teal-900 uppercase leading-tight">Kader (HEI)</label>
-                <span className="text-[9px] font-bold text-teal-400">Ref 24: {LEADERSHIP_2024_REFERENCE.kader}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.kader}
-                onChange={(e) => updateLeadershipField('kader', e.target.value)}
-                className="w-full p-2.5 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
-            </div>
-
-            {/* Kewangan Perolehan */}
-            <div className="p-5 bg-amber-50/50 border border-amber-100 rounded-2xl space-y-3">
-              <div className="flex justify-between items-start">
-                <label className="text-[10px] font-black text-amber-900 uppercase leading-tight">Kewangan & Perolehan</label>
-                <span className="text-[9px] font-bold text-amber-400">Ref 24: {LEADERSHIP_2024_REFERENCE.kewanganPerolehan}</span>
-              </div>
-              <input
-                type="number"
-                value={leadership.kewanganPerolehan}
-                onChange={(e) => updateLeadershipField('kewanganPerolehan', e.target.value)}
-                className="w-full p-2.5 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none font-bold text-sm"
-                placeholder="0"
-              />
+            <div className="md:col-span-3 overflow-x-auto rounded-2xl border border-gray-100">
+              <table className="w-full min-w-[560px] text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-slate-900">Pengurusan Aset Alih</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-slate-500">{LEADERSHIP_2024_REFERENCE.aset}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.aset} onChange={(e) => updateLeadershipField('aset', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-red-900">Keselamatan</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-red-500">{LEADERSHIP_2024_REFERENCE.keselamatan}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.keselamatan} onChange={(e) => updateLeadershipField('keselamatan', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-teal-900">Kader (HEI)</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-teal-500">{LEADERSHIP_2024_REFERENCE.kader}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.kader} onChange={(e) => updateLeadershipField('kader', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-teal-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-xs font-black text-amber-900">Kewangan & Perolehan</td>
+                    <td className="px-4 py-3 text-center text-xs font-black text-amber-500">{LEADERSHIP_2024_REFERENCE.kewanganPerolehan}</td>
+                    <td className="px-4 py-3"><input type="number" value={leadership.kewanganPerolehan} onChange={(e) => updateLeadershipField('kewanganPerolehan', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-amber-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none font-bold text-sm" placeholder="0" /></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Panel HR (Complex) */}
@@ -684,7 +645,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
               <div className="flex items-center justify-between border-b border-rose-100 pb-2">
                 <h4 className="text-xs font-black text-rose-900 uppercase">Panel Pengurusan Sumber Manusia</h4>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold text-rose-400 uppercase">Ref 24: {LEADERSHIP_2024_REFERENCE.panelHR.total}</span>
+                  <span className="text-[9px] font-bold text-rose-400 uppercase">Rujukan 2024: {LEADERSHIP_2024_REFERENCE.panelHR.total}</span>
                   <div className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-black text-xs">
                     JUMLAH: {panelHR.total}
                   </div>
