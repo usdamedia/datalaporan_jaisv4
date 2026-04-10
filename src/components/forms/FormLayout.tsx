@@ -152,7 +152,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
         <div className="flex items-start gap-4 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-6 text-blue-700">
           <AlertCircle className="mt-0.5 h-5 w-5" />
           <p className="text-[10px] md:text-[11px] font-bold leading-relaxed">
-            Progress disimpan secara automatik dalam storage peranti anda sahaja. Data tidak dihantar ke server selagi butang eksport tidak digunakan. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk keselamatan data jangka panjang.
+            Progress disimpan secara automatik dalam storage peranti anda sahaja. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk simpan progres pengisian anda.
           </p>
         </div>
       </div>
