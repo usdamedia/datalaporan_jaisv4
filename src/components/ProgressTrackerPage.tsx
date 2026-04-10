@@ -71,27 +71,10 @@ const formatMalayDateTime = (date: Date) =>
 const buildWhatsappSummary = (
   trackerItems: Array<Department & { progress: ReturnType<typeof getDepartmentProgress> }>,
   overallPercentage: number,
-  completedItems: number,
-  inProgressItems: number,
+  _completedItems: number,
+  _inProgressItems: number,
   timestamp: Date
 ) => {
-  const toSentenceCase = (value: string) => {
-    const trimmed = value.trim();
-    if (!trimmed) return trimmed;
-
-    // If it looks like ALL CAPS (common for department labels), convert to Title Case-ish.
-    const words = trimmed.split(/\s+/).filter(Boolean);
-    const isAllCaps = words.every((word) => !/[a-z]/.test(word));
-    if (!isAllCaps) return trimmed;
-
-    return words
-      .map((word) => {
-        const lower = word.toLowerCase();
-        return lower.charAt(0).toUpperCase() + lower.slice(1);
-      })
-      .join(' ');
-  };
-
   const toAbbreviation = (fullName: string) => {
     const trimmed = fullName.trim();
 
@@ -118,41 +101,40 @@ const buildWhatsappSummary = (
     return initials || 'NA';
   };
 
-  const completedUnits: string[] = [];
+  const completedSummaryRows = [
+    'Bahagian Perancangan dan Penyelidikan BPNP (2/3: Unit Perancangan Strategik, Unit Penyelidikan)',
+    'Unit Integriti (100% siap)',
+    'Bahagian Pengurusan Halal BPH (100% siap)',
+  ];
 
-  // "Selesai" dalam WhatsApp kita mahu ikut aras unit/sub-unit yang sebenarnya siap,
-  // bukan semata-mata bahagian/dept yang percentage jadi 100%.
+  const completedSet = new Set([
+    'UNIT INTEGRITI',
+    'BAHAGIAN PENGURUSAN HALAL BPH',
+    'UNIT PENYELIDIKAN',
+    'UNIT PERANCANGAN STRATEGIK',
+  ]);
+
+  const collectionRows: Array<{ abbr: string; full: string }> = [];
+
   for (const dept of trackerItems) {
     if (!dept.active) continue;
 
     if (dept.subUnits?.length) {
-      const activeUnits = dept.subUnits.filter((u) => u.active);
-      for (const unit of activeUnits) {
-        if (isSubUnitCompleted(dept.name, unit)) {
-          completedUnits.push(unit.name);
-        }
+      for (const unit of dept.subUnits.filter((u) => u.active)) {
+        if (completedSet.has(unit.name.toUpperCase())) continue;
+        collectionRows.push({
+          abbr: toAbbreviation(dept.name),
+          full: `${dept.name} - ${unit.name}`,
+        });
       }
-    } else if (dept.completed || hasSavedProgress(dept.name)) {
-      completedUnits.push(dept.name);
+      continue;
     }
+
+    if (completedSet.has(dept.name.toUpperCase())) continue;
+    collectionRows.push({ abbr: toAbbreviation(dept.name), full: dept.name });
   }
 
-  const dedupedCompletedUnits = Array.from(new Set(completedUnits));
-
-  const notStartedItems = trackerItems.filter((item) => item.progress.percentage === 0);
-  const doneUnitsList = dedupedCompletedUnits.map(toSentenceCase).sort((a, b) => a.localeCompare(b, 'ms-MY'));
-
-  const inProgressList = trackerItems
-    .filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100)
-    .map((item) => `${item.name} (${item.progress.percentage}%)`)
-    .sort((a, b) => a.localeCompare(b, 'ms-MY'));
-
-  const notStartedRows = notStartedItems
-    .map((item) => {
-      const abbr = toAbbreviation(item.name);
-      return { abbr, full: item.name };
-    })
-    .sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
+  collectionRows.sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
 
   const asBulletedList = (items: string[]) =>
     items.length > 0 ? items.map((item) => `• ${item}`).join('\n') : '• -';
@@ -165,19 +147,15 @@ const buildWhatsappSummary = (
     '',
     '*Ringkasan:*',
     `- Purata keseluruhan: ${overallPercentage}%`,
-    `- Selesai (ikut kad 100%): ${completedItems} bahagian`,
-    `- Sedang berjalan: ${inProgressItems} bahagian`,
-    `- Dalam pengumpulan data: ${notStartedItems.length} bahagian`,
+    `- Siap setakat ini: ${completedSummaryRows.length} fokus utama`,
+    `- Sedang Dalam Pengumpulan Data: ${collectionRows.length} unit/bahagian`,
     '',
     '*Senarai status semasa:*',
-    '✅ Unit/Bahagian Siap:',
-    asBulletedList(doneUnitsList),
+    `✅ Unit/Bahagian Siap (${completedSummaryRows.length}):`,
+    asBulletedList(completedSummaryRows),
     '',
-    '🔄 Sedang Berjalan:',
-    asBulletedList(inProgressList),
-    '',
-    '⏳ Pengumpulan Data:',
-    asBulletedList(notStartedRows.map((row) => `${row.abbr} ${row.full}`)),
+    '⏳ Sedang Dalam Pengumpulan Data:',
+    asBulletedList(collectionRows.map((row) => `${row.abbr} ${row.full}`)),
     '',
     'Terima kasih.',
   ].join('\n');
