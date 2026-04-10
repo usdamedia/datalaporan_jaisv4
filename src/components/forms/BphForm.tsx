@@ -148,68 +148,100 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
             <ShieldCheck className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">1. Statistik Sijil Pengesahan Halal Malaysia (SPHM) 2025</h3>
           </div>
-          <div className="p-6 space-y-8">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+          <div className="p-6 space-y-10">
+            {/* Unified SPHM Tables */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+              {/* Table 1: Permohonan Sijil */}
               <div className="space-y-4">
-                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Permohonan Sijil (SPHM) 2025</h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    { label: 'Rumah Sembelihan', field: 'rumahSembelihan' },
-                    { label: 'Produk Makanan / Minuman', field: 'produk' },
-                    { label: 'Premis Makanan', field: 'premis' },
-                    { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem' },
-                    { label: 'Logistik', field: 'logistik' },
-                    { label: 'Barang Gunaan', field: 'barangGunaan' },
-                  ].map(item => (
-                    <div key={item.field} className="grid grid-cols-2 items-center gap-4 rounded-lg p-2 transition-colors hover:bg-gray-50">
-                      <label className="text-[10px] font-bold text-gray-500 leading-tight">{item.label}</label>
-                      <input 
-                        type="number" 
-                        value={formData.bph.sphm.permohonanSkim?.[item.field] || ''} 
-                        onChange={(e) => updateBph(['sphm', 'permohonanSkim', item.field], e.target.value)} 
-                        className="p-1.5 bg-white border border-gray-200 rounded text-xs font-bold text-center focus:ring-1 focus:ring-olive-500 outline-none" 
-                      />
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2 border-l-4 border-zus-gold pl-3">
+                  <h4 className="text-[11px] font-black text-zus-900 uppercase tracking-wider">Statistik Permohonan SPHM</h4>
                 </div>
-                <div className="p-4 bg-olive-50 border border-olive-100 rounded-2xl flex justify-between items-center">
-                  <span className="text-xs font-black uppercase text-olive-900">Jumlah Permohonan</span>
-                  <div className="flex items-center gap-4">
-                    <span className="text-[10px] font-bold text-olive-400">Ref 24: {BPH_2024_REFERENCE.sphm.permohonan}</span>
-                    <span className="text-xl font-black text-olive-900">{sphmTotalPermohonan}</span>
-                  </div>
+                <div className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50/80 border-b border-gray-100">
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500">Kategori Skim</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">2024</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-zus-900 text-center">2025</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {[
+                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: 'Ref 24: -' },
+                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: 'Ref 24: -' },
+                        { label: 'Premis Makanan', field: 'premis', ref: 'Ref 24: -' },
+                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: 'Ref 24: -' },
+                        { label: 'Logistik', field: 'logistik', ref: 'Ref 24: -' },
+                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Ref 24: -' },
+                      ].map(item => (
+                        <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
+                          <td className="px-4 py-3 text-[10px] font-bold text-gray-400 text-center italic">{item.ref}</td>
+                          <td className="px-4 py-2">
+                            <input 
+                              type="number" 
+                              value={formData.bph.sphm.permohonanSkim?.[item.field] || ''} 
+                              onChange={(e) => updateBph(['sphm', 'permohonanSkim', item.field], e.target.value)} 
+                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none transition-all shadow-sm" 
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-olive-50/50 border-t border-olive-100">
+                        <td colSpan={2} className="px-4 py-3 text-[10px] font-black uppercase text-olive-900">Jumlah Permohonan</td>
+                        <td className="px-4 py-3 text-lg font-black text-olive-900 text-center">{sphmTotalPermohonan}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
               </div>
 
+              {/* Table 2: Pemilik Sijil Aktif */}
               <div className="space-y-4">
-                <h4 className="text-xs font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Pecahan Skim SPHM Aktif</h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan },
-                    { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk },
-                    { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis },
-                    { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem },
-                    { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik },
-                    { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan },
-                  ].map(item => (
-                    <div key={item.field} className="grid grid-cols-3 items-center gap-4 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                      <label className="text-[10px] font-bold text-gray-500 leading-tight">{item.label}</label>
-                      <div className="text-center text-[9px] font-bold text-gray-400 bg-gray-50 py-0.5 rounded">Ref 24: {item.ref}</div>
-                      <input 
-                        type="number" 
-                        value={formData.bph.sphm.skim[item.field]} 
-                        onChange={(e) => updateBph(['sphm', 'skim', item.field], e.target.value)} 
-                        className="p-1 bg-white border border-gray-200 rounded text-xs font-bold text-center focus:ring-1 focus:ring-olive-500 outline-none" 
-                      />
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2 border-l-4 border-zus-gold pl-3">
+                  <h4 className="text-[11px] font-black text-zus-900 uppercase tracking-wider">Pemilik Sijil (SPHM) Aktif</h4>
                 </div>
-                <div className="p-4 bg-[#5A5A40] text-zus-gold rounded-xl flex justify-between items-center">
-                  <span className="text-xs font-black uppercase">Jumlah Pemilik Sijil Aktif</span>
-                  <div className="flex items-center gap-4">
-                    <span className="text-[10px] opacity-60">Ref 24: {BPH_2024_REFERENCE.sphm.aktif}</span>
-                    <span className="text-xl font-black">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</span>
-                  </div>
+                <div className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50/80 border-b border-gray-100">
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500">Kategori Skim</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">2024</th>
+                        <th className="px-4 py-3 text-[10px] font-black uppercase text-zus-900 text-center">2025</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {[
+                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan },
+                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk },
+                        { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis },
+                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem },
+                        { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik },
+                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan },
+                      ].map(item => (
+                        <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
+                          <td className="px-4 py-3 text-xs font-black text-gray-400 text-center">{item.ref}</td>
+                          <td className="px-4 py-2">
+                            <input 
+                              type="number" 
+                              value={formData.bph.sphm.skim[item.field]} 
+                              onChange={(e) => updateBph(['sphm', 'skim', item.field], e.target.value)} 
+                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none transition-all shadow-sm" 
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-[#5A5A40] border-t border-gray-700">
+                        <td colSpan={2} className="px-4 py-3 text-[10px] font-black uppercase text-zus-gold">Jumlah Pemilik Aktif</td>
+                        <td className="px-4 py-3 text-lg font-black text-zus-gold text-center">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
               </div>
             </div>
@@ -244,33 +276,19 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                       <tr className="bg-gray-50/50">
                         <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500">Tahun</th>
                         <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">Permohonan</th>
-                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-400 text-center">+/-</th>
                         <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-500 text-center">Pemilik Aktif</th>
-                        <th className="px-4 py-3 text-[10px] font-black uppercase text-gray-400 text-center">+/-</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       <tr>
                         <td className="px-4 py-4 text-xs font-bold text-gray-500">2024 (Ref)</td>
                         <td className="px-4 py-4 text-xs font-black text-center text-zus-900">{BPH_2024_REFERENCE.sphm.permohonan}</td>
-                        <td className="px-4 py-4 text-center">-</td>
                         <td className="px-4 py-4 text-xs font-black text-center text-zus-900">{BPH_2024_REFERENCE.sphm.aktif}</td>
-                        <td className="px-4 py-4 text-center">-</td>
                       </tr>
                       <tr className="bg-olive-50/30">
                         <td className="px-4 py-4 text-xs font-bold text-olive-900">2025 (Semasa)</td>
                         <td className="px-4 py-4 text-sm font-black text-center text-olive-900">{sphmTotalPermohonan || BPH_2025_REFERENCE.sphm.permohonan}</td>
-                        <td className="px-4 py-4 text-center">
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${(sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan) >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                            {(sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan) > 0 ? '+' : ''}{sphmTotalPermohonan - BPH_2024_REFERENCE.sphm.permohonan}
-                          </span>
-                        </td>
                         <td className="px-4 py-4 text-sm font-black text-center text-olive-900">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</td>
-                        <td className="px-4 py-4 text-center">
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${(sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif) >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                            {(sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif) > 0 ? '+' : ''}{sphmTotalAktif - BPH_2024_REFERENCE.sphm.aktif}
-                          </span>
-                        </td>
                       </tr>
                     </tbody>
                   </table>
