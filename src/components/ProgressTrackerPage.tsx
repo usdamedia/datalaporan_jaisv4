@@ -208,7 +208,7 @@ const ProgressTrackerPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-8 md:space-y-12">
       <section className="relative overflow-hidden rounded-[2.5rem] border border-blue-200 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.2),_transparent_35%),linear-gradient(135deg,_#eff6ff,_#ffffff_45%,_#dbeafe)] px-6 py-7 shadow-xl shadow-blue-100/60 md:px-8 md:py-9">
         <div className="absolute -right-10 top-0 h-40 w-40 rounded-full bg-blue-300/20 blur-3xl" />
         <div className="absolute bottom-0 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-cyan-200/30 blur-3xl" />
@@ -228,24 +228,24 @@ const ProgressTrackerPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.75rem] border border-blue-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="rounded-[1.75rem] border border-blue-200/80 bg-white/85 p-5 shadow-sm backdrop-blur">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">Purata Keseluruhan</p>
-              <p className="mt-3 text-4xl font-black text-slate-900">{overallPercentage}%</p>
+              <p className="mt-3 text-4xl font-black leading-none text-slate-900">{overallPercentage}%</p>
             </div>
-            <div className="rounded-[1.75rem] border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+            <div className="rounded-[1.75rem] border border-emerald-200/80 bg-white/85 p-5 shadow-sm backdrop-blur">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Selesai</p>
-              <p className="mt-3 text-4xl font-black text-slate-900">{completedItems}</p>
+              <p className="mt-3 text-4xl font-black leading-none text-slate-900">{completedItems}</p>
             </div>
-            <div className="rounded-[1.75rem] border border-amber-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+            <div className="rounded-[1.75rem] border border-amber-200/80 bg-white/85 p-5 shadow-sm backdrop-blur">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-600">Sedang Berjalan</p>
-              <p className="mt-3 text-4xl font-black text-slate-900">{inProgressItems}</p>
+              <p className="mt-3 text-4xl font-black leading-none text-slate-900">{inProgressItems}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm md:p-6">
+      <section className="rounded-[2rem] border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40 p-6 shadow-sm md:p-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="max-w-3xl">
             <p className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
@@ -266,7 +266,7 @@ const ProgressTrackerPage: React.FC = () => {
           <button
             type="button"
             onClick={handleCopySummary}
-            className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition ${
+            className={`inline-flex min-w-[216px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-black transition ${
               isCopied
                 ? 'bg-emerald-600 text-white'
                 : 'border border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-100'
@@ -280,11 +280,16 @@ const ProgressTrackerPage: React.FC = () => {
         <textarea
           value={whatsappSummaryText}
           readOnly
-          className="mt-4 h-64 w-full rounded-2xl border border-emerald-200 bg-white p-4 text-sm leading-6 text-slate-700 shadow-inner focus:outline-none"
+          className="mt-5 h-64 w-full rounded-2xl border border-emerald-200 bg-white p-5 font-mono text-[13px] leading-6 text-slate-700 shadow-inner focus:outline-none"
         />
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-black tracking-tight text-slate-900 md:text-xl">Status Bahagian & Unit</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{trackerItems.length} kad aktif</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {trackerItems.map((item, index) => {
           const { percentage, completedCount, totalCount, statusLabel } = item.progress;
           const isDone = Boolean(item.completed || percentage === 100);
@@ -294,7 +299,7 @@ const ProgressTrackerPage: React.FC = () => {
           return (
             <article
               key={item.id}
-              className="group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              className="group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
               style={{ animationDelay: `${index * 40}ms` }}
             >
               <div className={`absolute inset-x-0 top-0 h-1.5 ${isDone ? 'bg-emerald-500' : isStarted ? 'bg-amber-400' : 'bg-blue-500'}`} />
@@ -305,7 +310,7 @@ const ProgressTrackerPage: React.FC = () => {
                     {getIconForDept(item.name)}
                   </div>
                   <div>
-                    <h3 className="text-base font-black leading-6 text-slate-900">{item.name}</h3>
+                    <h3 className="text-[15px] font-black leading-6 text-slate-900">{item.name}</h3>
                     <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
                       {item.subUnits?.length ? <Layers3 className="h-3.5 w-3.5" /> : <Gauge className="h-3.5 w-3.5" />}
                       {resolvedStatusLabel}
@@ -315,7 +320,7 @@ const ProgressTrackerPage: React.FC = () => {
 
                 <div className={`rounded-2xl px-3 py-2 text-right ${isDone ? 'bg-emerald-50 text-emerald-700' : isStarted ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em]">Progress</p>
-                  <p className="text-2xl font-black">{percentage}%</p>
+                  <p className="text-2xl font-black leading-none">{percentage}%</p>
                 </div>
               </div>
 
@@ -338,6 +343,7 @@ const ProgressTrackerPage: React.FC = () => {
             </article>
           );
         })}
+        </div>
       </section>
     </div>
   );
