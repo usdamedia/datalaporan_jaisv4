@@ -5,11 +5,12 @@ import DepartmentCard from './components/DepartmentCard';
 import FormEntry from './components/FormEntry';
 import DigitalizationPage from './components/DigitalizationPage';
 import ProgressTrackerPage from './components/ProgressTrackerPage';
+import AnnualReportContentsPage from './components/AnnualReportContentsPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
 import { DEPARTMENTS } from './data/departments';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3 } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
 const PROGRESS_TRACKER_PASSWORD = 'bpnpj@is2026';
@@ -21,6 +22,7 @@ export default function App() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [showDigitalization, setShowDigitalization] = useState(false);
   const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const [showAnnualContents, setShowAnnualContents] = useState(false);
 
   // Auto-show tutorial logic (max 3 times per day)
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function App() {
         showSubUnitModal?: boolean;
         showDigitalization?: boolean;
         showProgressTracker?: boolean;
+        showAnnualContents?: boolean;
       };
 
       if (parsed.showDigitalization) {
@@ -78,6 +81,11 @@ export default function App() {
 
       if (parsed.showProgressTracker) {
         setShowProgressTracker(true);
+        return;
+      }
+
+      if (parsed.showAnnualContents) {
+        setShowAnnualContents(true);
         return;
       }
 
@@ -113,6 +121,7 @@ export default function App() {
           JSON.stringify({
             showDigitalization: true,
             showProgressTracker: false,
+            showAnnualContents: false,
           })
         );
         return;
@@ -124,6 +133,19 @@ export default function App() {
           JSON.stringify({
             showDigitalization: false,
             showProgressTracker: true,
+            showAnnualContents: false,
+          })
+        );
+        return;
+      }
+
+      if (showAnnualContents) {
+        sessionStorage.setItem(
+          NAVIGATION_STORAGE_KEY,
+          JSON.stringify({
+            showDigitalization: false,
+            showProgressTracker: false,
+            showAnnualContents: true,
           })
         );
         return;
@@ -142,12 +164,13 @@ export default function App() {
           showSubUnitModal,
           showDigitalization: false,
           showProgressTracker: false,
+          showAnnualContents: false,
         })
       );
     } catch (error) {
       console.error('Failed to persist navigation state', error);
     }
-  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker]);
+  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker, showAnnualContents]);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
@@ -174,6 +197,7 @@ export default function App() {
     setShowSubUnitModal(false);
     setShowDigitalization(false);
     setShowProgressTracker(false);
+    setShowAnnualContents(false);
   };
 
   const handleOpenProgressTracker = () => {
@@ -200,9 +224,9 @@ export default function App() {
     <WebViewOnlyGuard>
       <MaintenanceGuard>
         <Layout 
-          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker} 
+          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents} 
           onBack={resetSelection}
-          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : 'Utama'}
+          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : 'Utama'}
         >
         {showTutorial && (
           <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -356,6 +380,8 @@ export default function App() {
           <DigitalizationPage />
         ) : showProgressTracker ? (
           <ProgressTrackerPage />
+        ) : showAnnualContents ? (
+          <AnnualReportContentsPage />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
@@ -405,6 +431,14 @@ export default function App() {
                 >
                   <BarChart3 className="w-4 h-4" />
                   Progress Tracker
+                </button>
+
+                <button
+                  onClick={() => setShowAnnualContents(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-indigo-600 bg-indigo-600 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:border-indigo-700 hover:bg-indigo-700 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
+                >
+                  <LayoutList className="w-4 h-4" />
+                  Isi Kandungan Laporan
                 </button>
               </div>
 
