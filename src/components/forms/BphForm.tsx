@@ -52,6 +52,105 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     }),
     []
   );
+  const FIXED_SPHM_PERMOHONAN_VALUES = useMemo(
+    () => ({
+      rumahSembelihan: 22,
+      produk: 263,
+      premis: 379,
+      oem: 8,
+      logistik: 4,
+      barangGunaan: 1,
+      total: 22 + 263 + 379 + 8 + 4 + 1
+    }),
+    []
+  );
+  const FIXED_SPHM_AKTIF_VALUES = useMemo(
+    () => ({
+      rumahSembelihan: 26,
+      produk: 461,
+      premis: 547,
+      oem: 32,
+      logistik: 8,
+      barangGunaan: 2,
+      total: 26 + 461 + 547 + 32 + 8 + 2
+    }),
+    []
+  );
+  const FIXED_BPH_LAWATAN_VALUES = useMemo(
+    () => ([
+      {
+        jenis: 'keluar',
+        tajukAgensi: 'Lawatan Malaysian International Halal Showcase (MIHAS)',
+        tarikh: '2025-09-16',
+        tempat: 'MITEC, Kuala Lumpur',
+        objektif: 'Pendedahan industri: menambah pengetahuan tentang trend, inovasi dan teknologi terkini dalam ekosistem halal; promosi antarabangsa serta penanda aras (benchmarking) piawaian industri daripada pempamer antarabangsa.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Lawatan dari pihak JAKIM Putrajaya, Jabatan Agama Islam Negeri ke Zon Halal Lundu',
+        tarikh: '2025-03-02',
+        tempat: 'Mecca',
+        objektif: 'Menghadiri Mecca Halal Forum dan mempromosi peniaga serta produk Sarawak di peringkat antarabangsa.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Kunjungan Hormat Delegasi Centexs Commercial Sarawak ke Jabatan Agama Islam Sarawak',
+        tarikh: '2025-10-03',
+        tempat: 'ARAS 12, MTAHMS',
+        objektif: 'Mempergiat dan memperluaskan bakat dan pendidikan halal ke Centex Sarawak.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Perbincangan bersama Haltex Group PTE LTD Limited',
+        tarikh: '2025-07-04',
+        tempat: 'ARAS 12, MTAHMS',
+        objektif: 'Menjalinkan kerjasama bersama JAIS bagi perundingan, latihan dan pembangunan industri halal.',
+      },
+      {
+        jenis: 'keluar',
+        tajukAgensi: 'Kunjungan Hormat pihak Akademi Pengajian Islam Kontemporari (ACIS) UiTM, Shah Alam ke BPH, JAIS',
+        tarikh: '2025-05-20',
+        tempat: 'ARAS 12, MTAHMS',
+        objektif: 'Menyokong dari segi pendidikan halal sedia ada dan kursus baharu yang bakal ditubuhkan.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Taklimat kerjasama Pengurusan Halal UiTM Sarawak dan BPH, JAIS',
+        tarikh: '2025-07-10',
+        tempat: 'ARAS 12, MTAHMS',
+        objektif: 'Mengadakan perbincangan secara telus berkenaan pendidikan dan kerjasama antara UiTM Sarawak dengan BPH.',
+      },
+      {
+        jenis: 'keluar',
+        tajukAgensi: 'Lawatan Penanda Aras Pensijilan Halal Industri Kotej di Negeri Sembilan & Lawatan ke Pusat Analisis Halal Makmal (MYHAC) JAKIM',
+        tarikh: '2025-04-17',
+        tempat: 'Negeri Sembilan',
+        objektif: 'Mempelajari berkenaan industri kotej berkaitan halal di Negeri Sembilan dan mengadakan lawatan di MYHAC JAKIM.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Kunjungan Hormat Pihak Halalpreneur Sarawak ke Bahagian Pengurusan Halal, JAIS',
+        tarikh: '2025-09-09',
+        tempat: 'ARAS 12, MTAHMS',
+        objektif: 'Mengadakan perbincangan dan kolaborasi bersama dengan BPH.',
+      },
+      {
+        jenis: 'keluar',
+        tajukAgensi: 'Mengadakan Perbincangan Meja Bulat bersama Panel Pakar Halal JAKIM bersama BPH, JAIS & MPC bagi keberkesanan ISPHM di Sarawak',
+        tarikh: '2025-10-29',
+        tempat: 'Hotel Zenith, Putrajaya',
+        objektif: 'Mengadakan perbincangan meja bulat bersama JAKIM bagi menangani isu Mye-Halal untuk mencapai inisiatif Pensijilan Halal Malaysia.',
+      },
+      {
+        jenis: 'masuk',
+        tajukAgensi: 'Menjadi Tuan Rumah kepada Mesyuarat Jawatankuasa Pelaksana Pensijilan Halal JAKIM Bil.3/2025',
+        tarikh: '2025-10-28',
+        tempat: 'Waterfront Hotel, Kuching',
+        objektif: 'Menjadi tuan rumah bagi mesyuarat pelaksana pensijilan halal yang dihadiri oleh pihak JAKIM, JAIN dan MAIN.',
+      },
+    ]),
+    []
+  );
 
   const initialState = {
     tarikh: '2026-04-06',
@@ -186,6 +285,93 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
     });
   }, [FIXED_MONITORING_VALUES, setFormData]);
 
+  useEffect(() => {
+    setFormData((prev: any) => {
+      if (!prev?.bph?.sphm) return prev;
+
+      const currentPermohonanSkim = prev.bph.sphm.permohonanSkim || {};
+      const needsUpdate =
+        String(currentPermohonanSkim.rumahSembelihan ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.rumahSembelihan) ||
+        String(currentPermohonanSkim.produk ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.produk) ||
+        String(currentPermohonanSkim.premis ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.premis) ||
+        String(currentPermohonanSkim.oem ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.oem) ||
+        String(currentPermohonanSkim.logistik ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.logistik) ||
+        String(currentPermohonanSkim.barangGunaan ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan) ||
+        String(prev.bph.sphm.permohonan ?? '') !== String(FIXED_SPHM_PERMOHONAN_VALUES.total);
+
+      if (!needsUpdate) return prev;
+
+      return {
+        ...prev,
+        bph: {
+          ...prev.bph,
+          sphm: {
+            ...prev.bph.sphm,
+            permohonan: String(FIXED_SPHM_PERMOHONAN_VALUES.total),
+            permohonanSkim: {
+              ...currentPermohonanSkim,
+              rumahSembelihan: String(FIXED_SPHM_PERMOHONAN_VALUES.rumahSembelihan),
+              produk: String(FIXED_SPHM_PERMOHONAN_VALUES.produk),
+              premis: String(FIXED_SPHM_PERMOHONAN_VALUES.premis),
+              oem: String(FIXED_SPHM_PERMOHONAN_VALUES.oem),
+              logistik: String(FIXED_SPHM_PERMOHONAN_VALUES.logistik),
+              barangGunaan: String(FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan)
+            }
+          }
+        }
+      };
+    });
+  }, [FIXED_SPHM_PERMOHONAN_VALUES, setFormData]);
+
+  useEffect(() => {
+    setFormData((prev: any) => {
+      if (!prev?.bph?.sphm?.skim) return prev;
+
+      const currentSkim = prev.bph.sphm.skim || {};
+      const needsUpdate =
+        String(currentSkim.rumahSembelihan ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.rumahSembelihan) ||
+        String(currentSkim.produk ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.produk) ||
+        String(currentSkim.premis ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.premis) ||
+        String(currentSkim.oem ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.oem) ||
+        String(currentSkim.logistik ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.logistik) ||
+        String(currentSkim.barangGunaan ?? '') !== String(FIXED_SPHM_AKTIF_VALUES.barangGunaan);
+
+      if (!needsUpdate) return prev;
+
+      return {
+        ...prev,
+        bph: {
+          ...prev.bph,
+          sphm: {
+            ...prev.bph.sphm,
+            skim: {
+              ...currentSkim,
+              rumahSembelihan: String(FIXED_SPHM_AKTIF_VALUES.rumahSembelihan),
+              produk: String(FIXED_SPHM_AKTIF_VALUES.produk),
+              premis: String(FIXED_SPHM_AKTIF_VALUES.premis),
+              oem: String(FIXED_SPHM_AKTIF_VALUES.oem),
+              logistik: String(FIXED_SPHM_AKTIF_VALUES.logistik),
+              barangGunaan: String(FIXED_SPHM_AKTIF_VALUES.barangGunaan)
+            }
+          }
+        }
+      };
+    });
+  }, [FIXED_SPHM_AKTIF_VALUES, setFormData]);
+
+  useEffect(() => {
+    setFormData((prev: any) => {
+      const currentLawatan = prev?.lawatan || [];
+      const nextLawatan = FIXED_BPH_LAWATAN_VALUES;
+      const sameLawatan = JSON.stringify(currentLawatan) === JSON.stringify(nextLawatan);
+      if (sameLawatan) return prev;
+      return {
+        ...prev,
+        lawatan: nextLawatan
+      };
+    });
+  }, [FIXED_BPH_LAWATAN_VALUES, setFormData]);
+
   const updateBph = (path: string[], value: any) => {
     setFormData((prev: any) => {
       const newData = JSON.parse(JSON.stringify(prev));
@@ -203,7 +389,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
   const chartData = [
     { name: '2024', permohonan: BPH_2024_REFERENCE.sphm.permohonan, aktif: BPH_2024_REFERENCE.sphm.aktif },
-    { name: '2025', permohonan: sphmTotalPermohonan || BPH_2025_REFERENCE.sphm.permohonan, aktif: sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif }
+    { name: '2025', permohonan: FIXED_SPHM_PERMOHONAN_VALUES.total, aktif: FIXED_SPHM_AKTIF_VALUES.total }
   ];
 
   if (!formData.bph) return null;
@@ -248,12 +434,12 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {[
-                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: 'Ref 24: -' },
-                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: 'Ref 24: -' },
-                        { label: 'Premis Makanan', field: 'premis', ref: 'Ref 24: -' },
-                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: 'Ref 24: -' },
-                        { label: 'Logistik', field: 'logistik', ref: 'Ref 24: -' },
-                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Ref 24: -' },
+                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.rumahSembelihan },
+                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.produk },
+                        { label: 'Premis Makanan', field: 'premis', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.premis },
+                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.oem },
+                        { label: 'Logistik', field: 'logistik', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.logistik },
+                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Ref 24: -', value: FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan },
                       ].map(item => (
                         <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
@@ -261,9 +447,9 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                           <td className="px-4 py-2">
                             <input 
                               type="number" 
-                              value={formData.bph.sphm.permohonanSkim?.[item.field] || ''} 
-                              onChange={(e) => updateBph(['sphm', 'permohonanSkim', item.field], e.target.value)} 
-                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none transition-all shadow-sm" 
+                              value={item.value}
+                              readOnly
+                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
                             />
                           </td>
                         </tr>
@@ -272,7 +458,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     <tfoot>
                       <tr className="bg-olive-50/50 border-t border-olive-100">
                         <td colSpan={2} className="px-4 py-3 text-[10px] font-black uppercase text-olive-900">Jumlah Permohonan</td>
-                        <td className="px-4 py-3 text-lg font-black text-olive-900 text-center">{sphmTotalPermohonan}</td>
+                        <td className="px-4 py-3 text-lg font-black text-olive-900 text-center">{FIXED_SPHM_PERMOHONAN_VALUES.total}</td>
                       </tr>
                     </tfoot>
                   </table>
@@ -295,12 +481,12 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {[
-                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan },
-                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk },
-                        { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis },
-                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem },
-                        { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik },
-                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan },
+                        { label: 'Rumah Sembelihan', field: 'rumahSembelihan', ref: BPH_2024_REFERENCE.sphm.skim.rumahSembelihan, value: FIXED_SPHM_AKTIF_VALUES.rumahSembelihan },
+                        { label: 'Produk Makanan / Minuman', field: 'produk', ref: BPH_2024_REFERENCE.sphm.skim.produk, value: FIXED_SPHM_AKTIF_VALUES.produk },
+                        { label: 'Premis Makanan', field: 'premis', ref: BPH_2024_REFERENCE.sphm.skim.premis, value: FIXED_SPHM_AKTIF_VALUES.premis },
+                        { label: 'Skim Pengilangan Kontrak (OEM)', field: 'oem', ref: BPH_2024_REFERENCE.sphm.skim.oem, value: FIXED_SPHM_AKTIF_VALUES.oem },
+                        { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik, value: FIXED_SPHM_AKTIF_VALUES.logistik },
+                        { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan, value: FIXED_SPHM_AKTIF_VALUES.barangGunaan },
                       ].map(item => (
                         <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
@@ -308,9 +494,9 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                           <td className="px-4 py-2">
                             <input 
                               type="number" 
-                              value={formData.bph.sphm.skim[item.field]} 
-                              onChange={(e) => updateBph(['sphm', 'skim', item.field], e.target.value)} 
-                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none transition-all shadow-sm" 
+                              value={item.value}
+                              readOnly
+                              className="w-full max-w-[80px] mx-auto block p-1.5 bg-gray-100 border border-gray-200 rounded-lg text-xs font-bold text-center text-zus-900 outline-none pointer-events-none" 
                             />
                           </td>
                         </tr>
@@ -319,7 +505,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                     <tfoot>
                       <tr className="bg-[#5A5A40] border-t border-gray-700">
                         <td colSpan={2} className="px-4 py-3 text-[10px] font-black uppercase text-zus-gold">Jumlah Pemilik Aktif</td>
-                        <td className="px-4 py-3 text-lg font-black text-zus-gold text-center">{sphmTotalAktif || BPH_2025_REFERENCE.sphm.aktif}</td>
+                        <td className="px-4 py-3 text-lg font-black text-zus-gold text-center">{FIXED_SPHM_AKTIF_VALUES.total}</td>
                       </tr>
                     </tfoot>
                   </table>
@@ -578,6 +764,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
           updateLawatan={updateLawatan} 
           handleSave={handleSave}
           isSaving={isSaving}
+          readOnly
         />
       </div>
       </div>

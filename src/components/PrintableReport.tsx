@@ -2803,9 +2803,9 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           </h3>
           <div className="h-16 border-b border-gray-300"></div>
           <div className="space-y-1">
-            <div className="text-[10px] font-bold text-zus-900">Nama: <span className="font-medium">................................</span></div>
-            <div className="text-[10px] font-bold text-zus-900">Jawatan: <span className="font-medium">................................</span></div>
-            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">................................</span></div>
+            <div className="text-[10px] font-bold text-zus-900">Nama: <span className="font-medium">{formData.disahkanOleh || '................................'}</span></div>
+            <div className="text-[10px] font-bold text-zus-900">Jawatan: <span className="font-medium">{formData.disahkanJawatan || '................................'}</span></div>
+            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">{formData.disahkanTarikh ? formatDateDDMMYYYYMY(formData.disahkanTarikh) : '................................'}</span></div>
           </div>
         </div>
       </div>

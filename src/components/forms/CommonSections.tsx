@@ -67,6 +67,45 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         />
       </div>
     </div>
+
+    <div className="mt-6 border-t border-gray-100 pt-6">
+      <h4 className="text-sm font-black text-zus-900 sentence-case">Disahkan Oleh</h4>
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-500 sentence-case">Nama</label>
+          <input
+            type="text"
+            name="disahkanOleh"
+            placeholder="Nama penyemak / penyelaras"
+            value={formData.disahkanOleh || ''}
+            onChange={handleInputChange}
+            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-500 sentence-case">Jawatan</label>
+          <input
+            type="text"
+            name="disahkanJawatan"
+            placeholder="Jawatan pegawai pengesah"
+            value={formData.disahkanJawatan || ''}
+            onChange={handleInputChange}
+            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-500 sentence-case">Tarikh</label>
+          <input
+            type="date"
+            lang="en-GB"
+            name="disahkanTarikh"
+            value={formData.disahkanTarikh || ''}
+            onChange={handleInputChange}
+            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+          />
+        </div>
+      </div>
+    </div>
   </section>
 );
 
@@ -132,9 +171,10 @@ export const LawatanSection: React.FC<{
   removeLawatan: any, 
   updateLawatan: any,
   handleSave?: any,
-  isSaving?: boolean
+  isSaving?: boolean,
+  readOnly?: boolean
 }> = ({ 
-  formData, addLawatan, removeLawatan, updateLawatan, handleSave, isSaving 
+  formData, addLawatan, removeLawatan, updateLawatan, handleSave, isSaving, readOnly = false
 }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
@@ -145,7 +185,7 @@ export const LawatanSection: React.FC<{
         <h3 className="text-lg font-bold text-zus-900 sentence-case">Rekod lawatan</h3>
       </div>
       <div className="flex items-center gap-4">
-        {formData.lawatan && formData.lawatan.length > 0 && handleSave && (
+        {formData.lawatan && formData.lawatan.length > 0 && handleSave && !readOnly && (
           <button 
             onClick={handleSave}
             disabled={isSaving}
@@ -155,12 +195,14 @@ export const LawatanSection: React.FC<{
             Simpan rekod
           </button>
         )}
-        <button 
-          onClick={addLawatan}
-          className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs sentence-case tracking-wider transition-colors"
-        >
-          <Plus className="w-4 h-4" /> Tambah lawatan
-        </button>
+        {!readOnly && (
+          <button 
+            onClick={addLawatan}
+            className="flex items-center gap-1.5 text-zus-gold hover:text-zus-900 font-bold text-xs sentence-case tracking-wider transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Tambah lawatan
+          </button>
+        )}
       </div>
     </div>
 
@@ -173,12 +215,14 @@ export const LawatanSection: React.FC<{
       <div className="space-y-4">
         {formData.lawatan.map((item: any, index: number) => (
           <div key={index} className="p-5 border border-gray-100 rounded-2xl bg-gray-50/50 relative group animate-slide-in-right">
-            <button 
-              onClick={() => removeLawatan(index)}
-              className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {!readOnly && (
+              <button 
+                onClick={() => removeLawatan(index)}
+                className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="space-y-1.5">
@@ -186,7 +230,8 @@ export const LawatanSection: React.FC<{
                 <select 
                   value={item.jenis}
                   onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
-                  className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-zus-gold/20"
+                  disabled={readOnly}
+                  className={`w-full p-2.5 border border-gray-200 rounded-xl text-xs font-bold outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
                 >
                   <option value="keluar">Lawatan Keluar</option>
                   <option value="masuk">Lawatan Masuk</option>
@@ -201,7 +246,8 @@ export const LawatanSection: React.FC<{
                   ref={(el) => autoGrowTextarea(el)}
                   placeholder="Contoh: Lawatan Kerja ke MIS"
                   rows={1}
-                  className="w-full min-h-[44px] overflow-hidden p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-none"
+                  readOnly={readOnly}
+                  className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
                 />
               </div>
             </div>
@@ -215,14 +261,16 @@ export const LawatanSection: React.FC<{
                     lang="en-GB"
                     value={item.tarikh}
                     onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
-                    className="flex-1 p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
+                    disabled={readOnly}
+                    className={`flex-1 p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
                   />
                   <textarea 
                     value={item.tempat}
                     onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
                     placeholder="Tempat"
                     rows={2}
-                    className="flex-1 min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
+                    readOnly={readOnly}
+                    className={`flex-1 min-h-[74px] p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-y ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
                   />
                 </div>
               </div>
@@ -235,7 +283,8 @@ export const LawatanSection: React.FC<{
                   ref={(el) => autoGrowTextarea(el)}
                   placeholder="Tujuan lawatan..."
                   rows={1}
-                  className="w-full min-h-[44px] overflow-hidden p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-none"
+                  readOnly={readOnly}
+                  className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
                 />
               </div>
             </div>

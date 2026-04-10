@@ -2825,9 +2825,9 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <Text style={styles.signatureLabel}>DISAHKAN OLEH:</Text>
             <View style={{ height: 40 }} />
             <View style={styles.signatureLine} />
-            <Text style={styles.signatureDetail}>Nama: ................................</Text>
-            <Text style={styles.signatureDetail}>Jawatan: ................................</Text>
-            <Text style={styles.signatureDetail}>Tarikh: ................................</Text>
+            <Text style={styles.signatureDetail}>Nama: {formData.disahkanOleh || '................................'}</Text>
+            <Text style={styles.signatureDetail}>Jawatan: {formData.disahkanJawatan || '................................'}</Text>
+            <Text style={styles.signatureDetail}>Tarikh: {formData.disahkanTarikh ? formatDateDDMMYYYYMY(formData.disahkanTarikh) : '................................'}</Text>
           </View>
         </View>
 
