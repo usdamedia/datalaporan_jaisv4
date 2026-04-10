@@ -202,7 +202,7 @@ const ProgressTrackerPage: React.FC = () => {
     return Math.round(sum / trackerItems.length);
   }, [trackerItems]);
 
-  const completedItems = trackerItems.filter((item) => item.progress.percentage === 100).length;
+  const completedItems = trackerItems.filter((item) => item.completed || item.progress.percentage === 100).length;
   const inProgressItems = trackerItems.filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100).length;
   const whatsappSummaryText = React.useMemo(
     () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp),
@@ -309,7 +309,8 @@ const ProgressTrackerPage: React.FC = () => {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {trackerItems.map((item, index) => {
           const { percentage, completedCount, totalCount, statusLabel } = item.progress;
-          const isDone = percentage === 100;
+          const isDone = Boolean(item.completed || percentage === 100);
+          const resolvedStatusLabel = item.completed ? 'Selesai' : statusLabel;
           const isStarted = percentage > 0 && percentage < 100;
 
           return (
@@ -329,7 +330,7 @@ const ProgressTrackerPage: React.FC = () => {
                     <h3 className="text-base font-black leading-6 text-slate-900">{item.name}</h3>
                     <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
                       {item.subUnits?.length ? <Layers3 className="h-3.5 w-3.5" /> : <Gauge className="h-3.5 w-3.5" />}
-                      {statusLabel}
+                      {resolvedStatusLabel}
                     </div>
                   </div>
                 </div>

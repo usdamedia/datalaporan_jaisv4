@@ -419,6 +419,7 @@ export default function App() {
                       id={dept.id}
                       name={dept.name}
                       active={dept.active}
+                      completed={dept.completed}
                       hasSubUnits={!!dept.subUnits}
                       onClick={() => handleDeptClick(dept)}
                       />
