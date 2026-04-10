@@ -198,6 +198,8 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const totalPusatAlQuran2025 = (formData.dakwah.alQuran?.pusatPemuliaan || []).filter(
     (item: { lokasi?: string; bahagian?: string }) => item?.lokasi?.trim() || item?.bahagian?.trim()
   ).length;
+  const totalMediaSosial2025 = mediaSosialLockedItems.reduce((sum, item) => sum + item.value, 0);
+  const totalDakwahMedia2025 = DAKWAH_2025_MEDIA_CURRENT.radio + DAKWAH_2025_MEDIA_CURRENT.internet + totalMediaSosial2025;
 
   return (
     <FormLayout
@@ -485,59 +487,59 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       </section>
 
       {/* Dakwah Melalui Media */}
-      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-          <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
-            <Radio className="w-5 h-5" />
+      <section className="overflow-hidden rounded-2xl border border-[#f2d9be] bg-white shadow-sm md:rounded-3xl">
+        <div className="border-b border-[#f2d9be] bg-gradient-to-r from-[#fff7ed] via-[#fffaf4] to-[#fffdf8] px-6 py-6 md:px-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ffedd5] text-[#c2410c]">
+                <Radio className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-zus-900">Dakwah Melalui Media (2025)</h3>
+                <p className="text-sm font-medium text-slate-600">Data 2025 disediakan untuk rujukan rasmi.</p>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-emerald-700">
+              <FileCheck className="h-4 w-4" />
+              Data 2025
+            </div>
           </div>
-          <h3 className="text-lg font-bold text-zus-900">Dakwah Melalui Media (2025)</h3>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl border border-[#f4dfc6] bg-white px-4 py-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Radio</p>
+              <p className="mt-1 text-3xl font-black text-slate-900">{DAKWAH_2025_MEDIA_CURRENT.radio}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-500">Rujukan 2024: {DAKWAH_2024_REFERENCE.media.radio}</p>
+            </div>
+            <div className="rounded-2xl border border-[#f4dfc6] bg-white px-4 py-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Internet</p>
+              <p className="mt-1 text-3xl font-black text-slate-900">{DAKWAH_2025_MEDIA_CURRENT.internet}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-500">Rujukan 2024: {DAKWAH_2024_REFERENCE.media.internet}</p>
+            </div>
+            <div className="rounded-2xl border border-[#f4dfc6] bg-[#fff8ef] px-4 py-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Jumlah Keseluruhan</p>
+              <p className="mt-1 text-3xl font-black text-[#9a3412]">{totalDakwahMedia2025}</p>
+              <p className="mt-2 text-xs font-semibold text-slate-500">Radio + Internet + Media Sosial</p>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="grid grid-cols-3 items-center gap-4">
-            <label className="text-xs font-bold text-gray-500">Radio</label>
-            <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-              2024: {DAKWAH_2024_REFERENCE.media.radio}
-            </div>
-            <input 
-              type="number"
-              value={formData.dakwah.mediaRadio2025}
-              readOnly
-              className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-            />
-          </div>
-          <div className="grid grid-cols-3 items-center gap-4">
-            <label className="text-xs font-bold text-gray-500">Internet</label>
-            <div className="text-center text-[10px] font-bold text-gray-400 bg-gray-100 py-1 rounded-md">
-              2024: {DAKWAH_2024_REFERENCE.media.internet}
-            </div>
-            <input 
-              type="number"
-              value={formData.dakwah.mediaInternet2025}
-              readOnly
-              className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-            />
-          </div>
-        </div>
-
-        <div className="mt-8 rounded-[1.9rem] border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-5 md:p-6 shadow-sm">
+        <div className="bg-gradient-to-br from-orange-50 via-white to-amber-50 px-6 py-6 md:px-8">
           <div className="flex flex-col gap-4 border-b border-orange-100 pb-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">
-              Medium Media Sosial (Sekiranya Ada)
-              </h4>
+              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">Medium Media Sosial (Sekiranya Ada)</h4>
               <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-orange-900/70">
-                Data media sosial tahun 2025 ini telah disahkan dan dikunci sebagai rujukan rasmi.
+                Nilai 2025 dipaparkan untuk rujukan sahaja. Pengguna tidak boleh ubah data ini.
               </p>
             </div>
-            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-orange-100 bg-white/80 p-3 text-center">
+            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-orange-100 bg-white/90 p-3 text-center">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Platform</p>
                 <p className="mt-1 text-lg font-black text-slate-800">{mediaSosialLockedItems.length}</p>
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Jenis</p>
-                <p className="mt-1 text-lg font-black text-orange-700">Media Sosial</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Jumlah</p>
+                <p className="mt-1 text-lg font-black text-orange-700">{totalMediaSosial2025}</p>
               </div>
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Tahun</p>
@@ -548,11 +550,11 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
 
           <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {mediaSosialLockedItems.map((item) => (
-              <div key={item.key} className="rounded-[1.5rem] border border-orange-100 bg-white p-4 shadow-[0_10px_30px_rgba(249,115,22,0.08)]">
+              <div key={item.key} className="rounded-[1.5rem] border border-orange-100 bg-white p-4 shadow-[0_10px_26px_rgba(249,115,22,0.08)]">
                 <div className="flex items-center justify-between gap-3">
                   <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
-                  <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-orange-700">
-                    Nilai
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700">
+                    2025
                   </span>
                 </div>
                 <input
@@ -561,8 +563,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                   inputMode="numeric"
                   value={formData.dakwah.mediaSosial?.[item.key] ?? item.value}
                   readOnly
-                  placeholder="0"
-                  className="mt-3 w-full rounded-2xl border border-orange-100 bg-orange-50/30 px-4 py-3 text-center text-lg font-black text-slate-800 outline-none transition focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100"
+                  className="mt-3 w-full rounded-2xl border border-orange-100 bg-orange-50/40 px-4 py-3 text-center text-lg font-black text-slate-800 outline-none"
                 />
               </div>
             ))}
