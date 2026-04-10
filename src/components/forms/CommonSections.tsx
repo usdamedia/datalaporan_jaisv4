@@ -187,12 +187,12 @@ export const LawatanSection: React.FC<{
               </div>
               <div className="md:col-span-2 space-y-1.5">
                 <label className="text-[10px] font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
-                <input 
-                  type="text"
+                <textarea 
                   value={item.tajukAgensi}
                   onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
                   placeholder="Contoh: Lawatan Kerja ke MIS"
-                  className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
+                  rows={2}
+                  className="w-full min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
                 />
               </div>
             </div>
@@ -207,23 +207,23 @@ export const LawatanSection: React.FC<{
                     onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
                     className="flex-1 p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
                   />
-                  <input 
-                    type="text"
+                  <textarea 
                     value={item.tempat}
                     onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
                     placeholder="Tempat"
-                    className="flex-1 p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
+                    rows={2}
+                    className="flex-1 min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
                   />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-gray-400 sentence-case">Objektif</label>
-                <input 
-                  type="text"
+                <textarea 
                   value={item.objektif}
                   onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
                   placeholder="Tujuan lawatan..."
-                  className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-zus-gold/20"
+                  rows={2}
+                  className="w-full min-h-[74px] p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none focus:ring-2 focus:ring-zus-gold/20 resize-y"
                 />
               </div>
             </div>
