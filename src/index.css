@@ -451,6 +451,31 @@
   }
 }
 
+/* MOBILE RESPONSIVE TUNING */
+@media (max-width: 640px) {
+  html,
+  body,
+  #root {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-typography .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+  .app-typography .overflow-x-auto > table {
+    min-width: max(420px, 100%);
+  }
+
+  .app-typography input,
+  .app-typography select,
+  .app-typography textarea {
+    font-size: 16px !important;
+  }
+}
+
 /* PRINT STYLES */
 @media print {
   @page {

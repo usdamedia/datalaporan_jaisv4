@@ -37,14 +37,14 @@ const TransportManagement: React.FC<TransportManagementProps> = ({ data2025, onC
       </div>
 
       {/* Z-Pattern Visual Grid (2024 Stats) */}
-      <div className="grid grid-cols-2 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
         {stats2024.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className={`${stat.color} rounded-3xl p-6 text-white shadow-lg relative overflow-hidden group h-40 flex flex-col justify-between`}
+            className={`${stat.color} relative flex h-36 flex-col justify-between overflow-hidden rounded-3xl p-5 text-white shadow-lg group sm:h-40 sm:p-6`}
           >
             <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity">
               {stat.icon}
@@ -55,7 +55,7 @@ const TransportManagement: React.FC<TransportManagementProps> = ({ data2025, onC
             
             <p className="text-xs font-black uppercase tracking-widest text-teal-100">{stat.label}</p>
             <div className="flex items-end justify-between">
-              <h4 className="text-5xl font-black text-[#FDE047] tracking-tighter">{stat.value}</h4>
+              <h4 className="text-4xl font-black tracking-tighter text-[#FDE047] sm:text-5xl">{stat.value}</h4>
               <span className="text-[10px] font-bold text-teal-100/60 uppercase">Data 2024</span>
             </div>
           </motion.div>
@@ -100,7 +100,7 @@ const TransportManagement: React.FC<TransportManagementProps> = ({ data2025, onC
         <div className="mt-8 flex justify-end">
           <button
             onClick={onSave}
-            className="flex items-center gap-2 px-8 py-4 bg-teal-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-teal-500 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] transition-all active:scale-95 group"
+            className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-3 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-teal-500 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] active:scale-95 sm:w-auto sm:px-8 sm:py-4 sm:text-sm"
           >
             <Save className="w-5 h-5 group-hover:animate-pulse" />
             Simpan Data 2025

@@ -209,7 +209,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <p className="text-teal-100 text-sm mb-6">
             Peningkatan keberkesanan operasi melalui maklumat awal awam (BTAM).
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
               <p className="text-[10px] uppercase tracking-wider font-bold text-teal-300 mb-1">BTAM 2025</p>
               <p className="text-2xl font-black">{formData.bpks.statistik.btam || 0}</p>

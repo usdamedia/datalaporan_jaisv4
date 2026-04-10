@@ -209,7 +209,7 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
 
         <div className="rounded-[1.6rem] border border-slate-200 bg-slate-50 p-6">
           <h3 className="text-sm font-black uppercase tracking-[0.18em] text-slate-700">Ringkasan Input 2025</h3>
-          <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {REFERENCE_ROWS.map((row) => (
               <div key={row.key} className="rounded-2xl border border-slate-200 bg-white p-4">
                 <p className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400">{row.label}</p>

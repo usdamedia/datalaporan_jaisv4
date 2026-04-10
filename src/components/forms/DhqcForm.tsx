@@ -167,7 +167,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
           <div className="rounded-[1.75rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
             <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#f7d982]">Rujukan Ringkas 2024</p>
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
               <div className="rounded-2xl bg-black/10 p-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-white/60">Guru Al-Quran</p>
                 <p className="mt-1 text-2xl font-black">{DHQC_2024_REFERENCE.guruAlQuran.total}</p>

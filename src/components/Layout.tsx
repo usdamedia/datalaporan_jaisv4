@@ -124,8 +124,8 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
     <div className="app-typography min-h-screen flex flex-col" style={appTypographyStyle}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div className="mx-auto max-w-[62.5rem] px-4 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex justify-between items-center h-16 md:h-20 lg:h-22">
+        <div className="mx-auto max-w-[62.5rem] px-3 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex h-16 items-center justify-between gap-2 md:h-20 lg:h-22">
             <div className="flex items-center gap-4">
               {showBack && (
                 <button
@@ -152,8 +152,8 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-1.5 py-1 shadow-sm font-sans">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <div className="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-1 py-1 shadow-sm font-sans sm:px-1.5">
                 <button
                   type="button"
                   onClick={() => setFontScale('small')}
@@ -194,15 +194,15 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                   {fontScale === 'extraLarge' ? 'A++' : 'A+'}
                 </button>
               </div>
-              <div className="hidden sm:block text-right mr-3">
+              <div className="hidden md:block text-right mr-2 lg:mr-3">
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Status Sistem</p>
                 <p className="text-xs text-green-600 font-bold flex items-center justify-end gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                   Aktif
                 </p>
               </div>
-              <div className="h-8 w-[1px] bg-gray-200 mx-2 hidden sm:block"></div>
-              <div className="bg-zus-gold/10 px-3 py-1 rounded-full border border-zus-gold/20">
+              <div className="h-8 w-[1px] bg-gray-200 mx-1 hidden md:block"></div>
+              <div className="bg-zus-gold/10 px-2 py-1 rounded-full border border-zus-gold/20 sm:px-3">
                 <span className="text-[10px] md:text-xs font-bold text-zus-gold uppercase tracking-wider">
                   {title || 'Utama'}
                 </span>
@@ -212,7 +212,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
         </div>
         {showAnnouncement && (
           <div className="w-full bg-red-700 px-4 py-2 text-white">
-            <div className="mx-auto flex max-w-[62.5rem] items-start gap-4">
+            <div className="mx-auto flex max-w-[62.5rem] items-start gap-3">
               <div className="flex flex-1 flex-wrap items-center justify-center gap-4 text-center leading-tight">
                 {announcementMessages.map((message, index) => (
                   <React.Fragment key={message.text}>
@@ -228,7 +228,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
                 onClick={() => setShowAnnouncement(false)}
                 aria-label="Tutup pengumuman"
                 title="Tutup pengumuman"
-                className="mt-0.5 rounded-full border border-white/40 px-2 py-0.5 text-sm font-bold text-white transition hover:bg-white/20"
+                className="mt-0.5 rounded-full border border-white/40 px-2 py-0.5 text-xs sm:text-sm font-bold text-white transition hover:bg-white/20"
               >
                 X
               </button>

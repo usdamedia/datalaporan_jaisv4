@@ -61,7 +61,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
     <>
       <div className="mx-auto max-w-[62.5rem] animate-fade-in pb-28">
       {/* Form Header */}
-      <div className="mb-12 flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
+      <div className="mb-8 flex flex-col gap-6 sm:mb-10 sm:gap-8 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">
           <button 
             onClick={onBack}
@@ -70,8 +70,8 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Kembali ke Utama
           </button>
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <h2 className="text-xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
               {deptName}
             </h2>
             {isAutoSaving && (
@@ -86,11 +86,11 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row xl:justify-end">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:gap-4 sm:flex-row xl:justify-end">
           <button
             onClick={onSave}
             disabled={isSaving}
-            className="flex min-w-[224px] items-center justify-center gap-4 rounded-[1.35rem] bg-zus-900 px-8 py-4 text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
+            className="flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] bg-zus-900 px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
           >
             {isSaving ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -104,7 +104,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <button
               onClick={handleExportPdf}
               disabled={isExportingPdf}
-              className={`flex min-w-[224px] items-center justify-center gap-4 rounded-[1.35rem] px-8 py-4 text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
+              className={`flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
                 isExportingPdf 
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                   : 'border border-gray-200 bg-white text-zus-900 hover:border-zus-gold hover:bg-slate-50'
