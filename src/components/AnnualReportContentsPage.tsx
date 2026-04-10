@@ -14,8 +14,7 @@ const AnnualReportContentsPage: React.FC = () => {
   return (
     <div className="space-y-8 md:space-y-10">
       <section className="overflow-hidden rounded-[2rem] border border-blue-200 bg-gradient-to-br from-blue-50 via-white to-sky-50 p-6 shadow-sm md:p-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-4xl space-y-3">
+        <div className="max-w-4xl space-y-3">
             <p className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
               <BookOpen className="h-3.5 w-3.5" />
               Single Page Summary
@@ -26,13 +25,6 @@ const AnnualReportContentsPage: React.FC = () => {
             <p className="text-sm font-medium leading-7 text-slate-600 md:text-base">
               Disusun sebagai ringkasan satu halaman yang kemas, moden, formal, dan mudah diimbas untuk rujukan pengurusan.
             </p>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Peranan</p>
-            <p className="mt-1 text-xs font-bold text-slate-700">
-              Pakar Penyusun Kandungan Korporat
-            </p>
-          </div>
         </div>
       </section>
 

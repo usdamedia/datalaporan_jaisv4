@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getTodayIsoMY } from '../utils/dateFormat';
-import { ChevronLeft, LayoutDashboard } from 'lucide-react';
+import { ChevronLeft, ChevronUp, LayoutDashboard } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
   const ANNOUNCEMENT_VIEW_KEY = 'jais_announcement_views_2025';
   const [showAnnouncement, setShowAnnouncement] = useState(false);
+  const [showGoTop, setShowGoTop] = useState(false);
   const announcementMessages = [
     {
       text: 'Data Tidak Ada Disimpan Di Mana-Mana Google Sheet, Anda Perlu Save -> Download PDF -> Tandatangan -> Serah kepada Urus Setia',
@@ -110,6 +111,20 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowGoTop(window.scrollY > 320);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const appTypographyStyle = useMemo(
     () => ({
@@ -261,6 +276,18 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
           </div>
         </div>
       </footer>
+
+      {showGoTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="Go to top"
+          title="Go to top"
+          className="print-hidden fixed bottom-5 right-4 z-[70] inline-flex h-12 w-12 items-center justify-center rounded-full border border-zus-gold/40 bg-zus-900 text-white shadow-[0_14px_30px_rgba(15,35,64,0.3)] transition-all hover:-translate-y-1 hover:bg-zus-800 hover:shadow-[0_18px_34px_rgba(15,35,64,0.35)] active:scale-95 sm:bottom-6 sm:right-6"
+        >
+          <ChevronUp className="h-5 w-5" />
+        </button>
+      )}
     </div>
   );
 };
