@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
 
 export const useFormLogic = (deptName: string, initialState: any) => {
-  const [formData, setFormData] = useState<any>(initialState);
+  const [formData, setRawFormData] = useState<any>(() => normalizeZeroValuesForInputs(initialState));
   const [isSaving, setIsSaving] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -46,7 +47,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       try {
         const parsed = JSON.parse(savedData);
         setSaveError(null);
-        setFormData((prev: any) => ({
+        setRawFormData((prev: any) => normalizeZeroValuesForInputs({
           ...prev,
           ...parsed,
           // Deep merge for specific objects if needed
@@ -88,6 +89,13 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     };
   }, [deptName, storageKey]);
 
+  const setFormData = useCallback((value: any) => {
+    setRawFormData((prev: any) => {
+      const next = typeof value === 'function' ? value(prev) : value;
+      return normalizeZeroValuesForInputs(next);
+    });
+  }, []);
+
   // Handle Auto-Save
   useEffect(() => {
     // Avoid saving on first load
@@ -120,7 +128,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
+    setRawFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = (dataToSave?: any) => {

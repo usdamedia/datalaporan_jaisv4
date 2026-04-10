@@ -85,10 +85,10 @@ const timelineData = [
 ];
 
 const INITIAL_2025_DATA = {
-  fb: { value: 210000, remark: '' },
-  ig: { value: 85000, remark: '' },
-  tt: { value: 125000, remark: '' },
-  yt: { value: 25000, remark: '' },
+  fb: { value: 210000 as number | '', remark: '' },
+  ig: { value: 85000 as number | '', remark: '' },
+  tt: { value: 125000 as number | '', remark: '' },
+  yt: { value: 25000 as number | '', remark: '' },
 };
 
 const DigitalizationPage: React.FC = () => {
@@ -127,10 +127,10 @@ const DigitalizationPage: React.FC = () => {
 
 
   const chartData = [
-    { name: 'FB', '2023': 152400, '2024': 185600, '2025': data2025.fb.value },
-    { name: 'IG', '2023': 45200, '2024': 62800, '2025': data2025.ig.value },
-    { name: 'TT', '2023': 21500, '2024': 88400, '2025': data2025.tt.value },
-    { name: 'YT', '2023': 12800, '2024': 19200, '2025': data2025.yt.value },
+    { name: 'FB', '2023': 152400, '2024': 185600, '2025': Number(data2025.fb.value) || 0 },
+    { name: 'IG', '2023': 45200, '2024': 62800, '2025': Number(data2025.ig.value) || 0 },
+    { name: 'TT', '2023': 21500, '2024': 88400, '2025': Number(data2025.tt.value) || 0 },
+    { name: 'YT', '2023': 12800, '2024': 19200, '2025': Number(data2025.yt.value) || 0 },
   ];
 
   return (
@@ -399,8 +399,9 @@ const DigitalizationPage: React.FC = () => {
                       <label className="text-[10px] font-bold text-gray-400 uppercase">Jumlah Pengikut</label>
                       <input 
                         type="number" 
-                        value={data2025[platform.id as keyof typeof INITIAL_2025_DATA].value}
-                        onChange={(e) => updateValue(platform.id as any, 'value', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                        value={data2025[platform.id as keyof typeof INITIAL_2025_DATA].value === 0 ? '' : data2025[platform.id as keyof typeof INITIAL_2025_DATA].value}
+                        onChange={(e) => updateValue(platform.id as any, 'value', e.target.value === '' ? '' : parseInt(e.target.value, 10))}
                         className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm font-bold"
                       />
                     </div>

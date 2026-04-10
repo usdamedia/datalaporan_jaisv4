@@ -16,11 +16,11 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   const announcementMessages = [
     {
       text: 'Data Tidak Ada Disimpan Di Mana-Mana Google Sheet, Anda Perlu Save -> Download PDF -> Tandatangan -> Serah kepada Urus Setia',
-      style: { fontSize: '18.67px', fontWeight: 700, fontStyle: 'normal' } as React.CSSProperties,
+      style: { fontSize: '14pt', fontWeight: 700, fontStyle: 'normal' } as React.CSSProperties,
     },
     {
       text: 'Dialek Sarawak: Data sik disimpan di mana mana google sheet, save progress di browser tuan puan, kakya boleh edit balit nya disimpan dalam broswer ktk jak, dah ready kakya download PDF print, kakya sign KB/PKB dan serahkan kepada urus setia.',
-      style: { fontSize: '13.33px', fontWeight: 400, fontStyle: 'italic' } as React.CSSProperties,
+      style: { fontSize: '10pt', fontWeight: 400, fontStyle: 'italic' } as React.CSSProperties,
     },
   ];
   const fontScaleOptions = useMemo(
@@ -92,6 +92,23 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
       console.error('Announcement storage error', error);
       setShowAnnouncement(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const applyNumberInputPlaceholder = () => {
+      const numberInputs = document.querySelectorAll<HTMLInputElement>('input[type="number"]');
+      numberInputs.forEach((input) => {
+        if (!input.getAttribute('placeholder')) {
+          input.setAttribute('placeholder', '0');
+        }
+      });
+    };
+
+    applyNumberInputPlaceholder();
+    const observer = new MutationObserver(applyNumberInputPlaceholder);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
   }, []);
 
   const appTypographyStyle = useMemo(

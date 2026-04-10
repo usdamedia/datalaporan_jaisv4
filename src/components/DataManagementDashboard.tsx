@@ -15,10 +15,10 @@ import {
 import { motion } from 'motion/react';
 
 interface Data2025 {
-  dtawgMeetings: number;
-  integratedDashboards: number;
-  dataClusters: number;
-  subDataDashboards: number;
+  dtawgMeetings: number | '';
+  integratedDashboards: number | '';
+  dataClusters: number | '';
+  subDataDashboards: number | '';
   subDataList: string[];
 }
 
@@ -34,10 +34,10 @@ interface DataManagementDashboardProps {
 }
 
 const INITIAL_2025_DATA: Data2025 = {
-  dtawgMeetings: 0,
-  integratedDashboards: 0,
-  dataClusters: 0,
-  subDataDashboards: 0,
+  dtawgMeetings: '',
+  integratedDashboards: '',
+  dataClusters: '',
+  subDataDashboards: '',
   subDataList: ['']
 };
 
@@ -68,7 +68,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
     const newData = {
       ...localData,
       subDataList: [...localData.subDataList, ''],
-      subDataDashboards: localData.subDataDashboards + 1
+      subDataDashboards: (Number(localData.subDataDashboards) || 0) + 1
     };
     handleDataChange(newData);
   };
@@ -236,7 +236,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
                   type="number" 
                   step="any"
                   placeholder="0"
-                  value={localData[field.id as keyof Data2025] || ''}
+                  value={localData[field.id as keyof Data2025] === 0 ? '' : localData[field.id as keyof Data2025]}
                   readOnly={field.readOnly}
                   onChange={(e) => handleDataChange({ ...localData, [field.id]: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                   className={`w-full px-6 py-4 rounded-2xl border-2 border-gray-100 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 outline-none transition-all font-black text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
