@@ -48,6 +48,7 @@ const sumField = (rows: any[], field: string) =>
   rows.reduce((total, row) => total + (parseInt(row[field], 10) || 0), 0);
 
 const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
+  const initialState = useMemo(() => createInitialState(), []);
   const {
     formData,
     setFormData,
@@ -60,7 +61,7 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
     removeLawatan,
     updateLawatan,
     isAutoSaving,
-  } = useFormLogic(deptName, createInitialState());
+  } = useFormLogic(deptName, initialState);
 
   const handleStatChange = (field: string, value: string) => {
     setFormData((prev: any) => ({
