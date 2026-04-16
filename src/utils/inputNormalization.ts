@@ -1,6 +1,18 @@
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   Object.prototype.toString.call(value) === '[object Object]';
 
+export const keepNumericInputDraft = (value: string) => (value === '' ? '' : value);
+
+export const toNonNegativeInt = (value: unknown) => {
+  const parsed = parseInt(String(value ?? ''), 10);
+  return Number.isNaN(parsed) ? 0 : Math.max(0, parsed);
+};
+
+export const toNonNegativeFloat = (value: unknown) => {
+  const parsed = parseFloat(String(value ?? ''));
+  return Number.isNaN(parsed) ? 0 : Math.max(0, parsed);
+};
+
 const normalizeLeafValue = (value: unknown): unknown => {
   if (typeof value === 'number' && value === 0) {
     return '';

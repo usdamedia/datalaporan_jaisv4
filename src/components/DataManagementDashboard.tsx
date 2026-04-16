@@ -15,10 +15,10 @@ import {
 import { motion } from 'motion/react';
 
 interface Data2025 {
-  dtawgMeetings: number | '';
-  integratedDashboards: number | '';
-  dataClusters: number | '';
-  subDataDashboards: number | '';
+  dtawgMeetings: number | string;
+  integratedDashboards: number | string;
+  dataClusters: number | string;
+  subDataDashboards: number | string;
   subDataList: string[];
 }
 
@@ -238,7 +238,7 @@ const DataManagementDashboard: React.FC<DataManagementDashboardProps> = ({ data,
                   placeholder="0"
                   value={localData[field.id as keyof Data2025] === 0 ? '' : localData[field.id as keyof Data2025]}
                   readOnly={field.readOnly}
-                  onChange={(e) => handleDataChange({ ...localData, [field.id]: e.target.value === '' ? '' : parseFloat(e.target.value) })}
+                  onChange={(e) => handleDataChange({ ...localData, [field.id]: e.target.value })}
                   className={`w-full rounded-2xl border-2 border-gray-100 px-4 py-3 text-base font-black outline-none transition-all focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 md:px-6 md:py-4 md:text-lg ${field.readOnly ? 'bg-gray-50 text-gray-400' : 'bg-white text-zus-900'}`}
                 />
               </div>

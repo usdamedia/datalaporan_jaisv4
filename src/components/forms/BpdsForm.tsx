@@ -5,6 +5,7 @@ import { BPDS_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import { keepNumericInputDraft, toNonNegativeFloat, toNonNegativeInt } from '../../utils/inputNormalization';
 
 interface BpdsFormProps {
   deptName: string;
@@ -64,7 +65,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
         ...prev.bpds,
         [section]: {
           ...prev.bpds[section],
-          [field]: parseInt(value) || 0
+          [field]: keepNumericInputDraft(value)
         }
       }
     }));
@@ -74,7 +75,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
     setFormData((prev: any) => {
       const newBpds = { ...prev.bpds };
       const newArray = [...newBpds[section]];
-      newArray[index] = { ...newArray[index], value: parseFloat(value) || 0 };
+      newArray[index] = { ...newArray[index], value: keepNumericInputDraft(value) };
       newBpds[section] = newArray;
       return { ...prev, bpds: newBpds };
     });
@@ -88,7 +89,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
       const nextDrafts = [...currentDrafts];
       nextDrafts[index] = {
         ...nextDrafts[index],
-        [field]: field === 'value' ? parseFloat(value) || 0 : value
+        [field]: field === 'value' ? keepNumericInputDraft(value) : value
       };
 
       return {
@@ -106,7 +107,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
       ...prev,
       bpds: {
         ...prev.bpds,
-        [field]: parseInt(value) || 0
+        [field]: keepNumericInputDraft(value)
       }
     }));
   };
@@ -141,7 +142,7 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
           )),
           {
             name: derafText,
-            value: parseFloat(formData.bpds.derafUndangUndangKemajuan) || 0
+            value: toNonNegativeFloat(formData.bpds.derafUndangUndangKemajuan)
           }
         ]
       }
@@ -168,13 +169,13 @@ const BpdsForm: React.FC<BpdsFormProps> = ({ deptName, onBack }) => {
   };
 
   const totalKesSelesai = useMemo(() => 
-    formData.bpds.kesSelesai.reduce((acc: number, curr: any) => acc + (curr.value || 0), 0),
+    formData.bpds.kesSelesai.reduce((acc: number, curr: any) => acc + toNonNegativeFloat(curr.value), 0),
     [formData.bpds.kesSelesai]
   );
 
-  const totalPendakwa = (formData.bpds.pendakwaSyarie.pegawaiSyariah || 0) + 
-                       (formData.bpds.pendakwaSyarie.penolongPegawaiSyariah || 0) + 
-                       (formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam || 0);
+  const totalPendakwa = toNonNegativeInt(formData.bpds.pendakwaSyarie.pegawaiSyariah) + 
+                       toNonNegativeInt(formData.bpds.pendakwaSyarie.penolongPegawaiSyariah) + 
+                       toNonNegativeInt(formData.bpds.pendakwaSyarie.penolongPegawaiHalEhwalIslam);
 
   const displayNumericInput = (value: number | string | undefined | null) => {
     if (value === 0 || value === '0' || value === undefined || value === null) {

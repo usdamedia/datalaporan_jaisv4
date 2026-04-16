@@ -4,6 +4,7 @@ import { FileText, ShieldCheck, Video } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { INTEGRITI_2025_CURRENT } from '../../constants';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 interface IntegritiFormProps {
   deptName: string;
@@ -99,7 +100,7 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
       ...prev,
       integriti: {
         ...prev.integriti,
-        [field]: value === '' ? '' : Math.max(0, parseInt(value, 10) || 0),
+        [field]: keepNumericInputDraft(value),
       },
     }));
   };

@@ -4,6 +4,7 @@ import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { DHQC_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 const DIVISION_FIELD_MAP: Record<string, keyof typeof DHQC_2024_REFERENCE.guruAlQuran> = {
   Kuching: 'kuching',
@@ -81,14 +82,13 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   });
 
   const handleNestedInputChange = (section: string, subSection: string, field: string, value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseFloat(value));
     setFormData((prev: any) => ({
       ...prev,
       [section]: {
         ...prev[section],
         [subSection]: {
           ...prev[section][subSection],
-          [field]: numValue,
+          [field]: keepNumericInputDraft(value),
         },
       },
     }));

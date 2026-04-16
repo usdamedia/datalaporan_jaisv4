@@ -401,7 +401,7 @@ const DigitalizationPage: React.FC = () => {
                         type="number" 
                         placeholder="0"
                         value={data2025[platform.id as keyof typeof INITIAL_2025_DATA].value === 0 ? '' : data2025[platform.id as keyof typeof INITIAL_2025_DATA].value}
-                        onChange={(e) => updateValue(platform.id as any, 'value', e.target.value === '' ? '' : parseInt(e.target.value, 10))}
+                        onChange={(e) => updateValue(platform.id as any, 'value', e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm font-bold"
                       />
                     </div>

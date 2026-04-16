@@ -10,6 +10,7 @@ import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { SARAWAK_DIVISIONS, SCHOOL_LIST, UPP_2024_REFERENCE } from '../../constants';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
   const {
@@ -46,21 +47,19 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
   });
 
   const handleNestedInputChange = (section: string, field: string, value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseInt(value));
     setFormData((prev: any) => ({
       ...prev,
       upp: {
         ...prev.upp,
         [section]: {
           ...prev.upp[section],
-          [field]: numValue
+          [field]: keepNumericInputDraft(value)
         }
       }
     }));
   };
 
   const handleDeepNestedInputChange = (section: string, subSection: string, field: string, value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseInt(value));
     setFormData((prev: any) => ({
       ...prev,
       upp: {
@@ -69,7 +68,7 @@ const UppForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName,
           ...prev.upp[section],
           [subSection]: {
             ...prev.upp[section][subSection],
-            [field]: numValue
+            [field]: keepNumericInputDraft(value)
           }
         }
       }

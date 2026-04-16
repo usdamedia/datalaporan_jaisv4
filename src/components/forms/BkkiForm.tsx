@@ -4,6 +4,7 @@ import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import { BKKI_2024_REFERENCE } from '../../constants';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 import { 
   Heart, 
   UserMinus, 
@@ -78,21 +79,19 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
   } = useFormLogic(deptName, initialState);
 
   const updateStat = (field: string, value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseInt(value) || 0).toString();
     setFormData((prev: any) => ({
       ...prev,
       stats: {
         ...prev.stats,
-        [field]: numValue
+        [field]: keepNumericInputDraft(value)
       }
     }));
   };
 
   const updateRegistrar = (index: number, field: string, value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseInt(value) || 0).toString();
     setFormData((prev: any) => {
       const newTable = [...prev.registrarTable];
-      newTable[index] = { ...newTable[index], [field]: numValue };
+      newTable[index] = { ...newTable[index], [field]: keepNumericInputDraft(value) };
       return {
         ...prev,
         registrarTable: newTable

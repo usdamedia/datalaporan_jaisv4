@@ -14,10 +14,11 @@ import {
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { UKOKO_PR_2024_REFERENCE } from '../../constants';
+import { keepNumericInputDraft, toNonNegativeInt } from '../../utils/inputNormalization';
 
 interface UkokoPRData {
   pembelianBukuBaharu: {
-    bilangan: number;
+    bilangan: number | string;
     kategoriBukuBaharu: Array<{
       id: string;
       name: string;
@@ -25,50 +26,50 @@ interface UkokoPRData {
   };
   aduan: {
     sumber: {
-      talikhidmat: number;
-      lain: number;
+      talikhidmat: number | string;
+      lain: number | string;
     };
-    statusSelesai: number;
+    statusSelesai: number | string;
     kategori: {
-      masjid: number;
-      kadNikah: number;
-      kafa: number;
-      logoHalal: number;
-      ncr: number;
-      tindakanPenguatkuasaanSyariah: number;
-      tindakanPengukuhanPendidikanIslam: number;
-      usk: number;
+      masjid: number | string;
+      kadNikah: number | string;
+      kafa: number | string;
+      logoHalal: number | string;
+      ncr: number | string;
+      tindakanPenguatkuasaanSyariah: number | string;
+      tindakanPengukuhanPendidikanIslam: number | string;
+      usk: number | string;
     };
     lokasi: {
-      hqBkki: number;
-      paibBintulu: number;
-      paibKuching: number;
-      paibMiri: number;
-      paibSarikei: number;
-      paibSibu: number;
+      hqBkki: number | string;
+      paibBintulu: number | string;
+      paibKuching: number | string;
+      paibMiri: number | string;
+      paibSarikei: number | string;
+      paibSibu: number | string;
     };
     customKategori: Array<{
       id: string;
       name: string;
-      value: number;
+      value: number | string;
     }>;
     customLokasi: Array<{
       id: string;
       name: string;
-      value: number;
+      value: number | string;
     }>;
   };
   maklumBalas: {
     queueBee: {
-      puas: number;
-      tidakPuas: number;
+      puas: number | string;
+      tidakPuas: number | string;
     };
     qrCode: {
-      puas: number;
-      tidakPuas: number;
+      puas: number | string;
+      tidakPuas: number | string;
     };
   };
-  lawatanLuar: number;
+  lawatanLuar: number | string;
 }
 
 const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
@@ -173,7 +174,6 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   const [newBookCategory, setNewBookCategory] = React.useState('');
 
   const updateField = (path: string, value: string) => {
-    const numValue = parseInt(value) || 0;
     setFormData((prev: any) => {
       const newPr = { ...prev.pr };
       const keys = path.split('.');
@@ -182,7 +182,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
         current[keys[i]] = { ...current[keys[i]] };
         current = current[keys[i]];
       }
-      current[keys[keys.length - 1]] = numValue;
+      current[keys[keys.length - 1]] = keepNumericInputDraft(value);
       return { ...prev, pr: newPr };
     });
   };
@@ -222,7 +222,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             item.id === id
               ? {
                   ...item,
-                  [field]: field === 'value' ? parseInt(value) || 0 : value,
+                  [field]: field === 'value' ? keepNumericInputDraft(value) : value,
                 }
               : item
           ),
@@ -279,7 +279,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             item.id === id
               ? {
                   ...item,
-                  [field]: field === 'value' ? parseInt(value) || 0 : value,
+                  [field]: field === 'value' ? keepNumericInputDraft(value) : value,
                 }
               : item
           ),
@@ -308,7 +308,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
         ...prev.pr,
         pembelianBukuBaharu: {
           ...(prev.pr?.pembelianBukuBaharu || {}),
-          bilangan: parseInt(value) || 0,
+          bilangan: keepNumericInputDraft(value),
         },
       },
     }));
@@ -371,16 +371,16 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
   };
 
   // Calculations
-  const totalAduanSumber = prData.aduan.sumber.talikhidmat + prData.aduan.sumber.lain;
+  const totalAduanSumber = toNonNegativeInt(prData.aduan.sumber.talikhidmat) + toNonNegativeInt(prData.aduan.sumber.lain);
   const totalAduanKategori =
-    Object.values(prData.aduan.kategori).reduce((a, b) => a + b, 0) +
-    (prData.aduan.customKategori || []).reduce((sum, item) => sum + (item.value || 0), 0);
+    Object.values(prData.aduan.kategori).reduce<number>((a, b) => a + toNonNegativeInt(b), 0) +
+    (prData.aduan.customKategori || []).reduce((sum, item) => sum + toNonNegativeInt(item.value), 0);
   const totalAduanLokasi =
-    Object.values(prData.aduan.lokasi).reduce((a, b) => a + b, 0) +
-    (prData.aduan.customLokasi || []).reduce((sum, item) => sum + (item.value || 0), 0);
+    Object.values(prData.aduan.lokasi).reduce<number>((a, b) => a + toNonNegativeInt(b), 0) +
+    (prData.aduan.customLokasi || []).reduce((sum, item) => sum + toNonNegativeInt(item.value), 0);
 
-  const totalQueueBee = prData.maklumBalas.queueBee.puas + prData.maklumBalas.queueBee.tidakPuas;
-  const totalQrCode = prData.maklumBalas.qrCode.puas + prData.maklumBalas.qrCode.tidakPuas;
+  const totalQueueBee = toNonNegativeInt(prData.maklumBalas.queueBee.puas) + toNonNegativeInt(prData.maklumBalas.queueBee.tidakPuas);
+  const totalQrCode = toNonNegativeInt(prData.maklumBalas.qrCode.puas) + toNonNegativeInt(prData.maklumBalas.qrCode.tidakPuas);
   const totalMaklumBalas = totalQueueBee + totalQrCode;
 
   const isAduanBalanced = totalAduanSumber === totalAduanKategori && totalAduanSumber === totalAduanLokasi;
@@ -884,11 +884,11 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </div>
             <div className="rounded-3xl border border-emerald-100 bg-white p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600">Puas Hati</p>
-              <p className="mt-2 text-3xl font-black text-emerald-950">{(prData.maklumBalas.queueBee.puas + prData.maklumBalas.qrCode.puas).toLocaleString()}</p>
+              <p className="mt-2 text-3xl font-black text-emerald-950">{(toNonNegativeInt(prData.maklumBalas.queueBee.puas) + toNonNegativeInt(prData.maklumBalas.qrCode.puas)).toLocaleString()}</p>
             </div>
             <div className="rounded-3xl border border-rose-100 bg-white p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-600">Tidak Puas</p>
-              <p className="mt-2 text-3xl font-black text-rose-950">{(prData.maklumBalas.queueBee.tidakPuas + prData.maklumBalas.qrCode.tidakPuas).toLocaleString()}</p>
+              <p className="mt-2 text-3xl font-black text-rose-950">{(toNonNegativeInt(prData.maklumBalas.queueBee.tidakPuas) + toNonNegativeInt(prData.maklumBalas.qrCode.tidakPuas)).toLocaleString()}</p>
             </div>
           </div>
 

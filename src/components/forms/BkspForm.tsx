@@ -5,6 +5,7 @@ import { BKSP_2024_REFERENCE } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import { keepNumericInputDraft, toNonNegativeInt } from '../../utils/inputNormalization';
 import {
   ResponsiveContainer,
   BarChart,
@@ -62,7 +63,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
     setFormData((prev: any) => {
       const newBksp = { ...prev.bksp };
       const newArray = [...newBksp[section]];
-      newArray[index] = { ...newArray[index], value: parseInt(value) || 0 };
+      newArray[index] = { ...newArray[index], value: keepNumericInputDraft(value) };
       newBksp[section] = newArray;
       return { ...prev, bksp: newBksp };
     });
@@ -75,7 +76,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
         ...prev.bksp,
         statistik: {
           ...prev.bksp.statistik,
-          [field]: parseInt(value) || 0
+          [field]: keepNumericInputDraft(value)
         }
       }
     }));
@@ -88,7 +89,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
         ...prev.bksp,
         statusKes: {
           ...prev.bksp.statusKes,
-          [field]: parseInt(value) || 0
+          [field]: keepNumericInputDraft(value)
         }
       }
     }));
@@ -106,22 +107,22 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   };
 
   const totalPermohonan = useMemo(() => 
-    formData.bksp.permohonan.reduce((acc: number, curr: any) => acc + (curr.value || 0), 0), 
+    formData.bksp.permohonan.reduce((acc: number, curr: any) => acc + toNonNegativeInt(curr.value), 0), 
     [formData.bksp.permohonan]
   );
 
   const totalPegawai = useMemo(() => 
-    formData.bksp.pegawai.reduce((acc: number, curr: any) => acc + (curr.value || 0), 0), 
+    formData.bksp.pegawai.reduce((acc: number, curr: any) => acc + toNonNegativeInt(curr.value), 0), 
     [formData.bksp.pegawai]
   );
 
-  const totalProgram = (formData.bksp.statistik.kaunselingSyarie || 0) + (formData.bksp.statistik.psikologi || 0);
+  const totalProgram = toNonNegativeInt(formData.bksp.statistik.kaunselingSyarie) + toNonNegativeInt(formData.bksp.statistik.psikologi);
 
   const puncaKrisisChartData = useMemo(() => {
     return (formData.bksp.puncaKrisis || [])
       .map((item: any) => ({
         name: item.name,
-        value: item.value || 0
+        value: toNonNegativeInt(item.value)
       }))
       .filter((item: any) => item.value > 0)
       .sort((a: any, b: any) => b.value - a.value);

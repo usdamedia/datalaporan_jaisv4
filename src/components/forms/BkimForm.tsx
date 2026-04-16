@@ -5,6 +5,7 @@ import { BKIM_2024_REFERENCE, SARAWAK_DIVISIONS } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 interface BkimFormProps {
   deptName: string;
@@ -72,7 +73,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
   const handleBkimDivisionChange = (index: number, field: string, value: any) => {
     setFormData((prev: any) => {
       const newDivisions = [...prev.bkim.bkimDivisions];
-      newDivisions[index] = { ...newDivisions[index], [field]: parseInt(value) || 0 };
+      newDivisions[index] = { ...newDivisions[index], [field]: keepNumericInputDraft(value) };
       return {
         ...prev,
         bkim: { ...prev.bkim, bkimDivisions: newDivisions }
@@ -104,7 +105,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
                   <input
                     type="number"
                     value={formData.bkim[item.field]}
-                    onChange={(e) => handleBkimChange(item.field, parseInt(e.target.value) || 0)}
+                    onChange={(e) => handleBkimChange(item.field, keepNumericInputDraft(e.target.value))}
                     className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
                   />
                 </td>

@@ -42,11 +42,7 @@ const createInitialState = () => ({
   },
 });
 
-const parseNumberInput = (value: string) => {
-  if (value === '') return '';
-  const parsed = parseInt(value, 10);
-  return Number.isNaN(parsed) ? '' : Math.max(0, parsed);
-};
+const parseNumberInput = (value: string) => (value === '' ? '' : value);
 
 const sumField = (rows: any[], field: string) =>
   rows.reduce((total, row) => total + (parseInt(row[field], 10) || 0), 0);

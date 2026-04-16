@@ -7,6 +7,7 @@ import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSect
 import { useFormLogic } from './useFormLogic';
 import DataManagementDashboard from '../DataManagementDashboard';
 import { usePrintView } from '../../hooks/usePrintView';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 interface BpnpFormProps {
   deptName: string;
@@ -457,7 +458,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
     }));
   }, [formData.bpnp?.strategik?.data?.namaDashboardBaharu, isUnitStrategik, setFormData]);
 
-  const handleBpnpStatChange = (field: string, value: number) => {
+  const handleBpnpStatChange = (field: string, value: number | string) => {
     setFormData((prev: any) => ({
       ...prev,
       bpnp: {
@@ -490,7 +491,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           ...prev.bpnp.strategik,
           [section]: {
             ...prev.bpnp.strategik?.[section],
-            [field]: value === '' ? '' : parseFloat(value),
+            [field]: keepNumericInputDraft(value),
           },
         },
       },
@@ -603,7 +604,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
       const newList = [...prev.bpnp.kajianList];
       newList[index] = {
         ...normalizeKajianEntry(newList[index]),
-        [field]: field === 'bilangan' ? (value === '' ? '' : Number(value)) : value,
+        [field]: field === 'bilangan' ? keepNumericInputDraft(String(value)) : value,
       };
       return {
         ...prev,
@@ -673,7 +674,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           step="any"
           placeholder="0"
           value={formData.bpnp.unitActivityTotal2025 || ''}
-          onChange={(e) => handleUnitActivityTotalChange(e.target.value === '' ? '' : parseFloat(e.target.value))}
+          onChange={(e) => handleUnitActivityTotalChange(keepNumericInputDraft(e.target.value))}
           readOnly={isUnitStrategik}
           className={`w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-center text-2xl font-black text-zus-900 outline-none transition-all ${isUnitStrategik ? 'cursor-not-allowed opacity-80' : 'focus:border-teal-300 focus:ring-4 focus:ring-teal-100'}`}
         />
@@ -1264,7 +1265,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                           <input
                             type="number"
                             value={formData.bpnp.statistik[item.field]}
-                            onChange={(e) => handleBpnpStatChange(item.field, parseInt(e.target.value) || 0)}
+                            onChange={(e) => handleBpnpStatChange(item.field, keepNumericInputDraft(e.target.value))}
                             className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none transition-all"
                           />
                         </td>
@@ -1299,7 +1300,7 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
                             <input
                               type="number"
                               value={formData.bpnp.statistik.infografik}
-                              onChange={(e) => handleBpnpStatChange('infografik', parseInt(e.target.value) || 0)}
+                              onChange={(e) => handleBpnpStatChange('infografik', keepNumericInputDraft(e.target.value))}
                               className="w-full p-2.5 bg-white border border-indigo-100 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
                             />
                           </td>

@@ -15,6 +15,7 @@ import { DAKWAH_2024_REFERENCE, DAKWAH_2025_MEDIA_CURRENT, DHQC_2024_REFERENCE, 
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import { keepNumericInputDraft } from '../../utils/inputNormalization';
 
 interface DakwahFormProps {
   deptName: string;
@@ -119,7 +120,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const handleDivisionChange = (listField: string, index: number, field: string, value: any) => {
     setFormData((prev: any) => {
       const newList = [...prev.dakwah[listField]];
-      newList[index] = { ...newList[index], [field]: parseInt(value) || 0 };
+      newList[index] = { ...newList[index], [field]: keepNumericInputDraft(value) };
       return {
         ...prev,
         dakwah: { ...prev.dakwah, [listField]: newList }
@@ -179,7 +180,6 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   };
 
   const handleAlQuranStatChange = (field: 'berat' | 'kekerapan', value: string) => {
-    const numValue = value === '' ? '' : Math.max(0, parseFloat(value));
     setFormData((prev: any) => ({
       ...prev,
       dakwah: {
@@ -188,7 +188,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
           ...prev.dakwah.alQuran,
           statistikDebu: {
             ...prev.dakwah.alQuran?.statistikDebu,
-            [field]: numValue,
+            [field]: keepNumericInputDraft(value),
           },
         },
       },
@@ -393,7 +393,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                 <input 
                   type="number"
                   value={formData.dakwah.progJais2025}
-                  onChange={(e) => handleDakwahChange('progJais2025', parseInt(e.target.value) || 0)}
+                  onChange={(e) => handleDakwahChange('progJais2025', keepNumericInputDraft(e.target.value))}
                   className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
                 />
               </div>
@@ -405,7 +405,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                 <input 
                   type="number"
                   value={formData.dakwah.progAgensi2025}
-                  onChange={(e) => handleDakwahChange('progAgensi2025', parseInt(e.target.value) || 0)}
+                  onChange={(e) => handleDakwahChange('progAgensi2025', keepNumericInputDraft(e.target.value))}
                   className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
                 />
               </div>
@@ -424,7 +424,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
               <input 
                 type="number"
                 value={formData.dakwah.tauliahAktif2025}
-                onChange={(e) => handleDakwahChange('tauliahAktif2025', parseInt(e.target.value) || 0)}
+                onChange={(e) => handleDakwahChange('tauliahAktif2025', keepNumericInputDraft(e.target.value))}
                 className="p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
               />
             </div>
