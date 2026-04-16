@@ -9,6 +9,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const [saveError, setSaveError] = useState<string | null>(null);
   const saveTimeoutRef = useRef<number | null>(null);
   const autoSaveTimeoutRef = useRef<number | null>(null);
+  const autoSaveIndicatorTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
   const storageKey = useMemo(() => {
@@ -83,6 +84,9 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       if (autoSaveTimeoutRef.current) {
         window.clearTimeout(autoSaveTimeoutRef.current);
       }
+      if (autoSaveIndicatorTimeoutRef.current) {
+        window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
+      }
       if (successTimeoutRef.current) {
         window.clearTimeout(successTimeoutRef.current);
       }
@@ -107,21 +111,27 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     if (autoSaveTimeoutRef.current) {
       window.clearTimeout(autoSaveTimeoutRef.current);
     }
+    if (autoSaveIndicatorTimeoutRef.current) {
+      window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
+    }
 
-    setIsAutoSaving(true);
     autoSaveTimeoutRef.current = window.setTimeout(() => {
       try {
+        setIsAutoSaving(true);
         localStorage.setItem(storageKey, JSON.stringify(formData));
-        setIsAutoSaving(false);
+        autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
       } catch (error) {
         console.error('Error auto-saving data', error);
         setIsAutoSaving(false);
       }
-    }, 1500); // Debounce delay 1.5s
+    }, 1200); // Debounce delay 1.2s
 
     return () => {
       if (autoSaveTimeoutRef.current) {
         window.clearTimeout(autoSaveTimeoutRef.current);
+      }
+      if (autoSaveIndicatorTimeoutRef.current) {
+        window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
       }
     };
   }, [formData, storageKey]);

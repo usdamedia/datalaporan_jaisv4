@@ -25,7 +25,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   onSave, 
   onExport,
   isSaving, 
-  isAutoSaving: _isAutoSaving,
+  isAutoSaving,
   showSuccess, 
   saveError,
   formData,
@@ -74,6 +74,12 @@ const FormLayout: React.FC<FormLayoutProps> = ({
             <h2 className="text-xl font-extrabold tracking-tight text-zus-900 sm:text-3xl md:text-4xl">
               {deptName}
             </h2>
+            {isAutoSaving && (
+              <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-slate-500">
+                <div className="h-1.5 w-1.5 rounded-full bg-teal-500"></div>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Auto Save</span>
+              </div>
+            )}
           </div>
           <p className="mt-3 max-w-4xl text-sm font-medium text-gray-500 md:text-base">
             Sila lengkapkan maklumat laporan tahunan di bawah.
