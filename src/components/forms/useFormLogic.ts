@@ -3,7 +3,8 @@ import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
 import { buildDraftKey } from '../../utils/formDraftKey';
 
 export const useFormLogic = (deptName: string, initialState: any) => {
-  const [formData, setRawFormData] = useState<any>(() => normalizeZeroValuesForInputs(initialState));
+  const initialStateRef = useRef<any>(normalizeZeroValuesForInputs(initialState));
+  const [formData, setRawFormData] = useState<any>(() => initialStateRef.current);
   const [isSaving, setIsSaving] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -15,31 +16,36 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const isInitialMount = useRef(true);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
 
-  const mergeWithInitialState = useCallback((payload: any) => normalizeZeroValuesForInputs({
-    ...initialState,
-    ...payload,
-    bpds: initialState.bpds ? { ...initialState.bpds, ...payload?.bpds } : initialState.bpds,
-    bkim: initialState.bkim ? { ...initialState.bkim, ...payload?.bkim } : initialState.bkim,
-    finance: initialState.finance ? { ...initialState.finance, ...payload?.finance } : initialState.finance,
-    leadership: initialState.leadership ? { ...initialState.leadership, ...payload?.leadership } : initialState.leadership,
-    transport: initialState.transport ? { ...initialState.transport, ...payload?.transport } : initialState.transport,
-    bkki: initialState.bkki ? { ...initialState.bkki, ...payload?.bkki } : initialState.bkki,
-    socialMedia: initialState.socialMedia ? { ...initialState.socialMedia, ...payload?.socialMedia } : initialState.socialMedia,
-    aduan: initialState.aduan ? { ...initialState.aduan, ...payload?.aduan } : initialState.aduan,
-    pr: initialState.pr ? { ...initialState.pr, ...payload?.pr } : initialState.pr,
-    bpnp: initialState.bpnp ? { ...initialState.bpnp, ...payload?.bpnp } : initialState.bpnp,
-    bksk: initialState.bksk ? { ...initialState.bksk, ...payload?.bksk } : initialState.bksk,
-    hr: initialState.hr ? { ...initialState.hr, ...payload?.hr } : initialState.hr,
-    bksp: initialState.bksp ? { ...initialState.bksp, ...payload?.bksp } : initialState.bksp,
-    ukoko: initialState.ukoko ? { ...initialState.ukoko, ...payload?.ukoko } : initialState.ukoko,
-    dhqc: initialState.dhqc ? { ...initialState.dhqc, ...payload?.dhqc } : initialState.dhqc,
-    upp: initialState.upp ? { ...initialState.upp, ...payload?.upp } : initialState.upp,
-    integriti: initialState.integriti ? { ...initialState.integriti, ...payload?.integriti } : initialState.integriti,
-    quality: initialState.quality ? { ...initialState.quality, ...payload?.quality } : initialState.quality,
-    penerbitan: initialState.penerbitan ? { ...initialState.penerbitan, ...payload?.penerbitan } : initialState.penerbitan,
-  }), [initialState]);
+  const mergeWithInitialState = useCallback((payload: any) => {
+    const baseState = initialStateRef.current;
+
+    return normalizeZeroValuesForInputs({
+      ...baseState,
+      ...payload,
+      bpds: baseState.bpds ? { ...baseState.bpds, ...payload?.bpds } : baseState.bpds,
+      bkim: baseState.bkim ? { ...baseState.bkim, ...payload?.bkim } : baseState.bkim,
+      finance: baseState.finance ? { ...baseState.finance, ...payload?.finance } : baseState.finance,
+      leadership: baseState.leadership ? { ...baseState.leadership, ...payload?.leadership } : baseState.leadership,
+      transport: baseState.transport ? { ...baseState.transport, ...payload?.transport } : baseState.transport,
+      bkki: baseState.bkki ? { ...baseState.bkki, ...payload?.bkki } : baseState.bkki,
+      socialMedia: baseState.socialMedia ? { ...baseState.socialMedia, ...payload?.socialMedia } : baseState.socialMedia,
+      aduan: baseState.aduan ? { ...baseState.aduan, ...payload?.aduan } : baseState.aduan,
+      pr: baseState.pr ? { ...baseState.pr, ...payload?.pr } : baseState.pr,
+      bpnp: baseState.bpnp ? { ...baseState.bpnp, ...payload?.bpnp } : baseState.bpnp,
+      bksk: baseState.bksk ? { ...baseState.bksk, ...payload?.bksk } : baseState.bksk,
+      hr: baseState.hr ? { ...baseState.hr, ...payload?.hr } : baseState.hr,
+      bksp: baseState.bksp ? { ...baseState.bksp, ...payload?.bksp } : baseState.bksp,
+      ukoko: baseState.ukoko ? { ...baseState.ukoko, ...payload?.ukoko } : baseState.ukoko,
+      dhqc: baseState.dhqc ? { ...baseState.dhqc, ...payload?.dhqc } : baseState.dhqc,
+      upp: baseState.upp ? { ...baseState.upp, ...payload?.upp } : baseState.upp,
+      integriti: baseState.integriti ? { ...baseState.integriti, ...payload?.integriti } : baseState.integriti,
+      quality: baseState.quality ? { ...baseState.quality, ...payload?.quality } : baseState.quality,
+      penerbitan: baseState.penerbitan ? { ...baseState.penerbitan, ...payload?.penerbitan } : baseState.penerbitan,
+    });
+  }, []);
 
   useEffect(() => {
+    initialStateRef.current = normalizeZeroValuesForInputs(initialState);
     let savedData: string | null = null;
 
     try {
