@@ -396,7 +396,7 @@ const DhqcForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             className="inline-flex items-center justify-center gap-3 rounded-[1.2rem] bg-[#0d4f45] px-6 py-4 text-sm font-black text-white shadow-[0_14px_30px_rgba(13,79,69,0.18)] transition hover:bg-[#0b4038] disabled:opacity-70"
           >
             <Save className="h-5 w-5" />
-            {isSaving ? 'Menyimpan...' : 'Simpan Rekod 2025'}
+            {isSaving ? 'Sila Tekan Butang Simpan Draf' : 'Simpan Rekod 2025'}
           </button>
         </div>
       </section>

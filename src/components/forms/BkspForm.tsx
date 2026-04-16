@@ -444,7 +444,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
               disabled={isSaving}
               className="flex items-center gap-2 px-8 py-3 bg-pink-600 text-white rounded-xl text-sm font-black hover:bg-pink-700 transition-all shadow-lg shadow-pink-200 active:scale-95 disabled:opacity-50"
             >
-              {isSaving ? 'Menyimpan...' : 'Simpan Bahagian Ini'}
+              {isSaving ? 'Sila Tekan Butang Simpan Draf' : 'Simpan Bahagian Ini'}
             </button>
           </div>
         </div>

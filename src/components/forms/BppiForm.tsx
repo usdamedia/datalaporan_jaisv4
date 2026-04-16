@@ -406,7 +406,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                   disabled={isSaving}
                   className="rounded-lg bg-amber-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isSaving ? 'Menyimpan...' : 'Simpan Trend'}
+                  {isSaving ? 'Sila Tekan Butang Simpan Draf' : 'Simpan Trend'}
                 </button>
               </div>
               <div className="overflow-x-auto">
