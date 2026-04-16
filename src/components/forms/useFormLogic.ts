@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
+import { buildDraftKey } from '../../utils/formDraftKey';
+import {
+  fetchRemoteDraft,
+  subscribeToRemoteDraft,
+  unsubscribeFromRemoteDraft,
+  upsertRemoteDraft,
+} from '../../utils/reportDraftStore';
+import { isSupabaseConfigured } from '../../utils/supabase';
 
 export const useFormLogic = (deptName: string, initialState: any) => {
   const [formData, setRawFormData] = useState<any>(() => normalizeZeroValuesForInputs(initialState));
@@ -12,18 +20,63 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const autoSaveIndicatorTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
-  const storageKey = useMemo(() => {
-    const normalizedDeptName = deptName
-      .trim()
-      .toUpperCase()
-      .replace(/[^A-Z0-9]+/g, '_')
-      .replace(/^_+|_+$/g, '');
+  const remoteSyncTimeoutRef = useRef<number | null>(null);
+  const latestFormDataRef = useRef<any>(formData);
+  const lastRemoteSnapshotRef = useRef<string>('');
+  const isApplyingRemoteRef = useRef(false);
+  const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
 
-    return `jais_2025_${normalizedDeptName || 'DEPARTMENT'}`;
-  }, [deptName]);
+  const mergeWithInitialState = useCallback((payload: any) => normalizeZeroValuesForInputs({
+    ...initialState,
+    ...payload,
+    bpds: initialState.bpds ? { ...initialState.bpds, ...payload?.bpds } : initialState.bpds,
+    bkim: initialState.bkim ? { ...initialState.bkim, ...payload?.bkim } : initialState.bkim,
+    finance: initialState.finance ? { ...initialState.finance, ...payload?.finance } : initialState.finance,
+    leadership: initialState.leadership ? { ...initialState.leadership, ...payload?.leadership } : initialState.leadership,
+    transport: initialState.transport ? { ...initialState.transport, ...payload?.transport } : initialState.transport,
+    bkki: initialState.bkki ? { ...initialState.bkki, ...payload?.bkki } : initialState.bkki,
+    socialMedia: initialState.socialMedia ? { ...initialState.socialMedia, ...payload?.socialMedia } : initialState.socialMedia,
+    aduan: initialState.aduan ? { ...initialState.aduan, ...payload?.aduan } : initialState.aduan,
+    pr: initialState.pr ? { ...initialState.pr, ...payload?.pr } : initialState.pr,
+    bpnp: initialState.bpnp ? { ...initialState.bpnp, ...payload?.bpnp } : initialState.bpnp,
+    bksk: initialState.bksk ? { ...initialState.bksk, ...payload?.bksk } : initialState.bksk,
+    hr: initialState.hr ? { ...initialState.hr, ...payload?.hr } : initialState.hr,
+    bksp: initialState.bksp ? { ...initialState.bksp, ...payload?.bksp } : initialState.bksp,
+    ukoko: initialState.ukoko ? { ...initialState.ukoko, ...payload?.ukoko } : initialState.ukoko,
+    dhqc: initialState.dhqc ? { ...initialState.dhqc, ...payload?.dhqc } : initialState.dhqc,
+    upp: initialState.upp ? { ...initialState.upp, ...payload?.upp } : initialState.upp,
+    integriti: initialState.integriti ? { ...initialState.integriti, ...payload?.integriti } : initialState.integriti,
+    quality: initialState.quality ? { ...initialState.quality, ...payload?.quality } : initialState.quality,
+    penerbitan: initialState.penerbitan ? { ...initialState.penerbitan, ...payload?.penerbitan } : initialState.penerbitan,
+  }), [initialState]);
+
+  useEffect(() => {
+    latestFormDataRef.current = formData;
+  }, [formData]);
 
   useEffect(() => {
     let savedData: string | null = null;
+    let isCancelled = false;
+
+    const applyIncomingDraft = (payload: any) => {
+      const merged = mergeWithInitialState(payload);
+      const snapshot = JSON.stringify(merged);
+      lastRemoteSnapshotRef.current = snapshot;
+      isApplyingRemoteRef.current = true;
+      latestFormDataRef.current = merged;
+      setSaveError(null);
+      setRawFormData(merged);
+
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(merged));
+      } catch (storageError) {
+        console.error('Error caching incoming data locally', storageError);
+      }
+
+      window.setTimeout(() => {
+        isApplyingRemoteRef.current = false;
+      }, 0);
+    };
 
     try {
       savedData = localStorage.getItem(storageKey);
@@ -46,38 +99,62 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     if (savedData) {
       try {
-        const parsed = JSON.parse(savedData);
-        setSaveError(null);
-        setRawFormData((prev: any) => normalizeZeroValuesForInputs({
-          ...prev,
-          ...parsed,
-          // Deep merge for specific objects if needed
-          bpds: prev.bpds ? { ...prev.bpds, ...parsed.bpds } : prev.bpds,
-          bkim: prev.bkim ? { ...prev.bkim, ...parsed.bkim } : prev.bkim,
-          finance: prev.finance ? { ...prev.finance, ...parsed.finance } : prev.finance,
-          leadership: prev.leadership ? { ...prev.leadership, ...parsed.leadership } : prev.leadership,
-          transport: prev.transport ? { ...prev.transport, ...parsed.transport } : prev.transport,
-          bkki: prev.bkki ? { ...prev.bkki, ...parsed.bkki } : prev.bkki,
-          socialMedia: prev.socialMedia ? { ...prev.socialMedia, ...parsed.socialMedia } : prev.socialMedia,
-          aduan: prev.aduan ? { ...prev.aduan, ...parsed.aduan } : prev.aduan,
-          pr: prev.pr ? { ...prev.pr, ...parsed.pr } : prev.pr,
-          bpnp: prev.bpnp ? { ...prev.bpnp, ...parsed.bpnp } : prev.bpnp,
-          bksk: prev.bksk ? { ...prev.bksk, ...parsed.bksk } : prev.bksk,
-          hr: prev.hr ? { ...prev.hr, ...parsed.hr } : prev.hr,
-          bksp: prev.bksp ? { ...prev.bksp, ...parsed.bksp } : prev.bksp,
-          ukoko: prev.ukoko ? { ...prev.ukoko, ...parsed.ukoko } : prev.ukoko,
-          dhqc: prev.dhqc ? { ...prev.dhqc, ...parsed.dhqc } : prev.dhqc,
-          upp: prev.upp ? { ...prev.upp, ...parsed.upp } : prev.upp,
-          integriti: prev.integriti ? { ...prev.integriti, ...parsed.integriti } : prev.integriti,
-          quality: prev.quality ? { ...prev.quality, ...parsed.quality } : prev.quality,
-          penerbitan: prev.penerbitan ? { ...prev.penerbitan, ...parsed.penerbitan } : prev.penerbitan,
-        }));
+        applyIncomingDraft(JSON.parse(savedData));
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
     }
 
+    if (!isSupabaseConfigured) {
+      return () => {
+        if (saveTimeoutRef.current) {
+          window.clearTimeout(saveTimeoutRef.current);
+        }
+        if (autoSaveTimeoutRef.current) {
+          window.clearTimeout(autoSaveTimeoutRef.current);
+        }
+        if (autoSaveIndicatorTimeoutRef.current) {
+          window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
+        }
+        if (successTimeoutRef.current) {
+          window.clearTimeout(successTimeoutRef.current);
+        }
+        if (remoteSyncTimeoutRef.current) {
+          window.clearTimeout(remoteSyncTimeoutRef.current);
+        }
+      };
+    }
+
+    fetchRemoteDraft(storageKey)
+      .then((remoteDraft) => {
+        if (isCancelled || !remoteDraft?.data) return;
+
+        const remoteSnapshot = JSON.stringify(normalizeZeroValuesForInputs(remoteDraft.data));
+        if (remoteSnapshot === lastRemoteSnapshotRef.current) return;
+        applyIncomingDraft(remoteDraft.data);
+      })
+      .catch((error) => {
+        console.error('Error loading remote draft', error);
+        if (!isCancelled) {
+          setSaveError('Supabase tidak dapat dihubungi. App masih menggunakan simpanan lokal buat sementara.');
+        }
+      });
+
+    const channel = subscribeToRemoteDraft(storageKey, (remoteDraft) => {
+      if (isCancelled || !remoteDraft?.data) return;
+
+      const nextSnapshot = JSON.stringify(normalizeZeroValuesForInputs(remoteDraft.data));
+      const currentSnapshot = JSON.stringify(normalizeZeroValuesForInputs(latestFormDataRef.current));
+
+      if (nextSnapshot === currentSnapshot || nextSnapshot === lastRemoteSnapshotRef.current) {
+        return;
+      }
+
+      applyIncomingDraft(remoteDraft.data);
+    });
+
     return () => {
+      isCancelled = true;
       if (saveTimeoutRef.current) {
         window.clearTimeout(saveTimeoutRef.current);
       }
@@ -87,11 +164,15 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       if (autoSaveIndicatorTimeoutRef.current) {
         window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
       }
+      if (remoteSyncTimeoutRef.current) {
+        window.clearTimeout(remoteSyncTimeoutRef.current);
+      }
       if (successTimeoutRef.current) {
         window.clearTimeout(successTimeoutRef.current);
       }
+      void unsubscribeFromRemoteDraft(channel);
     };
-  }, [deptName, storageKey]);
+  }, [deptName, mergeWithInitialState, storageKey]);
 
   const setFormData = useCallback((value: any) => {
     setRawFormData((prev: any) => {
@@ -114,21 +195,50 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     if (autoSaveIndicatorTimeoutRef.current) {
       window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
     }
+    if (remoteSyncTimeoutRef.current) {
+      window.clearTimeout(remoteSyncTimeoutRef.current);
+    }
+
+    if (isApplyingRemoteRef.current) {
+      return;
+    }
 
     autoSaveTimeoutRef.current = window.setTimeout(() => {
       try {
         setIsAutoSaving(true);
         localStorage.setItem(storageKey, JSON.stringify(formData));
-        autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
       } catch (error) {
         console.error('Error auto-saving data', error);
         setIsAutoSaving(false);
+        setSaveError('Simpanan lokal gagal. Sila semak storage pelayar anda.');
+        return;
       }
+
+      if (!isSupabaseConfigured) {
+        autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
+        return;
+      }
+
+      remoteSyncTimeoutRef.current = window.setTimeout(async () => {
+        try {
+          const saved = await upsertRemoteDraft(storageKey, deptName, formData);
+          lastRemoteSnapshotRef.current = JSON.stringify(normalizeZeroValuesForInputs(saved?.data || formData));
+          setSaveError(null);
+        } catch (error) {
+          console.error('Error auto-saving data to Supabase', error);
+          setSaveError('Sambungan Supabase gagal. Data masih disimpan secara lokal pada peranti ini.');
+        } finally {
+          autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
+        }
+      }, 150);
     }, 1200); // Debounce delay 1.2s
 
     return () => {
       if (autoSaveTimeoutRef.current) {
         window.clearTimeout(autoSaveTimeoutRef.current);
+      }
+      if (remoteSyncTimeoutRef.current) {
+        window.clearTimeout(remoteSyncTimeoutRef.current);
       }
       if (autoSaveIndicatorTimeoutRef.current) {
         window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
@@ -157,15 +267,23 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setSaveError(null);
     setShowSuccess(false);
     setIsSaving(true);
-    saveTimeoutRef.current = window.setTimeout(() => {
+    saveTimeoutRef.current = window.setTimeout(async () => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(payload));
+        if (isSupabaseConfigured) {
+          const saved = await upsertRemoteDraft(storageKey, deptName, payload);
+          lastRemoteSnapshotRef.current = JSON.stringify(normalizeZeroValuesForInputs(saved?.data || payload));
+        }
         setShowSuccess(true);
         successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
       } catch (error) {
-        console.error('Error saving data locally', error);
+        console.error('Error saving data', error);
         setShowSuccess(false);
-        setSaveError('Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.');
+        setSaveError(
+          isSupabaseConfigured
+            ? 'Data tidak dapat disimpan ke Supabase. Sila semak URL, publishable key, atau setup table/policy.'
+            : 'Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.'
+        );
       } finally {
         setIsSaving(false);
       }
