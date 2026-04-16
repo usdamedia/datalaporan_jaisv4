@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
 import { buildDraftKey } from '../../utils/formDraftKey';
-import {
-  fetchRemoteDraft,
-  subscribeToRemoteDraft,
-  unsubscribeFromRemoteDraft,
-  upsertRemoteDraft,
-} from '../../utils/reportDraftStore';
-import { isSupabaseConfigured } from '../../utils/supabase';
 
 export const useFormLogic = (deptName: string, initialState: any) => {
   const [formData, setRawFormData] = useState<any>(() => normalizeZeroValuesForInputs(initialState));
@@ -20,10 +13,6 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const autoSaveIndicatorTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
-  const remoteSyncTimeoutRef = useRef<number | null>(null);
-  const latestFormDataRef = useRef<any>(formData);
-  const lastRemoteSnapshotRef = useRef<string>('');
-  const isApplyingRemoteRef = useRef(false);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
 
   const mergeWithInitialState = useCallback((payload: any) => normalizeZeroValuesForInputs({
@@ -51,32 +40,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   }), [initialState]);
 
   useEffect(() => {
-    latestFormDataRef.current = formData;
-  }, [formData]);
-
-  useEffect(() => {
     let savedData: string | null = null;
-    let isCancelled = false;
-
-    const applyIncomingDraft = (payload: any) => {
-      const merged = mergeWithInitialState(payload);
-      const snapshot = JSON.stringify(merged);
-      lastRemoteSnapshotRef.current = snapshot;
-      isApplyingRemoteRef.current = true;
-      latestFormDataRef.current = merged;
-      setSaveError(null);
-      setRawFormData(merged);
-
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(merged));
-      } catch (storageError) {
-        console.error('Error caching incoming data locally', storageError);
-      }
-
-      window.setTimeout(() => {
-        isApplyingRemoteRef.current = false;
-      }, 0);
-    };
 
     try {
       savedData = localStorage.getItem(storageKey);
@@ -99,62 +63,14 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     if (savedData) {
       try {
-        applyIncomingDraft(JSON.parse(savedData));
+        setSaveError(null);
+        setRawFormData(mergeWithInitialState(JSON.parse(savedData)));
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
     }
 
-    if (!isSupabaseConfigured) {
-      return () => {
-        if (saveTimeoutRef.current) {
-          window.clearTimeout(saveTimeoutRef.current);
-        }
-        if (autoSaveTimeoutRef.current) {
-          window.clearTimeout(autoSaveTimeoutRef.current);
-        }
-        if (autoSaveIndicatorTimeoutRef.current) {
-          window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
-        }
-        if (successTimeoutRef.current) {
-          window.clearTimeout(successTimeoutRef.current);
-        }
-        if (remoteSyncTimeoutRef.current) {
-          window.clearTimeout(remoteSyncTimeoutRef.current);
-        }
-      };
-    }
-
-    fetchRemoteDraft(storageKey)
-      .then((remoteDraft) => {
-        if (isCancelled || !remoteDraft?.data) return;
-
-        const remoteSnapshot = JSON.stringify(normalizeZeroValuesForInputs(remoteDraft.data));
-        if (remoteSnapshot === lastRemoteSnapshotRef.current) return;
-        applyIncomingDraft(remoteDraft.data);
-      })
-      .catch((error) => {
-        console.error('Error loading remote draft', error);
-        if (!isCancelled) {
-          setSaveError('Supabase tidak dapat dihubungi. App masih menggunakan simpanan lokal buat sementara.');
-        }
-      });
-
-    const channel = subscribeToRemoteDraft(storageKey, (remoteDraft) => {
-      if (isCancelled || !remoteDraft?.data) return;
-
-      const nextSnapshot = JSON.stringify(normalizeZeroValuesForInputs(remoteDraft.data));
-      const currentSnapshot = JSON.stringify(normalizeZeroValuesForInputs(latestFormDataRef.current));
-
-      if (nextSnapshot === currentSnapshot || nextSnapshot === lastRemoteSnapshotRef.current) {
-        return;
-      }
-
-      applyIncomingDraft(remoteDraft.data);
-    });
-
     return () => {
-      isCancelled = true;
       if (saveTimeoutRef.current) {
         window.clearTimeout(saveTimeoutRef.current);
       }
@@ -164,13 +80,9 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       if (autoSaveIndicatorTimeoutRef.current) {
         window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
       }
-      if (remoteSyncTimeoutRef.current) {
-        window.clearTimeout(remoteSyncTimeoutRef.current);
-      }
       if (successTimeoutRef.current) {
         window.clearTimeout(successTimeoutRef.current);
       }
-      void unsubscribeFromRemoteDraft(channel);
     };
   }, [deptName, mergeWithInitialState, storageKey]);
 
@@ -195,13 +107,6 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     if (autoSaveIndicatorTimeoutRef.current) {
       window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
     }
-    if (remoteSyncTimeoutRef.current) {
-      window.clearTimeout(remoteSyncTimeoutRef.current);
-    }
-
-    if (isApplyingRemoteRef.current) {
-      return;
-    }
 
     autoSaveTimeoutRef.current = window.setTimeout(() => {
       try {
@@ -213,32 +118,12 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         setSaveError('Simpanan lokal gagal. Sila semak storage pelayar anda.');
         return;
       }
-
-      if (!isSupabaseConfigured) {
-        autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
-        return;
-      }
-
-      remoteSyncTimeoutRef.current = window.setTimeout(async () => {
-        try {
-          const saved = await upsertRemoteDraft(storageKey, deptName, formData);
-          lastRemoteSnapshotRef.current = JSON.stringify(normalizeZeroValuesForInputs(saved?.data || formData));
-          setSaveError(null);
-        } catch (error) {
-          console.error('Error auto-saving data to Supabase', error);
-          setSaveError('Sambungan Supabase gagal. Data masih disimpan secara lokal pada peranti ini.');
-        } finally {
-          autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
-        }
-      }, 150);
+      autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
     }, 1200); // Debounce delay 1.2s
 
     return () => {
       if (autoSaveTimeoutRef.current) {
         window.clearTimeout(autoSaveTimeoutRef.current);
-      }
-      if (remoteSyncTimeoutRef.current) {
-        window.clearTimeout(remoteSyncTimeoutRef.current);
       }
       if (autoSaveIndicatorTimeoutRef.current) {
         window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
@@ -267,23 +152,15 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setSaveError(null);
     setShowSuccess(false);
     setIsSaving(true);
-    saveTimeoutRef.current = window.setTimeout(async () => {
+    saveTimeoutRef.current = window.setTimeout(() => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(payload));
-        if (isSupabaseConfigured) {
-          const saved = await upsertRemoteDraft(storageKey, deptName, payload);
-          lastRemoteSnapshotRef.current = JSON.stringify(normalizeZeroValuesForInputs(saved?.data || payload));
-        }
         setShowSuccess(true);
         successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
       } catch (error) {
         console.error('Error saving data', error);
         setShowSuccess(false);
-        setSaveError(
-          isSupabaseConfigured
-            ? 'Data tidak dapat disimpan ke Supabase. Sila semak URL, publishable key, atau setup table/policy.'
-            : 'Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.'
-        );
+        setSaveError('Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.');
       } finally {
         setIsSaving(false);
       }

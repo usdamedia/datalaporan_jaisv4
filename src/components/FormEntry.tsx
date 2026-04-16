@@ -24,8 +24,51 @@ interface FormEntryProps {
   onBack: () => void;
 }
 
+const BKSK_FORM_PASSWORD = 'BKSKJ@IS';
+const BKSK_FORM_UNLOCK_KEY = 'jais_bksk_form_unlocked';
+
 const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   const normalizedDeptName = deptName.toUpperCase();
+  const [isBkskUnlocked, setIsBkskUnlocked] = React.useState(() => {
+    if (typeof window === 'undefined') return false;
+
+    try {
+      return window.sessionStorage.getItem(BKSK_FORM_UNLOCK_KEY) === 'true';
+    } catch (error) {
+      console.error('Failed to read BKSK form access state', error);
+      return false;
+    }
+  });
+
+  React.useEffect(() => {
+    const isBkskPage = normalizedDeptName.includes('BKSK') || normalizedDeptName.includes('SAUDARA KITA');
+    if (!isBkskPage || isBkskUnlocked) return;
+
+    const enteredPassword = window.prompt('Masukkan kata laluan untuk akses Bahagian Kemajuan Saudara Kita (BKSK):');
+
+    if (enteredPassword === BKSK_FORM_PASSWORD) {
+      try {
+        window.sessionStorage.setItem(BKSK_FORM_UNLOCK_KEY, 'true');
+      } catch (error) {
+        console.error('Failed to persist BKSK form access state', error);
+      }
+
+      setIsBkskUnlocked(true);
+      return;
+    }
+
+    if (enteredPassword !== null) {
+      window.alert('Kata laluan tidak tepat.');
+    }
+
+    onBack();
+  }, [isBkskUnlocked, normalizedDeptName, onBack]);
+
+  const isBkskPage = normalizedDeptName.includes('BKSK') || normalizedDeptName.includes('SAUDARA KITA');
+
+  if (isBkskPage && !isBkskUnlocked) {
+    return null;
+  }
 
   // Route to specific form components based on department name
   
