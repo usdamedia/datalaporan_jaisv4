@@ -14,6 +14,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const autoSaveIndicatorTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
   const isInitialMount = useRef(true);
+  const loadedStorageKeyRef = useRef<string | null>(null);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
 
   const mergeWithInitialState = useCallback((payload: any) => {
@@ -45,6 +46,10 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   }, []);
 
   useEffect(() => {
+    if (loadedStorageKeyRef.current === storageKey) {
+      return;
+    }
+
     initialStateRef.current = normalizeZeroValuesForInputs(initialState);
     let savedData: string | null = null;
 
@@ -74,7 +79,11 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
+    } else {
+      setRawFormData(initialStateRef.current);
     }
+
+    loadedStorageKeyRef.current = storageKey;
 
     return () => {
       if (saveTimeoutRef.current) {
@@ -90,7 +99,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         window.clearTimeout(successTimeoutRef.current);
       }
     };
-  }, [deptName, mergeWithInitialState, storageKey]);
+  }, [initialState, mergeWithInitialState, storageKey]);
 
   const setFormData = useCallback((value: any) => {
     setRawFormData((prev: any) => {
