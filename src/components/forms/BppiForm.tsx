@@ -177,7 +177,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
             <h3 className="text-white font-bold">1. Institusi Pendidikan Islam 2025</h3>
           </div>
           <div className="p-6 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-8">
               {/* MIS */}
               <div className="space-y-4">
                 <h4 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">Sekolah Agama MIS</h4>
