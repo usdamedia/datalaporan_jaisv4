@@ -3,27 +3,44 @@ import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Lock, Sparkles } fro
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
+import { buildDraftKey } from '../utils/formDraftKey';
 
 const BKSK_TRACKER_PASSWORD = 'BKSKJ@IS';
 const BKSK_TRACKER_UNLOCK_KEY = 'jais_bksk_tracker_unlocked';
 
-const toStorageKey = (name: string) =>
-  `jais_2025_${name
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '')}`;
+const getPossibleDraftKeys = (name: string) => {
+  const normalizedName = name.trim();
+  const candidates = new Set([normalizedName]);
+
+  const prefix = normalizedName.match(/^([A-Z]{2,8})\b/);
+  if (prefix) candidates.add(prefix[1]);
+
+  const dashed = normalizedName.match(/^([A-Z]{2,8})\s*-\s*/);
+  if (dashed) candidates.add(dashed[1]);
+
+  const trailing = normalizedName.match(/\b([A-Z]{2,8})\s*$/);
+  if (trailing) candidates.add(trailing[1]);
+
+  return Array.from(candidates).map((candidate) => buildDraftKey(candidate));
+};
 
 const hasSavedProgress = (name: string) => {
   if (typeof window === 'undefined') return false;
 
   try {
-    const saved = window.localStorage.getItem(toStorageKey(name));
-    return Boolean(saved && saved !== 'null' && saved !== '{}');
+    return getPossibleDraftKeys(name).some((storageKey) => {
+      const saved = window.localStorage.getItem(storageKey);
+      return Boolean(saved && saved !== 'null' && saved !== '{}');
+    });
   } catch (error) {
     console.error('Failed to read progress status', error);
     return false;
   }
+};
+
+const isBkskDepartment = (name: string) => {
+  const normalizedName = name.toUpperCase();
+  return normalizedName.includes('BKSK') || normalizedName.includes('SAUDARA KITA');
 };
 
 const isSubUnitCompleted = (parentName: string, unit: SubUnit) =>
@@ -71,78 +88,98 @@ const formatMalayDateTime = (date: Date) =>
     hour12: false,
   }).format(date)}`;
 
+type TrackerItemWithProgress = Department & { progress: ReturnType<typeof getDepartmentProgress> };
+type SummaryRow = { abbr: string; full: string };
+
+const toAbbreviation = (fullName: string) => {
+  const trimmed = fullName.trim();
+
+  const prefix = trimmed.match(/^([A-Z]{2,8})\b/);
+  if (prefix) return prefix[1];
+
+  const dashed = trimmed.match(/^([A-Z]{2,8})\s*-\s*/);
+  if (dashed) return dashed[1];
+
+  const trailing = trimmed.match(/\b([A-Z]{2,8})\s*$/);
+  if (trailing) return trailing[1];
+
+  const words = trimmed.split(/\s+/).filter(Boolean);
+  const initials = words
+    .slice(0, 4)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
+  return initials || 'NA';
+};
+
+const sortSummaryRows = (rows: SummaryRow[]) =>
+  rows.sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
+
 const buildWhatsappSummary = (
-  trackerItems: Array<Department & { progress: ReturnType<typeof getDepartmentProgress> }>,
+  trackerItems: TrackerItemWithProgress[],
   overallPercentage: number,
-  _completedItems: number,
-  _inProgressItems: number,
+  completedItems: number,
+  inProgressItems: number,
+  isBkskUnlocked: boolean,
   timestamp: Date
 ) => {
-  const toAbbreviation = (fullName: string) => {
-    const trimmed = fullName.trim();
-
-    // Prefer explicit prefix acronyms, e.g. "UPP UNIT ..." -> UPP
-    const prefix = trimmed.match(/^([A-Z]{2,8})\b/);
-    if (prefix) return prefix[1];
-
-    // Prefer left side of "DHQC - ..." style labels
-    const dashed = trimmed.match(/^([A-Z]{2,8})\s*-\s*/);
-    if (dashed) return dashed[1];
-
-    // Prefer trailing acronym, e.g. "... BPPS" -> BPPS, "... UKOKO" -> UKOKO
-    const trailing = trimmed.match(/\b([A-Z]{2,8})\s*$/);
-    if (trailing) return trailing[1];
-
-    // Fallback: initials from first 3-4 words (e.g. "Unit Integriti" -> UI)
-    const words = trimmed.split(/\s+/).filter(Boolean);
-    const initials = words
-      .slice(0, 4)
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase();
-
-    return initials || 'NA';
-  };
-
-  const completedSummaryRows = [
-    'Bahagian Perancangan dan Penyelidikan BPNP (2/3: Unit Perancangan Strategik, Unit Penyelidikan)',
-    'Unit Integriti (100% siap)',
-    'Bahagian Pengurusan Halal BPH (100% siap)',
-  ];
-
-  const completedSet = new Set([
-    'UNIT INTEGRITI',
-    'BAHAGIAN PENGURUSAN HALAL BPH',
-    'UNIT PENYELIDIKAN',
-    'UNIT PERANCANGAN STRATEGIK',
-  ]);
-
-  const collectionRows: Array<{ abbr: string; full: string }> = [];
+  const completedRows: SummaryRow[] = [];
+  const inProgressRows: SummaryRow[] = [];
+  const pendingRows: SummaryRow[] = [];
+  const protectedRows: SummaryRow[] = [];
 
   for (const dept of trackerItems) {
     if (!dept.active) continue;
 
-    if (dept.subUnits?.length) {
-      for (const unit of dept.subUnits.filter((u) => u.active)) {
-        if (completedSet.has(unit.name.toUpperCase())) continue;
-        collectionRows.push({
-          abbr: toAbbreviation(dept.name),
-          full: `${dept.name} - ${unit.name}`,
-        });
-      }
+    const isLockedBksk = isBkskDepartment(dept.name) && !isBkskUnlocked;
+    const departmentAbbr = toAbbreviation(dept.name);
+
+    if (isLockedBksk) {
+      protectedRows.push({
+        abbr: departmentAbbr,
+        full: `${dept.name} - status dilindungi`,
+      });
       continue;
     }
 
-    if (completedSet.has(dept.name.toUpperCase())) continue;
-    collectionRows.push({ abbr: toAbbreviation(dept.name), full: dept.name });
+    if (dept.subUnits?.length) {
+      for (const unit of dept.subUnits.filter((u) => u.active)) {
+        const row = {
+          abbr: departmentAbbr,
+          full: `${dept.name} - ${unit.name}`,
+        };
+
+        if (isSubUnitCompleted(dept.name, unit)) {
+          completedRows.push(row);
+        } else {
+          pendingRows.push(row);
+        }
+      }
+
+      continue;
+    }
+
+    const row = { abbr: departmentAbbr, full: dept.name };
+
+    if (dept.progress.percentage === 100) {
+      completedRows.push(row);
+    } else if (dept.progress.percentage > 0) {
+      inProgressRows.push(row);
+    } else {
+      pendingRows.push(row);
+    }
   }
 
-  collectionRows.sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
+  sortSummaryRows(completedRows);
+  sortSummaryRows(inProgressRows);
+  sortSummaryRows(pendingRows);
+  sortSummaryRows(protectedRows);
 
   const asBulletedList = (items: string[]) =>
     items.length > 0 ? items.map((item) => `• ${item}`).join('\n') : '• -';
 
-  return [
+  const lines = [
     'Assalamualaikum Tuan/Puan,',
     'Berikut kemas kini semasa Pengumpulan Data Laporan Tahunan JAIS 2025:',
     '',
@@ -150,18 +187,29 @@ const buildWhatsappSummary = (
     '',
     '*Ringkasan:*',
     `- Purata keseluruhan: ${overallPercentage}%`,
-    `- Siap setakat ini: ${completedSummaryRows.length} fokus utama`,
-    `- Sedang Dalam Pengumpulan Data: ${collectionRows.length} unit/bahagian`,
+    `- Selesai sepenuhnya: ${completedItems} unit/bahagian`,
+    `- Sedang berjalan: ${inProgressItems} unit/bahagian`,
+    `- Belum lengkap / belum bermula: ${pendingRows.length} unit/bahagian`,
     '',
     '*Senarai status semasa:*',
-    `✅ Unit/Bahagian Siap (${completedSummaryRows.length}):`,
-    asBulletedList(completedSummaryRows),
+    `✅ Unit/Bahagian Selesai (${completedRows.length}):`,
+    asBulletedList(completedRows.map((row) => `${row.abbr} ${row.full}`)),
     '',
-    '⏳ Sedang Dalam Pengumpulan Data:',
-    asBulletedList(collectionRows.map((row) => `${row.abbr} ${row.full}`)),
+    `🟡 Unit/Bahagian Sedang Berjalan (${inProgressRows.length}):`,
+    asBulletedList(inProgressRows.map((row) => `${row.abbr} ${row.full}`)),
     '',
-    'Terima kasih.',
-  ].join('\n');
+    `⏳ Unit/Bahagian Belum Lengkap (${pendingRows.length}):`,
+    asBulletedList(pendingRows.map((row) => `${row.abbr} ${row.full}`)),
+  ];
+
+  if (protectedRows.length > 0) {
+    lines.push('', `🔒 Unit/Bahagian Dilindungi (${protectedRows.length}):`);
+    lines.push(asBulletedList(protectedRows.map((row) => `${row.abbr} ${row.full}`)));
+  }
+
+  lines.push('', 'Terima kasih.');
+
+  return lines.join('\n');
 };
 
 const ProgressTrackerPage: React.FC = () => {
@@ -196,8 +244,8 @@ const ProgressTrackerPage: React.FC = () => {
   const completedItems = trackerItems.filter((item) => item.completed || item.progress.percentage === 100).length;
   const inProgressItems = trackerItems.filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100).length;
   const whatsappSummaryText = React.useMemo(
-    () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp),
-    [trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp]
+    () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, isBkskUnlocked, summaryTimestamp),
+    [trackerItems, overallPercentage, completedItems, inProgressItems, isBkskUnlocked, summaryTimestamp]
   );
 
   const handleCopySummary = async () => {
@@ -207,6 +255,7 @@ const ProgressTrackerPage: React.FC = () => {
       overallPercentage,
       completedItems,
       inProgressItems,
+      isBkskUnlocked,
       latestTimestamp
     );
 
@@ -322,7 +371,7 @@ const ProgressTrackerPage: React.FC = () => {
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {trackerItems.map((item, index) => {
-          const isBkskItem = item.name.toUpperCase().includes('BKSK') || item.name.toUpperCase().includes('SAUDARA KITA');
+          const isBkskItem = isBkskDepartment(item.name);
           const isLockedBksk = isBkskItem && !isBkskUnlocked;
           const { percentage, completedCount, totalCount, statusLabel } = item.progress;
           const isDone = Boolean(item.completed || percentage === 100);
