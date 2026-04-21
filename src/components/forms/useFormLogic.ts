@@ -94,13 +94,12 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         action?: 'manual_save' | 'autosave' | 'reconnect_sync';
       }
     ) => {
-      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+      const officerName = metadata?.officerName?.trim() || null;
+      const action = metadata?.action || 'autosave';
+      const clientId = getClientId();
+      let draftSyncFailed = false;
 
       try {
-        const officerName = metadata?.officerName?.trim() || null;
-        const action = metadata?.action || 'autosave';
-        const clientId = getClientId();
-
         await setDoc(
           doc(db, 'drafts_2025', storageKey),
           {
@@ -117,26 +116,43 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           },
           { merge: true }
         );
-
-        if (action === 'manual_save') {
-          const resolvedOfficerName = officerName || 'Tetamu';
-          const logPayload = {
-            deptName,
-            storageKey,
-            action,
-            officerName: resolvedOfficerName,
-            updatedByUid: null,
-            updatedByEmail: `guest@${clientId}`,
-            updatedByClientId: clientId,
-            createdAt: serverTimestamp(),
-            clientCreatedAt: new Date().toISOString(),
-          };
-
-          await addDoc(collection(db, 'drafts_2025', storageKey, 'update_logs'), logPayload);
-          await addDoc(collection(db, 'update_logs_central'), logPayload);
-        }
       } catch (error) {
-        console.error('Error syncing data to Firestore', error);
+        draftSyncFailed = true;
+        console.error('Error syncing draft data to Firestore', error);
+      }
+
+      if (action !== 'manual_save') {
+        return;
+      }
+
+      const logPayload = {
+        deptName,
+        storageKey,
+        action,
+        officerName: officerName || 'Tetamu',
+        updatedByUid: null,
+        updatedByEmail: `guest@${clientId}`,
+        updatedByClientId: clientId,
+        createdAt: serverTimestamp(),
+        clientCreatedAt: new Date().toISOString(),
+      };
+
+      try {
+        await addDoc(collection(db, 'update_logs_central'), logPayload);
+      } catch (error) {
+        console.error('Error writing central update log to Firestore', error);
+        throw error;
+      }
+
+      try {
+        await addDoc(collection(db, 'drafts_2025', storageKey, 'update_logs'), logPayload);
+      } catch (error) {
+        // Keep the central audit log as the source of truth even if the nested mirror fails.
+        console.error('Error writing nested update log to Firestore', error);
+      }
+
+      if (draftSyncFailed) {
+        throw new Error('Draft saved locally but Firestore draft sync failed.');
       }
     },
     [deptName, storageKey]
@@ -327,18 +343,23 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setLastOfficerName(normalizedOfficerName);
 
     saveTimeoutRef.current = window.setTimeout(() => {
-      try {
+      (async () => {
+        try {
         localStorage.setItem(storageKey, JSON.stringify(payload));
-        void syncToCloud(payload, { action: 'manual_save', officerName: normalizedOfficerName });
+          await syncToCloud(payload, { action: 'manual_save', officerName: normalizedOfficerName });
         setShowSuccess(true);
         successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
-      } catch (error) {
-        console.error('Error saving data', error);
-        setShowSuccess(false);
-        setSaveError('Data tidak dapat disimpan ke localStorage. Sila kosongkan ruang storan pelayar atau tutup mod private/incognito.');
-      } finally {
-        setIsSaving(false);
-      }
+          setSaveError(null);
+        } catch (error) {
+          console.error('Error saving data', error);
+          setShowSuccess(false);
+          const firestoreError = error as { code?: string };
+          const errorSuffix = firestoreError?.code ? ` (${firestoreError.code})` : '';
+          setSaveError(`Data disimpan lokal tetapi log/sync Firestore gagal${errorSuffix}. Sila semak sambungan internet atau rules.`);
+        } finally {
+          setIsSaving(false);
+        }
+      })();
     }, 800);
   };
 
