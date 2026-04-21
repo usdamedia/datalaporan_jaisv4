@@ -257,36 +257,52 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     if (savedData) {
       try {
         parsedLocalData = JSON.parse(savedData);
-        setSaveError(null);
-        setRawFormData(mergeWithInitialState(parsedLocalData));
-        latestPayloadRef.current = parsedLocalData;
-        lastFirestorePayloadRef.current = sanitizeForFirestore(parsedLocalData);
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
-    } else {
-      setRawFormData(initialStateRef.current);
     }
+
+    setRawFormData(initialStateRef.current);
 
     loadedStorageKeyRef.current = storageKey;
 
     let cancelled = false;
 
     const hydrateFromCloud = async () => {
+      const applyLocalFallback = () => {
+        if (!parsedLocalData) {
+          setRawFormData(initialStateRef.current);
+          latestPayloadRef.current = initialStateRef.current;
+          return;
+        }
+
+        setSaveError(null);
+        setRawFormData(mergeWithInitialState(parsedLocalData));
+        latestPayloadRef.current = parsedLocalData;
+      };
+
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        applyLocalFallback();
+        return;
+      }
+
       try {
         const snapshot = await getDoc(doc(db, 'drafts_2025', storageKey));
         if (cancelled || !snapshot.exists()) {
           if (parsedLocalData) {
+            applyLocalFallback();
             void syncToCloud(parsedLocalData, { action: 'reconnect_sync' });
+            return;
           }
+
+          setRawFormData(initialStateRef.current);
+          latestPayloadRef.current = initialStateRef.current;
           return;
         }
 
         const cloudData = snapshot.data()?.data;
-        if (!cloudData) return;
-
-        if (parsedLocalData) {
-          void syncToCloud(parsedLocalData, { action: 'reconnect_sync' });
+        if (!cloudData) {
+          applyLocalFallback();
           return;
         }
 
@@ -297,6 +313,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       } catch (error) {
         if (!cancelled) {
           console.error('Error loading Firestore draft', error);
+          applyLocalFallback();
         }
       }
     };
