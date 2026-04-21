@@ -1,6 +1,26 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { addDoc, collection, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
 import { buildDraftKey } from '../../utils/formDraftKey';
+import { db } from '../../firebase';
+
+const CLIENT_ID_STORAGE_KEY = 'jais_client_id_2025';
+
+const getClientId = () => {
+  if (typeof window === 'undefined') return 'unknown-client';
+
+  try {
+    const existing = window.localStorage.getItem(CLIENT_ID_STORAGE_KEY);
+    if (existing) return existing;
+
+    const generated = `client_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+    window.localStorage.setItem(CLIENT_ID_STORAGE_KEY, generated);
+    return generated;
+  } catch (error) {
+    console.error('Unable to access client id storage', error);
+    return 'unknown-client';
+  }
+};
 
 export const useFormLogic = (deptName: string, initialState: any) => {
   const initialStateRef = useRef<any>(normalizeZeroValuesForInputs(initialState));
@@ -16,6 +36,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const isInitialMount = useRef(true);
   const loadedStorageKeyRef = useRef<string | null>(null);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
+  const latestPayloadRef = useRef<any>(initialStateRef.current);
 
   const mergeWithInitialState = useCallback((payload: any) => {
     const baseState = initialStateRef.current;
@@ -45,13 +66,67 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     });
   }, []);
 
+  const syncToCloud = useCallback(
+    async (
+      payload: any,
+      metadata?: {
+        officerName?: string;
+        action?: 'manual_save' | 'autosave' | 'reconnect_sync';
+      }
+    ) => {
+      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+
+      try {
+        const officerName = metadata?.officerName?.trim() || null;
+        const action = metadata?.action || 'autosave';
+        const clientId = getClientId();
+
+        await setDoc(
+          doc(db, 'drafts_2025', storageKey),
+          {
+            deptName,
+            storageKey,
+            data: payload,
+            updatedByUid: null,
+            updatedByEmail: `guest@${clientId}`,
+            updatedByClientId: clientId,
+            lastAction: action,
+            lastOfficerName: officerName,
+            updatedAt: serverTimestamp(),
+            clientUpdatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+
+        if (officerName) {
+          await addDoc(collection(db, 'drafts_2025', storageKey, 'update_logs'), {
+            deptName,
+            storageKey,
+            action,
+            officerName,
+            updatedByUid: null,
+            updatedByEmail: `guest@${clientId}`,
+            updatedByClientId: clientId,
+            createdAt: serverTimestamp(),
+            clientCreatedAt: new Date().toISOString(),
+          });
+        }
+      } catch (error) {
+        console.error('Error syncing data to Firestore', error);
+      }
+    },
+    [deptName, storageKey]
+  );
+
   useEffect(() => {
     if (loadedStorageKeyRef.current === storageKey) {
       return;
     }
 
     initialStateRef.current = normalizeZeroValuesForInputs(initialState);
+    latestPayloadRef.current = initialStateRef.current;
     let savedData: string | null = null;
+    let parsedLocalData: any = null;
 
     try {
       savedData = localStorage.getItem(storageKey);
@@ -74,8 +149,10 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     if (savedData) {
       try {
+        parsedLocalData = JSON.parse(savedData);
         setSaveError(null);
-        setRawFormData(mergeWithInitialState(JSON.parse(savedData)));
+        setRawFormData(mergeWithInitialState(parsedLocalData));
+        latestPayloadRef.current = parsedLocalData;
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
@@ -85,7 +162,40 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     loadedStorageKeyRef.current = storageKey;
 
+    let cancelled = false;
+
+    const hydrateFromCloud = async () => {
+      try {
+        const snapshot = await getDoc(doc(db, 'drafts_2025', storageKey));
+        if (cancelled || !snapshot.exists()) {
+          if (parsedLocalData) {
+            void syncToCloud(parsedLocalData, { action: 'reconnect_sync' });
+          }
+          return;
+        }
+
+        const cloudData = snapshot.data()?.data;
+        if (!cloudData) return;
+
+        if (parsedLocalData) {
+          void syncToCloud(parsedLocalData, { action: 'reconnect_sync' });
+          return;
+        }
+
+        setRawFormData(mergeWithInitialState(cloudData));
+        latestPayloadRef.current = cloudData;
+        localStorage.setItem(storageKey, JSON.stringify(cloudData));
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Error loading Firestore draft', error);
+        }
+      }
+    };
+
+    void hydrateFromCloud();
+
     return () => {
+      cancelled = true;
       if (saveTimeoutRef.current) {
         window.clearTimeout(saveTimeoutRef.current);
       }
@@ -99,12 +209,14 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         window.clearTimeout(successTimeoutRef.current);
       }
     };
-  }, [initialState, mergeWithInitialState, storageKey]);
+  }, [initialState, mergeWithInitialState, storageKey, syncToCloud]);
 
   const setFormData = useCallback((value: any) => {
     setRawFormData((prev: any) => {
       const next = typeof value === 'function' ? value(prev) : value;
-      return normalizeZeroValuesForInputs(next);
+      const normalized = normalizeZeroValuesForInputs(next);
+      latestPayloadRef.current = normalized;
+      return normalized;
     });
   }, []);
 
@@ -127,6 +239,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       try {
         setIsAutoSaving(true);
         localStorage.setItem(storageKey, JSON.stringify(formData));
+        void syncToCloud(formData, { action: 'autosave' });
       } catch (error) {
         console.error('Error auto-saving data', error);
         setIsAutoSaving(false);
@@ -144,7 +257,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
       }
     };
-  }, [formData, storageKey]);
+  }, [formData, storageKey, syncToCloud]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -167,9 +280,26 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setSaveError(null);
     setShowSuccess(false);
     setIsSaving(true);
+    latestPayloadRef.current = payload;
+
+    const officerName = window.prompt('Sila isikan nama anda untuk pengesahan kemas kini data:');
+    if (officerName === null) {
+      setIsSaving(false);
+      setSaveError('Simpanan dibatalkan. Nama pegawai diperlukan untuk pengesahan.');
+      return;
+    }
+
+    const normalizedOfficerName = officerName.trim();
+    if (!normalizedOfficerName) {
+      setIsSaving(false);
+      setSaveError('Simpanan dibatalkan. Sila isi nama pegawai.');
+      return;
+    }
+
     saveTimeoutRef.current = window.setTimeout(() => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(payload));
+        void syncToCloud(payload, { action: 'manual_save', officerName: normalizedOfficerName });
         setShowSuccess(true);
         successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
       } catch (error) {
@@ -181,6 +311,25 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       }
     }, 800);
   };
+
+  useEffect(() => {
+    const handleOnline = () => {
+      try {
+        const savedData = localStorage.getItem(storageKey);
+        if (!savedData) {
+          void syncToCloud(latestPayloadRef.current, { action: 'reconnect_sync' });
+          return;
+        }
+
+        void syncToCloud(JSON.parse(savedData), { action: 'reconnect_sync' });
+      } catch (error) {
+        console.error('Error syncing local draft after reconnect', error);
+      }
+    };
+
+    window.addEventListener('online', handleOnline);
+    return () => window.removeEventListener('online', handleOnline);
+  }, [storageKey, syncToCloud]);
 
   const addLawatan = () => {
     setFormData((prev: any) => ({

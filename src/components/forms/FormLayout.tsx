@@ -133,7 +133,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
       {showSuccess && (
         <div className="mb-8 bg-green-50 border border-green-100 p-4 rounded-2xl flex items-center gap-4 text-green-700 animate-scale-in">
           <CheckCircle2 className="w-5 h-5" />
-          <span className="text-sm font-bold">Data telah berjaya disimpan secara lokal!</span>
+          <span className="text-sm font-bold">Data Telah Disimpan. Terima Kasih!</span>
         </div>
       )}
 
@@ -152,7 +152,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
         <div className="flex items-start gap-4 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-6 text-blue-700">
           <AlertCircle className="mt-0.5 h-5 w-5" />
           <p className="text-[10px] md:text-[11px] font-bold leading-relaxed">
-            Progress disimpan secara automatik dalam storage peranti anda sahaja. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk simpan progres pengisian anda.
+            Progress disimpan automatik di storage peranti dan akan diselaras ke Firestore bila internet tersedia. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk pengesahan nama pegawai.
           </p>
         </div>
       </div>

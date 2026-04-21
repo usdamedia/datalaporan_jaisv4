@@ -1,9 +1,11 @@
 import React from 'react';
-import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Sparkles } from 'lucide-react';
+import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, RefreshCw, Sparkles } from 'lucide-react';
+import { collectionGroup, getDocs, limit, query, Timestamp } from 'firebase/firestore';
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
 import { buildDraftKey } from '../utils/formDraftKey';
+import { db } from '../firebase';
 
 const getPossibleDraftKeys = (name: string) => {
   const normalizedName = name.trim();
@@ -82,6 +84,15 @@ const formatMalayDateTime = (date: Date) =>
 
 type TrackerItemWithProgress = Department & { progress: ReturnType<typeof getDepartmentProgress> };
 type SummaryRow = { abbr: string; full: string };
+type UpdateLogEntry = {
+  id: string;
+  deptName: string;
+  officerName: string;
+  updatedByEmail: string;
+  action: string;
+  createdAt: Date | null;
+  clientCreatedAt: string | null;
+};
 
 const toAbbreviation = (fullName: string) => {
   const trimmed = fullName.trim();
@@ -107,6 +118,16 @@ const toAbbreviation = (fullName: string) => {
 
 const sortSummaryRows = (rows: SummaryRow[]) =>
   rows.sort((a, b) => a.abbr.localeCompare(b.abbr, 'ms-MY') || a.full.localeCompare(b.full, 'ms-MY'));
+
+const toDateFromLog = (value: unknown): Date | null => {
+  if (!value) return null;
+  if (value instanceof Timestamp) return value.toDate();
+  if (typeof value === 'object' && value && 'seconds' in value) {
+    const seconds = Number((value as { seconds: unknown }).seconds);
+    if (!Number.isNaN(seconds)) return new Date(seconds * 1000);
+  }
+  return null;
+};
 
 const buildWhatsappSummary = (
   trackerItems: TrackerItemWithProgress[],
@@ -187,8 +208,12 @@ const buildWhatsappSummary = (
 };
 
 const ProgressTrackerPage: React.FC = () => {
+  const [activeView, setActiveView] = React.useState<'status' | 'log'>('status');
   const [summaryTimestamp, setSummaryTimestamp] = React.useState(new Date());
   const [isCopied, setIsCopied] = React.useState(false);
+  const [logs, setLogs] = React.useState<UpdateLogEntry[]>([]);
+  const [isLoadingLogs, setIsLoadingLogs] = React.useState(false);
+  const [logsError, setLogsError] = React.useState<string | null>(null);
 
   const trackerItems = React.useMemo(
     () => DEPARTMENTS.filter((department) => department.active).map((department) => ({
@@ -232,8 +257,76 @@ const ProgressTrackerPage: React.FC = () => {
     }
   };
 
+  const loadLogs = React.useCallback(async () => {
+    setIsLoadingLogs(true);
+    setLogsError(null);
+
+    try {
+      const snapshot = await getDocs(query(collectionGroup(db, 'update_logs'), limit(250)));
+      const nextLogs = snapshot.docs
+        .map((entry) => {
+          const data = entry.data();
+          return {
+            id: entry.id,
+            deptName: String(data.deptName || '-'),
+            officerName: String(data.officerName || '-'),
+            updatedByEmail: String(data.updatedByEmail || '-'),
+            action: String(data.action || 'manual_save'),
+            createdAt: toDateFromLog(data.createdAt),
+            clientCreatedAt: data.clientCreatedAt ? String(data.clientCreatedAt) : null,
+          } as UpdateLogEntry;
+        })
+        .sort((a, b) => {
+          const aTime = a.createdAt?.getTime() || (a.clientCreatedAt ? new Date(a.clientCreatedAt).getTime() : 0);
+          const bTime = b.createdAt?.getTime() || (b.clientCreatedAt ? new Date(b.clientCreatedAt).getTime() : 0);
+          return bTime - aTime;
+        });
+
+      setLogs(nextLogs);
+    } catch (error) {
+      console.error('Failed to load update logs', error);
+      setLogsError('Log tidak dapat dimuatkan. Semak sambungan internet atau Firestore rules.');
+    } finally {
+      setIsLoadingLogs(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (activeView !== 'log') return;
+    void loadLogs();
+  }, [activeView, loadLogs]);
+
   return (
     <div className="space-y-8 md:space-y-12">
+      <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveView('status')}
+            className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-[0.14em] transition ${
+              activeView === 'status'
+                ? 'bg-blue-700 text-white'
+                : 'border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            Status
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveView('log')}
+            className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-[0.14em] transition ${
+              activeView === 'log'
+                ? 'bg-blue-700 text-white'
+                : 'border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            Log Kemaskini
+          </button>
+        </div>
+      </section>
+
+      {activeView === 'status' ? (
+      <>
       <section className="relative overflow-hidden rounded-[2.5rem] border border-blue-200 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.2),_transparent_35%),linear-gradient(135deg,_#eff6ff,_#ffffff_45%,_#dbeafe)] px-6 py-7 shadow-xl shadow-blue-100/60 md:px-8 md:py-9">
         <div className="absolute -right-10 top-0 h-40 w-40 rounded-full bg-blue-300/20 blur-3xl" />
         <div className="absolute bottom-0 left-1/2 h-32 w-32 -translate-x-1/2 rounded-full bg-cyan-200/30 blur-3xl" />
@@ -374,6 +467,77 @@ const ProgressTrackerPage: React.FC = () => {
         })}
         </div>
       </section>
+      </>
+      ) : (
+      <section className="rounded-[2rem] border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-6 shadow-sm md:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-indigo-600">Audit Trail</p>
+            <h3 className="mt-1 text-xl font-black text-slate-900 md:text-2xl">Log Kemaskini Pegawai</h3>
+            <p className="mt-2 text-sm font-medium text-slate-600">
+              Rekod ini dipaparkan hanya dalam Progress Tracker. Ia direkod semasa pengguna menekan Simpan Draf.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => void loadLogs()}
+            disabled={isLoadingLogs}
+            className="inline-flex items-center gap-2 rounded-xl border border-indigo-300 bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-indigo-700 transition hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isLoadingLogs ? 'animate-spin' : ''}`} />
+            Refresh Log
+          </button>
+        </div>
+
+        {logsError && (
+          <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
+            {logsError}
+          </p>
+        )}
+
+        <div className="mt-5 overflow-x-auto rounded-2xl border border-indigo-100 bg-white">
+          <table className="min-w-full">
+            <thead className="bg-indigo-50 text-left">
+              <tr>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">Tarikh Masa</th>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">Nama Pegawai</th>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">Bahagian / Unit</th>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">Akaun Login</th>
+                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">Tindakan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {!isLoadingLogs && logs.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-sm font-semibold text-slate-500">
+                    Tiada log kemaskini lagi.
+                  </td>
+                </tr>
+              ) : (
+                logs.map((log, idx) => {
+                  const timeLabel = log.createdAt
+                    ? formatMalayDateTime(log.createdAt)
+                    : log.clientCreatedAt
+                      ? formatMalayDateTime(new Date(log.clientCreatedAt))
+                      : '-';
+                  const actionLabel = log.action === 'manual_save' ? 'Simpan Draf' : log.action;
+
+                  return (
+                    <tr key={`${log.id}-${idx}`} className="border-t border-indigo-100/80">
+                      <td className="px-4 py-3 text-xs font-semibold text-slate-700">{timeLabel}</td>
+                      <td className="px-4 py-3 text-xs font-bold text-slate-800">{log.officerName}</td>
+                      <td className="px-4 py-3 text-xs font-semibold text-slate-700">{log.deptName}</td>
+                      <td className="px-4 py-3 text-xs font-semibold text-slate-700">{log.updatedByEmail}</td>
+                      <td className="px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-indigo-700">{actionLabel}</td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      )}
     </div>
   );
 };
