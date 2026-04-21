@@ -1,12 +1,9 @@
 import React from 'react';
-import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Lock, Sparkles } from 'lucide-react';
+import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, Sparkles } from 'lucide-react';
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
 import { buildDraftKey } from '../utils/formDraftKey';
-
-const BKSK_TRACKER_PASSWORD = 'BKSKJ@IS';
-const BKSK_TRACKER_UNLOCK_KEY = 'jais_bksk_tracker_unlocked';
 
 const getPossibleDraftKeys = (name: string) => {
   const normalizedName = name.trim();
@@ -36,11 +33,6 @@ const hasSavedProgress = (name: string) => {
     console.error('Failed to read progress status', error);
     return false;
   }
-};
-
-const isBkskDepartment = (name: string) => {
-  const normalizedName = name.toUpperCase();
-  return normalizedName.includes('BKSK') || normalizedName.includes('SAUDARA KITA');
 };
 
 const isSubUnitCompleted = (parentName: string, unit: SubUnit) =>
@@ -121,27 +113,15 @@ const buildWhatsappSummary = (
   overallPercentage: number,
   completedItems: number,
   inProgressItems: number,
-  isBkskUnlocked: boolean,
   timestamp: Date
 ) => {
   const completedRows: SummaryRow[] = [];
   const inProgressRows: SummaryRow[] = [];
   const pendingRows: SummaryRow[] = [];
-  const protectedRows: SummaryRow[] = [];
 
   for (const dept of trackerItems) {
     if (!dept.active) continue;
-
-    const isLockedBksk = isBkskDepartment(dept.name) && !isBkskUnlocked;
     const departmentAbbr = toAbbreviation(dept.name);
-
-    if (isLockedBksk) {
-      protectedRows.push({
-        abbr: departmentAbbr,
-        full: `${dept.name} - status dilindungi`,
-      });
-      continue;
-    }
 
     if (dept.subUnits?.length) {
       for (const unit of dept.subUnits.filter((u) => u.active)) {
@@ -174,7 +154,6 @@ const buildWhatsappSummary = (
   sortSummaryRows(completedRows);
   sortSummaryRows(inProgressRows);
   sortSummaryRows(pendingRows);
-  sortSummaryRows(protectedRows);
 
   const asBulletedList = (items: string[]) =>
     items.length > 0 ? items.map((item) => `• ${item}`).join('\n') : '• -';
@@ -202,11 +181,6 @@ const buildWhatsappSummary = (
     asBulletedList(pendingRows.map((row) => `${row.abbr} ${row.full}`)),
   ];
 
-  if (protectedRows.length > 0) {
-    lines.push('', `🔒 Unit/Bahagian Dilindungi (${protectedRows.length}):`);
-    lines.push(asBulletedList(protectedRows.map((row) => `${row.abbr} ${row.full}`)));
-  }
-
   lines.push('', 'Terima kasih.');
 
   return lines.join('\n');
@@ -215,16 +189,6 @@ const buildWhatsappSummary = (
 const ProgressTrackerPage: React.FC = () => {
   const [summaryTimestamp, setSummaryTimestamp] = React.useState(new Date());
   const [isCopied, setIsCopied] = React.useState(false);
-  const [isBkskUnlocked, setIsBkskUnlocked] = React.useState(() => {
-    if (typeof window === 'undefined') return false;
-
-    try {
-      return window.sessionStorage.getItem(BKSK_TRACKER_UNLOCK_KEY) === 'true';
-    } catch (error) {
-      console.error('Failed to read BKSK tracker access state', error);
-      return false;
-    }
-  });
 
   const trackerItems = React.useMemo(
     () => DEPARTMENTS.filter((department) => department.active).map((department) => ({
@@ -244,8 +208,8 @@ const ProgressTrackerPage: React.FC = () => {
   const completedItems = trackerItems.filter((item) => item.completed || item.progress.percentage === 100).length;
   const inProgressItems = trackerItems.filter((item) => item.progress.percentage > 0 && item.progress.percentage < 100).length;
   const whatsappSummaryText = React.useMemo(
-    () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, isBkskUnlocked, summaryTimestamp),
-    [trackerItems, overallPercentage, completedItems, inProgressItems, isBkskUnlocked, summaryTimestamp]
+    () => buildWhatsappSummary(trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp),
+    [trackerItems, overallPercentage, completedItems, inProgressItems, summaryTimestamp]
   );
 
   const handleCopySummary = async () => {
@@ -255,7 +219,6 @@ const ProgressTrackerPage: React.FC = () => {
       overallPercentage,
       completedItems,
       inProgressItems,
-      isBkskUnlocked,
       latestTimestamp
     );
 
@@ -267,24 +230,6 @@ const ProgressTrackerPage: React.FC = () => {
     } catch (error) {
       console.error('Failed to copy WhatsApp summary', error);
     }
-  };
-
-  const handleUnlockBksk = () => {
-    const enteredPassword = window.prompt('Masukkan kata laluan untuk melihat Kemajuan Saudara Kita:');
-    if (enteredPassword === null) return;
-
-    if (enteredPassword !== BKSK_TRACKER_PASSWORD) {
-      window.alert('Kata laluan tidak tepat.');
-      return;
-    }
-
-    try {
-      window.sessionStorage.setItem(BKSK_TRACKER_UNLOCK_KEY, 'true');
-    } catch (error) {
-      console.error('Failed to persist BKSK tracker access state', error);
-    }
-
-    setIsBkskUnlocked(true);
   };
 
   return (
@@ -371,8 +316,6 @@ const ProgressTrackerPage: React.FC = () => {
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {trackerItems.map((item, index) => {
-          const isBkskItem = isBkskDepartment(item.name);
-          const isLockedBksk = isBkskItem && !isBkskUnlocked;
           const { percentage, completedCount, totalCount, statusLabel } = item.progress;
           const isDone = Boolean(item.completed || percentage === 100);
           const resolvedStatusLabel = item.completed ? 'Selesai' : statusLabel;
@@ -394,55 +337,37 @@ const ProgressTrackerPage: React.FC = () => {
                   <div>
                     <h3 className="text-[15px] font-black leading-6 text-slate-900">{item.name}</h3>
                     <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                      {isLockedBksk ? (
-                        <Lock className="h-3.5 w-3.5" />
-                      ) : item.subUnits?.length ? (
+                      {item.subUnits?.length ? (
                         <Layers3 className="h-3.5 w-3.5" />
                       ) : (
                         <Gauge className="h-3.5 w-3.5" />
                       )}
-                      {isLockedBksk ? 'Dilindungi' : resolvedStatusLabel}
+                      {resolvedStatusLabel}
                     </div>
                   </div>
                 </div>
 
-                <div className={`rounded-2xl px-3 py-2 text-right ${isLockedBksk ? 'bg-slate-100 text-slate-500' : isDone ? 'bg-emerald-50 text-emerald-700' : isStarted ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
+                <div className={`rounded-2xl px-3 py-2 text-right ${isDone ? 'bg-emerald-50 text-emerald-700' : isStarted ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em]">Progress</p>
-                  <p className="text-2xl font-black leading-none">{isLockedBksk ? '•••' : `${percentage}%`}</p>
+                  <p className="text-2xl font-black leading-none">{`${percentage}%`}</p>
                 </div>
               </div>
 
               <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${isLockedBksk ? 'bg-slate-300' : isDone ? 'bg-emerald-500' : isStarted ? 'bg-amber-400' : 'bg-blue-500'}`}
-                  style={{ width: isLockedBksk ? '100%' : `${percentage}%` }}
+                  className={`h-full rounded-full transition-all duration-500 ${isDone ? 'bg-emerald-500' : isStarted ? 'bg-amber-400' : 'bg-blue-500'}`}
+                  style={{ width: `${percentage}%` }}
                 />
               </div>
 
               <div className="mt-5 flex items-center justify-between text-xs font-semibold text-slate-500">
-                {isLockedBksk ? (
-                  <>
-                    <span>Data kemajuan disorok</span>
-                    <button
-                      type="button"
-                      onClick={handleUnlockBksk}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-slate-50 px-3 py-1 font-black uppercase tracking-[0.12em] text-slate-600 transition hover:bg-slate-100"
-                    >
-                      <Lock className="h-3.5 w-3.5" />
-                      Buka
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <span>
-                      {completedCount} / {totalCount} komponen siap
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      {isDone ? <CheckCircle2 className="h-4 w-4 text-emerald-500" /> : <Clock3 className="h-4 w-4 text-amber-500" />}
-                      {isDone ? 'Lengkap' : isStarted ? 'Sebahagian' : 'Belum mula'}
-                    </span>
-                  </>
-                )}
+                <span>
+                  {completedCount} / {totalCount} komponen siap
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  {isDone ? <CheckCircle2 className="h-4 w-4 text-emerald-500" /> : <Clock3 className="h-4 w-4 text-amber-500" />}
+                  {isDone ? 'Lengkap' : isStarted ? 'Sebahagian' : 'Belum mula'}
+                </span>
               </div>
             </article>
           );
