@@ -443,21 +443,6 @@ export default function App() {
               </div>
 
             </div>
-
-            <div className="sticky top-20 z-30">
-              <div className="mx-1 rounded-2xl border border-cyan-200 bg-gradient-to-r from-cyan-50 via-emerald-50 to-blue-50 p-4 shadow-lg shadow-cyan-100/70 backdrop-blur sm:p-5">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-700">What's New</p>
-                <h3 className="mt-1 text-base font-black text-slate-900 sm:text-lg">Update Version v2.6.0</h3>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">April 2026</p>
-                <div className="mt-3 space-y-2 text-sm text-slate-700">
-                  <p>
-                    <span className="font-black text-cyan-800">Fungsi Synchronize:</span>{' '}
-                    Maklumat yang diisi kini sudah sync. Isi di komputer A, dan rakan anda boleh isikan ruangannya di komputer B.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div className="border-t border-gray-200 pt-6 md:pt-10">
               <h2 className="text-lg md:text-2xl font-bold text-zus-900 mb-4 md:mb-6 px-2 border-l-4 border-zus-gold ml-1">Senarai Bahagian</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 pb-8">
