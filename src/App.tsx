@@ -235,8 +235,8 @@ export default function App() {
               onClick={() => setShowTutorial(false)}
             ></div>
 
-            <div className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] border border-red-100 bg-white shadow-2xl animate-scale-in">
-              <div className="relative overflow-hidden border-b border-red-100 bg-gradient-to-r from-red-700 via-red-600 to-rose-500 px-6 py-5 text-white md:px-8 md:py-6">
+            <div className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] border border-cyan-100 bg-white shadow-2xl animate-scale-in">
+              <div className="relative overflow-hidden border-b border-cyan-100 bg-gradient-to-r from-cyan-700 via-teal-600 to-blue-600 px-6 py-5 text-white md:px-8 md:py-6">
                 <div className="absolute inset-y-0 right-0 w-40 bg-white/10 blur-3xl"></div>
                 <button
                   onClick={() => setShowTutorial(false)}
@@ -246,38 +246,38 @@ export default function App() {
                   <X className="h-5 w-5" />
                 </button>
 
-                <p className="mb-2 text-[11px] font-black uppercase tracking-[0.28em] text-red-100">Panduan Pengguna</p>
+                <p className="mb-2 text-[11px] font-black uppercase tracking-[0.28em] text-cyan-100">Panduan Pengguna</p>
                 <h2 className="max-w-2xl pr-10 text-2xl font-black leading-tight md:text-3xl">
                   Ikut 5 langkah ringkas ini sebelum mula mengisi data.
                 </h2>
-                <p className="mt-3 max-w-2xl text-sm text-red-50/90 md:text-base">
+                <p className="mt-3 max-w-2xl text-sm text-cyan-50/90 md:text-base">
                   Popup ini akan muncul setiap kali sistem dibuka supaya pengguna terus nampak panduan utama.
                 </p>
               </div>
 
-              <div className="bg-gradient-to-b from-red-50 via-white to-rose-50 px-4 py-4 md:px-8 md:py-8">
+              <div className="bg-gradient-to-b from-cyan-50 via-white to-blue-50 px-4 py-4 md:px-8 md:py-8">
                 <div className="grid grid-cols-1 gap-4 text-left sm:grid-cols-2 xl:grid-cols-5 md:gap-4">
-                  <div className="relative overflow-hidden rounded-2xl border border-red-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
-                    <div className="absolute right-3 top-2 text-5xl font-black text-red-100">1</div>
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-red-100 text-red-600">
+                  <div className="relative overflow-hidden rounded-2xl border border-cyan-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
+                    <div className="absolute right-3 top-2 text-5xl font-black text-cyan-100">1</div>
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
                       <MousePointerClick className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="mb-1 text-sm font-bold text-zus-900 md:text-base">Pilih Bahagian</h3>
                     <p className="text-xs leading-relaxed text-slate-600">Klik kad jabatan di senarai bawah untuk mula mengisi.</p>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-2xl border border-orange-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
-                    <div className="absolute right-3 top-2 text-5xl font-black text-orange-100">2</div>
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
+                  <div className="relative overflow-hidden rounded-2xl border border-teal-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
+                    <div className="absolute right-3 top-2 text-5xl font-black text-teal-100">2</div>
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-teal-100 text-teal-700">
                       <FileText className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="mb-1 text-sm font-bold text-zus-900 md:text-base">Isi Maklumat</h3>
                     <p className="text-xs leading-relaxed text-slate-600">Lengkapkan borang data yang disediakan mengikut bahagian masing-masing.</p>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-2xl border border-amber-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
-                    <div className="absolute right-3 top-2 text-5xl font-black text-amber-100">3</div>
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                  <div className="relative overflow-hidden rounded-2xl border border-sky-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
+                    <div className="absolute right-3 top-2 text-5xl font-black text-sky-100">3</div>
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-sky-100 text-sky-700">
                       <Save className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="mb-1 text-sm font-bold text-zus-900 md:text-base">Simpan Draf</h3>
@@ -286,16 +286,16 @@ export default function App() {
 
                   <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
                     <div className="absolute right-3 top-2 text-5xl font-black text-emerald-100">4</div>
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
                       <FileCheck className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="mb-1 text-sm font-bold text-zus-900 md:text-base">Export PDF</h3>
                     <p className="text-xs leading-relaxed text-slate-600">Muat turun laporan PDF untuk semakan dan pengesahan akhir.</p>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-2xl border border-rose-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
-                    <div className="absolute right-3 top-2 text-5xl font-black text-rose-100">5</div>
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-rose-100 text-rose-600">
+                  <div className="relative overflow-hidden rounded-2xl border border-blue-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
+                    <div className="absolute right-3 top-2 text-5xl font-black text-blue-100">5</div>
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                       <FileCheck className="h-5 w-5 md:h-6 md:w-6" />
                     </div>
                     <h3 className="mb-1 text-sm font-bold text-zus-900 md:text-base">Tandatangan Pengesahan</h3>
@@ -308,7 +308,7 @@ export default function App() {
                 <div className="mt-5 flex justify-end">
                   <button
                     onClick={() => setShowTutorial(false)}
-                  className="rounded-full bg-red-600 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 active:scale-95"
+                  className="rounded-full bg-cyan-700 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition hover:bg-cyan-800 active:scale-95"
                   >
                     Faham, tutup panduan
                   </button>
@@ -410,7 +410,7 @@ export default function App() {
               <div className="mb-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <button 
                   onClick={() => setShowTutorial(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-red-500 bg-red-600 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-red-200 transition-all hover:border-red-700 hover:bg-red-700 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-cyan-600 bg-cyan-700 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-cyan-200 transition-all hover:border-cyan-700 hover:bg-cyan-800 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
                 >
                   <Info className="w-4 h-4" />
                   Panduan Pengguna
@@ -442,6 +442,24 @@ export default function App() {
                 </button>
               </div>
 
+            </div>
+
+            <div className="sticky top-20 z-30">
+              <div className="mx-1 rounded-2xl border border-cyan-200 bg-gradient-to-r from-cyan-50 via-emerald-50 to-blue-50 p-4 shadow-lg shadow-cyan-100/70 backdrop-blur sm:p-5">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-700">What's New</p>
+                <h3 className="mt-1 text-base font-black text-slate-900 sm:text-lg">Update Version v2.6.0</h3>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">April 2026</p>
+                <div className="mt-3 space-y-2 text-sm text-slate-700">
+                  <p>
+                    <span className="font-black text-cyan-800">Fungsi Synchronize:</span>{' '}
+                    Maklumat yang diisi kini sudah sync. Isi di komputer A, dan rakan anda boleh isikan ruangannya di komputer B.
+                  </p>
+                  <p>
+                    <span className="font-black text-blue-800">Fungsi Log:</span>{' '}
+                    Selepas anda tekan butang "Simpan", sila isikan nama untuk rekod kemaskini.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="border-t border-gray-200 pt-6 md:pt-10">

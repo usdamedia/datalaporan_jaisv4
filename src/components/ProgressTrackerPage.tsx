@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, RefreshCw, Sparkles } from 'lucide-react';
-import { collectionGroup, getDocs, limit, query, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, limit, query, Timestamp } from 'firebase/firestore';
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
@@ -262,7 +262,7 @@ const ProgressTrackerPage: React.FC = () => {
     setLogsError(null);
 
     try {
-      const snapshot = await getDocs(query(collectionGroup(db, 'update_logs'), limit(250)));
+      const snapshot = await getDocs(query(collection(db, 'update_logs_central'), limit(250)));
       const nextLogs = snapshot.docs
         .map((entry) => {
           const data = entry.data();
@@ -285,7 +285,9 @@ const ProgressTrackerPage: React.FC = () => {
       setLogs(nextLogs);
     } catch (error) {
       console.error('Failed to load update logs', error);
-      setLogsError('Log tidak dapat dimuatkan. Semak sambungan internet atau Firestore rules.');
+      const err = error as { code?: string; message?: string };
+      const errorCode = err?.code ? ` (${err.code})` : '';
+      setLogsError(`Log tidak dapat dimuatkan${errorCode}. Semak sambungan internet atau Firestore rules.`);
     } finally {
       setIsLoadingLogs(false);
     }

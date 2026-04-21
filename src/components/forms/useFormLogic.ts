@@ -99,7 +99,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         );
 
         if (officerName) {
-          await addDoc(collection(db, 'drafts_2025', storageKey, 'update_logs'), {
+          const logPayload = {
             deptName,
             storageKey,
             action,
@@ -109,7 +109,10 @@ export const useFormLogic = (deptName: string, initialState: any) => {
             updatedByClientId: clientId,
             createdAt: serverTimestamp(),
             clientCreatedAt: new Date().toISOString(),
-          });
+          };
+
+          await addDoc(collection(db, 'drafts_2025', storageKey, 'update_logs'), logPayload);
+          await addDoc(collection(db, 'update_logs_central'), logPayload);
         }
       } catch (error) {
         console.error('Error syncing data to Firestore', error);
