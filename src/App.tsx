@@ -229,34 +229,34 @@ export default function App() {
           title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : 'Utama'}
         >
         {showTutorial && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4">
             <div
               className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm animate-fade-in"
               onClick={() => setShowTutorial(false)}
             ></div>
 
-            <div className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] border border-cyan-100 bg-white shadow-2xl animate-scale-in">
-              <div className="relative overflow-hidden border-b border-cyan-100 bg-gradient-to-r from-cyan-700 via-teal-600 to-blue-600 px-6 py-5 text-white md:px-8 md:py-6">
+            <div className="relative w-full max-w-5xl max-h-[84vh] overflow-hidden rounded-[1.75rem] border border-cyan-100 bg-white shadow-2xl animate-scale-in sm:max-h-[90vh] sm:rounded-[2rem]">
+              <div className="relative overflow-hidden border-b border-cyan-100 bg-gradient-to-r from-cyan-700 via-teal-600 to-blue-600 px-5 py-4 text-white md:px-8 md:py-6">
                 <div className="absolute inset-y-0 right-0 w-40 bg-white/10 blur-3xl"></div>
                 <button
                   onClick={() => setShowTutorial(false)}
-                  className="absolute right-4 top-4 rounded-full bg-white/15 p-2 text-white transition hover:bg-white/25"
+                  className="absolute right-3 top-3 rounded-full bg-white/15 p-2 text-white transition hover:bg-white/25 md:right-4 md:top-4"
                   aria-label="Tutup panduan"
                 >
                   <X className="h-5 w-5" />
                 </button>
 
                 <p className="mb-2 text-[11px] font-black uppercase tracking-[0.28em] text-cyan-100">Panduan Pengguna</p>
-                <h2 className="max-w-2xl pr-10 text-2xl font-black leading-tight md:text-3xl">
+                <h2 className="max-w-2xl pr-10 text-xl font-black leading-tight sm:text-2xl md:text-3xl">
                   Ikut 5 langkah ringkas ini sebelum mula mengisi data.
                 </h2>
-                <p className="mt-3 max-w-2xl text-sm text-cyan-50/90 md:text-base">
+                <p className="mt-2 max-w-2xl text-xs text-cyan-50/90 sm:text-sm md:mt-3 md:text-base">
                   Popup ini akan muncul setiap kali sistem dibuka supaya pengguna terus nampak panduan utama.
                 </p>
               </div>
 
-              <div className="bg-gradient-to-b from-cyan-50 via-white to-blue-50 px-4 py-4 md:px-8 md:py-8">
-                <div className="grid grid-cols-1 gap-4 text-left sm:grid-cols-2 xl:grid-cols-5 md:gap-4">
+              <div className="max-h-[calc(84vh-8.5rem)] overflow-y-auto bg-gradient-to-b from-cyan-50 via-white to-blue-50 px-4 py-4 md:max-h-[calc(90vh-10rem)] md:px-8 md:py-8">
+                <div className="grid grid-cols-1 gap-3 text-left sm:grid-cols-2 xl:grid-cols-5 md:gap-4">
                   <div className="relative overflow-hidden rounded-2xl border border-cyan-100 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md md:p-5">
                     <div className="absolute right-3 top-2 text-5xl font-black text-cyan-100">1</div>
                     <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
@@ -305,10 +305,10 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex justify-end">
+                <div className="mt-4 flex justify-end pb-1">
                   <button
                     onClick={() => setShowTutorial(false)}
-                  className="rounded-full bg-cyan-700 px-6 py-2 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition hover:bg-cyan-800 active:scale-95"
+                  className="w-full rounded-full bg-cyan-700 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-cyan-200 transition hover:bg-cyan-800 active:scale-95 sm:w-auto"
                   >
                     Faham, tutup panduan
                   </button>
