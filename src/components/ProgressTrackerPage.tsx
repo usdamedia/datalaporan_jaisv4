@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, CheckCircle2, Clock3, Copy, Gauge, Layers3, RefreshCw, Sparkles } from 'lucide-react';
-import { collection, getDocs, limit, query, Timestamp } from 'firebase/firestore';
+import { collection, collectionGroup, getDocs, limit, query, Timestamp } from 'firebase/firestore';
 import { DEPARTMENTS, getIconForDept } from '../data/departments';
 import { Department, SubUnit } from '../types';
 import { formatDateDDMMYYYYMY } from '../utils/dateFormat';
@@ -94,6 +94,11 @@ type UpdateLogEntry = {
   clientCreatedAt: string | null;
 };
 
+type LogDocLike = {
+  id: string;
+  data: () => Record<string, unknown>;
+};
+
 const toAbbreviation = (fullName: string) => {
   const trimmed = fullName.trim();
 
@@ -128,6 +133,26 @@ const toDateFromLog = (value: unknown): Date | null => {
   }
   return null;
 };
+
+const mapLogDocs = (docs: LogDocLike[]): UpdateLogEntry[] =>
+  docs
+    .map((entry) => {
+      const data = entry.data();
+      return {
+        id: entry.id,
+        deptName: String(data.deptName || '-'),
+        officerName: String(data.officerName || '-'),
+        updatedByEmail: String(data.updatedByEmail || '-'),
+        action: String(data.action || 'manual_save'),
+        createdAt: toDateFromLog(data.createdAt),
+        clientCreatedAt: data.clientCreatedAt ? String(data.clientCreatedAt) : null,
+      } as UpdateLogEntry;
+    })
+    .sort((a, b) => {
+      const aTime = a.createdAt?.getTime() || (a.clientCreatedAt ? new Date(a.clientCreatedAt).getTime() : 0);
+      const bTime = b.createdAt?.getTime() || (b.clientCreatedAt ? new Date(b.clientCreatedAt).getTime() : 0);
+      return bTime - aTime;
+    });
 
 const buildWhatsappSummary = (
   trackerItems: TrackerItemWithProgress[],
@@ -262,32 +287,20 @@ const ProgressTrackerPage: React.FC = () => {
     setLogsError(null);
 
     try {
-      const snapshot = await getDocs(query(collection(db, 'update_logs_central'), limit(250)));
-      const nextLogs = snapshot.docs
-        .map((entry) => {
-          const data = entry.data();
-          return {
-            id: entry.id,
-            deptName: String(data.deptName || '-'),
-            officerName: String(data.officerName || '-'),
-            updatedByEmail: String(data.updatedByEmail || '-'),
-            action: String(data.action || 'manual_save'),
-            createdAt: toDateFromLog(data.createdAt),
-            clientCreatedAt: data.clientCreatedAt ? String(data.clientCreatedAt) : null,
-          } as UpdateLogEntry;
-        })
-        .sort((a, b) => {
-          const aTime = a.createdAt?.getTime() || (a.clientCreatedAt ? new Date(a.clientCreatedAt).getTime() : 0);
-          const bTime = b.createdAt?.getTime() || (b.clientCreatedAt ? new Date(b.clientCreatedAt).getTime() : 0);
-          return bTime - aTime;
-        });
-
-      setLogs(nextLogs);
+      const centralSnapshot = await getDocs(query(collection(db, 'update_logs_central'), limit(250)));
+      setLogs(mapLogDocs(centralSnapshot.docs));
     } catch (error) {
-      console.error('Failed to load update logs', error);
-      const err = error as { code?: string; message?: string };
-      const errorCode = err?.code ? ` (${err.code})` : '';
-      setLogsError(`Log tidak dapat dimuatkan${errorCode}. Semak sambungan internet atau Firestore rules.`);
+      console.error('Failed to load central logs, falling back to nested logs', error);
+
+      try {
+        const nestedSnapshot = await getDocs(query(collectionGroup(db, 'update_logs'), limit(250)));
+        setLogs(mapLogDocs(nestedSnapshot.docs));
+      } catch (fallbackError) {
+        console.error('Failed to load fallback logs', fallbackError);
+        const err = fallbackError as { code?: string; message?: string };
+        const errorCode = err?.code ? ` (${err.code})` : '';
+        setLogsError(`Log tidak dapat dimuatkan${errorCode}. Semak sambungan internet atau Firestore rules.`);
+      }
     } finally {
       setIsLoadingLogs(false);
     }

@@ -454,10 +454,6 @@ export default function App() {
                     <span className="font-black text-cyan-800">Fungsi Synchronize:</span>{' '}
                     Maklumat yang diisi kini sudah sync. Isi di komputer A, dan rakan anda boleh isikan ruangannya di komputer B.
                   </p>
-                  <p>
-                    <span className="font-black text-blue-800">Fungsi Log:</span>{' '}
-                    Selepas anda tekan butang "Simpan", sila isikan nama untuk rekod kemaskini.
-                  </p>
                 </div>
               </div>
             </div>

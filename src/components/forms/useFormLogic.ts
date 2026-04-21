@@ -5,6 +5,7 @@ import { buildDraftKey } from '../../utils/formDraftKey';
 import { db } from '../../firebase';
 
 const CLIENT_ID_STORAGE_KEY = 'jais_client_id_2025';
+const OFFICER_NAME_STORAGE_KEY = 'jais_last_officer_name_2025';
 
 const getClientId = () => {
   if (typeof window === 'undefined') return 'unknown-client';
@@ -19,6 +20,25 @@ const getClientId = () => {
   } catch (error) {
     console.error('Unable to access client id storage', error);
     return 'unknown-client';
+  }
+};
+
+const getLastOfficerName = () => {
+  if (typeof window === 'undefined') return '';
+  try {
+    return window.localStorage.getItem(OFFICER_NAME_STORAGE_KEY) || '';
+  } catch (error) {
+    console.error('Unable to read last officer name', error);
+    return '';
+  }
+};
+
+const setLastOfficerName = (name: string) => {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(OFFICER_NAME_STORAGE_KEY, name);
+  } catch (error) {
+    console.error('Unable to persist last officer name', error);
   }
 };
 
@@ -98,12 +118,13 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           { merge: true }
         );
 
-        if (officerName) {
+        if (action === 'manual_save') {
+          const resolvedOfficerName = officerName || 'Tetamu';
           const logPayload = {
             deptName,
             storageKey,
             action,
-            officerName,
+            officerName: resolvedOfficerName,
             updatedByUid: null,
             updatedByEmail: `guest@${clientId}`,
             updatedByClientId: clientId,
@@ -285,19 +306,25 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setIsSaving(true);
     latestPayloadRef.current = payload;
 
-    const officerName = window.prompt('Sila isikan nama anda untuk pengesahan kemas kini data:');
-    if (officerName === null) {
+    const suggestedOfficerName = getLastOfficerName();
+    const officerNameInput = window.prompt(
+      'Sila isikan nama anda untuk pengesahan kemas kini data:',
+      suggestedOfficerName
+    );
+    if (officerNameInput === null) {
       setIsSaving(false);
       setSaveError('Simpanan dibatalkan. Nama pegawai diperlukan untuk pengesahan.');
       return;
     }
 
-    const normalizedOfficerName = officerName.trim();
+    const normalizedOfficerName = officerNameInput.trim();
     if (!normalizedOfficerName) {
       setIsSaving(false);
       setSaveError('Simpanan dibatalkan. Sila isi nama pegawai.');
       return;
     }
+
+    setLastOfficerName(normalizedOfficerName);
 
     saveTimeoutRef.current = window.setTimeout(() => {
       try {

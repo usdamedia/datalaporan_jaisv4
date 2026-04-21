@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { getTodayIsoMY } from '../utils/dateFormat';
 import { ChevronLeft, ChevronUp, LayoutDashboard } from 'lucide-react';
 
 interface LayoutProps {
@@ -11,19 +10,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) => {
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
-  const ANNOUNCEMENT_VIEW_KEY = 'jais_announcement_views_2025';
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const [showGoTop, setShowGoTop] = useState(false);
-  const announcementMessages = [
-    {
-      text: 'Data Tidak Ada Disimpan Di Mana-Mana Google Sheet, Anda Perlu Save -> Download PDF -> Tandatangan -> Serah kepada Urus Setia',
-      style: { fontSize: '14pt', fontWeight: 700, fontStyle: 'normal' } as React.CSSProperties,
-    },
-    {
-      text: 'Dialek Sarawak: Data sik disimpan di mana mana google sheet, save progress di browser tuan puan, kakya boleh edit balit nya disimpan dalam broswer ktk jak, dah ready kakya download PDF print, kakya sign KB/PKB dan serahkan kepada urus setia.',
-      style: { fontSize: '10pt', fontWeight: 400, fontStyle: 'italic' } as React.CSSProperties,
-    },
-  ];
   const fontScaleOptions = useMemo(
     () => ({
       small: {
@@ -60,40 +47,6 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
   useEffect(() => {
     window.localStorage.setItem(FONT_SIZE_STORAGE_KEY, fontScale);
   }, [fontScale]);
-
-  useEffect(() => {
-    const today = getTodayIsoMY();
-
-    try {
-      const stored = window.localStorage.getItem(ANNOUNCEMENT_VIEW_KEY);
-      let viewData = { date: '', count: 0 };
-
-      if (stored) {
-        viewData = JSON.parse(stored);
-      }
-
-      if (viewData.date === today) {
-        if (viewData.count < 3) {
-          setShowAnnouncement(true);
-          window.localStorage.setItem(
-            ANNOUNCEMENT_VIEW_KEY,
-            JSON.stringify({ date: today, count: viewData.count + 1 })
-          );
-        } else {
-          setShowAnnouncement(false);
-        }
-      } else {
-        setShowAnnouncement(true);
-        window.localStorage.setItem(
-          ANNOUNCEMENT_VIEW_KEY,
-          JSON.stringify({ date: today, count: 1 })
-        );
-      }
-    } catch (error) {
-      console.error('Announcement storage error', error);
-      setShowAnnouncement(true);
-    }
-  }, []);
 
   useEffect(() => {
     const applyNumberInputPlaceholder = () => {
@@ -225,31 +178,6 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
             </div>
           </div>
         </div>
-        {showAnnouncement && (
-          <div className="w-full bg-red-700 px-4 py-2 text-white">
-            <div className="mx-auto flex max-w-[62.5rem] items-start gap-3">
-              <div className="flex flex-1 flex-wrap items-center justify-center gap-4 text-center leading-tight">
-                {announcementMessages.map((message, index) => (
-                  <React.Fragment key={message.text}>
-                    {index > 0 && <span className="hidden sm:inline text-red-200">|</span>}
-                    <p style={message.style} className="tracking-[0.01em]">
-                      {message.text}
-                    </p>
-                  </React.Fragment>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowAnnouncement(false)}
-                aria-label="Tutup pengumuman"
-                title="Tutup pengumuman"
-                className="mt-0.5 rounded-full border border-white/40 px-2 py-0.5 text-xs sm:text-sm font-bold text-white transition hover:bg-white/20"
-              >
-                X
-              </button>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* Main Content */}
