@@ -42,6 +42,67 @@ const setLastOfficerName = (name: string) => {
   }
 };
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const sanitizeForFirestore = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => sanitizeForFirestore(item))
+      .filter((item) => item !== undefined);
+  }
+
+  if (isPlainObject(value)) {
+    return Object.entries(value).reduce<Record<string, unknown>>((acc, [key, item]) => {
+      const sanitized = sanitizeForFirestore(item);
+      if (sanitized !== undefined) {
+        acc[key] = sanitized;
+      }
+      return acc;
+    }, {});
+  }
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return value;
+};
+
+const hasMeaningfulDiff = (value: unknown) => {
+  if (value === undefined) return false;
+  if (Array.isArray(value)) return true;
+  if (isPlainObject(value)) return Object.keys(value).length > 0;
+  return true;
+};
+
+const buildChangedPayload = (previousValue: unknown, nextValue: unknown): unknown => {
+  const previousSanitized = sanitizeForFirestore(previousValue);
+  const nextSanitized = sanitizeForFirestore(nextValue);
+
+  if (JSON.stringify(previousSanitized) === JSON.stringify(nextSanitized)) {
+    return undefined;
+  }
+
+  if (Array.isArray(nextSanitized)) {
+    return nextSanitized;
+  }
+
+  if (isPlainObject(nextSanitized) && isPlainObject(previousSanitized)) {
+    const diffEntries = Object.keys(nextSanitized).reduce<Record<string, unknown>>((acc, key) => {
+      const nestedDiff = buildChangedPayload(previousSanitized[key], nextSanitized[key]);
+      if (nestedDiff !== undefined) {
+        acc[key] = nestedDiff;
+      }
+      return acc;
+    }, {});
+
+    return Object.keys(diffEntries).length > 0 ? diffEntries : undefined;
+  }
+
+  return nextSanitized;
+};
+
 export const useFormLogic = (deptName: string, initialState: any) => {
   const initialStateRef = useRef<any>(normalizeZeroValuesForInputs(initialState));
   const [formData, setRawFormData] = useState<any>(() => initialStateRef.current);
@@ -57,6 +118,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const loadedStorageKeyRef = useRef<string | null>(null);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
   const latestPayloadRef = useRef<any>(initialStateRef.current);
+  const lastFirestorePayloadRef = useRef<any>(sanitizeForFirestore(initialStateRef.current));
 
   const mergeWithInitialState = useCallback((payload: any) => {
     const baseState = initialStateRef.current;
@@ -98,24 +160,28 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       const action = metadata?.action || 'autosave';
       const clientId = getClientId();
       let draftSyncFailed = false;
+      const sanitizedPayload = sanitizeForFirestore(payload);
+      const changedPayload = buildChangedPayload(lastFirestorePayloadRef.current, sanitizedPayload);
 
       try {
-        await setDoc(
-          doc(db, 'drafts_2025', storageKey),
-          {
-            deptName,
-            storageKey,
-            data: payload,
-            updatedByUid: null,
-            updatedByEmail: `guest@${clientId}`,
-            updatedByClientId: clientId,
-            lastAction: action,
-            lastOfficerName: officerName,
-            updatedAt: serverTimestamp(),
-            clientUpdatedAt: new Date().toISOString(),
-          },
-          { merge: true }
-        );
+        const draftUpdatePayload: Record<string, unknown> = {
+          deptName,
+          storageKey,
+          updatedByUid: null,
+          updatedByEmail: `guest@${clientId}`,
+          updatedByClientId: clientId,
+          lastAction: action,
+          lastOfficerName: officerName,
+          updatedAt: serverTimestamp(),
+          clientUpdatedAt: new Date().toISOString(),
+        };
+
+        if (hasMeaningfulDiff(changedPayload)) {
+          draftUpdatePayload.data = changedPayload;
+        }
+
+        await setDoc(doc(db, 'drafts_2025', storageKey), draftUpdatePayload, { merge: true });
+        lastFirestorePayloadRef.current = sanitizedPayload;
       } catch (error) {
         draftSyncFailed = true;
         console.error('Error syncing draft data to Firestore', error);
@@ -165,6 +231,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     initialStateRef.current = normalizeZeroValuesForInputs(initialState);
     latestPayloadRef.current = initialStateRef.current;
+    lastFirestorePayloadRef.current = sanitizeForFirestore(initialStateRef.current);
     let savedData: string | null = null;
     let parsedLocalData: any = null;
 
@@ -193,6 +260,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
         setSaveError(null);
         setRawFormData(mergeWithInitialState(parsedLocalData));
         latestPayloadRef.current = parsedLocalData;
+        lastFirestorePayloadRef.current = sanitizeForFirestore(parsedLocalData);
       } catch (e) {
         console.error("Error parsing saved data", e);
       }
@@ -224,6 +292,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
         setRawFormData(mergeWithInitialState(cloudData));
         latestPayloadRef.current = cloudData;
+        lastFirestorePayloadRef.current = sanitizeForFirestore(cloudData);
         localStorage.setItem(storageKey, JSON.stringify(cloudData));
       } catch (error) {
         if (!cancelled) {
