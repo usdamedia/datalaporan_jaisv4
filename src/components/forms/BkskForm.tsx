@@ -94,30 +94,13 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
     });
   };
 
-  const totals = useMemo(() => ({
-    kelasBimbingan: {
-      kelas2025: sumField(formData.bksk.kelasBimbingan, 'kelas'),
-      guru2025: sumField(formData.bksk.kelasBimbingan, 'guru'),
-    },
-    urusSetiaProkask: {
-      urusSetia2025: sumField(formData.bksk.urusSetiaProkask, 'urusSetia'),
-      prokask2025: sumField(formData.bksk.urusSetiaProkask, 'prokask'),
-    },
-    kampungNuqaba: {
-      kampung2025: sumField(formData.bksk.kampungNuqaba, 'kampungSaudaraKita'),
-      nuqaba2025: sumField(formData.bksk.kampungNuqaba, 'nuqabaMualaf'),
-    },
-  }), [formData.bksk]);
-
   const StatCard = ({
     title,
     field,
-    reference,
     icon,
   }: {
     title: string;
     field: 'pendaftaranPengislaman' | 'programAktiviti';
-    reference: number;
     icon: React.ReactNode;
   }) => (
     <div className="rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-amber-50 p-6 shadow-sm">
@@ -134,13 +117,11 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
         <table className="w-full min-w-[340px] text-sm">
           <thead className="bg-teal-50">
             <tr>
-              <th className="px-3 py-2 text-left text-[10px] font-black uppercase tracking-wider text-teal-800">Rujukan 2024</th>
               <th className="px-3 py-2 text-left text-[10px] font-black uppercase tracking-wider text-teal-800">Input 2025</th>
             </tr>
           </thead>
           <tbody>
             <tr className="border-t border-teal-100">
-              <td className="px-3 py-3 text-lg font-black text-teal-700">{reference}</td>
               <td className="px-3 py-2">
                 <input
                   type="number"
@@ -161,7 +142,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
   const renderDivisionTable = ({
     title,
     icon,
-    rows2024,
     rows2025,
     tableKey,
     columns,
@@ -183,11 +163,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
             <tr className="bg-[#F5EFE3] text-slate-600">
               <th className="border-b border-slate-200 px-4 py-3 text-left text-[11px] font-black uppercase tracking-widest">Bahagian</th>
               {columns.map((column: any) => (
-                <th key={`${column.key}-ref`} className="border-b border-slate-200 px-4 py-3 text-center text-[11px] font-black uppercase tracking-widest bg-slate-100">
-                  {column.label} Rujukan 2024
-                </th>
-              ))}
-              {columns.map((column: any) => (
                 <th key={`${column.key}-entry`} className="border-b border-slate-200 px-4 py-3 text-center text-[11px] font-black uppercase tracking-widest bg-teal-50">
                   {column.label} Input 2025
                 </th>
@@ -198,11 +173,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
             {rows2025.map((row: any, index: number) => (
               <tr key={row.name} className="odd:bg-white even:bg-slate-50/60">
                 <td className="border-b border-slate-100 px-4 py-3 font-black text-slate-800">{row.name}</td>
-                {columns.map((column: any) => (
-                  <td key={`${column.key}-ref`} className="border-b border-slate-100 px-3 py-2 text-center text-xs font-black text-slate-500 bg-slate-50">
-                    {rows2024[index]?.[column.key] ?? 0}
-                  </td>
-                ))}
                 {columns.map((column: any) => (
                   <td key={column.key} className="border-b border-slate-100 bg-teal-50/60 px-3 py-2">
                     <input
@@ -219,11 +189,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
             ))}
             <tr className="bg-teal-900 text-white">
               <td className="px-4 py-3 font-black uppercase">Jumlah</td>
-              {columns.map((column: any) => (
-                <td key={`${column.key}-total-ref`} className="px-4 py-3 text-center font-black bg-slate-700">
-                  {sumField(rows2024, column.key)}
-                </td>
-              ))}
               {columns.map((column: any) => (
                 <td key={column.key} className="px-4 py-3 text-center font-black bg-teal-800">
                   {sumField(rows2025, column.key)}
@@ -267,13 +232,11 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
             <StatCard
               title="Pendaftaran Pengislaman"
               field="pendaftaranPengislaman"
-              reference={BKSK_2024_REFERENCE.statistik.pendaftaranPengislaman}
               icon={<Users className="h-5 w-5" />}
             />
             <StatCard
               title="Program / Aktiviti"
               field="programAktiviti"
-              reference={BKSK_2024_REFERENCE.statistik.programAktiviti}
               icon={<Sparkles className="h-5 w-5" />}
             />
           </div>
@@ -282,7 +245,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
         {renderDivisionTable({
           title: '2. Kelas Bimbingan Saudara Kita',
           icon: <BookOpenCheck className="h-5 w-5" />,
-          rows2024: BKSK_2024_REFERENCE.kelasBimbingan,
           rows2025: formData.bksk.kelasBimbingan,
           tableKey: 'kelasBimbingan',
           columns: [
@@ -294,7 +256,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
         {renderDivisionTable({
           title: '3. Urus Setia & Program Angkat (PROKASK)',
           icon: <HandHelping className="h-5 w-5" />,
-          rows2024: BKSK_2024_REFERENCE.urusSetiaProkask,
           rows2025: formData.bksk.urusSetiaProkask,
           tableKey: 'urusSetiaProkask',
           columns: [
@@ -306,7 +267,6 @@ const BkskForm: React.FC<BkskFormProps> = ({ deptName, onBack }) => {
         {renderDivisionTable({
           title: '4. Kampung Saudara Kita & Nuqaba Mualaf',
           icon: <Home className="h-5 w-5" />,
-          rows2024: BKSK_2024_REFERENCE.kampungNuqaba,
           rows2025: formData.bksk.kampungNuqaba,
           tableKey: 'kampungNuqaba',
           columns: [

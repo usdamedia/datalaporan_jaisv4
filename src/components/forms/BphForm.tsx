@@ -410,7 +410,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
 
       <div className="mt-8 space-y-8 animate-fade-in px-4 md:px-8">
         {/* 1. SPHM Section */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <section id="bph-sphm-section" className="scroll-mt-28 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-[#5A5A40] p-4 flex items-center gap-4">
             <ShieldCheck className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">1. Statistik Sijil Pengesahan Halal Malaysia (SPHM) 2025</h3>
@@ -441,7 +441,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                         { label: 'Logistik', field: 'logistik', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.logistik },
                         { label: 'Barang Gunaan', field: 'barangGunaan', ref: 'Rujukan 2024: -', value: FIXED_SPHM_PERMOHONAN_VALUES.barangGunaan },
                       ].map(item => (
-                        <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
+                        <tr id={item.field === 'oem' ? 'bph-oem-permohonan' : undefined} key={item.field} className="scroll-mt-32 hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-400 text-center italic">{item.ref}</td>
                           <td className="px-4 py-2">
@@ -488,7 +488,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                         { label: 'Logistik', field: 'logistik', ref: BPH_2024_REFERENCE.sphm.skim.logistik, value: FIXED_SPHM_AKTIF_VALUES.logistik },
                         { label: 'Barang Gunaan', field: 'barangGunaan', ref: BPH_2024_REFERENCE.sphm.skim.barangGunaan, value: FIXED_SPHM_AKTIF_VALUES.barangGunaan },
                       ].map(item => (
-                        <tr key={item.field} className="hover:bg-gray-50/50 transition-colors">
+                        <tr id={item.field === 'oem' ? 'bph-oem-aktif' : undefined} key={item.field} className="scroll-mt-32 hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-700">{item.label}</td>
                           <td className="px-4 py-3 text-xs font-black text-gray-400 text-center">{item.ref}</td>
                           <td className="px-4 py-2">
@@ -573,7 +573,7 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
         </section>
 
         {/* 2. Pemantauan Section */}
-        <section className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <section id="bph-zon-halal-section" className="scroll-mt-28 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-[#5A5A40] p-4 flex items-center gap-4">
             <Activity className="w-5 h-5 text-zus-gold" />
             <h3 className="text-white font-bold">2. Pemantauan, Penguatkuasaan & Aduan</h3>

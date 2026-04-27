@@ -550,7 +550,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Tarikh Laporan:</Text>
-              <Text style={styles.value}>{formatDateDDMMYYYYMY(formData.tarikh)}</Text>
+              <Text style={styles.value}>{formatNowDDMMYYYYMY()}</Text>
             </View>
           </View>
         )}
@@ -712,44 +712,25 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
                     </View>
                     <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Penapisan Bahan</Text></View>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Penapisan Bahan Berunsur Islam</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.penapisan}</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.penapisan}</Text></View>
                     </View>
                     <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kluster Data</Text></View>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kajian Ajaran Sesat</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.kluster}</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.kluster}</Text></View>
                     </View>
                     <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Program / Aktiviti</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.program}</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.program}</Text></View>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Penerbitan Digital (2025)</Text>
-                  <View style={styles.table} wrap={false}>
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Kategori</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2024</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>2025</Text></View>
-                    </View>
-                    <View style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Infografik Akidah</Text></View>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilangan Penerbitan Digital Unit Pada Tahun 2025</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.infografik}</Text></View>
                       <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.infografik}</Text></View>
                     </View>
-                  </View>
-                  <View style={styles.narrativeBox}>
-                    <Text style={[styles.infoCardLabel, { marginBottom: 4 }]}>Rujukan 2024</Text>
-                    <Text style={styles.narrativeText}>Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).</Text>
-                    <Text style={[styles.infoCardLabel, { marginTop: 10, marginBottom: 4 }]}>Kandungan Utama / Tajuk Koleksi 2025</Text>
-                    <Text style={styles.narrativeText}>
-                      {formData.bpnp.penerbitanDigital?.kandunganUtama || '................................'}
-                    </Text>
+                    <View style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Bilangan Program/Aktiviti Unit Akidah Tapisan Tahun 2025</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{BPNP_2024_REFERENCE.statistik.program}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.bpnp.statistik.program}</Text></View>
+                    </View>
                   </View>
                 </View>
               </>
@@ -2700,7 +2681,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* Narrative Sections */}
         {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
-          <Text style={styles.sectionTitle}>Ringkasan Pencapaian Utama 2025</Text>
+          <Text style={styles.sectionTitle}>Ringkasan Pencapaian Utama Unit Tahun 2025</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.ringkasan || 'Tiada maklumat disediakan.'}</Text>
           </View>
@@ -2709,7 +2690,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
-          <Text style={styles.sectionTitle}>Isu & Cabaran</Text>
+          <Text style={styles.sectionTitle}>Isu dan Cabaran Unit</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.isu || 'Tiada maklumat disediakan.'}</Text>
           </View>
@@ -2718,7 +2699,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {shouldRenderCommonNarrative && (
         <View style={styles.section} wrap={false}>
-          <Text style={styles.sectionTitle}>Cadangan Penambahbaikan</Text>
+          <Text style={styles.sectionTitle}>Cadangan Penambahbaikan / Way Forward Unit</Text>
           <View style={styles.narrativeBox}>
             <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
           </View>
@@ -2755,7 +2736,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={{ marginTop: 20 }}>
-              <Text style={styles.sectionTitle}>Cadangan Penambahbaikan</Text>
+              <Text style={styles.sectionTitle}>Cadangan Penambahbaikan / Way Forward Unit</Text>
               <View style={styles.narrativeBox}>
                 <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
               </View>
@@ -2817,7 +2798,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             <View style={styles.signatureLine} />
             <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
             <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Tarikh: {formData.tarikh ? formatDateDDMMYYYYMY(formData.tarikh) : '................................'}</Text>
+            <Text style={styles.signatureDetail}>Tarikh: {formatNowDDMMYYYYMY()}</Text>
           </View>
 
           {/* Right: Disahkan Oleh */}

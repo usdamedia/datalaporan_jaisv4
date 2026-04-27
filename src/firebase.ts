@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAxjtNJIUWGoSdHgleRYqCcrZWLq1-lftI',
@@ -12,8 +12,20 @@ const firebaseConfig = {
   measurementId: 'G-2SWF2X9T9E',
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore(firebaseApp);
+export const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+const createFirestore = () => {
+  try {
+    return initializeFirestore(firebaseApp, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+    });
+  } catch (error) {
+    console.warn('Firestore persistent cache unavailable, using standard Firestore instance', error);
+    return getFirestore(firebaseApp);
+  }
+};
+
+export const db = createFirestore();
 
 if (typeof window !== 'undefined') {
   void isSupported()

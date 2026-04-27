@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getTodayIsoMY } from './utils/dateFormat';
 import Layout from './components/Layout';
 import DepartmentCard from './components/DepartmentCard';
@@ -8,9 +8,11 @@ import ProgressTrackerPage from './components/ProgressTrackerPage';
 import AnnualReportContentsPage from './components/AnnualReportContentsPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
+import DraftLoadingOverlay from './components/DraftLoadingOverlay';
 import { DEPARTMENTS } from './data/departments';
+import { CONTENT_SEARCH_INDEX } from './data/searchIndex';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
 const PROGRESS_TRACKER_PASSWORD = 'bpnpj@is2026';
@@ -23,6 +25,8 @@ export default function App() {
   const [showDigitalization, setShowDigitalization] = useState(false);
   const [showProgressTracker, setShowProgressTracker] = useState(false);
   const [showAnnualContents, setShowAnnualContents] = useState(false);
+  const [homeSearchQuery, setHomeSearchQuery] = useState('');
+  const pendingSearchTargetRef = useRef<string | null>(null);
 
   // Auto-show tutorial logic (max 3 times per day)
   useEffect(() => {
@@ -191,6 +195,125 @@ export default function App() {
     setShowSubUnitModal(false);
   };
 
+  const normalizedHomeSearchQuery = homeSearchQuery.trim().toLowerCase();
+  const filteredDepartments = React.useMemo(() => {
+    if (!normalizedHomeSearchQuery) return DEPARTMENTS;
+
+    return DEPARTMENTS.filter((dept) => {
+      const deptMatch = dept.name.toLowerCase().includes(normalizedHomeSearchQuery);
+      const subUnitMatch = dept.subUnits?.some((unit) => unit.name.toLowerCase().includes(normalizedHomeSearchQuery));
+      const contentMatch = CONTENT_SEARCH_INDEX.some((entry) => {
+        if (entry.deptId !== dept.id) return false;
+        return [entry.title, entry.context, ...entry.keywords].join(' ').toLowerCase().includes(normalizedHomeSearchQuery);
+      });
+      return deptMatch || subUnitMatch || contentMatch;
+    });
+  }, [normalizedHomeSearchQuery]);
+
+  const homeSearchResults = React.useMemo(() => {
+    if (!normalizedHomeSearchQuery) return [];
+
+    const navigationResults = DEPARTMENTS.flatMap((dept) => {
+      const results: Array<{ id: string; label: string; context: string; dept: Department; subUnit?: SubUnit; targetId?: string; type: 'navigation' | 'content' }> = [];
+      if (dept.name.toLowerCase().includes(normalizedHomeSearchQuery)) {
+        results.push({
+          id: `dept-${dept.id}`,
+          label: dept.name,
+          context: dept.subUnits?.length ? 'Bahagian dengan unit' : 'Bahagian',
+          dept,
+          type: 'navigation',
+        });
+      }
+
+      dept.subUnits?.forEach((unit) => {
+        if (unit.name.toLowerCase().includes(normalizedHomeSearchQuery)) {
+          results.push({
+            id: `unit-${unit.id}`,
+            label: unit.name,
+            context: dept.name,
+            dept,
+            subUnit: unit,
+            type: 'navigation',
+          });
+        }
+      });
+
+      return results;
+    });
+
+    const contentResults = CONTENT_SEARCH_INDEX.flatMap((entry) => {
+      const haystack = [entry.title, entry.context, ...entry.keywords].join(' ').toLowerCase();
+      if (!haystack.includes(normalizedHomeSearchQuery)) return [];
+
+      const dept = DEPARTMENTS.find((item) => item.id === entry.deptId);
+      if (!dept) return [];
+
+      const subUnit = entry.subUnitId
+        ? dept.subUnits?.find((unit) => unit.id === entry.subUnitId)
+        : undefined;
+
+      return [{
+        id: `content-${entry.id}`,
+        label: entry.title,
+        context: entry.context,
+        dept,
+        subUnit,
+        targetId: entry.targetId,
+        type: 'content' as const,
+      }];
+    });
+
+    return [...contentResults, ...navigationResults];
+  }, [normalizedHomeSearchQuery]);
+
+  const handleSearchResultClick = (dept: Department, subUnit?: SubUnit, targetId?: string) => {
+    if (!dept.active || (subUnit && !subUnit.active)) return;
+
+    pendingSearchTargetRef.current = targetId || null;
+    setShowDigitalization(false);
+    setShowProgressTracker(false);
+    setShowAnnualContents(false);
+    setHomeSearchQuery('');
+    setSelectedDept(dept);
+    if (subUnit) {
+      setSelectedSubUnit(subUnit);
+      setShowSubUnitModal(false);
+      return;
+    }
+
+    setSelectedSubUnit(null);
+    setShowSubUnitModal(Boolean(dept.subUnits?.length));
+  };
+
+  // Logic: Show form if a leaf-node department/unit is selected
+  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit);
+
+  useEffect(() => {
+    if (!isFormMode || !pendingSearchTargetRef.current) return;
+
+    let attempts = 0;
+    const scrollToPendingTarget = () => {
+      const targetId = pendingSearchTargetRef.current;
+      if (!targetId) return;
+
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('ring-4', 'ring-zus-gold/40', 'transition-shadow');
+        window.setTimeout(() => target.classList.remove('ring-4', 'ring-zus-gold/40', 'transition-shadow'), 2200);
+        pendingSearchTargetRef.current = null;
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 12) {
+        window.setTimeout(scrollToPendingTarget, 180);
+      }
+    };
+
+    window.setTimeout(scrollToPendingTarget, 250);
+  }, [isFormMode, selectedDept, selectedSubUnit]);
+
   const resetSelection = () => {
     setSelectedDept(null);
     setSelectedSubUnit(null);
@@ -209,13 +332,10 @@ export default function App() {
       return;
     }
 
-    setShowProgressTracker(true);
-  };
-
-  // Logic: Show form if a leaf-node department/unit is selected
-  const isFormMode = !!selectedDept && (!selectedDept.subUnits || !!selectedSubUnit);
-  
-  // Title for Form Entry
+	    setShowProgressTracker(true);
+	  };
+	  
+	  // Title for Form Entry
   const formTitle = selectedSubUnit 
     ? `${selectedDept?.name} : ${selectedSubUnit.name}` 
     : selectedDept?.name;
@@ -223,6 +343,7 @@ export default function App() {
   return (
     <WebViewOnlyGuard>
       <MaintenanceGuard>
+        <DraftLoadingOverlay />
         <Layout 
           showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents} 
           onBack={resetSelection}
@@ -389,6 +510,19 @@ export default function App() {
           />
         ) : (
           <div className="animate-fade-in-up space-y-6 md:space-y-12">
+            <div className="sticky top-[4.75rem] z-40 md:top-[5.75rem]">
+              <div className="rounded-2xl border border-slate-200 bg-white/95 px-4 py-4 shadow-[0_16px_40px_rgba(15,23,42,0.10)] backdrop-blur md:rounded-[1.75rem] md:px-6">
+                <div className="flex items-start gap-3 md:items-center md:gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100 md:h-11 md:w-11">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                  <p className="min-w-0 text-sm font-semibold leading-relaxed text-slate-700 md:text-base">
+                    <span className="font-black text-zus-900">Kemaskini :</span>{' '}
+                    Data kini disegerakkan (synchronize) dalam mana-mana komputer. Simpan progress anda untuk lihat dan edit di mana sahaja!
+                  </p>
+                </div>
+              </div>
+            </div>
             
             {/* HERO HEADER & INSTRUCTIONS */}
             <div className="text-center max-w-5xl mx-auto pt-4 md:pt-8 px-4">
@@ -406,6 +540,65 @@ export default function App() {
               <p className="text-sm md:text-xl text-gray-500 font-medium max-w-2xl mx-auto mb-6 md:mb-8 px-4 leading-relaxed">
                 Sistem pengumpulan data berpusat untuk penerbitan buku laporan tahunan Jabatan Agama Islam Sarawak.
               </p>
+
+              <div className="mx-auto mb-6 max-w-3xl text-left">
+                <label htmlFor="homepage-search" className="mb-2 block text-xs font-black uppercase tracking-wider text-slate-500">
+                  Cari bahagian / unit / kandungan borang
+                </label>
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  <input
+                    id="homepage-search"
+                    type="search"
+                    value={homeSearchQuery}
+                    onChange={(event) => setHomeSearchQuery(event.target.value)}
+                    placeholder="Cari contoh: OEM, pengilang, akidah, halal, BPNP, HR"
+                    className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-12 text-sm font-bold text-slate-800 shadow-sm outline-none transition-all focus:border-zus-gold/60 focus:ring-4 focus:ring-zus-gold/10"
+                  />
+                  {homeSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setHomeSearchQuery('')}
+                      aria-label="Kosongkan carian"
+                      title="Kosongkan carian"
+                      className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
+                {normalizedHomeSearchQuery && (
+                  <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                    {homeSearchResults.length > 0 ? (
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {homeSearchResults.slice(0, 6).map((result) => (
+                          <button
+                            key={result.id}
+                            type="button"
+                            onClick={() => handleSearchResultClick(result.dept, result.subUnit, result.targetId)}
+                            className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-left transition hover:border-zus-gold/40 hover:bg-white hover:shadow-sm"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <p className="text-sm font-black text-zus-900">{result.label}</p>
+                              {result.type === 'content' && (
+                                <span className="shrink-0 rounded-full bg-zus-gold/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-zus-gold">
+                                  Kandungan
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-1 text-[11px] font-bold text-slate-500">{result.context}</p>
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="px-2 py-3 text-sm font-bold text-slate-500">
+                        Tiada padanan dijumpai untuk "{homeSearchQuery}".
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <div className="mb-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <button 
@@ -444,9 +637,16 @@ export default function App() {
 
             </div>
             <div className="border-t border-gray-200 pt-6 md:pt-10">
-              <h2 className="text-lg md:text-2xl font-bold text-zus-900 mb-4 md:mb-6 px-2 border-l-4 border-zus-gold ml-1">Senarai Bahagian</h2>
+              <div className="mb-4 flex flex-col gap-2 px-2 md:mb-6 md:flex-row md:items-end md:justify-between">
+                <h2 className="border-l-4 border-zus-gold pl-3 text-lg font-bold text-zus-900 md:text-2xl">Senarai Bahagian</h2>
+                {normalizedHomeSearchQuery && (
+                  <p className="text-xs font-bold text-slate-500">
+                    {filteredDepartments.length} padanan bahagian/unit dijumpai
+                  </p>
+                )}
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 pb-8">
-                  {DEPARTMENTS.map((dept, index) => (
+                  {filteredDepartments.map((dept, index) => (
                   <div key={dept.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in-up">
                       <DepartmentCard
                       id={dept.id}
@@ -456,6 +656,22 @@ export default function App() {
                       hasSubUnits={!!dept.subUnits}
                       onClick={() => handleDeptClick(dept)}
                       />
+                      {normalizedHomeSearchQuery && dept.subUnits?.some((unit) => unit.name.toLowerCase().includes(normalizedHomeSearchQuery)) && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {dept.subUnits
+                            .filter((unit) => unit.name.toLowerCase().includes(normalizedHomeSearchQuery))
+                            .map((unit) => (
+                              <button
+                                key={unit.id}
+                                type="button"
+                                onClick={() => handleSearchResultClick(dept, unit)}
+                                className="rounded-full border border-cyan-100 bg-cyan-50 px-3 py-1 text-[10px] font-black text-cyan-700 transition hover:border-cyan-300 hover:bg-white"
+                              >
+                                {unit.name}
+                              </button>
+                            ))}
+                        </div>
+                      )}
                   </div>
                   ))}
               </div>

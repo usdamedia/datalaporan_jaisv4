@@ -1227,105 +1227,118 @@ const BpnpForm: React.FC<BpnpFormProps> = ({ deptName, onBack }) => {
           )}
 
           {isUnitAkidah && (
-              <>
-          {renderUnitActivitySection(
-            'Jumlah Aktiviti Unit Akidah Tapisan (2025)',
-            'Nilai ini akan dicampurkan bersama Unit Penyelidikan dan Unit Perancangan Strategik dalam dashboard BPNP.',
-            'border-cyan-100 text-cyan-600'
-          )}
+            <>
+              {(() => {
+                const akidahEntryCards = [
+                  {
+                    label: 'Penapisan bahan berunsur Islam',
+                    field: 'penapisan',
+                    value: formData.bpnp.statistik?.penapisan,
+                    reference: BPNP_2024_REFERENCE.statistik.penapisan,
+                    icon: <Search className="h-5 w-5" />,
+                    shellClass: 'border-cyan-100 bg-cyan-50/70 text-cyan-700',
+                    inputClass: 'focus:border-cyan-300 focus:ring-cyan-100',
+                  },
+                  {
+                    label: 'Kajian ajaran sesat',
+                    field: 'kluster',
+                    value: formData.bpnp.statistik?.kluster,
+                    reference: BPNP_2024_REFERENCE.statistik.kluster,
+                    icon: <BookOpen className="h-5 w-5" />,
+                    shellClass: 'border-emerald-100 bg-emerald-50/70 text-emerald-700',
+                    inputClass: 'focus:border-emerald-300 focus:ring-emerald-100',
+                  },
+                  {
+                    label: 'Bilangan penerbitan digital unit pada tahun 2025',
+                    field: 'infografik',
+                    value: formData.bpnp.statistik?.infografik,
+                    reference: BPNP_2024_REFERENCE.statistik.infografik,
+                    icon: <Image className="h-5 w-5" />,
+                    shellClass: 'border-indigo-100 bg-indigo-50/70 text-indigo-700',
+                    inputClass: 'focus:border-indigo-300 focus:ring-indigo-100',
+                  },
+                  {
+                    label: 'Bilangan program/aktiviti unit akidah tapisan tahun 2025',
+                    field: 'program',
+                    value: formData.bpnp.statistik?.program,
+                    reference: BPNP_2024_REFERENCE.statistik.program,
+                    icon: <Activity className="h-5 w-5" />,
+                    shellClass: 'border-amber-100 bg-amber-50/70 text-amber-700',
+                    inputClass: 'focus:border-amber-300 focus:ring-amber-100',
+                  },
+                ];
 
-          {/* Statistik & Penerbitan */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
-                  <Activity className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-zus-900 sentence-case">Statistik aktiviti & operasi (2025)</h3>
-              </div>
-              <div className="overflow-x-auto rounded-xl border border-gray-100">
-                <table className="w-full min-w-[500px] text-sm">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-500">Perkara</th>
-                      <th className="px-4 py-3 text-center text-[10px] font-black uppercase text-gray-500">Rujukan 2024</th>
-                      <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-zus-900">Input 2025</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {[
-                      { label: 'Penapisan bahan berunsur Islam', field: 'penapisan', ref: BPNP_2024_REFERENCE.statistik.penapisan },
-                      { label: 'Kluster data bersepadu', field: 'kluster', ref: BPNP_2024_REFERENCE.statistik.kluster },
-                      { label: 'Program / aktiviti', field: 'program', ref: BPNP_2024_REFERENCE.statistik.program },
-                    ].map((item) => (
-                      <tr key={item.field}>
-                        <td className="px-4 py-3 text-xs font-bold text-gray-600">{item.label}</td>
-                        <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{item.ref}</td>
-                        <td className="px-4 py-3">
-                          <input
-                            type="number"
-                            value={formData.bpnp.statistik[item.field]}
-                            onChange={(e) => handleBpnpStatChange(item.field, keepNumericInputDraft(e.target.value))}
-                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none transition-all"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-              <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
-                  <Image className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-zus-900 sentence-case">Penerbitan digital (2025)</h3>
-              </div>
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-4">
-                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr>
-                          <th className="pb-2 text-left text-[10px] font-black uppercase text-indigo-500">Rujukan 2024</th>
-                          <th className="pb-2 text-left text-[10px] font-black uppercase text-indigo-700">Input 2025</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="pr-2 text-xs font-black text-indigo-400 align-middle">{BPNP_2024_REFERENCE.statistik.infografik}</td>
-                          <td>
-                            <input
-                              type="number"
-                              value={formData.bpnp.statistik.infografik}
-                              onChange={(e) => handleBpnpStatChange('infografik', keepNumericInputDraft(e.target.value))}
-                              className="w-full p-2.5 bg-white border border-indigo-100 rounded-xl text-sm font-bold text-center focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4">
-                    <h4 className="text-[10px] font-black text-indigo-500 sentence-case mb-1">Kandungan utama / tajuk koleksi</h4>
-                    <p className="mb-3 text-[10px] font-medium italic text-slate-500">
-                      Rujukan 2024: Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).
-                    </p>
-                    <textarea
-                      rows={5}
-                      value={formData.bpnp.penerbitanDigital?.kandunganUtama || ''}
-                      onChange={(e) => handleBpnpNestedTextChange('penerbitanDigital', 'kandunganUtama', e.target.value)}
-                      placeholder="Masukkan kandungan utama atau tajuk koleksi untuk tahun 2025"
-                      className="w-full resize-y rounded-xl border border-indigo-100 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:ring-2 focus:ring-indigo-200"
-                    />
+                return (
+                  <>
+              <section id="bpnp-akidah-entry-section" className="scroll-mt-28 overflow-hidden rounded-[2rem] border border-cyan-100 bg-white shadow-sm">
+                <div className="bg-gradient-to-r from-cyan-700 via-teal-600 to-emerald-600 px-6 py-6 text-white md:px-8">
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="max-w-2xl">
+                      <p className="text-[11px] font-black uppercase tracking-[0.24em] text-cyan-100">Unit Akidah Tapisan</p>
+                      <h3 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">Entry Data Utama 2025</h3>
+                      <p className="mt-2 text-sm font-semibold leading-relaxed text-cyan-50/90">
+                        Lengkapkan empat angka utama Unit Akidah Tapisan untuk disatukan dalam ringkasan BPNP.
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 lg:min-w-[420px]">
+                      {akidahEntryCards.map((item) => (
+                        <div key={item.label} className="rounded-2xl border border-white/20 bg-white/15 p-4 shadow-sm backdrop-blur">
+                          <p className="text-[10px] font-black uppercase tracking-wider text-cyan-50/80">{item.label}</p>
+                          <p className="mt-2 text-3xl font-black leading-none text-white">{Number(item.value) || 0}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
-              </>
+              </section>
+
+              <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-8">
+                <div className="mb-6 flex flex-col gap-3 border-b border-slate-100 pb-5 md:flex-row md:items-center md:justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
+                      <Activity className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-black tracking-tight text-zus-900 sentence-case">Borang entry Unit Akidah Tapisan</h3>
+                      <p className="mt-1 text-sm font-medium text-slate-500">Isi nilai 2025 untuk setiap perkara di bawah. Rujukan 2024 dipaparkan sebagai panduan.</p>
+                    </div>
+                  </div>
+                  <span className="inline-flex w-fit rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-xs font-black text-emerald-700">
+                    4 perkara wajib
+                  </span>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                  {akidahEntryCards.map((item) => (
+                    <div key={item.field} className={`rounded-[1.5rem] border p-5 ${item.shellClass}`}>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/80 shadow-sm">
+                          {item.icon}
+                        </div>
+                        <span className="rounded-full bg-white/80 px-3 py-1 text-[10px] font-black text-slate-500 ring-1 ring-current/10">
+                          2024: {item.reference}
+                        </span>
+                      </div>
+                      <label className="mt-5 block min-h-[2.5rem] text-sm font-black leading-tight text-slate-700 sentence-case">
+                        {item.label}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        placeholder="0"
+                        value={item.value}
+                        onChange={(e) => handleBpnpStatChange(item.field, keepNumericInputDraft(e.target.value))}
+                        className={`mt-4 w-full rounded-2xl border border-white/70 bg-white px-4 py-4 text-center text-2xl font-black text-zus-900 shadow-sm outline-none transition-all focus:ring-4 ${item.inputClass}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+                  </>
+                );
+              })()}
+            </>
             )}
 
           {!isUnitPenyelidikan && (

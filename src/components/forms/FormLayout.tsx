@@ -147,14 +147,6 @@ const FormLayout: React.FC<FormLayoutProps> = ({
       {/* Main Form Content */}
       <div className="space-y-10">
         {children}
-
-        {/* Footer Info */}
-        <div className="flex items-start gap-4 rounded-[1.5rem] border border-blue-100 bg-blue-50/60 p-6 text-blue-700">
-          <AlertCircle className="mt-0.5 h-5 w-5" />
-          <p className="text-[10px] md:text-[11px] font-bold leading-relaxed">
-            Progress disimpan automatik di storage peranti dan akan diselaras ke Firestore bila internet tersedia. Pastikan anda menekan <span className="text-zus-900 font-black italic underline">Simpan Draf</span> untuk pengesahan nama pegawai.
-          </p>
-        </div>
       </div>
       </div>
     </>

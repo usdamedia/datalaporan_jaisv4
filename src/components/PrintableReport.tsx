@@ -1417,7 +1417,6 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                 <p className="mt-3 text-4xl font-black text-zus-900">{bpnpUnitActivityTotal2025}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-8">
               <div className="space-y-4">
                 <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                   Statistik Aktiviti & Operasi (2025)
@@ -1432,55 +1431,27 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border p-2 font-bold">Penapisan Bahan</td>
+                      <td className="border p-2 font-bold">Penapisan Bahan Berunsur Islam</td>
                       <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.penapisan}</td>
                       <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.penapisan}</td>
                     </tr>
                     <tr>
-                      <td className="border p-2 font-bold">Kluster Data</td>
+                      <td className="border p-2 font-bold">Kajian Ajaran Sesat</td>
                       <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.kluster}</td>
                       <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.kluster}</td>
                     </tr>
                     <tr>
-                      <td className="border p-2 font-bold">Program / Aktiviti</td>
+                      <td className="border p-2 font-bold">Bilangan Penerbitan Digital Unit Pada Tahun 2025</td>
+                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.infografik}</td>
+                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.infografik}</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2 font-bold">Bilangan Program/Aktiviti Unit Akidah Tapisan Tahun 2025</td>
                       <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.program}</td>
                       <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.program}</td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                  Penerbitan Digital (2025)
-                </h3>
-                <table className="w-full text-xs border-collapse">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border p-2 text-left">Kategori</th>
-                      <th className="border p-2 text-center">2024</th>
-                      <th className="border p-2 text-center bg-blue-50">2025</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="border p-2 font-bold">Infografik Akidah</td>
-                      <td className="border p-2 text-center">{BPNP_2024_REFERENCE.statistik.infografik}</td>
-                      <td className="border p-2 text-center font-black bg-blue-50">{formData.bpnp.statistik.infografik}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="p-3 bg-indigo-50 border border-indigo-100 rounded text-[10px] space-y-2">
-                  <div>
-                    <span className="font-black text-indigo-900 uppercase">Rujukan 2024:</span>
-                    <p className="text-indigo-700">Ulangkaji Sifat 20, Koleksi Bahan Infografik Islamik (untuk paparan TV Masjid & Surau).</p>
-                  </div>
-                  <div>
-                    <span className="font-black text-indigo-900 uppercase">Kandungan Utama / Tajuk Koleksi 2025:</span>
-                    <p className="text-slate-700">{formData.bpnp.penerbitanDigital?.kandunganUtama || '................................'}</p>
-                  </div>
-                </div>
-              </div>
               </div>
             </div>
           )}
@@ -2700,7 +2671,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       <div className="mt-8 space-y-6">
         <div className="space-y-2">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-            Ringkasan Pencapaian Utama 2025
+            Ringkasan Pencapaian Utama Unit Tahun 2025
           </h3>
           <p className="text-xs text-gray-700 leading-relaxed text-justify">
             {formData.ringkasan || 'Tiada maklumat disediakan.'}
@@ -2710,7 +2681,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
         <div className="grid grid-cols-2 gap-8">
           <div className="space-y-2">
             <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-              Isu & Cabaran
+              Isu dan Cabaran Unit
             </h3>
             <p className="text-xs text-gray-700 leading-relaxed text-justify">
               {formData.isu || 'Tiada maklumat disediakan.'}
@@ -2718,7 +2689,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-              Cadangan Penambahbaikan
+              Cadangan Penambahbaikan / Way Forward Unit
             </h3>
             <p className="text-xs text-gray-700 leading-relaxed text-justify">
               {formData.cadangan || 'Tiada maklumat disediakan.'}
@@ -2772,7 +2743,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
 
           <div className="space-y-2">
             <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-              Cadangan Penambahbaikan
+              Cadangan Penambahbaikan / Way Forward Unit
             </h3>
             <p className="text-xs text-gray-700 leading-relaxed text-justify">
               {formData.cadangan || 'Tiada maklumat disediakan.'}
@@ -2821,7 +2792,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
           <div className="space-y-1">
             <div className="text-[10px] font-bold text-zus-900">Nama: <span className="font-medium">{formData.disediakanOleh || '................................'}</span></div>
             <div className="text-[10px] font-bold text-zus-900">Jawatan: <span className="font-medium">{formData.jawatan || '................................'}</span></div>
-            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">{formData.tarikh ? formatDateDDMMYYYYMY(formData.tarikh) : '................................'}</span></div>
+            <div className="text-[10px] font-bold text-zus-900">Tarikh: <span className="font-medium">{formatNowDDMMYYYYMY()}</span></div>
           </div>
         </div>
 

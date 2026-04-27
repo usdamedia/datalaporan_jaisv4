@@ -4,42 +4,24 @@ import { normalizeZeroValuesForInputs } from '../../utils/inputNormalization';
 import { buildDraftKey } from '../../utils/formDraftKey';
 import { db } from '../../firebase';
 
-const CLIENT_ID_STORAGE_KEY = 'jais_client_id_2025';
-const OFFICER_NAME_STORAGE_KEY = 'jais_last_officer_name_2025';
+const CLIENT_ID =
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? `client_${crypto.randomUUID()}`
+    : `client_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
 
 const getClientId = () => {
   if (typeof window === 'undefined') return 'unknown-client';
-
-  try {
-    const existing = window.localStorage.getItem(CLIENT_ID_STORAGE_KEY);
-    if (existing) return existing;
-
-    const generated = `client_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
-    window.localStorage.setItem(CLIENT_ID_STORAGE_KEY, generated);
-    return generated;
-  } catch (error) {
-    console.error('Unable to access client id storage', error);
-    return 'unknown-client';
-  }
+  return CLIENT_ID;
 };
 
-const getLastOfficerName = () => {
-  if (typeof window === 'undefined') return '';
-  try {
-    return window.localStorage.getItem(OFFICER_NAME_STORAGE_KEY) || '';
-  } catch (error) {
-    console.error('Unable to read last officer name', error);
-    return '';
-  }
-};
-
-const setLastOfficerName = (name: string) => {
+const dispatchDraftLoading = (isLoading: boolean, deptName: string) => {
   if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(OFFICER_NAME_STORAGE_KEY, name);
-  } catch (error) {
-    console.error('Unable to persist last officer name', error);
-  }
+
+  window.dispatchEvent(
+    new CustomEvent('jais:draft-loading', {
+      detail: { isLoading, deptName },
+    })
+  );
 };
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
@@ -69,38 +51,21 @@ const sanitizeForFirestore = (value: unknown): unknown => {
   return value;
 };
 
-const hasMeaningfulDiff = (value: unknown) => {
-  if (value === undefined) return false;
-  if (Array.isArray(value)) return true;
-  if (isPlainObject(value)) return Object.keys(value).length > 0;
-  return true;
-};
+const mergeDraftData = <T,>(baseValue: T, draftValue: unknown): T => {
+  if (draftValue === undefined) return baseValue;
+  if (Array.isArray(baseValue) || Array.isArray(draftValue)) return draftValue as T;
 
-const buildChangedPayload = (previousValue: unknown, nextValue: unknown): unknown => {
-  const previousSanitized = sanitizeForFirestore(previousValue);
-  const nextSanitized = sanitizeForFirestore(nextValue);
+  if (isPlainObject(baseValue) && isPlainObject(draftValue)) {
+    const merged = { ...baseValue } as Record<string, unknown>;
 
-  if (JSON.stringify(previousSanitized) === JSON.stringify(nextSanitized)) {
-    return undefined;
+    Object.entries(draftValue).forEach(([key, value]) => {
+      merged[key] = key in merged ? mergeDraftData(merged[key], value) : value;
+    });
+
+    return merged as T;
   }
 
-  if (Array.isArray(nextSanitized)) {
-    return nextSanitized;
-  }
-
-  if (isPlainObject(nextSanitized) && isPlainObject(previousSanitized)) {
-    const diffEntries = Object.keys(nextSanitized).reduce<Record<string, unknown>>((acc, key) => {
-      const nestedDiff = buildChangedPayload(previousSanitized[key], nextSanitized[key]);
-      if (nestedDiff !== undefined) {
-        acc[key] = nestedDiff;
-      }
-      return acc;
-    }, {});
-
-    return Object.keys(diffEntries).length > 0 ? diffEntries : undefined;
-  }
-
-  return nextSanitized;
+  return draftValue as T;
 };
 
 export const useFormLogic = (deptName: string, initialState: any) => {
@@ -111,41 +76,14 @@ export const useFormLogic = (deptName: string, initialState: any) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const saveTimeoutRef = useRef<number | null>(null);
-  const autoSaveTimeoutRef = useRef<number | null>(null);
-  const autoSaveIndicatorTimeoutRef = useRef<number | null>(null);
   const successTimeoutRef = useRef<number | null>(null);
-  const isInitialMount = useRef(true);
   const loadedStorageKeyRef = useRef<string | null>(null);
   const storageKey = useMemo(() => buildDraftKey(deptName), [deptName]);
   const latestPayloadRef = useRef<any>(initialStateRef.current);
   const lastFirestorePayloadRef = useRef<any>(sanitizeForFirestore(initialStateRef.current));
 
   const mergeWithInitialState = useCallback((payload: any) => {
-    const baseState = initialStateRef.current;
-
-    return normalizeZeroValuesForInputs({
-      ...baseState,
-      ...payload,
-      bpds: baseState.bpds ? { ...baseState.bpds, ...payload?.bpds } : baseState.bpds,
-      bkim: baseState.bkim ? { ...baseState.bkim, ...payload?.bkim } : baseState.bkim,
-      finance: baseState.finance ? { ...baseState.finance, ...payload?.finance } : baseState.finance,
-      leadership: baseState.leadership ? { ...baseState.leadership, ...payload?.leadership } : baseState.leadership,
-      transport: baseState.transport ? { ...baseState.transport, ...payload?.transport } : baseState.transport,
-      bkki: baseState.bkki ? { ...baseState.bkki, ...payload?.bkki } : baseState.bkki,
-      socialMedia: baseState.socialMedia ? { ...baseState.socialMedia, ...payload?.socialMedia } : baseState.socialMedia,
-      aduan: baseState.aduan ? { ...baseState.aduan, ...payload?.aduan } : baseState.aduan,
-      pr: baseState.pr ? { ...baseState.pr, ...payload?.pr } : baseState.pr,
-      bpnp: baseState.bpnp ? { ...baseState.bpnp, ...payload?.bpnp } : baseState.bpnp,
-      bksk: baseState.bksk ? { ...baseState.bksk, ...payload?.bksk } : baseState.bksk,
-      hr: baseState.hr ? { ...baseState.hr, ...payload?.hr } : baseState.hr,
-      bksp: baseState.bksp ? { ...baseState.bksp, ...payload?.bksp } : baseState.bksp,
-      ukoko: baseState.ukoko ? { ...baseState.ukoko, ...payload?.ukoko } : baseState.ukoko,
-      dhqc: baseState.dhqc ? { ...baseState.dhqc, ...payload?.dhqc } : baseState.dhqc,
-      upp: baseState.upp ? { ...baseState.upp, ...payload?.upp } : baseState.upp,
-      integriti: baseState.integriti ? { ...baseState.integriti, ...payload?.integriti } : baseState.integriti,
-      quality: baseState.quality ? { ...baseState.quality, ...payload?.quality } : baseState.quality,
-      penerbitan: baseState.penerbitan ? { ...baseState.penerbitan, ...payload?.penerbitan } : baseState.penerbitan,
-    });
+    return normalizeZeroValuesForInputs(mergeDraftData(initialStateRef.current, payload || {}));
   }, []);
 
   const syncToCloud = useCallback(
@@ -161,12 +99,12 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       const clientId = getClientId();
       let draftSyncFailed = false;
       const sanitizedPayload = sanitizeForFirestore(payload);
-      const changedPayload = buildChangedPayload(lastFirestorePayloadRef.current, sanitizedPayload);
 
       try {
         const draftUpdatePayload: Record<string, unknown> = {
           deptName,
           storageKey,
+          data: sanitizedPayload,
           updatedByUid: null,
           updatedByEmail: `guest@${clientId}`,
           updatedByClientId: clientId,
@@ -176,11 +114,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
           clientUpdatedAt: new Date().toISOString(),
         };
 
-        if (hasMeaningfulDiff(changedPayload)) {
-          draftUpdatePayload.data = changedPayload;
-        }
-
-        await setDoc(doc(db, 'drafts_2025', storageKey), draftUpdatePayload, { merge: true });
+        await setDoc(doc(db, 'drafts_2025', storageKey), draftUpdatePayload);
         lastFirestorePayloadRef.current = sanitizedPayload;
       } catch (error) {
         draftSyncFailed = true;
@@ -232,69 +166,20 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     initialStateRef.current = normalizeZeroValuesForInputs(initialState);
     latestPayloadRef.current = initialStateRef.current;
     lastFirestorePayloadRef.current = sanitizeForFirestore(initialStateRef.current);
-    let savedData: string | null = null;
-    let parsedLocalData: any = null;
-
-    try {
-      savedData = localStorage.getItem(storageKey);
-
-      // Migrate older records that used the raw department label as the key.
-      if (!savedData) {
-        const legacyKey = `jais_2025_${deptName}`;
-        const legacyData = localStorage.getItem(legacyKey);
-
-        if (legacyData) {
-          savedData = legacyData;
-          localStorage.setItem(storageKey, legacyData);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading saved data', error);
-      setSaveError('Pelayar ini menghalang simpanan lokal. Sila semak mod private/incognito atau ruang storan.');
-      return;
-    }
-
-    if (savedData) {
-      try {
-        parsedLocalData = JSON.parse(savedData);
-      } catch (e) {
-        console.error("Error parsing saved data", e);
-      }
-    }
-
     setRawFormData(initialStateRef.current);
-
     loadedStorageKeyRef.current = storageKey;
 
     let cancelled = false;
 
     const hydrateFromCloud = async () => {
-      const applyLocalFallback = () => {
-        if (!parsedLocalData) {
-          setRawFormData(initialStateRef.current);
-          latestPayloadRef.current = initialStateRef.current;
-          return;
-        }
-
-        setSaveError(null);
-        setRawFormData(mergeWithInitialState(parsedLocalData));
-        latestPayloadRef.current = parsedLocalData;
-      };
-
-      if (typeof navigator !== 'undefined' && !navigator.onLine) {
-        applyLocalFallback();
-        return;
-      }
+      dispatchDraftLoading(true, deptName);
 
       try {
         const snapshot = await getDoc(doc(db, 'drafts_2025', storageKey));
-        if (cancelled || !snapshot.exists()) {
-          if (parsedLocalData) {
-            applyLocalFallback();
-            void syncToCloud(parsedLocalData, { action: 'reconnect_sync' });
-            return;
-          }
+        
+        if (cancelled) return;
 
+        if (!snapshot.exists()) {
           setRawFormData(initialStateRef.current);
           latestPayloadRef.current = initialStateRef.current;
           return;
@@ -302,18 +187,24 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
         const cloudData = snapshot.data()?.data;
         if (!cloudData) {
-          applyLocalFallback();
+          setRawFormData(initialStateRef.current);
+          latestPayloadRef.current = initialStateRef.current;
           return;
         }
 
-        setRawFormData(mergeWithInitialState(cloudData));
-        latestPayloadRef.current = cloudData;
-        lastFirestorePayloadRef.current = sanitizeForFirestore(cloudData);
-        localStorage.setItem(storageKey, JSON.stringify(cloudData));
+        const mergedCloudData = mergeWithInitialState(cloudData);
+        setRawFormData(mergedCloudData);
+        latestPayloadRef.current = mergedCloudData;
+        lastFirestorePayloadRef.current = sanitizeForFirestore(mergedCloudData);
       } catch (error) {
         if (!cancelled) {
           console.error('Error loading Firestore draft', error);
-          applyLocalFallback();
+          setRawFormData(initialStateRef.current);
+          latestPayloadRef.current = initialStateRef.current;
+        }
+      } finally {
+        if (!cancelled) {
+          dispatchDraftLoading(false, deptName);
         }
       }
     };
@@ -322,20 +213,17 @@ export const useFormLogic = (deptName: string, initialState: any) => {
 
     return () => {
       cancelled = true;
+      dispatchDraftLoading(false, deptName);
+      loadedStorageKeyRef.current = null;
       if (saveTimeoutRef.current) {
         window.clearTimeout(saveTimeoutRef.current);
-      }
-      if (autoSaveTimeoutRef.current) {
-        window.clearTimeout(autoSaveTimeoutRef.current);
-      }
-      if (autoSaveIndicatorTimeoutRef.current) {
-        window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
       }
       if (successTimeoutRef.current) {
         window.clearTimeout(successTimeoutRef.current);
       }
     };
-  }, [initialState, mergeWithInitialState, storageKey, syncToCloud]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mergeWithInitialState, storageKey, syncToCloud]);
 
   const setFormData = useCallback((value: any) => {
     setRawFormData((prev: any) => {
@@ -346,48 +234,9 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     });
   }, []);
 
-  // Handle Auto-Save
-  useEffect(() => {
-    // Avoid saving on first load
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-
-    if (autoSaveTimeoutRef.current) {
-      window.clearTimeout(autoSaveTimeoutRef.current);
-    }
-    if (autoSaveIndicatorTimeoutRef.current) {
-      window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
-    }
-
-    autoSaveTimeoutRef.current = window.setTimeout(() => {
-      try {
-        setIsAutoSaving(true);
-        localStorage.setItem(storageKey, JSON.stringify(formData));
-        void syncToCloud(formData, { action: 'autosave' });
-      } catch (error) {
-        console.error('Error auto-saving data', error);
-        setIsAutoSaving(false);
-        setSaveError('Simpanan lokal gagal. Sila semak storage pelayar anda.');
-        return;
-      }
-      autoSaveIndicatorTimeoutRef.current = window.setTimeout(() => setIsAutoSaving(false), 500);
-    }, 1200); // Debounce delay 1.2s
-
-    return () => {
-      if (autoSaveTimeoutRef.current) {
-        window.clearTimeout(autoSaveTimeoutRef.current);
-      }
-      if (autoSaveIndicatorTimeoutRef.current) {
-        window.clearTimeout(autoSaveIndicatorTimeoutRef.current);
-      }
-    };
-  }, [formData, storageKey, syncToCloud]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setRawFormData((prev: any) => ({ ...prev, [name]: value }));
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = (dataToSave?: any) => {
@@ -408,10 +257,9 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     setIsSaving(true);
     latestPayloadRef.current = payload;
 
-    const suggestedOfficerName = getLastOfficerName();
     const officerNameInput = window.prompt(
       'Sila isikan nama anda untuk pengesahan kemas kini data:',
-      suggestedOfficerName
+      ''
     );
     if (officerNameInput === null) {
       setIsSaving(false);
@@ -426,12 +274,9 @@ export const useFormLogic = (deptName: string, initialState: any) => {
       return;
     }
 
-    setLastOfficerName(normalizedOfficerName);
-
     saveTimeoutRef.current = window.setTimeout(() => {
       (async () => {
         try {
-        localStorage.setItem(storageKey, JSON.stringify(payload));
           await syncToCloud(payload, { action: 'manual_save', officerName: normalizedOfficerName });
         setShowSuccess(true);
         successTimeoutRef.current = window.setTimeout(() => setShowSuccess(false), 3000);
@@ -449,24 +294,7 @@ export const useFormLogic = (deptName: string, initialState: any) => {
     }, 800);
   };
 
-  useEffect(() => {
-    const handleOnline = () => {
-      try {
-        const savedData = localStorage.getItem(storageKey);
-        if (!savedData) {
-          void syncToCloud(latestPayloadRef.current, { action: 'reconnect_sync' });
-          return;
-        }
-
-        void syncToCloud(JSON.parse(savedData), { action: 'reconnect_sync' });
-      } catch (error) {
-        console.error('Error syncing local draft after reconnect', error);
-      }
-    };
-
-    window.addEventListener('online', handleOnline);
-    return () => window.removeEventListener('online', handleOnline);
-  }, [storageKey, syncToCloud]);
+  // Online reconnect handling is now natively managed by Firebase Firestore Offline Persistence.
 
   const addLawatan = () => {
     setFormData((prev: any) => ({

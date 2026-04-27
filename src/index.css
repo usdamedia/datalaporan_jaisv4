@@ -66,8 +66,8 @@
 
   input::placeholder,
   textarea::placeholder {
-    color: #9ca3af;
-    opacity: 1;
+    color: transparent !important;
+    opacity: 0 !important;
   }
 }
 
@@ -452,6 +452,18 @@
 }
 
 /* MOBILE RESPONSIVE TUNING */
+@keyframes loading-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(60%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
 @media (max-width: 640px) {
   html,
   body,

@@ -1,5 +1,8 @@
 import React from 'react';
 import { Info, Calendar, User, FileText, MessageSquare, Lightbulb, Plus, Trash2, AlertCircle, Save, Loader2, Briefcase } from 'lucide-react';
+import dayjs from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { formatDateDDMMYYYYMY, getTodayIsoMY } from '../../utils/dateFormat';
 
 interface CommonSectionsProps {
   formData: any;
@@ -68,14 +71,9 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
           <Calendar className="w-3 h-3" /> Tarikh laporan
         </label>
-        <input 
-          type="date"
-          lang="en-GB"
-          name="tarikh"
-          value={formData.tarikh}
-          onChange={handleInputChange}
-          className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
-        />
+        <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 text-sm font-medium text-slate-900">
+          {formatDateDDMMYYYYMY(getTodayIsoMY())}
+        </div>
       </div>
       <div className="space-y-2">
         <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
@@ -158,7 +156,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
     <div className="space-y-6">
       <div className="space-y-2">
         <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
-          Ringkasan pencapaian utama 2025
+          Ringkasan pencapaian utama unit tahun 2025
         </label>
         <textarea 
           name="ringkasan"
@@ -173,7 +171,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
-            <MessageSquare className="w-3 h-3" /> Isu & cabaran
+            <MessageSquare className="w-3 h-3" /> Isu dan cabaran unit
           </label>
           <textarea 
             name="isu"
@@ -186,7 +184,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
         </div>
         <div className="space-y-2">
           <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
-            <Lightbulb className="w-3 h-3" /> Cadangan penambahbaikan
+            <Lightbulb className="w-3 h-3" /> Cadangan penambahbaikan / way forward unit
           </label>
           <textarea 
             name="cadangan"
@@ -209,9 +207,10 @@ export const LawatanSection: React.FC<{
   updateLawatan: any,
   handleSave?: any,
   isSaving?: boolean,
-  readOnly?: boolean
+  readOnly?: boolean,
+  useMuiDatePicker?: boolean
 }> = ({ 
-  formData, addLawatan, removeLawatan, updateLawatan, handleSave, isSaving, readOnly = false
+  formData, addLawatan, removeLawatan, updateLawatan, handleSave, isSaving, readOnly = false, useMuiDatePicker = true
 }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
@@ -251,36 +250,30 @@ export const LawatanSection: React.FC<{
     ) : (
       <div className="space-y-4">
         {formData.lawatan.map((item: any, index: number) => (
-          <div key={index} className="p-5 border border-gray-100 rounded-2xl bg-gray-50/50 relative group animate-slide-in-right">
+          <div key={index} className="relative rounded-2xl border border-gray-100 bg-gray-50/50 p-5 animate-slide-in-right md:p-6">
             {!readOnly && (
               <button 
                 onClick={() => removeLawatan(index)}
-                className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                className="absolute right-4 top-4 rounded-xl p-2 text-gray-300 transition-all hover:bg-red-50 hover:text-red-500"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
-            {(() => {
-              const tarikhParts = parseIsoDateParts(item.tarikh || '');
-
-              return (
-                <>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Jenis</label>
+                  <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 sentence-case">Jenis</label>
                       <select 
                         value={item.jenis}
                         onChange={(e) => updateLawatan(index, 'jenis', e.target.value)}
                         disabled={readOnly}
-                        className={`w-full p-2.5 border border-gray-200 rounded-xl text-xs font-bold outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                        className={`h-12 w-full rounded-2xl border border-gray-200 px-4 text-sm font-bold outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:border-zus-gold/40 focus:ring-2 focus:ring-zus-gold/20'}`}
                       >
                         <option value="keluar">Lawatan Keluar</option>
                         <option value="masuk">Lawatan Masuk</option>
                       </select>
                     </div>
-                    <div className="md:col-span-2 space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
+                    <div className="space-y-2 lg:col-span-2">
+                      <label className="text-xs font-bold text-gray-400 sentence-case">Tajuk agensi / program</label>
                       <textarea 
                         value={item.tajukAgensi}
                         onChange={(e) => updateLawatan(index, 'tajukAgensi', e.target.value)}
@@ -289,62 +282,86 @@ export const LawatanSection: React.FC<{
                         placeholder="Contoh: Lawatan Kerja ke MIS"
                         rows={1}
                         readOnly={readOnly}
-                        className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                        className={`min-h-12 w-full resize-none overflow-hidden rounded-2xl border border-gray-200 px-4 py-3 text-sm font-medium leading-relaxed outline-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:border-zus-gold/40 focus:ring-2 focus:ring-zus-gold/20'}`}
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Tarikh & tempat</label>
-                      <div className="flex gap-2">
-                        <div className="flex-1 grid grid-cols-3 gap-2">
-                          <select
-                            value={tarikhParts.day}
-                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(tarikhParts.year, tarikhParts.month, e.target.value))}
-                            disabled={readOnly}
-                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                          >
-                            <option value="">Hari</option>
-                            {LAWATAN_DAY_OPTIONS.map((day) => (
-                              <option key={day} value={day}>{day}</option>
-                            ))}
-                          </select>
-                          <select
-                            value={tarikhParts.month}
-                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(tarikhParts.year, e.target.value, tarikhParts.day))}
-                            disabled={readOnly}
-                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                          >
-                            <option value="">Bulan</option>
-                            {LAWATAN_MONTH_OPTIONS.map((month) => (
-                              <option key={month.value} value={month.value}>{month.label}</option>
-                            ))}
-                          </select>
-                          <select
-                            value={tarikhParts.year}
-                            onChange={(e) => updateLawatan(index, 'tarikh', buildIsoDate(e.target.value, tarikhParts.month, tarikhParts.day))}
-                            disabled={readOnly}
-                            className={`p-2.5 border border-gray-200 rounded-xl text-xs font-medium outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                          >
-                            <option value="">Tahun</option>
-                            {LAWATAN_YEAR_OPTIONS.map((year) => (
-                              <option key={year} value={year}>{year}</option>
-                            ))}
-                          </select>
+                  <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(14rem,0.85fr)_minmax(15rem,1fr)_minmax(18rem,1.45fr)]">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 sentence-case">Tarikh</label>
+                        <div className="relative w-full">
+                          {useMuiDatePicker ? (
+                            <DatePicker
+                              value={item.tarikh ? dayjs(item.tarikh) : null}
+                              onChange={(newValue) => updateLawatan(index, 'tarikh', newValue?.isValid() ? newValue.format('YYYY-MM-DD') : '')}
+                              disabled={readOnly}
+	                              format="DD/MM/YYYY"
+	                              slotProps={{
+	                                textField: {
+	                                  fullWidth: true,
+	                                  size: 'small',
+	                                  variant: 'outlined',
+	                                  slotProps: {
+	                                    htmlInput: {
+	                                      'aria-label': 'Pilih tarikh lawatan',
+	                                    },
+	                                  },
+	                                },
+	                              }}
+                              sx={{
+                                width: '100%',
+                                '& .MuiInputBase-root': {
+                                  height: 48,
+                                  borderRadius: '1rem',
+                                  backgroundColor: readOnly ? '#f3f4f6' : '#ffffff',
+                                  color: '#1e293b',
+                                  fontFamily: 'inherit',
+                                  fontSize: '0.875rem',
+                                  fontWeight: 800,
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: '#e5e7eb',
+                                },
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: '#d1d5db',
+                                },
+                                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: '#c5a065 !important',
+                                  borderWidth: '1px',
+                                },
+                                '& .MuiInputBase-input': {
+                                  padding: '0.75rem 0.875rem',
+                                },
+                              }}
+                            />
+                          ) : (
+                            <>
+                              <Calendar className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                              <input
+                                type="date"
+                                value={item.tarikh || ''}
+                                onChange={(e) => updateLawatan(index, 'tarikh', e.target.value)}
+                                disabled={readOnly}
+                                className={`h-12 w-full rounded-2xl border border-gray-200 px-4 pl-11 text-sm font-bold leading-none text-slate-800 outline-none ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'bg-white focus:border-zus-gold/40 focus:ring-2 focus:ring-zus-gold/20'}`}
+                              />
+                            </>
+                          )}
                         </div>
-                        <textarea 
-                          value={item.tempat}
-                          onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
-                          placeholder="Tempat"
-                          rows={2}
-                          readOnly={readOnly}
-                          className={`flex-1 min-h-[74px] p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-y ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
-                        />
-                      </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 sentence-case">Objektif</label>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 sentence-case">Tempat</label>
+                      <textarea
+                        value={item.tempat}
+                        onChange={(e) => updateLawatan(index, 'tempat', e.target.value)}
+                        placeholder="Tempat"
+                        rows={2}
+                        readOnly={readOnly}
+                        className={`min-h-[4.75rem] w-full resize-y rounded-2xl border border-gray-200 px-4 py-3 text-sm font-medium leading-relaxed outline-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:border-zus-gold/40 focus:ring-2 focus:ring-zus-gold/20'}`}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 sentence-case">Objektif</label>
                       <textarea 
                         value={item.objektif}
                         onChange={(e) => updateLawatan(index, 'objektif', e.target.value)}
@@ -353,13 +370,10 @@ export const LawatanSection: React.FC<{
                         placeholder="Tujuan lawatan..."
                         rows={1}
                         readOnly={readOnly}
-                        className={`w-full min-h-[44px] overflow-hidden p-2.5 border border-gray-200 rounded-xl text-xs font-medium leading-relaxed outline-none resize-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:ring-2 focus:ring-zus-gold/20'}`}
+                        className={`min-h-[4.75rem] w-full resize-none overflow-hidden rounded-2xl border border-gray-200 px-4 py-3 text-sm font-medium leading-relaxed outline-none ${readOnly ? 'bg-gray-100 text-gray-700 cursor-not-allowed' : 'bg-white focus:border-zus-gold/40 focus:ring-2 focus:ring-zus-gold/20'}`}
                       />
                     </div>
                   </div>
-                </>
-              );
-            })()}
           </div>
         ))}
       </div>

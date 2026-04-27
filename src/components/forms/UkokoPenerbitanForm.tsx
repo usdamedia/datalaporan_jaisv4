@@ -206,13 +206,13 @@ const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = 
           <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
             <Lightbulb className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold text-zus-900 sentence-case">Cadangan Penambahbaikan</h3>
+          <h3 className="text-lg font-bold text-zus-900 sentence-case">Cadangan Penambahbaikan / Way Forward Unit</h3>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-2">
             <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
-              Cadangan penambahbaikan untuk tahun 2026
+              Cadangan penambahbaikan / way forward unit
             </label>
             <textarea 
               name="cadangan"
