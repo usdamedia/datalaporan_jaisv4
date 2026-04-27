@@ -15,7 +15,7 @@ import UkokoForm from './forms/UkokoForm';
 import UkokoPenerbitanForm from './forms/UkokoPenerbitanForm';
 import UkokoPublicRelationsForm from './forms/UkokoPublicRelationsForm';
 import DhqcForm from './forms/DhqcForm';
-import BkskAccessGate from './BkskAccessGate';
+import BkskForm from './forms/BkskForm';
 import GenericForm from './forms/GenericForm';
 import IntegritiForm from './forms/IntegritiForm';
 
@@ -54,7 +54,7 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   }
 
   if (normalizedDeptName.includes('BKSK') || normalizedDeptName.includes('SAUDARA KITA')) {
-    return <BkskAccessGate deptName={deptName} onBack={onBack} />;
+    return <BkskForm deptName={deptName} onBack={onBack} />;
   }
   
   if (normalizedDeptName.includes('BPKS')) {
