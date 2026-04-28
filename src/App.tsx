@@ -10,6 +10,7 @@ import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
 import DraftLoadingOverlay from './components/DraftLoadingOverlay';
+import { DEPARTMENTS } from './data/departments';
 import { CONTENT_SEARCH_INDEX } from './data/searchIndex';
 import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search } from 'lucide-react';
