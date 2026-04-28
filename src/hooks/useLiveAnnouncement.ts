@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { doc, increment, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const LIVE_ANNOUNCEMENT_DOC = doc(db, 'live_controls', 'announcement');
+const LIVE_ANNOUNCEMENT_DOC = doc(db, 'drafts_2025', 'live_announcement_control');
 const DEVICE_ID_STORAGE_KEY = 'jais_live_device_id_2025';
 
 export interface LiveAnnouncementState {

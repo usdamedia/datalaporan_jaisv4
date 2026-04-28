@@ -407,6 +407,7 @@ export default function App() {
           showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents || showPrivacyPolicy || showAturcara} 
           onBack={resetSelection}
           title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : showPrivacyPolicy ? 'Dasar Privasi' : showAturcara ? 'Aturcara' : 'Utama'}
+          fullWidth={showAturcara}
           onPrivacyPolicyClick={() => {
             resetSelection();
             setShowPrivacyPolicy(true);

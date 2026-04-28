@@ -7,9 +7,10 @@ interface LayoutProps {
   onBack?: () => void;
   title?: string;
   onPrivacyPolicyClick?: () => void;
+  fullWidth?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title, onPrivacyPolicyClick }) => {
+const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title, onPrivacyPolicyClick, fullWidth = false }) => {
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
   const [showGoTop, setShowGoTop] = useState(false);
   const fontScaleOptions = useMemo(
@@ -183,7 +184,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title, onPr
 
       {/* Main Content */}
       <main className="flex-grow">
-        <div className="mx-auto max-w-[62.5rem] px-4 py-8 sm:px-8 md:py-12 lg:px-12 xl:px-16">
+        <div className={fullWidth ? 'w-full px-0 py-0' : 'mx-auto max-w-[62.5rem] px-4 py-8 sm:px-8 md:py-12 lg:px-12 xl:px-16'}>
           {children}
         </div>
       </main>

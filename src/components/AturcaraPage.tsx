@@ -99,7 +99,7 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
   return (
     <div
       ref={pageRef}
-      className={`aturcara-page relative -mx-4 -my-8 overflow-hidden bg-slate-950 text-white sm:-mx-8 md:-my-12 lg:-mx-12 xl:-mx-16 ${isMaximized ? 'aturcara-page-maximized' : ''}`}
+      className={`aturcara-page relative min-h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950 text-white md:min-h-[calc(100vh-5rem)] ${isMaximized ? 'aturcara-page-maximized' : ''}`}
     >
       <div className="aturcara-particles" aria-hidden="true">
         {Array.from({ length: 26 }).map((_, index) => (
