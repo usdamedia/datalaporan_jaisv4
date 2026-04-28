@@ -7,13 +7,14 @@ import DigitalizationPage from './components/DigitalizationPage';
 import ProgressTrackerPage from './components/ProgressTrackerPage';
 import AnnualReportContentsPage from './components/AnnualReportContentsPage';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage';
+import AturcaraPage from './components/AturcaraPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
 import DraftLoadingOverlay from './components/DraftLoadingOverlay';
 import { DEPARTMENTS } from './data/departments';
 import { CONTENT_SEARCH_INDEX } from './data/searchIndex';
 import { Department, SubUnit } from './types';
-import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search } from 'lucide-react';
+import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search, CalendarDays } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
 const PROGRESS_TRACKER_PASSWORD = 'bpnpj@is2026';
@@ -27,6 +28,7 @@ export default function App() {
   const [showProgressTracker, setShowProgressTracker] = useState(false);
   const [showAnnualContents, setShowAnnualContents] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [showAturcara, setShowAturcara] = useState(false);
   const [homeSearchQuery, setHomeSearchQuery] = useState('');
   const pendingSearchTargetRef = useRef<string | null>(null);
 
@@ -79,7 +81,13 @@ export default function App() {
         showProgressTracker?: boolean;
         showAnnualContents?: boolean;
         showPrivacyPolicy?: boolean;
+        showAturcara?: boolean;
       };
+
+      if (parsed.showAturcara) {
+        setShowAturcara(true);
+        return;
+      }
 
       if (parsed.showPrivacyPolicy) {
         setShowPrivacyPolicy(true);
@@ -135,6 +143,7 @@ export default function App() {
             showProgressTracker: false,
             showAnnualContents: false,
             showPrivacyPolicy: false,
+            showAturcara: false,
           })
         );
         return;
@@ -148,6 +157,7 @@ export default function App() {
             showProgressTracker: true,
             showAnnualContents: false,
             showPrivacyPolicy: false,
+            showAturcara: false,
           })
         );
         return;
@@ -161,6 +171,21 @@ export default function App() {
             showProgressTracker: false,
             showAnnualContents: true,
             showPrivacyPolicy: false,
+            showAturcara: false,
+          })
+        );
+        return;
+      }
+
+      if (showAturcara) {
+        sessionStorage.setItem(
+          NAVIGATION_STORAGE_KEY,
+          JSON.stringify({
+            showDigitalization: false,
+            showProgressTracker: false,
+            showAnnualContents: false,
+            showPrivacyPolicy: false,
+            showAturcara: true,
           })
         );
         return;
@@ -174,6 +199,7 @@ export default function App() {
             showProgressTracker: false,
             showAnnualContents: false,
             showPrivacyPolicy: true,
+            showAturcara: false,
           })
         );
         return;
@@ -194,12 +220,13 @@ export default function App() {
           showProgressTracker: false,
           showAnnualContents: false,
           showPrivacyPolicy: false,
+          showAturcara: false,
         })
       );
     } catch (error) {
       console.error('Failed to persist navigation state', error);
     }
-  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker, showAnnualContents, showPrivacyPolicy]);
+  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker, showAnnualContents, showPrivacyPolicy, showAturcara]);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
@@ -299,6 +326,7 @@ export default function App() {
     setShowProgressTracker(false);
     setShowAnnualContents(false);
     setShowPrivacyPolicy(false);
+    setShowAturcara(false);
     setHomeSearchQuery('');
     setSelectedDept(dept);
     if (subUnit) {
@@ -348,6 +376,7 @@ export default function App() {
     setShowProgressTracker(false);
     setShowAnnualContents(false);
     setShowPrivacyPolicy(false);
+    setShowAturcara(false);
   };
 
   const handleOpenProgressTracker = () => {
@@ -372,9 +401,9 @@ export default function App() {
       <MaintenanceGuard>
         <DraftLoadingOverlay />
         <Layout 
-          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents || showPrivacyPolicy} 
+          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents || showPrivacyPolicy || showAturcara} 
           onBack={resetSelection}
-          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : showPrivacyPolicy ? 'Dasar Privasi' : 'Utama'}
+          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : showPrivacyPolicy ? 'Dasar Privasi' : showAturcara ? 'Aturcara' : 'Utama'}
           onPrivacyPolicyClick={() => {
             resetSelection();
             setShowPrivacyPolicy(true);
@@ -536,6 +565,8 @@ export default function App() {
           <AnnualReportContentsPage />
         ) : showPrivacyPolicy ? (
           <PrivacyPolicyPage />
+        ) : showAturcara ? (
+          <AturcaraPage />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
@@ -665,6 +696,14 @@ export default function App() {
                 >
                   <LayoutList className="w-4 h-4" />
                   Isi Kandungan Laporan
+                </button>
+
+                <button
+                  onClick={() => setShowAturcara(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-800 bg-slate-900 px-5 py-2 text-xs font-bold text-white shadow-lg shadow-slate-200 transition-all hover:border-slate-950 hover:bg-slate-950 active:scale-95 sm:w-auto md:px-8 md:py-2 md:text-sm"
+                >
+                  <CalendarDays className="w-4 h-4" />
+                  Aturcara
                 </button>
               </div>
 
