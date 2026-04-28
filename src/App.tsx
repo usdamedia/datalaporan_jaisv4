@@ -8,9 +8,11 @@ import ProgressTrackerPage from './components/ProgressTrackerPage';
 import AnnualReportContentsPage from './components/AnnualReportContentsPage';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import AturcaraPage from './components/AturcaraPage';
+import LiveAnnouncementOverlay from './components/LiveAnnouncementOverlay';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
 import DraftLoadingOverlay from './components/DraftLoadingOverlay';
+import { useLiveAnnouncement } from './hooks/useLiveAnnouncement';
 import { DEPARTMENTS } from './data/departments';
 import { CONTENT_SEARCH_INDEX } from './data/searchIndex';
 import { Department, SubUnit } from './types';
@@ -31,6 +33,7 @@ export default function App() {
   const [showAturcara, setShowAturcara] = useState(false);
   const [homeSearchQuery, setHomeSearchQuery] = useState('');
   const pendingSearchTargetRef = useRef<string | null>(null);
+  const liveAnnouncement = useLiveAnnouncement();
 
   // Auto-show tutorial logic (max 3 times per day)
   useEffect(() => {
@@ -566,7 +569,13 @@ export default function App() {
         ) : showPrivacyPolicy ? (
           <PrivacyPolicyPage />
         ) : showAturcara ? (
-          <AturcaraPage />
+          <AturcaraPage
+            liveAnnouncement={liveAnnouncement.state}
+            liveAnnouncementError={liveAnnouncement.error}
+            isLiveAdminDevice={liveAnnouncement.isAdminDevice}
+            onStartLiveAnnouncement={liveAnnouncement.startAnnouncement}
+            onStopLiveAnnouncement={liveAnnouncement.stopAnnouncement}
+          />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
@@ -751,6 +760,12 @@ export default function App() {
           </div>
         )}
         </Layout>
+        {liveAnnouncement.shouldShowOverlay && (
+          <LiveAnnouncementOverlay
+            announcement={liveAnnouncement.state}
+            onLove={liveAnnouncement.sendLove}
+          />
+        )}
       </MaintenanceGuard>
     </WebViewOnlyGuard>
   );

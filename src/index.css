@@ -136,6 +136,24 @@
     font-weight: 900 !important;
   }
 
+  .aturcara-page-maximized {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+
+  .aturcara-page-maximized > .relative {
+    min-height: 100vh !important;
+  }
+
+  .aturcara-page-maximized .aturcara-slide-deck,
+  .aturcara-page-maximized .aturcara-slide {
+    min-height: calc(100vh - 6.75rem) !important;
+  }
+
   .aturcara-eyebrow,
   .aturcara-kicker {
     color: #f6d48d !important;
@@ -198,7 +216,13 @@
     line-height: 0.92 !important;
   }
 
-  .aturcara-slide-header h2 {
+  .aturcara-hero-copy .aturcara-main-heading {
+    max-width: 32ch;
+    font-size: 28pt !important;
+    line-height: 1.12 !important;
+  }
+
+  .app-typography .aturcara-page .aturcara-slide-header h2 {
     max-width: 18ch;
     font-size: clamp(2rem, 4.7vw, 5rem) !important;
   }
@@ -227,7 +251,8 @@
   .aturcara-bento {
     display: grid;
     min-height: 0;
-    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    padding: 0 clamp(0.35rem, 1.2vw, 1.25rem);
   }
 
   .aturcara-bento-hero {
@@ -244,17 +269,39 @@
 
   .aturcara-panel,
   .aturcara-highlight {
+    position: relative;
     display: flex;
     min-width: 0;
     flex-direction: column;
     justify-content: flex-end;
     overflow: hidden;
-    border-radius: 1.5rem;
-    border: 1px solid rgba(226, 232, 240, 0.16);
-    background: rgba(255, 255, 255, 0.1);
-    padding: clamp(1rem, 2vw, 2rem);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 60px rgba(2, 6, 23, 0.25);
-    backdrop-filter: blur(18px);
+    border-radius: clamp(1.65rem, 2.4vw, 2.25rem);
+    border: 1px solid rgba(226, 232, 240, 0.18);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06)),
+      radial-gradient(circle at 82% 16%, rgba(186, 230, 253, 0.12), transparent 34%),
+      rgba(15, 23, 42, 0.2);
+    padding: clamp(1.35rem, 2.1vw, 2.3rem);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.13),
+      0 24px 70px rgba(2, 6, 23, 0.24);
+    backdrop-filter: blur(22px) saturate(1.1);
+  }
+
+  .aturcara-panel::before,
+  .aturcara-highlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 42%);
+    opacity: 0.55;
+  }
+
+  .aturcara-panel > *,
+  .aturcara-highlight > * {
+    position: relative;
+    z-index: 1;
   }
 
   .aturcara-panel-large {
@@ -270,8 +317,8 @@
     color: #f6d48d;
   }
 
-  .aturcara-panel span,
-  .aturcara-highlight span {
+  .app-typography .aturcara-page .aturcara-panel span,
+  .app-typography .aturcara-page .aturcara-highlight span {
     color: #bae6fd !important;
     font-size: clamp(0.82rem, 1.15vw, 1rem) !important;
     font-weight: 900 !important;
@@ -279,8 +326,8 @@
     text-transform: uppercase !important;
   }
 
-  .aturcara-panel strong,
-  .aturcara-highlight strong {
+  .app-typography .aturcara-page .aturcara-panel strong,
+  .app-typography .aturcara-page .aturcara-highlight strong {
     margin-top: 0.45rem;
     color: #ffffff !important;
     font-size: clamp(1.2rem, 2.4vw, 2.5rem) !important;
@@ -288,8 +335,8 @@
     line-height: 1.05 !important;
   }
 
-  .aturcara-panel p,
-  .aturcara-highlight p {
+  .app-typography .aturcara-page .aturcara-panel p,
+  .app-typography .aturcara-page .aturcara-highlight p {
     margin-top: 0.7rem;
     color: rgba(241, 245, 249, 0.78) !important;
     font-size: clamp(0.9rem, 1.35vw, 1.18rem) !important;
@@ -298,7 +345,9 @@
   }
 
   .aturcara-highlight {
-    background: linear-gradient(135deg, rgba(197, 160, 101, 0.95), rgba(14, 116, 144, 0.82));
+    background:
+      linear-gradient(145deg, rgba(246, 212, 141, 0.88), rgba(14, 116, 144, 0.82)),
+      radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.22), transparent 34%);
   }
 
   .aturcara-highlight span,
@@ -308,29 +357,67 @@
   }
 
   .aturcara-finale {
-    background: rgba(197, 160, 101, 0.18);
+    background:
+      linear-gradient(145deg, rgba(197, 160, 101, 0.2), rgba(255, 255, 255, 0.07)),
+      rgba(15, 23, 42, 0.18);
     border-color: rgba(246, 212, 141, 0.35);
   }
 
-  .aturcara-main-button {
+  .aturcara-home-button,
+  .aturcara-icon-button {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(246, 212, 141, 0.34);
+    background: rgba(246, 212, 141, 0.14);
+    color: #fff7ed !important;
+    transition: transform 180ms ease, background 180ms ease;
+  }
+
+  .aturcara-home-button:hover,
+  .aturcara-icon-button:hover {
+    transform: translateY(-1px);
+    background: rgba(246, 212, 141, 0.22);
+  }
+
+  .aturcara-live-button {
     display: inline-flex;
     min-height: 2.75rem;
     align-items: center;
     gap: 0.5rem;
     border-radius: 999px;
-    border: 1px solid rgba(246, 212, 141, 0.34);
-    background: rgba(246, 212, 141, 0.14);
-    padding: 0.75rem 1rem;
-    color: #fff7ed !important;
-    font-size: 0.82rem !important;
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    background: rgba(244, 63, 94, 0.14);
+    padding: 0.72rem 1rem;
+    color: #fff1f2 !important;
+    font-size: 0.8rem !important;
     font-weight: 900 !important;
-    line-height: 1.15 !important;
-    transition: transform 180ms ease, background 180ms ease;
+    line-height: 1 !important;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
   }
 
-  .aturcara-main-button:hover {
+  .aturcara-live-button:hover {
     transform: translateY(-1px);
-    background: rgba(246, 212, 141, 0.22);
+    background: rgba(244, 63, 94, 0.24);
+    border-color: rgba(244, 63, 94, 0.5);
+  }
+
+  .aturcara-live-button.is-live {
+    background: rgba(225, 29, 72, 0.92);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 0 0 6px rgba(225, 29, 72, 0.12), 0 18px 45px rgba(225, 29, 72, 0.28);
+  }
+
+  .aturcara-live-love {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    padding: 0.25rem 0.45rem;
   }
 
   .aturcara-tabs {
@@ -365,6 +452,68 @@
     inset: 0;
     pointer-events: none;
     overflow: hidden;
+  }
+
+  .live-announcement-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(244, 63, 94, 0.12), transparent 28%),
+      radial-gradient(circle at 80% 78%, rgba(197, 160, 101, 0.14), transparent 30%),
+      linear-gradient(180deg, #ffffff, #f8fafc);
+  }
+
+  .live-announcement-bg span {
+    position: absolute;
+    left: calc((var(--i) * 41) % 100 * 1%);
+    top: calc((var(--i) * 23) % 100 * 1%);
+    width: calc(0.45rem + (var(--i) % 4) * 0.18rem);
+    height: calc(0.45rem + (var(--i) % 4) * 0.18rem);
+    border-radius: 999px;
+    background: rgba(225, 29, 72, 0.14);
+    animation: liveAnnouncementFloat 16s linear infinite;
+    animation-delay: calc(var(--i) * -0.55s);
+  }
+
+  .live-love-burst {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.25rem;
+    color: #be123c !important;
+    font-size: 0.9rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    animation: liveLoveBurst 760ms ease-out forwards;
+  }
+
+  @keyframes liveAnnouncementFloat {
+    0% {
+      transform: translate3d(0, 70px, 0) scale(0.9);
+      opacity: 0;
+    }
+    25% {
+      opacity: 0.75;
+    }
+    100% {
+      transform: translate3d(36px, -90px, 0) scale(1.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes liveLoveBurst {
+    0% {
+      transform: translate3d(0, 0, 0) scale(0.9);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(0, -38px, 0) scale(1.25);
+      opacity: 0;
+    }
   }
 
   .aturcara-particle {

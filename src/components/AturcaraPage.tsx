@@ -1,16 +1,45 @@
-import React, { useRef, useState } from 'react';
-import { CalendarDays, Clock, Home, MapPin, Presentation, Sparkles, Target } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { CalendarDays, Clock, Heart, Home, MapPin, Maximize2, Megaphone, Minimize2, Presentation, Sparkles, Target, XCircle } from 'lucide-react';
+import { LiveAnnouncementState } from '../hooks/useLiveAnnouncement';
+
+interface AturcaraPageProps {
+  liveAnnouncement: LiveAnnouncementState;
+  liveAnnouncementError?: string;
+  isLiveAdminDevice: boolean;
+  onStartLiveAnnouncement: () => Promise<void>;
+  onStopLiveAnnouncement: () => Promise<void>;
+}
 
 const slides = [
-  { id: 'utama', label: 'Slaid 1' },
-  { id: 'fokus', label: 'Slaid 2' },
-  { id: 'pagi', label: 'Slaid 3' },
-  { id: 'petang', label: 'Slaid 5' },
+  { id: 'utama', label: '1' },
+  { id: 'fokus', label: '2' },
+  { id: 'pagi', label: '3' },
+  { id: 'petang', label: '4' },
 ];
 
-const AturcaraPage: React.FC = () => {
+const AturcaraPage: React.FC<AturcaraPageProps> = ({
+  liveAnnouncement,
+  liveAnnouncementError,
+  isLiveAdminDevice,
+  onStartLiveAnnouncement,
+  onStopLiveAnnouncement,
+}) => {
+  const pageRef = useRef<HTMLDivElement | null>(null);
   const slideDeckRef = useRef<HTMLDivElement | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const nextIsFullscreen = document.fullscreenElement === pageRef.current;
+      setIsFullscreen(nextIsFullscreen);
+      setIsMaximized(nextIsFullscreen);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   const goToSlide = (index: number) => {
     const deck = slideDeckRef.current;
@@ -29,8 +58,49 @@ const AturcaraPage: React.FC = () => {
     setActiveSlide(Math.max(0, Math.min(slides.length - 1, nextIndex)));
   };
 
+  const toggleFullscreen = async () => {
+    try {
+      if (isFullscreen && document.fullscreenElement) {
+        await document.exitFullscreen();
+        setIsMaximized(false);
+        return;
+      }
+
+      if (document.fullscreenEnabled && pageRef.current?.requestFullscreen) {
+        await pageRef.current.requestFullscreen();
+        setIsMaximized(true);
+        return;
+      }
+
+      setIsMaximized((current) => !current);
+    } catch (error) {
+      console.error('Aturcara fullscreen failed', error);
+      setIsMaximized((current) => !current);
+    }
+  };
+
+  const handleLiveAnnouncement = async () => {
+    if (liveAnnouncement.active && isLiveAdminDevice) {
+      await onStopLiveAnnouncement();
+      return;
+    }
+
+    const enteredCode = window.prompt('Masukkan kod admin untuk mulakan pengumuman:');
+    if (enteredCode === null) return;
+
+    if (enteredCode.trim().toUpperCase() !== 'LIVE') {
+      window.alert('Kod tidak tepat.');
+      return;
+    }
+
+    await onStartLiveAnnouncement();
+  };
+
   return (
-    <div className="aturcara-page relative -mx-4 -my-8 overflow-hidden bg-slate-950 text-white sm:-mx-8 md:-my-12 lg:-mx-12 xl:-mx-16">
+    <div
+      ref={pageRef}
+      className={`aturcara-page relative -mx-4 -my-8 overflow-hidden bg-slate-950 text-white sm:-mx-8 md:-my-12 lg:-mx-12 xl:-mx-16 ${isMaximized ? 'aturcara-page-maximized' : ''}`}
+    >
       <div className="aturcara-particles" aria-hidden="true">
         {Array.from({ length: 26 }).map((_, index) => (
           <span key={index} className="aturcara-particle" style={{ ['--i' as string]: index }} />
@@ -47,10 +117,36 @@ const AturcaraPage: React.FC = () => {
             <button
               type="button"
               onClick={() => goToSlide(0)}
-              className="aturcara-main-button"
+              aria-label="Kembali ke slaid utama"
+              title="Kembali ke slaid utama"
+              className="aturcara-home-button"
             >
-              <Home className="h-4 w-4" />
-              Kembali Ke Slaid Utama
+              <Home className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              aria-label={isMaximized ? 'Keluar maximize' : 'Maximize slaid'}
+              title={isMaximized ? 'Keluar maximize' : 'Maximize slaid'}
+              className="aturcara-icon-button"
+            >
+              {isMaximized ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+            </button>
+            <button
+              type="button"
+              onClick={handleLiveAnnouncement}
+              aria-label={liveAnnouncement.active && isLiveAdminDevice ? 'Tamatkan pengumuman' : 'Mulakan pengumuman live'}
+              title={liveAnnouncement.active && isLiveAdminDevice ? 'Tamatkan pengumuman' : 'Mulakan pengumuman live'}
+              className={`aturcara-live-button ${liveAnnouncement.active ? 'is-live' : ''}`}
+            >
+              {liveAnnouncement.active && isLiveAdminDevice ? <XCircle className="h-5 w-5" /> : <Megaphone className="h-5 w-5" />}
+              <span>{liveAnnouncement.active && isLiveAdminDevice ? 'Stop Live' : 'Live'}</span>
+              {liveAnnouncement.active && (
+                <span className="aturcara-live-love">
+                  <Heart className="h-3.5 w-3.5 fill-current" />
+                  {liveAnnouncement.loveCount.toLocaleString('ms-MY')}
+                </span>
+              )}
             </button>
             <div className="aturcara-tabs">
               {slides.map((slide, index) => (
@@ -67,6 +163,12 @@ const AturcaraPage: React.FC = () => {
           </div>
         </div>
 
+        {liveAnnouncementError && (
+          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+            {liveAnnouncementError}
+          </div>
+        )}
+
         <div
           ref={slideDeckRef}
           onScroll={handleScroll}
@@ -75,7 +177,7 @@ const AturcaraPage: React.FC = () => {
           <section className="aturcara-slide aturcara-title-slide">
             <div className="aturcara-hero-copy">
               <p className="aturcara-kicker">Bengkel Pemurnian Draf</p>
-              <h2>ATURACARA BENGKEL PEMURNIAN DRAF LAPORAN JAIS TAHUN 2025</h2>
+              <h2 className="aturcara-main-heading">ATURCARA BENGKEL PEMURNIAN DRAF LAPORAN JAIS TAHUN 2025</h2>
               <p className="aturcara-subtitle">Sesi penyelarasan akhir untuk paparan, semakan dan pengesahan data laporan tahunan.</p>
             </div>
 
@@ -95,7 +197,7 @@ const AturcaraPage: React.FC = () => {
                 <MapPin className="h-9 w-9" />
                 <span>Tempat</span>
                 <strong>Dewan Ijtima' Aras 11</strong>
-                <p>Bangunan TAHMS</p>
+                <p>Bangunan Majma' Tuanku Abdul Halim Mu'adzam Shah</p>
               </div>
             </div>
           </section>
@@ -140,7 +242,7 @@ const AturcaraPage: React.FC = () => {
               <Clock className="h-10 w-10" />
               <div>
                 <p className="aturcara-kicker">08.30 Pagi - 11.00 Pagi</p>
-                <h2>Aturacara Sesi Pagi</h2>
+                <h2>Aturcara Sesi Pagi</h2>
               </div>
             </div>
 
@@ -153,7 +255,7 @@ const AturcaraPage: React.FC = () => {
               <div className="aturcara-panel aturcara-panel-wide">
                 <span>09.00 Pagi - 12.30 T/Hari</span>
                 <strong>Pemurnian & Pembentangan Data Ekspres</strong>
-                <p>Bahagian yang telah siap sedia boleh terus membuat pembentangan ringkas kepada urus setia.</p>
+                <p>Bahagian yang telah siap sedia boleh terus membuat serahan data yang telah ditandatangani dan pembentangan ringkas kepada urus setia.</p>
               </div>
               <div className="aturcara-panel">
                 <span>12.30 T/Hari - 2.00 Petang</span>
@@ -172,7 +274,7 @@ const AturcaraPage: React.FC = () => {
               <Presentation className="h-10 w-10" />
               <div>
                 <p className="aturcara-kicker">02.00 Petang - 04.00 Petang</p>
-                <h2>Aturacara Sesi Petang</h2>
+                <h2>Aturcara Sesi Petang</h2>
               </div>
             </div>
 
