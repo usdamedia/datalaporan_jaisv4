@@ -463,19 +463,16 @@
 
   .aturcara-admin-love-stream {
     position: fixed;
-    right: clamp(1rem, 2.8vw, 2.75rem);
-    bottom: clamp(1rem, 3vw, 3rem);
+    inset: 0;
     z-index: 10020;
     pointer-events: none;
   }
 
   .aturcara-admin-love-stream span {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    transform: translate(-50%, -50%);
     filter: drop-shadow(0 12px 22px rgba(225, 29, 72, 0.28));
     animation: adminLoveFloat 1400ms ease-out forwards;
-    animation-delay: calc(var(--i) * 45ms);
   }
 
   .aturcara-tabs {
@@ -594,14 +591,14 @@
 
   @keyframes adminLoveFloat {
     0% {
-      transform: translate3d(0, 0, 0) scale(0.65) rotate(-10deg);
+      transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(0.65) rotate(-10deg);
       opacity: 0;
     }
     20% {
       opacity: 1;
     }
     100% {
-      transform: translate3d(calc(-42px - var(--i) * 7px), calc(-130px - var(--i) * 18px), 0) scale(1.35) rotate(12deg);
+      transform: translate(-50%, -50%) translate3d(0, -92px, 0) scale(1.35) rotate(12deg);
       opacity: 0;
     }
   }

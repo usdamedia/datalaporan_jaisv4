@@ -30,7 +30,7 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
-  const [adminLoveBursts, setAdminLoveBursts] = useState<Array<{ id: string }>>([]);
+  const [adminLoveBursts, setAdminLoveBursts] = useState<Array<{ id: string; x: number; y: number }>>([]);
   const lastReactionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -49,11 +49,18 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
     if (!isLiveAdminDevice || !reactionId || reactionId === lastReactionIdRef.current) return;
 
     lastReactionIdRef.current = reactionId;
-    setAdminLoveBursts((items) => [...items.slice(-7), { id: reactionId }]);
+    setAdminLoveBursts((items) => [
+      ...items.slice(-18),
+      {
+        id: reactionId,
+        x: liveAnnouncement.lastReaction?.x ?? 0.92,
+        y: liveAnnouncement.lastReaction?.y ?? 0.86,
+      },
+    ]);
     window.setTimeout(() => {
       setAdminLoveBursts((items) => items.filter((item) => item.id !== reactionId));
     }, 1400);
-  }, [isLiveAdminDevice, liveAnnouncement.lastReaction?.id]);
+  }, [isLiveAdminDevice, liveAnnouncement.lastReaction?.id, liveAnnouncement.lastReaction?.x, liveAnnouncement.lastReaction?.y]);
 
   const goToSlide = (index: number) => {
     const deck = slideDeckRef.current;
@@ -122,8 +129,14 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
       </div>
       {adminLoveBursts.length > 0 && (
         <div className="aturcara-admin-love-stream" aria-hidden="true">
-          {adminLoveBursts.map((burst, index) => (
-            <span key={burst.id} style={{ ['--i' as string]: index }}>
+          {adminLoveBursts.map((burst) => (
+            <span
+              key={burst.id}
+              style={{
+                left: `${burst.x * 100}%`,
+                top: `${burst.y * 100}%`,
+              }}
+            >
               <Heart className="h-8 w-8 fill-rose-500 text-rose-500" />
             </span>
           ))}
