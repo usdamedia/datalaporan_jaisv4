@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CalendarDays, Clock, Heart, Home, MapPin, Maximize2, Megaphone, Minimize2, Presentation, Sparkles, Target, XCircle } from 'lucide-react';
 import { LiveAnnouncementState } from '../hooks/useLiveAnnouncement';
+import borangDataQr from '../assets/borang-data-qr.jpg';
 
 interface AturcaraPageProps {
   liveAnnouncement: LiveAnnouncementState;
@@ -29,6 +30,8 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [adminLoveBursts, setAdminLoveBursts] = useState<Array<{ id: string }>>([]);
+  const lastReactionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -40,6 +43,17 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
+
+  useEffect(() => {
+    const reactionId = liveAnnouncement.lastReaction?.id;
+    if (!isLiveAdminDevice || !reactionId || reactionId === lastReactionIdRef.current) return;
+
+    lastReactionIdRef.current = reactionId;
+    setAdminLoveBursts((items) => [...items.slice(-7), { id: reactionId }]);
+    window.setTimeout(() => {
+      setAdminLoveBursts((items) => items.filter((item) => item.id !== reactionId));
+    }, 1400);
+  }, [isLiveAdminDevice, liveAnnouncement.lastReaction?.id]);
 
   const goToSlide = (index: number) => {
     const deck = slideDeckRef.current;
@@ -106,6 +120,15 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
           <span key={index} className="aturcara-particle" style={{ ['--i' as string]: index }} />
         ))}
       </div>
+      {adminLoveBursts.length > 0 && (
+        <div className="aturcara-admin-love-stream" aria-hidden="true">
+          {adminLoveBursts.map((burst, index) => (
+            <span key={burst.id} style={{ ['--i' as string]: index }}>
+              <Heart className="h-8 w-8 fill-rose-500 text-rose-500" />
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="relative z-10 min-h-[calc(100vh-4rem)] px-4 py-5 sm:px-8 md:min-h-[calc(100vh-5rem)] md:px-10 md:py-7">
         <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -178,6 +201,13 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
             <div className="aturcara-hero-copy">
               <p className="aturcara-kicker">Bengkel Pemurnian Draf</p>
               <h2 className="aturcara-main-heading">ATURCARA BENGKEL PEMURNIAN DRAF LAPORAN JAIS TAHUN 2025</h2>
+              <div className="aturcara-qr-card">
+                <img src={borangDataQr} alt="Kod QR Borang Data JAIS" />
+                <div>
+                  <span>Kod QR Borang Data</span>
+                  <strong>Scan Untuk Akses Borang</strong>
+                </div>
+              </div>
               <p className="aturcara-subtitle">Sesi penyelarasan akhir untuk paparan, semakan dan pengesahan data laporan tahunan.</p>
             </div>
 

@@ -10,6 +10,12 @@ export interface LiveAnnouncementState {
   message: string;
   loveCount: number;
   startedByDeviceId: string | null;
+  lastReaction?: {
+    id: string;
+    x: number;
+    y: number;
+    deviceId: string;
+  } | null;
 }
 
 const defaultLiveAnnouncement: LiveAnnouncementState = {
@@ -17,6 +23,7 @@ const defaultLiveAnnouncement: LiveAnnouncementState = {
   message: 'Pengumuman sedang dijalankan',
   loveCount: 0,
   startedByDeviceId: null,
+  lastReaction: null,
 };
 
 const getOrCreateDeviceId = () => {
@@ -54,6 +61,14 @@ export const useLiveAnnouncement = () => {
           message: typeof data.message === 'string' && data.message.trim() ? data.message : defaultLiveAnnouncement.message,
           loveCount: typeof data.loveCount === 'number' ? data.loveCount : 0,
           startedByDeviceId: typeof data.startedByDeviceId === 'string' ? data.startedByDeviceId : null,
+          lastReaction: data.lastReaction && typeof data.lastReaction === 'object'
+            ? {
+                id: typeof data.lastReaction.id === 'string' ? data.lastReaction.id : '',
+                x: typeof data.lastReaction.x === 'number' ? data.lastReaction.x : 0.5,
+                y: typeof data.lastReaction.y === 'number' ? data.lastReaction.y : 0.5,
+                deviceId: typeof data.lastReaction.deviceId === 'string' ? data.lastReaction.deviceId : '',
+              }
+            : null,
         });
         setError('');
       },
@@ -85,6 +100,7 @@ export const useLiveAnnouncement = () => {
           active: true,
           message: defaultLiveAnnouncement.message,
           loveCount: 0,
+          lastReaction: null,
           startedByDeviceId: deviceId,
           startedAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
@@ -115,16 +131,22 @@ export const useLiveAnnouncement = () => {
     }
   }, []);
 
-  const sendLove = useCallback(async () => {
+  const sendLove = useCallback(async (position?: { x: number; y: number }) => {
     try {
       await updateDoc(LIVE_ANNOUNCEMENT_DOC, {
         loveCount: increment(1),
+        lastReaction: {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          x: Math.max(0, Math.min(1, position?.x ?? 0.5)),
+          y: Math.max(0, Math.min(1, position?.y ?? 0.5)),
+          deviceId,
+        },
         updatedAt: serverTimestamp(),
       });
     } catch (loveError) {
       console.error('Failed to send live reaction', loveError);
     }
-  }, []);
+  }, [deviceId]);
 
   return {
     deviceId,

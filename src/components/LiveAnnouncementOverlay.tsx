@@ -4,15 +4,23 @@ import { LiveAnnouncementState } from '../hooks/useLiveAnnouncement';
 
 interface LiveAnnouncementOverlayProps {
   announcement: LiveAnnouncementState;
-  onLove: () => void;
+  onLove: (position?: { x: number; y: number }) => void;
 }
 
 const LiveAnnouncementOverlay: React.FC<LiveAnnouncementOverlayProps> = ({ announcement, onLove }) => {
-  const [burstCount, setBurstCount] = useState(0);
+  const [bursts, setBursts] = useState<Array<{ id: number; x: number; y: number }>>([]);
 
-  const handleLove = () => {
-    setBurstCount((count) => count + 1);
-    onLove();
+  const handleLove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width;
+    const y = (event.clientY - bounds.top) / bounds.height;
+    const id = Date.now();
+
+    setBursts((items) => [...items.slice(-8), { id, x, y }]);
+    window.setTimeout(() => {
+      setBursts((items) => items.filter((item) => item.id !== id));
+    }, 1100);
+    onLove({ x, y });
   };
 
   return (
@@ -39,12 +47,26 @@ const LiveAnnouncementOverlay: React.FC<LiveAnnouncementOverlayProps> = ({ annou
         <button
           type="button"
           onClick={handleLove}
-          className="group relative mt-10 flex h-28 w-28 items-center justify-center rounded-full bg-rose-600 text-white shadow-[0_28px_80px_rgba(225,29,72,0.32)] transition hover:scale-105 hover:bg-rose-700 active:scale-95 md:h-32 md:w-32"
-          aria-label="Tap love"
-          title="Tap love"
+          className="live-tap-zone group relative mt-10 flex min-h-[15rem] w-full max-w-3xl items-center justify-center overflow-hidden rounded-[2rem] border border-rose-100 bg-white/90 text-rose-600 shadow-[0_28px_90px_rgba(15,23,42,0.12)] transition active:scale-[0.995] md:min-h-[18rem]"
+          aria-label="Tap love pada kawasan ini"
+          title="Tap love pada kawasan ini"
         >
-          <Heart className="h-12 w-12 fill-white transition group-hover:scale-110 md:h-14 md:w-14" />
-          <span key={burstCount} className="live-love-burst">+1</span>
+          <div className="pointer-events-none flex flex-col items-center">
+            <Heart className="h-16 w-16 fill-rose-600 transition group-hover:scale-110 md:h-20 md:w-20" />
+            <span className="mt-4 text-base font-black uppercase tracking-[0.24em] text-rose-500">Tap Love</span>
+          </div>
+          {bursts.map((burst) => (
+            <span
+              key={burst.id}
+              className="live-love-burst"
+              style={{
+                left: `${burst.x * 100}%`,
+                top: `${burst.y * 100}%`,
+              }}
+            >
+              <Heart className="h-10 w-10 fill-rose-500 text-rose-500" />
+            </span>
+          ))}
         </button>
 
         <div className="mt-6 rounded-full border border-rose-100 bg-rose-50 px-6 py-3 text-base font-black text-rose-700 shadow-sm">
