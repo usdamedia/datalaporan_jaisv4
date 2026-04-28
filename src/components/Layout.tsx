@@ -6,9 +6,10 @@ interface LayoutProps {
   showBack?: boolean;
   onBack?: () => void;
   title?: string;
+  onPrivacyPolicyClick?: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) => {
+const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title, onPrivacyPolicyClick }) => {
   const FONT_SIZE_STORAGE_KEY = 'jais_font_scale_preference';
   const [showGoTop, setShowGoTop] = useState(false);
   const fontScaleOptions = useMemo(
@@ -197,7 +198,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showBack, onBack, title }) =>
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6">
-              <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Dasar Privasi</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); onPrivacyPolicyClick?.(); }} className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Dasar Privasi</a>
               <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Terma Penggunaan</a>
               <a href="#" className="text-xs text-gray-400 hover:text-zus-gold transition-colors">Bantuan</a>
             </div>

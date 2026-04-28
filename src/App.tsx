@@ -6,10 +6,10 @@ import FormEntry from './components/FormEntry';
 import DigitalizationPage from './components/DigitalizationPage';
 import ProgressTrackerPage from './components/ProgressTrackerPage';
 import AnnualReportContentsPage from './components/AnnualReportContentsPage';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import MaintenanceGuard from './components/MaintenanceGuard';
 import WebViewOnlyGuard from './components/WebViewOnlyGuard';
 import DraftLoadingOverlay from './components/DraftLoadingOverlay';
-import { DEPARTMENTS } from './data/departments';
 import { CONTENT_SEARCH_INDEX } from './data/searchIndex';
 import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search } from 'lucide-react';
@@ -25,6 +25,7 @@ export default function App() {
   const [showDigitalization, setShowDigitalization] = useState(false);
   const [showProgressTracker, setShowProgressTracker] = useState(false);
   const [showAnnualContents, setShowAnnualContents] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [homeSearchQuery, setHomeSearchQuery] = useState('');
   const pendingSearchTargetRef = useRef<string | null>(null);
 
@@ -76,7 +77,13 @@ export default function App() {
         showDigitalization?: boolean;
         showProgressTracker?: boolean;
         showAnnualContents?: boolean;
+        showPrivacyPolicy?: boolean;
       };
+
+      if (parsed.showPrivacyPolicy) {
+        setShowPrivacyPolicy(true);
+        return;
+      }
 
       if (parsed.showDigitalization) {
         setShowDigitalization(true);
@@ -126,6 +133,7 @@ export default function App() {
             showDigitalization: true,
             showProgressTracker: false,
             showAnnualContents: false,
+            showPrivacyPolicy: false,
           })
         );
         return;
@@ -138,6 +146,7 @@ export default function App() {
             showDigitalization: false,
             showProgressTracker: true,
             showAnnualContents: false,
+            showPrivacyPolicy: false,
           })
         );
         return;
@@ -150,6 +159,20 @@ export default function App() {
             showDigitalization: false,
             showProgressTracker: false,
             showAnnualContents: true,
+            showPrivacyPolicy: false,
+          })
+        );
+        return;
+      }
+
+      if (showPrivacyPolicy) {
+        sessionStorage.setItem(
+          NAVIGATION_STORAGE_KEY,
+          JSON.stringify({
+            showDigitalization: false,
+            showProgressTracker: false,
+            showAnnualContents: false,
+            showPrivacyPolicy: true,
           })
         );
         return;
@@ -169,12 +192,13 @@ export default function App() {
           showDigitalization: false,
           showProgressTracker: false,
           showAnnualContents: false,
+          showPrivacyPolicy: false,
         })
       );
     } catch (error) {
       console.error('Failed to persist navigation state', error);
     }
-  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker, showAnnualContents]);
+  }, [selectedDept, selectedSubUnit, showSubUnitModal, showDigitalization, showProgressTracker, showAnnualContents, showPrivacyPolicy]);
 
   const handleDeptClick = (dept: Department) => {
     if (!dept.active) return;
@@ -273,6 +297,7 @@ export default function App() {
     setShowDigitalization(false);
     setShowProgressTracker(false);
     setShowAnnualContents(false);
+    setShowPrivacyPolicy(false);
     setHomeSearchQuery('');
     setSelectedDept(dept);
     if (subUnit) {
@@ -321,6 +346,7 @@ export default function App() {
     setShowDigitalization(false);
     setShowProgressTracker(false);
     setShowAnnualContents(false);
+    setShowPrivacyPolicy(false);
   };
 
   const handleOpenProgressTracker = () => {
@@ -345,9 +371,13 @@ export default function App() {
       <MaintenanceGuard>
         <DraftLoadingOverlay />
         <Layout 
-          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents} 
+          showBack={isFormMode || showSubUnitModal || showDigitalization || showProgressTracker || showAnnualContents || showPrivacyPolicy} 
           onBack={resetSelection}
-          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : 'Utama'}
+          title={isFormMode ? 'Isi Data' : showDigitalization ? 'Digitalisasi' : showProgressTracker ? 'Progress Tracker' : showAnnualContents ? 'Isi Kandungan' : showPrivacyPolicy ? 'Dasar Privasi' : 'Utama'}
+          onPrivacyPolicyClick={() => {
+            resetSelection();
+            setShowPrivacyPolicy(true);
+          }}
         >
         {showTutorial && (
           <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4">
@@ -503,6 +533,8 @@ export default function App() {
           <ProgressTrackerPage />
         ) : showAnnualContents ? (
           <AnnualReportContentsPage />
+        ) : showPrivacyPolicy ? (
+          <PrivacyPolicyPage />
         ) : isFormMode ? (
           <FormEntry 
             deptName={formTitle || ''} 
