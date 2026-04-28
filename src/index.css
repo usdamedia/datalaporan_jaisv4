@@ -238,7 +238,7 @@
 
   .aturcara-qr-card {
     display: inline-flex;
-    width: min(100%, 28rem);
+    width: min(100%, 34rem);
     align-items: center;
     gap: 1rem;
     margin-top: 1.4rem;
@@ -251,8 +251,8 @@
   }
 
   .aturcara-qr-card img {
-    width: clamp(5.5rem, 10vw, 7.5rem);
-    height: clamp(5.5rem, 10vw, 7.5rem);
+    width: clamp(8rem, 14vw, 11rem);
+    height: clamp(8rem, 14vw, 11rem);
     flex: 0 0 auto;
     border-radius: 0.85rem;
     background: #ffffff;
