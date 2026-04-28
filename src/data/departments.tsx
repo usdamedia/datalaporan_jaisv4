@@ -26,7 +26,7 @@ export const DEPARTMENTS: Department[] = [
     subUnits: [
       { id: 'bpps-pentadbiran', name: 'Unit Pentadbiran', active: true },
       { id: 'bpps-akaun', name: 'Unit Akaun', active: true },
-      { id: 'bpps-hr', name: 'Unit HR & Latihan', active: true },
+      { id: 'bpps-hr', name: 'Unit HR & Latihan', active: true, completed: true },
     ],
   },
   {
