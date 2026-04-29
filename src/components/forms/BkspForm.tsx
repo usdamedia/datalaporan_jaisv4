@@ -21,12 +21,7 @@ interface BkspFormProps {
   onBack: () => void;
 }
 
-const PENAGIHAN_LAIN_LAIN_CATEGORY = 'Masalah Penagihan Lain - lain';
-const PENAGIHAN_LAIN_LAIN_ALIASES = [
-  PENAGIHAN_LAIN_LAIN_CATEGORY.toLowerCase(),
-  'masalah penagihan lain-lain',
-];
-const BKSP_VERIFIED_DATA_VERSION = 'bksp-verified-2025-20260429';
+const BKSP_VERIFIED_DATA_VERSION = 'bksp-verified-2025-20260429-v2';
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const hasSeededVerifiedDataRef = useRef(false);
@@ -88,41 +83,6 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
       }
     }));
   }, [formData.bksp?.verifiedDataVersion, setFormData]);
-
-  useEffect(() => {
-    const puncaKrisis = formData.bksp?.puncaKrisis;
-    if (!Array.isArray(puncaKrisis)) return;
-
-    const penagihanIndex = puncaKrisis.findIndex((item: any) =>
-      PENAGIHAN_LAIN_LAIN_ALIASES.includes(item.name?.trim().toLowerCase())
-    );
-
-    if (penagihanIndex >= 0) {
-      if (puncaKrisis[penagihanIndex].name === PENAGIHAN_LAIN_LAIN_CATEGORY) return;
-
-      setFormData((prev: any) => ({
-        ...prev,
-        bksp: {
-          ...prev.bksp,
-          puncaKrisis: (prev.bksp?.puncaKrisis || []).map((item: any, index: number) =>
-            index === penagihanIndex ? { ...item, name: PENAGIHAN_LAIN_LAIN_CATEGORY } : item
-          ),
-        },
-      }));
-      return;
-    }
-
-    setFormData((prev: any) => ({
-      ...prev,
-      bksp: {
-        ...prev.bksp,
-        puncaKrisis: [
-          ...(prev.bksp?.puncaKrisis || []),
-          { name: PENAGIHAN_LAIN_LAIN_CATEGORY, value: 0 },
-        ],
-      },
-    }));
-  }, [formData.bksp?.puncaKrisis, setFormData]);
 
   const handleBkspChange = (section: string, index: number, value: any) => {
     setFormData((prev: any) => {
