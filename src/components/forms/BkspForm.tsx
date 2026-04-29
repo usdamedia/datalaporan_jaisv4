@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Heart, Users, BarChart3, CheckSquare, Activity, Info } from 'lucide-react';
-import { BKSP_2024_REFERENCE } from '../../constants';
+import { BKSP_2024_REFERENCE, BKSP_2025_VERIFIED } from '../../constants';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
@@ -28,26 +28,27 @@ const PENAGIHAN_LAIN_LAIN_ALIASES = [
 ];
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
+  const hasSeededVerifiedDataRef = useRef(false);
   const initialState = {
     tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
-    ringkasan: '',
-    isu: '',
-    cadangan: '',
+    ringkasan: BKSP_2025_VERIFIED.ringkasan,
+    isu: BKSP_2025_VERIFIED.isu,
+    cadangan: BKSP_2025_VERIFIED.cadangan,
     lawatan: [],
     bksp: {
-      permohonan: BKSP_2024_REFERENCE.permohonan.map(p => ({ name: p.name, value: 0 })),
-      pegawai: BKSP_2024_REFERENCE.pegawai.map(p => ({ name: p.name, value: 0 })),
+      permohonan: BKSP_2025_VERIFIED.permohonan,
+      pegawai: BKSP_2025_VERIFIED.pegawai,
       statistik: {
-        kaunselingSyarie: 0,
-        psikologi: 0
+        kaunselingSyarie: BKSP_2025_VERIFIED.statistik.kaunselingSyarie,
+        psikologi: BKSP_2025_VERIFIED.statistik.psikologi
       },
       statusKes: {
-        diterima: 0,
-        diselesaikan: 0
+        diterima: BKSP_2025_VERIFIED.statusKes.diterima,
+        diselesaikan: BKSP_2025_VERIFIED.statusKes.diselesaikan
       },
-      puncaKrisis: BKSP_2024_REFERENCE.puncaKrisis.map(p => ({ name: p, value: 0 }))
+      puncaKrisis: BKSP_2025_VERIFIED.puncaKrisis
     }
   };
 
@@ -64,6 +65,54 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
     setFormData,
     isAutoSaving,
   } = useFormLogic(deptName, initialState);
+
+  useEffect(() => {
+    if (hasSeededVerifiedDataRef.current) return;
+
+    const hasAnyBkspValue = [
+      ...(formData.bksp?.permohonan || []),
+      ...(formData.bksp?.pegawai || []),
+      ...(formData.bksp?.puncaKrisis || []),
+    ].some((item: any) => toNonNegativeInt(item.value) > 0)
+      || toNonNegativeInt(formData.bksp?.statistik?.kaunselingSyarie) > 0
+      || toNonNegativeInt(formData.bksp?.statistik?.psikologi) > 0
+      || toNonNegativeInt(formData.bksp?.statusKes?.diterima) > 0
+      || toNonNegativeInt(formData.bksp?.statusKes?.diselesaikan) > 0;
+
+    const hasNarrative = Boolean(
+      formData.ringkasan?.trim() ||
+      formData.isu?.trim() ||
+      formData.cadangan?.trim()
+    );
+
+    if (hasAnyBkspValue || hasNarrative) return;
+
+    hasSeededVerifiedDataRef.current = true;
+    setFormData((prev: any) => ({
+      ...prev,
+      ringkasan: BKSP_2025_VERIFIED.ringkasan,
+      isu: BKSP_2025_VERIFIED.isu,
+      cadangan: BKSP_2025_VERIFIED.cadangan,
+      bksp: {
+        ...prev.bksp,
+        permohonan: BKSP_2025_VERIFIED.permohonan,
+        pegawai: BKSP_2025_VERIFIED.pegawai,
+        statistik: BKSP_2025_VERIFIED.statistik,
+        statusKes: BKSP_2025_VERIFIED.statusKes,
+        puncaKrisis: BKSP_2025_VERIFIED.puncaKrisis,
+      }
+    }));
+  }, [
+    formData.bksp?.permohonan,
+    formData.bksp?.pegawai,
+    formData.bksp?.puncaKrisis,
+    formData.bksp?.statistik,
+    formData.bksp?.statusKes,
+    formData.ringkasan,
+    formData.isu,
+    formData.cadangan,
+    setFormData
+  ]);
 
   useEffect(() => {
     const puncaKrisis = formData.bksp?.puncaKrisis;

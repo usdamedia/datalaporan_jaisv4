@@ -317,6 +317,131 @@ export const BKSP_2024_REFERENCE = {
   ]
 };
 
+export const BKSP_2025_VERIFIED = {
+  permohonan: [
+    { name: 'Kuching', value: 1619 },
+    { name: 'Samarahan', value: 361 },
+    { name: 'Serian', value: 49 },
+    { name: 'Sri Aman', value: 76 },
+    { name: 'Betong', value: 231 },
+    { name: 'Sarikei', value: 72 },
+    { name: 'Sibu', value: 294 },
+    { name: 'Mukah', value: 78 },
+    { name: 'Kapit', value: 12 },
+    { name: 'Bintulu', value: 174 },
+    { name: 'Miri', value: 361 },
+    { name: 'Limbang', value: 125 }
+  ],
+  pegawai: [
+    { name: 'Kuching', value: 11 },
+    { name: 'Samarahan', value: 3 },
+    { name: 'Serian', value: 8 },
+    { name: 'Sri Aman', value: 2 },
+    { name: 'Betong', value: 5 },
+    { name: 'Sarikei', value: 6 },
+    { name: 'Sibu', value: 3 },
+    { name: 'Mukah', value: 5 },
+    { name: 'Kapit', value: 4 },
+    { name: 'Bintulu', value: 4 },
+    { name: 'Miri', value: 3 },
+    { name: 'Limbang', value: 8 }
+  ],
+  statistik: {
+    kaunselingSyarie: 40,
+    psikologi: 112
+  },
+  statusKes: {
+    diterima: 3365,
+    diselesaikan: 1869
+  },
+  puncaKrisis: [
+    { name: 'Tiada Persefahaman', value: 2534 },
+    { name: 'Abai Nafkah', value: 1009 },
+    { name: 'Tidak Bertanggungjawab', value: 861 },
+    { name: 'Disyaki Curang', value: 694 },
+    { name: 'Tinggalkan Rumah', value: 528 },
+    { name: 'Bengis/Mendera', value: 496 },
+    { name: 'Masalah Dadah', value: 386 },
+    { name: 'Cemburu', value: 378 },
+    { name: 'Hutang', value: 359 },
+    { name: 'Masalah Agama', value: 349 },
+    { name: 'Masalah Judi', value: 319 },
+    { name: 'Lain-lain', value: 315 },
+    { name: 'Tidak Taat', value: 279 },
+    { name: 'Keluar Rumah Tanpa Izin', value: 234 },
+    { name: 'Campur Tangan Keluarga Suami', value: 213 },
+    { name: 'Masalah Arak', value: 203 },
+    { name: 'Masalah Seksual', value: 132 },
+    { name: 'Campur Tangan Keluarga Isteri', value: 99 },
+    { name: 'Gangguan Spiritual', value: 81 },
+    { name: 'Ingin Berpoligami', value: 68 },
+    { name: 'Enggan Bermadu', value: 11 },
+    { name: 'Masalah Penagihan Lain - lain', value: 0 }
+  ],
+  ringkasan: `1. Laporan Keseluruhan Sarawak
+Perkhidmatan runding cara dilaksanakan secara meluas di 12 bahagian dan daerah Sarawak. Bahagian dengan permohonan tertinggi adalah:
+i. Kuching (1477 kes)
+ii. Samarahan (408 kes)
+iii. Miri (352 kes)
+iv. Sibu (326 kes)
+Menunjukkan permintaan tinggi terhadap perkhidmatan runding cara perkahwinan terutamanya di kawasan bandar.
+
+2. Beban dan Keberhasilan Kes
+Jumlah kes diterima adalah sebanyak 3,450 kes, manakala jumlah kes diselesaikan adalah sebanyak 2,139 kes menjadikan kadar kes yang diselesaikan adalah sebanyak 62%.
+Ini menunjukkan tahap keupayaan penyelesaian yang sederhana baik, namun masih terdapat backlog kes yang signifikan (~38%) yang perlu diberikan perhatian dan pemantauan.
+
+3. Kepelbagaian Intervensi
+Program yang dilaksanakan dibahagikan kepada 2 kategori iaitu kaunseling Syarie sebanyak 35 program, manakala Pembangunan Psikologi sebanyak 50 program.
+Program kaunseling syarie menumpukan kepada aspek latihan kemahiran, pemantauan SOP dan penambahbaikan perkhidmatan runding cara dalam kalangan perunding cara.
+Manakala program Pembangunan Psikologi memberi perhatian kepada aspek psikososial, psikospiritual, kesihatan mental dan sistem sokongan.
+Ini menunjukkan bahawa penekanan kepada intervensi psikologi yang lebih luas dan pelaksanaan yang mengintegrasi elemen psikologi moden dan syarie.`,
+  isu: `i. Konflik perkahwinan yang kompleks dan permintaan yang tinggi
+Implikasi:
+- Keperluan kepada lebih ramai pegawai perunding cara yang berkemahiran tinggi dan pakar dalam bidang.
+- Latihan yang lebih kerap dan intensif.
+- Keperluan kepada program membina kesejahteraan dan pengurusan perkahwinan yang pelbagai.
+
+ii. Jurang Penyelesaian Kes
+- Daripada 3,450 kes diterima, sebanyak 2,139 kes berjaya diselesaikan. Baki: 1,311 kes masih dalam proses intervensi dan susulan.
+- Ini memberikan cabaran utama merangkumi beban kerja tinggi, tempoh intervensi yang panjang dan kemungkinan kes berulang / kompleks.
+
+iii. Wujud Ketidakseimbangan Permintaan vs Sumber
+- Kawasan seperti Kuching sangat tinggi, manakala Kapit (14 kes) dan Serian (29 kes) direkodkan sangat rendah.
+- Ini kemungkinan ekoran dari akses perkhidmatan tidak seimbang, kurang kesedaran di kawasan luar bandar dan faktor stigma terhadap perkhidmatan runding cara dan kaunseling di Jabatan Agama Islam.`,
+  cadangan: `STRATEGI PENGURUSAN KES
+i. Perkenalkan pengkategorian:
+- Asingkan dan bezakan prosedur mengikut kategori tujuan membuat permohonan runding cara iaitu:
+  a. Untuk mempertimbangkan keputusan berpisah dengan pasangan (kategori A)
+  b. Untuk mendapatkan pandangan/khidmat nasihat, mendapatkan khidmat orang tengah untuk menyelesaikan masalah dengan pasangan, meluahkan tekanan dan kekusutan fikiran dan menyelamat perkahwinan (Kategori B)
+  c. Kategori A melalui proses konsultasi ringkas berhubung prosedur ringkas permohonan cerai. Kategori B melalui proses perkhidmatan runding cara/kaunseling perkahwinan.
+ii. Gunakan pendekatan strategik dan bersesuaian:
+- Solution-Focused Brief Therapy (SFBT) untuk kes ringan
+- Emotionally Focused Therapy (EFT) untuk kes yang lebih berat dan mendalam.
+
+PENGAGIHAN SUMBER MANUSIA
+i. Perkenalkan:
+- Kaunseling dalam talian (tele-kaunseling)
+- Program rakan kaunseling syarie
+
+PENINGKATAN KADAR PENYELESAIAN KES
+i. Tingkatkan KPI:
+- Kadar penyelesaian ke 75% daripada 70%
+- Latihan aplikasi Pendekatan Solution Focused kepada perundingcara.
+
+PENGUKUHAN PROGRAM PENCEGAHAN
+i. Pelbagaikan modul dalam program Suarasa:
+- Modul komunikasi pasangan
+- Pengurusan emosi
+- Literasi perkahwinan
+ii. Sasaran:
+- Golongan muda
+- Pasangan awal perkahwinan
+
+KESIMPULAN STRATEGIK
+Secara keseluruhan, BKSPP menunjukkan permintaan tinggi dan relevan daripada masyarakat dan menunjukkan keupayaan intervensi yang baik namun masih perlukan banyak latihan dan penambahbaikan pada kemahiran, ilmu serta prosedur.
+Fokus perlu diberikan lebih kepada perancangan intervensi berfokus dan berlapi serta pencegahan krisis yang lebih awal berbanding intervensi rawatan selepas krisis.`
+};
+
 export const BPDS_2024_REFERENCE = {
   kertasSiasatan: {
     matrimoni: 307,

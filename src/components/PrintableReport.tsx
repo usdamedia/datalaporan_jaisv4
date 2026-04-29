@@ -2448,16 +2448,29 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
                 Kakitangan Sangkutan
               </h3>
-              <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-black text-indigo-900 uppercase">Pekhidmat MIS</span>
-                  <span className="text-lg font-black text-indigo-700">{formData.hr.sangkutan.mis}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-black text-indigo-900 uppercase">Penyelia KAFA (JAKIM)</span>
-                  <span className="text-lg font-black text-indigo-700">{formData.hr.sangkutan.jakim.penyeliaKafa}</span>
-                </div>
-              </div>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-indigo-50">
+                    <th className="border border-indigo-100 p-2 text-left">Perkara</th>
+                    <th className="border border-indigo-100 p-2 text-center">Rujukan 2024</th>
+                    <th className="border border-indigo-100 p-2 text-center">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: 'Pekhidmat MIS', ref: HR_2024_REFERENCE.sangkutan.mis, value: formData.hr.sangkutan.mis },
+                    { label: 'Penyelia KAFA', ref: HR_2024_REFERENCE.sangkutan.jakim.penyeliaKafa, value: formData.hr.sangkutan.jakim.penyeliaKafa },
+                    { label: 'Penggerak Masyarakat Saudara Kita', ref: HR_2024_REFERENCE.sangkutan.jakim.penggerak, value: formData.hr.sangkutan.jakim.penggerak },
+                    { label: 'Pegawai Takmir, Pembantu Takmir dan Penyelaras Pentadbiran Masjid Daerah', ref: HR_2024_REFERENCE.sangkutan.jakim.takmir, value: formData.hr.sangkutan.jakim.takmir },
+                  ].map((item) => (
+                    <tr key={item.label}>
+                      <td className="border border-indigo-100 p-2 font-bold text-indigo-950">{item.label}</td>
+                      <td className="border border-indigo-100 p-2 text-center font-bold text-indigo-600">{item.ref}</td>
+                      <td className="border border-indigo-100 p-2 text-center font-black bg-indigo-50 text-indigo-700">{item.value || 0}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             <div className="space-y-4">

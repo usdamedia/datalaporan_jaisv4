@@ -2484,10 +2484,32 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Kakitangan Sangkutan & Persaraan (2025)</Text>
-              <View style={styles.row}><Text style={styles.label}>Pekhidmat MIS:</Text><Text style={styles.value}>{formData.hr.sangkutan.mis}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Penyelia KAFA:</Text><Text style={styles.value}>{formData.hr.sangkutan.jakim.penyeliaKafa}</Text></View>
+              <Text style={styles.sectionTitle}>Kakitangan Sangkutan (2025)</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '52%' }]}><Text>Perkara</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Rujukan 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>Input 2025</Text></View>
+                </View>
+                {[
+                  { label: 'Pekhidmat MIS', ref: HR_2024_REFERENCE.sangkutan.mis, value: formData.hr.sangkutan.mis },
+                  { label: 'Penyelia KAFA', ref: HR_2024_REFERENCE.sangkutan.jakim.penyeliaKafa, value: formData.hr.sangkutan.jakim.penyeliaKafa },
+                  { label: 'Penggerak Masyarakat Saudara Kita', ref: HR_2024_REFERENCE.sangkutan.jakim.penggerak, value: formData.hr.sangkutan.jakim.penggerak },
+                  { label: 'Pegawai Takmir, Pembantu Takmir dan Penyelaras Pentadbiran Masjid Daerah', ref: HR_2024_REFERENCE.sangkutan.jakim.takmir, value: formData.hr.sangkutan.jakim.takmir },
+                ].map((item) => (
+                  <View key={item.label} style={styles.tableRow}>
+                    <View style={[styles.tableCell, { width: '52%' }]}><Text>{item.label}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{item.ref}</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '28%' }]}><Text>{item.value || 0}</Text></View>
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Persaraan 2025</Text>
               <View style={styles.row}><Text style={styles.label}>Jumlah Bersara:</Text><Text style={styles.value}>{formData.hr.bersara}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Rujukan 2024:</Text><Text style={styles.value}>{HR_2024_REFERENCE.bersara}</Text></View>
             </View>
 
             <View style={styles.section}>
