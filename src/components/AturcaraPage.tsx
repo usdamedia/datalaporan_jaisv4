@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CalendarDays, Clock, Heart, Home, MapPin, Maximize2, Megaphone, Minimize2, Presentation, Sparkles, Target, XCircle } from 'lucide-react';
+import { CalendarDays, Clock, Heart, Home, MapPin, Maximize2, Megaphone, Minimize2, Moon, Presentation, Sparkles, Sun, Target, XCircle } from 'lucide-react';
 import { LiveAnnouncementState } from '../hooks/useLiveAnnouncement';
 import borangDataQr from '../assets/borang-data-qr.jpg';
 
@@ -18,6 +18,8 @@ const slides = [
   { id: 'petang', label: '4' },
 ];
 
+const ATURCARA_THEME_STORAGE_KEY = 'jais_aturcara_theme';
+
 const AturcaraPage: React.FC<AturcaraPageProps> = ({
   liveAnnouncement,
   liveAnnouncementError,
@@ -30,8 +32,16 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    return window.localStorage.getItem(ATURCARA_THEME_STORAGE_KEY) === 'light' ? 'light' : 'dark';
+  });
   const [adminLoveBursts, setAdminLoveBursts] = useState<Array<{ id: string; x: number; y: number }>>([]);
   const lastReactionIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    window.localStorage.setItem(ATURCARA_THEME_STORAGE_KEY, theme);
+  }, [theme]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -117,10 +127,14 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
     await onStartLiveAnnouncement();
   };
 
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <div
       ref={pageRef}
-      className={`aturcara-page relative min-h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950 text-white md:min-h-[calc(100vh-5rem)] ${isMaximized ? 'aturcara-page-maximized' : ''}`}
+      className={`aturcara-page aturcara-theme-${theme} relative min-h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950 text-white md:min-h-[calc(100vh-5rem)] ${isMaximized ? 'aturcara-page-maximized' : ''}`}
     >
       <div className="aturcara-particles" aria-hidden="true">
         {Array.from({ length: 26 }).map((_, index) => (
@@ -167,6 +181,16 @@ const AturcaraPage: React.FC<AturcaraPageProps> = ({
               className="aturcara-icon-button"
             >
               {isMaximized ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+            </button>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Tukar ke light mode' : 'Tukar ke dark mode'}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              className="aturcara-theme-toggle"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
             </button>
             <button
               type="button"
