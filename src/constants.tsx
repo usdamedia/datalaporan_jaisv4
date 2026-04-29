@@ -604,8 +604,8 @@ export const BPPI_2024_REFERENCE = {
     guru: 2523,
     penyelia: 36,
     upkk: {
-      calon: 12686,
-      gps: 2.28
+      calon: 12281,
+      gps: 2.12
     }
   },
   kad: {
