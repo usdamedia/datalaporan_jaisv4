@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import { Heart, Users, BarChart3, CheckSquare, Activity, Info } from 'lucide-react';
 import { BKSP_2024_REFERENCE } from '../../constants';
@@ -20,6 +20,8 @@ interface BkspFormProps {
   deptName: string;
   onBack: () => void;
 }
+
+const PENAGIHAN_LAIN_LAIN_CATEGORY = 'Masalah Penagihan Lain-Lain';
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const initialState = {
@@ -58,6 +60,28 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
     setFormData,
     isAutoSaving,
   } = useFormLogic(deptName, initialState);
+
+  useEffect(() => {
+    const puncaKrisis = formData.bksp?.puncaKrisis;
+    if (!Array.isArray(puncaKrisis)) return;
+
+    const hasPenagihanLainLain = puncaKrisis.some(
+      (item: any) => item.name?.trim().toLowerCase() === PENAGIHAN_LAIN_LAIN_CATEGORY.toLowerCase()
+    );
+
+    if (hasPenagihanLainLain) return;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      bksp: {
+        ...prev.bksp,
+        puncaKrisis: [
+          ...(prev.bksp?.puncaKrisis || []),
+          { name: PENAGIHAN_LAIN_LAIN_CATEGORY, value: 0 },
+        ],
+      },
+    }));
+  }, [formData.bksp?.puncaKrisis, setFormData]);
 
   const handleBkspChange = (section: string, index: number, value: any) => {
     setFormData((prev: any) => {
