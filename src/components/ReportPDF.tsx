@@ -1117,7 +1117,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section} wrap={false}>
+            <View style={styles.section} break wrap={false}>
               <Text style={styles.sectionTitle}>Pecahan Guru Asing Mengikut Bahagian</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
