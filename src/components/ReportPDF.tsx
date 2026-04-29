@@ -2508,9 +2508,19 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Persaraan 2025</Text>
-              <View style={styles.row}><Text style={styles.label}>Jumlah Bersara:</Text><Text style={styles.value}>{formData.hr.bersara}</Text></View>
-              <View style={styles.row}><Text style={styles.label}>Rujukan 2024:</Text><Text style={styles.value}>{HR_2024_REFERENCE.bersara}</Text></View>
+              <Text style={styles.sectionTitle}>Kakitangan Bersara (2025)</Text>
+              <View style={styles.table} wrap={false}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Perkara</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Rujukan 2024</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>Input 2025</Text></View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={[styles.tableCell, { width: '50%' }]}><Text>Kakitangan Bersara</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{HR_2024_REFERENCE.bersara}</Text></View>
+                  <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{formData.hr.bersara || 0}</Text></View>
+                </View>
+              </View>
             </View>
 
             <View style={styles.section}>

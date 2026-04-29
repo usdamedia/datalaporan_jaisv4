@@ -2472,18 +2472,24 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
 
             <div className="space-y-4">
               <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-                Persaraan 2025
+                Kakitangan Bersara (2025)
               </h3>
-              <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] font-black text-red-400 uppercase">Jumlah Bersara</div>
-                  <div className="text-2xl font-black text-red-700">{formData.hr.bersara}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[10px] font-bold text-gray-400 uppercase">Ref 2024</div>
-                  <div className="text-lg font-bold text-gray-500">{HR_2024_REFERENCE.bersara}</div>
-                </div>
-              </div>
+              <table className="w-full text-[10px] border-collapse">
+                <thead>
+                  <tr className="bg-red-50">
+                    <th className="border border-red-100 p-2 text-left">Perkara</th>
+                    <th className="border border-red-100 p-2 text-center">Rujukan 2024</th>
+                    <th className="border border-red-100 p-2 text-center">Input 2025</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-red-100 p-2 font-bold text-red-950">Kakitangan Bersara</td>
+                    <td className="border border-red-100 p-2 text-center font-bold text-red-600">{HR_2024_REFERENCE.bersara}</td>
+                    <td className="border border-red-100 p-2 text-center font-black bg-red-50 text-red-700">{formData.hr.bersara || 0}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="space-y-4">
