@@ -491,10 +491,9 @@ export const LEADERSHIP_2024_REFERENCE = {
   mpj: 3,
   pegawaiAgama: 1,
   perhimpunan: {
-    tawjihat: 1,
     perdana: 1,
     bulanan: 3,
-    total: 5
+    total: 4
   },
   aset: 2,
   keselamatan: 2,

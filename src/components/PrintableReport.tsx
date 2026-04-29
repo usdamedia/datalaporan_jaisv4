@@ -2303,11 +2303,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                   <span className="text-[10px] font-black text-orange-900 uppercase">Jumlah Keseluruhan</span>
                   <span className="text-xl font-black text-orange-700">{formData.leadership.perhimpunan.total}</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center">
-                    <div className="text-[7px] font-bold text-orange-400 uppercase">Tawjihat</div>
-                    <div className="text-xs font-black text-orange-600">{formData.leadership.perhimpunan.tawjihat || 0}</div>
-                  </div>
+                <div className="grid grid-cols-2 gap-2">
                   <div className="text-center">
                     <div className="text-[7px] font-bold text-orange-400 uppercase">Perdana</div>
                     <div className="text-xs font-black text-orange-600">{formData.leadership.perhimpunan.perdana || 0}</div>

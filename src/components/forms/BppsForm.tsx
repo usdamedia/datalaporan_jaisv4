@@ -32,7 +32,6 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
       mpj: '',
       pegawaiAgama: '',
       perhimpunan: {
-        tawjihat: '',
         perdana: '',
         bulanan: '',
         total: 0
@@ -96,11 +95,10 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
   // Auto-sum for Perhimpunan
   useEffect(() => {
     if (isPentadbiran) {
-      const perhimpunan = formData.leadership?.perhimpunan || { tawjihat: '', perdana: '', bulanan: '', total: 0 };
-      const tawjihat = parseInt(perhimpunan.tawjihat) || 0;
+      const perhimpunan = formData.leadership?.perhimpunan || { perdana: '', bulanan: '', total: 0 };
       const perdana = parseInt(perhimpunan.perdana) || 0;
       const bulanan = parseInt(perhimpunan.bulanan) || 0;
-      const total = tawjihat + perdana + bulanan;
+      const total = perdana + bulanan;
 
       if (total !== perhimpunan.total) {
         setFormData((prev: any) => ({
@@ -115,7 +113,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
         }));
       }
     }
-  }, [formData.leadership?.perhimpunan?.tawjihat, formData.leadership?.perhimpunan?.perdana, formData.leadership?.perhimpunan?.bulanan, isPentadbiran]);
+  }, [formData.leadership?.perhimpunan?.perdana, formData.leadership?.perhimpunan?.bulanan, isPentadbiran]);
 
   // Auto-sum for Panel HR
   useEffect(() => {
@@ -248,7 +246,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
   const financeYear2025 = formData.finance?.financeYears?.[0] || { lulus: '', belanja: '', hasil: '' };
   const financeDistricts = formData.finance?.financeDistricts || [];
   const leadership = formData.leadership || {};
-  const perhimpunan = leadership.perhimpunan || { tawjihat: '', perdana: '', bulanan: '', total: 0 };
+  const perhimpunan = leadership.perhimpunan || { perdana: '', bulanan: '', total: 0 };
   const panelHR = leadership.panelHR || { biasa: '', khas: '', total: 0 };
   const transport = formData.transport || { van: '', mpv: '', sedan: '', suv: '', bus: '' };
   const getExportState = () =>
@@ -573,17 +571,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-bold text-orange-700 uppercase">Tawjihat</label>
-                  <input
-                    type="number"
-                    value={perhimpunan.tawjihat}
-                    onChange={(e) => updateLeadershipField('perhimpunan', e.target.value, 'tawjihat')}
-                    className="w-full p-2 bg-white border border-orange-200 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 font-bold text-sm"
-                    placeholder="0"
-                  />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[9px] font-bold text-orange-700 uppercase">Perdana</label>
                   <input
