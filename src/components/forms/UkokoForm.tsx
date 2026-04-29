@@ -10,7 +10,9 @@ import {
   AlertCircle
 } from 'lucide-react';
 import FormLayout from './FormLayout';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
+import { getTodayIsoMY } from '../../utils/dateFormat';
 import { SARAWAK_DIVISIONS, UKOKO_2024_REFERENCE } from '../../constants';
 
 const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
@@ -21,8 +23,19 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
     isSaving,
     isAutoSaving,
     showSuccess,
-    saveError
+    saveError,
+    handleInputChange,
+    addLawatan,
+    removeLawatan,
+    updateLawatan
   } = useFormLogic(deptName, {
+    tarikh: getTodayIsoMY(),
+    disediakanOleh: '',
+    jawatan: '',
+    ringkasan: '',
+    isu: '',
+    cadangan: '',
+    lawatan: [],
     ukoko: {
       perayaanIslam: [],
       majlisKesyukuran: []
@@ -86,6 +99,8 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       saveError={saveError}
       formData={formData}
     >
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+
       {/* Summary Header */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-emerald-900 p-6 rounded-3xl shadow-lg text-white flex flex-col justify-center relative overflow-hidden group">
@@ -308,6 +323,16 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
           <p className="text-xs font-bold uppercase tracking-tight">Sila pastikan semua maklumat acara diisi dengan lengkap sebelum menyimpan.</p>
         </div>
       )}
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      <LawatanSection 
+        formData={formData} 
+        addLawatan={addLawatan} 
+        removeLawatan={removeLawatan} 
+        updateLawatan={updateLawatan} 
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
     </FormLayout>
   );
 };
