@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { collection, getDocs, limit, query, Timestamp } from 'firebase/firestore';
 import { 
   Calendar, 
   Plus, 
@@ -9,13 +10,27 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
+import { db } from '../../firebase';
 import FormLayout from './FormLayout';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import { getTodayIsoMY } from '../../utils/dateFormat';
+import { buildDraftKey } from '../../utils/formDraftKey';
 import { SARAWAK_DIVISIONS, UKOKO_2024_REFERENCE } from '../../constants';
 
+const toLogDate = (value: unknown) => {
+  if (!value) return null;
+  if (value instanceof Timestamp) return value.toDate();
+  if (typeof value === 'object' && value && 'seconds' in value) {
+    const seconds = Number((value as { seconds: unknown }).seconds);
+    if (!Number.isNaN(seconds)) return new Date(seconds * 1000);
+  }
+  return null;
+};
+
 const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
+  const [latestSavedBy, setLatestSavedBy] = useState<string>('');
+  const [latestSavedAt, setLatestSavedAt] = useState<string>('');
   const {
     formData,
     setFormData,
@@ -48,6 +63,51 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       penyertaanLuar: []
     }
   });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadLatestSaveLog = async () => {
+      const storageKey = buildDraftKey(deptName);
+
+      try {
+        const snapshot = await getDocs(query(collection(db, 'drafts_2025', storageKey, 'update_logs'), limit(50)));
+        const latestLog = snapshot.docs
+          .map((entry) => {
+            const data = entry.data();
+            const createdAt = toLogDate(data.createdAt);
+            const clientCreatedAt = data.clientCreatedAt ? String(data.clientCreatedAt) : '';
+            return {
+              officerName: String(data.officerName || ''),
+              createdAt,
+              clientCreatedAt,
+              time: createdAt?.getTime() || (clientCreatedAt ? new Date(clientCreatedAt).getTime() : 0),
+            };
+          })
+          .filter((entry) => entry.officerName)
+          .sort((a, b) => b.time - a.time)[0];
+
+        if (cancelled || !latestLog) return;
+
+        setLatestSavedBy(latestLog.officerName);
+        setLatestSavedAt(
+          latestLog.createdAt
+            ? latestLog.createdAt.toLocaleString('ms-MY', { dateStyle: 'medium', timeStyle: 'short' })
+            : latestLog.clientCreatedAt
+              ? new Date(latestLog.clientCreatedAt).toLocaleString('ms-MY', { dateStyle: 'medium', timeStyle: 'short' })
+              : ''
+        );
+      } catch (error) {
+        console.error('Failed to load latest UKOKO save log', error);
+      }
+    };
+
+    void loadLatestSaveLog();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [deptName]);
 
   const addEvent = (category: 'perayaanIslam' | 'majlisKesyukuran' | 'penyertaanLuar') => {
     setFormData((prev: any) => {
@@ -118,6 +178,16 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       formData={formData}
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} showDisemak />
+
+      <section className="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5 shadow-sm">
+        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Simpanan terakhir</p>
+        <p className="mt-2 text-sm font-bold text-zus-900">
+          {latestSavedBy ? `Dikemaskini oleh ${latestSavedBy}` : 'Belum ada log simpanan manual untuk unit ini.'}
+        </p>
+        {latestSavedAt && (
+          <p className="mt-1 text-xs font-medium text-emerald-800/70">{latestSavedAt}</p>
+        )}
+      </section>
 
       {/* Summary Header */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
