@@ -594,7 +594,7 @@ export const BPPI_2024_REFERENCE = {
     { name: "SK (A) MIS Lawas", value: 517 },
     { name: "SMK (A) Tun Ahmad Zaidi", value: 716 },
     { name: "SMK Pesantren Abdul Taib Mahmud", value: 492 },
-    { name: "SRAMOR", value: 0 }
+    { name: "SRAMOR - Sekolah Rendah Agama Datuk Haji Mohamad Mortadza Haji Daud", value: 0 }
   ],
   kafa: {
     pelajar: 69429,
