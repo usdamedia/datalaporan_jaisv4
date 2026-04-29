@@ -2527,6 +2527,26 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '25%' }]}><Text>{formData.hr.bersara || 0}</Text></View>
                 </View>
               </View>
+              {formData.hr.senaraiBersara && formData.hr.senaraiBersara.length > 0 ? (
+                <View style={styles.table} wrap={false}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <View style={[styles.tableCell, { width: '30%' }]}><Text>Nama</Text></View>
+                    <View style={[styles.tableCell, { width: '25%' }]}><Text>Jawatan</Text></View>
+                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>Tarikh Bersara</Text></View>
+                    <View style={[styles.tableCell, { width: '25%' }]}><Text>Stesen Terakhir</Text></View>
+                  </View>
+                  {formData.hr.senaraiBersara.map((item: any, index: number) => (
+                    <View key={index} style={styles.tableRow}>
+                      <View style={[styles.tableCell, { width: '30%' }]}><Text>{item.nama || '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.jawatan || '-'}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '20%' }]}><Text>{item.tarikhBersara ? formatDateDDMMYYYYMY(item.tarikhBersara) : '-'}</Text></View>
+                      <View style={[styles.tableCell, { width: '25%' }]}><Text>{item.stesenTerakhir || '-'}</Text></View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.emptyState}>Tiada senarai kakitangan bersara dimasukkan.</Text>
+              )}
             </View>
 
             <View style={styles.section} wrap={false}>

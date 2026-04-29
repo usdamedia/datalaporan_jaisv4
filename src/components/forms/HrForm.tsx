@@ -94,6 +94,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
         grandTotal: ''
       },
       bersara: '',
+      senaraiBersara: [],
       naikPangkat: [],
       hldp: []
     },
@@ -258,22 +259,24 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
     });
   };
 
-  const addHrListItem = (section: 'naikPangkat' | 'hldp') => {
+  const addHrListItem = (section: 'senaraiBersara' | 'naikPangkat' | 'hldp') => {
     setFormData((prev: any) => ({
       ...prev,
       hr: {
         ...prev.hr,
         [section]: [
           ...(prev.hr[section] || []),
-          section === 'naikPangkat'
-            ? { nama: '', pangkatSemasa: '', pangkatBaru: '' }
-            : { nama: '', jawatan: '', jenisPengajian: '' }
+          section === 'senaraiBersara'
+            ? { nama: '', jawatan: '', tarikhBersara: '', stesenTerakhir: '' }
+            : section === 'naikPangkat'
+              ? { nama: '', pangkatSemasa: '', pangkatBaru: '' }
+              : { nama: '', jawatan: '', jenisPengajian: '' }
         ]
       }
     }));
   };
 
-  const updateHrListItem = (section: 'naikPangkat' | 'hldp', index: number, field: string, value: string) => {
+  const updateHrListItem = (section: 'senaraiBersara' | 'naikPangkat' | 'hldp', index: number, field: string, value: string) => {
     setFormData((prev: any) => {
       const nextItems = [...(prev.hr[section] || [])];
       nextItems[index] = { ...nextItems[index], [field]: value };
@@ -287,7 +290,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
     });
   };
 
-  const removeHrListItem = (section: 'naikPangkat' | 'hldp', index: number) => {
+  const removeHrListItem = (section: 'senaraiBersara' | 'naikPangkat' | 'hldp', index: number) => {
     setFormData((prev: any) => ({
       ...prev,
       hr: {
@@ -647,7 +650,7 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
             </div>
             <h2 className="text-white font-bold text-lg">5. Kakitangan Bersara</h2>
           </div>
-          <div className="p-6">
+          <div className="p-6 space-y-5">
             <div className="bg-red-50 p-6 rounded-2xl border border-red-100 max-w-2xl mx-auto">
               <div className="overflow-x-auto rounded-xl border border-red-100">
                 <table className="w-full min-w-[430px] text-sm">
@@ -675,6 +678,67 @@ const HrForm: React.FC<HrFormProps> = ({ deptName, onBack }) => {
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div className="rounded-2xl border border-red-100 bg-red-50/40 p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-sm font-black text-red-950">Senarai Kakitangan Bersara 2025</h3>
+                  <p className="mt-1 text-xs font-medium text-red-700/70">Masukkan butiran kakitangan bersara supaya dijana bersama dalam PDF.</p>
+                </div>
+                <button
+                  onClick={() => addHrListItem('senaraiBersara')}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-red-700 text-white font-bold text-sm hover:bg-red-800 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tambah Rekod
+                </button>
+              </div>
+              {(formData.hr.senaraiBersara || []).length === 0 ? (
+                <div className="mt-4 text-center py-8 bg-white rounded-2xl border border-dashed border-red-100 text-sm font-medium text-red-300">
+                  Tiada rekod kakitangan bersara ditambah.
+                </div>
+              ) : (
+                <div className="mt-4 space-y-4">
+                  {(formData.hr.senaraiBersara || []).map((item: any, index: number) => (
+                    <div key={index} className="grid grid-cols-1 gap-4 rounded-2xl border border-red-100 bg-white p-4 md:grid-cols-[1fr_1fr_12rem_1fr_auto]">
+                      <input
+                        type="text"
+                        value={item.nama}
+                        onChange={(e) => updateHrListItem('senaraiBersara', index, 'nama', e.target.value)}
+                        className="w-full p-3 bg-red-50/50 border border-red-100 rounded-xl outline-none font-medium"
+                        placeholder="Nama"
+                      />
+                      <input
+                        type="text"
+                        value={item.jawatan}
+                        onChange={(e) => updateHrListItem('senaraiBersara', index, 'jawatan', e.target.value)}
+                        className="w-full p-3 bg-red-50/50 border border-red-100 rounded-xl outline-none font-medium"
+                        placeholder="Jawatan"
+                      />
+                      <input
+                        type="date"
+                        lang="en-GB"
+                        value={item.tarikhBersara}
+                        onChange={(e) => updateHrListItem('senaraiBersara', index, 'tarikhBersara', e.target.value)}
+                        className="w-full p-3 bg-red-50/50 border border-red-100 rounded-xl outline-none font-medium"
+                      />
+                      <input
+                        type="text"
+                        value={item.stesenTerakhir}
+                        onChange={(e) => updateHrListItem('senaraiBersara', index, 'stesenTerakhir', e.target.value)}
+                        className="w-full p-3 bg-red-50/50 border border-red-100 rounded-xl outline-none font-medium"
+                        placeholder="Stesen terakhir"
+                      />
+                      <button
+                        onClick={() => removeHrListItem('senaraiBersara', index)}
+                        className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
