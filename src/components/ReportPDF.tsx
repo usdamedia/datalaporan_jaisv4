@@ -2413,7 +2413,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* HR Specific Data */}
         {isHR && formData.hr && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Ringkasan Perjawatan (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2439,7 +2439,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Demografi & Skim Perkhidmatan (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2490,7 +2490,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kakitangan Sangkutan (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2513,7 +2513,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kakitangan Bersara (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2529,7 +2529,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kakitangan Naik Pangkat (2025)</Text>
               {formData.hr.naikPangkat && formData.hr.naikPangkat.length > 0 ? (
                 <View style={styles.table} wrap={false}>
@@ -2551,7 +2551,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               )}
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kakitangan HLDP / Menyambung Pengajian 2025</Text>
               {formData.hr.hldp && formData.hr.hldp.length > 0 ? (
                 <View style={styles.table} wrap={false}>
@@ -2573,7 +2573,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               )}
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Taburan Kakitangan Ibu Pejabat (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2643,7 +2643,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Taburan Kakitangan Mengikut Daerah (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2682,34 +2682,36 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <Text style={styles.value}>{formData.latihan.ringkasan.generik} / {formData.latihan.ringkasan.spesifik}</Text>
                 </View>
 
-                <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Pencapaian Jam Latihan Kakitangan</Text>
-                <View style={styles.table} wrap={false}>
-                  <View style={[styles.tableRow, styles.tableHeader]}>
-                    <View style={[styles.tableCell, { width: '40%' }]}><Text>Rekod Pencapaian</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>P&P</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>SK 1</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>SK 2</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>Jumlah</Text></View>
-                  </View>
-                  {[
-                    { label: 'Telah Mencapai', key: 'mencapai' },
-                    { label: 'Tidak Mencapai', key: 'tidakMencapai' },
-                    { label: 'Tiada Rekod', key: 'tiadaRekod' },
-                  ].map((row) => (
-                    <View key={row.key} style={styles.tableRow}>
-                      <View style={[styles.tableCell, { width: '40%' }]}><Text>{row.label}</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].pp} ({formData.latihan.pencapaian[row.key].ppPct}%)</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].sk1} ({formData.latihan.pencapaian[row.key].sk1Pct}%)</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].sk2} ({formData.latihan.pencapaian[row.key].sk2Pct}%)</Text></View>
-                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].total} ({formData.latihan.pencapaian[row.key].totalPct}%)</Text></View>
+                <View wrap={false}>
+                  <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Pencapaian Jam Latihan Kakitangan</Text>
+                  <View style={styles.table} wrap={false}>
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>Rekod Pencapaian</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>P&P</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>SK 1</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>SK 2</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>Jumlah</Text></View>
                     </View>
-                  ))}
-                  <View style={[styles.tableRow, styles.tableHeader]}>
-                    <View style={[styles.tableCell, { width: '40%' }]}><Text>JUMLAH KESELURUHAN</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.pp}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.sk1}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.sk2}</Text></View>
-                    <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.total}</Text></View>
+                    {[
+                      { label: 'Telah Mencapai', key: 'mencapai' },
+                      { label: 'Tidak Mencapai', key: 'tidakMencapai' },
+                      { label: 'Tiada Rekod', key: 'tiadaRekod' },
+                    ].map((row) => (
+                      <View key={row.key} style={styles.tableRow}>
+                        <View style={[styles.tableCell, { width: '40%' }]}><Text>{row.label}</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].pp} ({formData.latihan.pencapaian[row.key].ppPct}%)</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].sk1} ({formData.latihan.pencapaian[row.key].sk1Pct}%)</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].sk2} ({formData.latihan.pencapaian[row.key].sk2Pct}%)</Text></View>
+                        <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian[row.key].total} ({formData.latihan.pencapaian[row.key].totalPct}%)</Text></View>
+                      </View>
+                    ))}
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <View style={[styles.tableCell, { width: '40%' }]}><Text>JUMLAH KESELURUHAN</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.pp}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.sk1}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.sk2}</Text></View>
+                      <View style={[styles.tableCell, styles.tableCellCenter, { width: '15%' }]}><Text>{formData.latihan.pencapaian.jumlahKeseluruhan.total}</Text></View>
+                    </View>
                   </View>
                 </View>
               </View>
