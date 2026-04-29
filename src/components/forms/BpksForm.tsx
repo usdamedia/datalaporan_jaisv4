@@ -404,14 +404,6 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </table>
             </div>
 
-            {!isBorang5Valid && (totalBorang5Bahagian > 0 || totalBorang5Kategori > 0) && (
-              <div className="mt-4 flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-xl border border-red-100">
-                <AlertCircle className="w-4 h-4" />
-                <p className="text-[10px] font-bold">
-                  AMARAN: Jumlah Bahagian ({totalBorang5Bahagian}) tidak sama dengan Jumlah Kategori ({totalBorang5Kategori}).
-                </p>
-              </div>
-            )}
           </div>
         </div>
 
