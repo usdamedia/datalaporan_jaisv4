@@ -50,6 +50,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
     transport: {
       van: '',
       mpv: '',
+      sedan: '',
       suv: '',
       bus: ''
     },
@@ -249,7 +250,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
   const leadership = formData.leadership || {};
   const perhimpunan = leadership.perhimpunan || { tawjihat: '', perdana: '', bulanan: '', total: 0 };
   const panelHR = leadership.panelHR || { biasa: '', khas: '', total: 0 };
-  const transport = formData.transport || { van: '', mpv: '', suv: '', bus: '' };
+  const transport = formData.transport || { van: '', mpv: '', sedan: '', suv: '', bus: '' };
   const getExportState = () =>
     buildReportExportState(deptName, formData, {
       pagination: {

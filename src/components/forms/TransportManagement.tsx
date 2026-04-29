@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 interface TransportData {
   van: number;
   mpv: number;
+  sedan: number;
   suv: number;
   bus: number;
 }
@@ -19,6 +20,7 @@ const TransportManagement: React.FC<TransportManagementProps> = ({ data2025, onC
   const stats2024 = [
     { label: 'Van', value: 2, icon: <Truck className="w-8 h-8" />, color: 'bg-teal-600' },
     { label: 'MPV', value: 3, icon: <Car className="w-8 h-8" />, color: 'bg-teal-600' },
+    { label: 'Sedan', value: 0, icon: <Car className="w-8 h-8" />, color: 'bg-teal-600' },
     { label: 'SUV', value: 11, icon: <Car className="w-8 h-8" />, color: 'bg-teal-600' },
     { label: 'Bas', value: 1, icon: <Bus className="w-8 h-8" />, color: 'bg-teal-600' },
   ];
@@ -73,6 +75,7 @@ const TransportManagement: React.FC<TransportManagementProps> = ({ data2025, onC
           {[
             { id: 'van', label: 'Bilangan Van', icon: <Truck className="w-4 h-4" /> },
             { id: 'mpv', label: 'Bilangan MPV', icon: <Car className="w-4 h-4" /> },
+            { id: 'sedan', label: 'Bilangan Sedan', icon: <Car className="w-4 h-4" /> },
             { id: 'suv', label: 'Bilangan SUV', icon: <Car className="w-4 h-4" /> },
             { id: 'bus', label: 'Bilangan Bas', icon: <Bus className="w-4 h-4" /> },
           ].map((field) => (
