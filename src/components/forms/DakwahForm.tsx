@@ -43,10 +43,10 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
     cadangan: '',
     lawatan: [],
     dakwah: {
-      progJais2025: 0,
-      progAgensi2025: 0,
-      tauliahAktif2025: 0,
-      tauliahSeluruhSarawak2025: 0,
+      progJais2025: '',
+      progAgensi2025: '',
+      tauliahAktif2025: '',
+      tauliahSeluruhSarawak2025: '',
       mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
       mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
       mediaSosial: {
@@ -67,11 +67,11 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       },
       tauliahDivisions: SARAWAK_DIVISIONS.map(name => ({
         name,
-        val2025: 0
+        val2025: ''
       })),
       guruAsingDivisions: SARAWAK_DIVISIONS.map(name => ({
         name,
-        val2025: 0
+        val2025: ''
       }))
     }
   };
