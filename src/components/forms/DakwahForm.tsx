@@ -187,7 +187,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const ms = formData.dakwah.mediaSosial || {};
   const totalPlatform = (Number(ms.fb) || 0) + (Number(ms.ig) || 0) + (Number(ms.tiktok) || 0) + (Number(ms.youtube) || 0);
   const totalInternet = (Number(ms.kiswa) || 0) + (Number(ms.tvs) || 0);
-  const totalKandungan = (Number(ms.poster) || 0) + (Number(ms.video) || 0);
+  const totalKandungan = (Number(ms.poster) || 0) + (Number(ms.video) || 0) + (Number(ms.live) || 0) + (Number(ms.reel) || 0);
 
   return (
     <FormLayout
@@ -501,10 +501,10 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* JUMLAH PLATFORM */}
+          {/* Platform Media Sosial */}
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
-              JUMLAH PLATFORM
+              Platform Media Sosial
             </h4>
             <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
               <div className="grid grid-cols-[1fr_auto] items-center gap-4">
@@ -556,10 +556,10 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
             </div>
           </div>
 
-          {/* INTERNET */}
+          {/* Portal & Penyiaran */}
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
-              Internet
+              Portal & Penyiaran
             </h4>
             <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
               <div className="grid grid-cols-[1fr_auto] items-center gap-4">
@@ -591,10 +591,10 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
             </div>
           </div>
 
-          {/* JENIS BAHAN KANDUNGAN DIBUAT 2025 */}
+          {/* Format Kandungan */}
           <div className="space-y-4">
             <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
-              Jenis Bahan Kandungan
+              Format Kandungan
             </h4>
             <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
               <div className="grid grid-cols-[1fr_auto] items-center gap-4">
@@ -613,6 +613,26 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
                   type="number"
                   value={formData.dakwah.mediaSosial?.video ?? ''}
                   onChange={(e) => handleMediaSosialChange('video', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Live</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.live ?? ''}
+                  onChange={(e) => handleMediaSosialChange('live', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Reel</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.reel ?? ''}
+                  onChange={(e) => handleMediaSosialChange('reel', e.target.value)}
                   className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
                   placeholder="0"
                 />

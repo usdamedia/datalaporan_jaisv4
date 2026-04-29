@@ -12,6 +12,7 @@ import {
   Plus
 } from 'lucide-react';
 import FormLayout from './FormLayout';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import { UKOKO_PR_2024_REFERENCE } from '../../constants';
 import { keepNumericInputDraft, toNonNegativeInt } from '../../utils/inputNormalization';
@@ -80,7 +81,11 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     isSaving,
     isAutoSaving,
     showSuccess,
-    saveError
+    saveError,
+    handleInputChange,
+    addLawatan,
+    updateLawatan,
+    removeLawatan
   } = useFormLogic(deptName, {
     pr: {
       pembelianBukuBaharu: {
@@ -486,7 +491,9 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       saveError={saveError}
       formData={formData}
     >
-      <div className="space-y-8">
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      
+      <div className="space-y-8 mt-8">
         <section className="rounded-[2rem] bg-[linear-gradient(135deg,#5b6cff_0%,#7c3aed_55%,#5b21b6_100%)] p-8 text-white shadow-xl">
           <p className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-100">Laporan Tahunan Perhubungan Awam</p>
           <h1 className="mt-3 max-w-4xl text-3xl font-black uppercase tracking-tight">Unit Komunikasi Korporat (UKOKO) · Unit Komunikasi dan Pusat Sumber (UKPS)</h1>
@@ -963,7 +970,19 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </table>
           </div>
         </section>
+        </section>
       </div>
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      
+      <LawatanSection 
+        formData={formData} 
+        addLawatan={addLawatan} 
+        removeLawatan={removeLawatan} 
+        updateLawatan={updateLawatan} 
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
     </FormLayout>
   );
 };

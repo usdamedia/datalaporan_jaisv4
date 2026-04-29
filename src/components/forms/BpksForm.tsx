@@ -13,6 +13,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { BPKS_2024_REFERENCE } from '../../constants';
 
 const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -23,7 +24,11 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     isSaving,
     isAutoSaving,
     showSuccess,
-    saveError
+    saveError,
+    handleInputChange,
+    addLawatan,
+    updateLawatan,
+    removeLawatan
   } = useFormLogic('BPKS', {
     bpks: {
       statistik: {
@@ -149,6 +154,8 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       saveError={saveError}
       formData={formData}
     >
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      
       {/* 1. Statistik Ringkasan */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-teal-100 hover:shadow-md transition-all">
@@ -568,7 +575,20 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <Scale className="absolute -bottom-4 -right-4 w-32 h-32 text-teal-200/50 group-hover:scale-110 transition-transform duration-500" />
           </div>
         </div>
+          </div>
+        </div>
       </div>
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      
+      <LawatanSection 
+        formData={formData} 
+        addLawatan={addLawatan} 
+        removeLawatan={removeLawatan} 
+        updateLawatan={updateLawatan} 
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
     </FormLayout>
   );
 };

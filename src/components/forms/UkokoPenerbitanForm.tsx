@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
-import { BasicInfoSection, LawatanSection } from './CommonSections';
+import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
 import { UKOKO_PENERBITAN_2024_REFERENCE } from '../../constants';
 
 const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
@@ -200,31 +200,7 @@ const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = 
         </div>
       </section>
 
-      {/* Custom Cadangan Section */}
-      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-          <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
-            <Lightbulb className="w-5 h-5" />
-          </div>
-          <h3 className="text-lg font-bold text-zus-900 sentence-case">Cadangan Penambahbaikan / Way Forward Unit</h3>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 flex items-center gap-2 sentence-case">
-              Cadangan penambahbaikan / way forward unit
-            </label>
-            <textarea 
-              name="cadangan"
-              rows={4}
-              placeholder="Nyatakan cadangan anda..."
-              value={formData.cadangan}
-              onChange={handleInputChange}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
-            ></textarea>
-          </div>
-        </div>
-      </section>
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
 
       <LawatanSection 
         formData={formData} 

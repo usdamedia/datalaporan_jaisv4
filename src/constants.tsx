@@ -61,6 +61,8 @@ export const DAKWAH_2025_MEDIA_CURRENT = {
     tvs: 25,
     poster: 242,
     video: 59,
+    live: 0,
+    reel: 0,
   },
 } as const;
 

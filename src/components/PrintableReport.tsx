@@ -105,7 +105,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isKualiti);
+  const shouldRenderCommonNarrative = !(isUkokoPerayaan || isKualiti);
   const bpnpKajian2025 = (formData.bpnp?.kajianList || []).map(normalizeKajianReportEntry);
   const bpnpPenulisan2025 = (formData.bpnp?.penulisanList || []).map(normalizePenulisanCompetitionReportEntry);
   const bpnpKajian2024 = BPNP_2024_REFERENCE.kajian.map((kajian) => normalizeKajianReportEntry(kajian));
@@ -1193,6 +1193,16 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
                     <td className="border p-2 font-bold">Video</td>
                     <td className="border p-2 text-center">-</td>
                     <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.video ?? DAKWAH_2025_MEDIA_CURRENT.sosial.video}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Live</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.live ?? DAKWAH_2025_MEDIA_CURRENT.sosial.live}</td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2 font-bold">Reel</td>
+                    <td className="border p-2 text-center">-</td>
+                    <td className="border p-2 text-center font-black bg-blue-50">{formData.dakwah.mediaSosial?.reel ?? DAKWAH_2025_MEDIA_CURRENT.sosial.reel}</td>
                   </tr>
                 </tbody>
               </table>
@@ -2778,19 +2788,11 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
             </table>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
-              Cadangan Penambahbaikan / Way Forward Unit
-            </h3>
-            <p className="text-xs text-gray-700 leading-relaxed text-justify">
-              {formData.cadangan || 'Tiada maklumat disediakan.'}
-            </p>
-          </div>
         </div>
       )}
 
       {/* Lawatan Section */}
-      {(shouldRenderCommonNarrative || isUkokoPenerbitan || isKualiti) && formData.lawatan && formData.lawatan.length > 0 && (
+      {(shouldRenderCommonNarrative || isKualiti) && formData.lawatan && formData.lawatan.length > 0 && (
         <div className="mt-8 space-y-4">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
             Rekod Lawatan / Penandaarasan

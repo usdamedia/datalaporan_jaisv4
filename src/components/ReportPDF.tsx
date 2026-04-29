@@ -521,7 +521,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     },
   ];
   const shouldRenderBasicInfo = !(isIntegriti || isKualiti);
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isKualiti);
+  const shouldRenderCommonNarrative = !(isUkokoPerayaan || isKualiti);
 
   return (
     <Document>
@@ -1093,6 +1093,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <View style={styles.row}><Text style={styles.label}>TVS:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.tvs ?? DAKWAH_2025_MEDIA_CURRENT.sosial.tvs}</Text></View>
               <View style={styles.row}><Text style={styles.label}>Poster:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.poster ?? DAKWAH_2025_MEDIA_CURRENT.sosial.poster}</Text></View>
               <View style={styles.row}><Text style={styles.label}>Video:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.video ?? DAKWAH_2025_MEDIA_CURRENT.sosial.video}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Live:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.live ?? DAKWAH_2025_MEDIA_CURRENT.sosial.live}</Text></View>
+              <View style={styles.row}><Text style={styles.label}>Reel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.reel ?? DAKWAH_2025_MEDIA_CURRENT.sosial.reel}</Text></View>
             </View>
 
             <View style={styles.section}>
@@ -2786,12 +2788,6 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               )}
             </View>
 
-            <View style={{ marginTop: 20 }}>
-              <Text style={styles.sectionTitle}>Cadangan Penambahbaikan / Way Forward Unit</Text>
-              <View style={styles.narrativeBox}>
-                <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
-              </View>
-            </View>
           </View>
         )}
 
