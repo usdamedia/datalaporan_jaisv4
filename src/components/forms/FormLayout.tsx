@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Save, FileDown, CheckCircle2, AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, limit, query, Timestamp } from 'firebase/firestore';
+import { ArrowLeft, Save, FileDown, CheckCircle2, AlertCircle, History } from 'lucide-react';
+import { db } from '../../firebase';
+import { buildDraftKey } from '../../utils/formDraftKey';
 import { buildReportExportState, exportReportPdf, type PdfExportState } from '../../utils/reportPdfExport';
 
 interface FormLayoutProps {
@@ -18,6 +21,16 @@ interface FormLayoutProps {
   children: React.ReactNode;
 }
 
+const toLogDate = (value: unknown) => {
+  if (!value) return null;
+  if (value instanceof Timestamp) return value.toDate();
+  if (typeof value === 'object' && value && 'seconds' in value) {
+    const seconds = Number((value as { seconds: unknown }).seconds);
+    if (!Number.isNaN(seconds)) return new Date(seconds * 1000);
+  }
+  return null;
+};
+
 const FormLayout: React.FC<FormLayoutProps> = ({ 
   deptName, 
   exportDeptName,
@@ -35,6 +48,59 @@ const FormLayout: React.FC<FormLayoutProps> = ({
 }) => {
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [latestSavedBy, setLatestSavedBy] = useState('');
+  const [latestSavedAt, setLatestSavedAt] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadLatestSaveLog = async () => {
+      const storageKey = buildDraftKey(deptName);
+
+      try {
+        const snapshot = await getDocs(query(collection(db, 'drafts_2025', storageKey, 'update_logs'), limit(50)));
+        const latestLog = snapshot.docs
+          .map((entry) => {
+            const data = entry.data();
+            const createdAt = toLogDate(data.createdAt);
+            const clientCreatedAt = data.clientCreatedAt ? String(data.clientCreatedAt) : '';
+            return {
+              officerName: String(data.officerName || ''),
+              createdAt,
+              clientCreatedAt,
+              time: createdAt?.getTime() || (clientCreatedAt ? new Date(clientCreatedAt).getTime() : 0),
+            };
+          })
+          .filter((entry) => entry.officerName)
+          .sort((a, b) => b.time - a.time)[0];
+
+        if (cancelled) return;
+
+        if (!latestLog) {
+          setLatestSavedBy('');
+          setLatestSavedAt('');
+          return;
+        }
+
+        setLatestSavedBy(latestLog.officerName);
+        setLatestSavedAt(
+          latestLog.createdAt
+            ? latestLog.createdAt.toLocaleString('ms-MY', { dateStyle: 'medium', timeStyle: 'short' })
+            : latestLog.clientCreatedAt
+              ? new Date(latestLog.clientCreatedAt).toLocaleString('ms-MY', { dateStyle: 'medium', timeStyle: 'short' })
+              : ''
+        );
+      } catch (error) {
+        console.error('Failed to load latest save log', error);
+      }
+    };
+
+    void loadLatestSaveLog();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [deptName, showSuccess]);
 
   const handleExportPdf = async () => {
     if (isExportingPdf) return;
@@ -143,6 +209,21 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           <span className="text-sm font-bold">{saveError}</span>
         </div>
       )}
+
+      <section className="mb-8 flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <History className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Simpanan terakhir</p>
+          <p className="mt-2 text-sm font-bold text-zus-900">
+            {latestSavedBy ? `Dikemaskini oleh ${latestSavedBy}` : 'Belum ada log simpanan manual untuk bahagian / unit ini.'}
+          </p>
+          {latestSavedAt && (
+            <p className="mt-1 text-xs font-medium text-slate-500">{latestSavedAt}</p>
+          )}
+        </div>
+      </section>
 
       {/* Main Form Content */}
       <div className="space-y-10">
