@@ -313,6 +313,10 @@ const styles = StyleSheet.create({
     width: '40%',
     marginTop: 60,
   },
+  signatureBoxThird: {
+    width: '30%',
+    marginTop: 60,
+  },
   signatureLabel: {
     fontSize: 9,
     textAlign: 'left',
@@ -2837,27 +2841,58 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Signature Section */}
-        <View style={styles.signatureSection} wrap={false}>
-          {/* Left: Disediakan Oleh */}
-          <View style={styles.signatureBox}>
-            <Text style={styles.signatureLabel}>DISEDIAKAN OLEH:</Text>
-            <View style={{ height: 40 }} />
-            <View style={styles.signatureLine} />
-            <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Tarikh: {formatNowDDMMYYYYMY()}</Text>
-          </View>
+        {isUkokoPerayaan ? (
+          <View style={styles.signatureSection} wrap={false}>
+            <View style={styles.signatureBoxThird}>
+              <Text style={styles.signatureLabel}>DISEDIAKAN OLEH:</Text>
+              <View style={{ height: 40 }} />
+              <View style={styles.signatureLine} />
+              <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Tarikh: {formatNowDDMMYYYYMY()}</Text>
+            </View>
 
-          {/* Right: Disahkan Oleh */}
-          <View style={styles.signatureBox}>
-            <Text style={styles.signatureLabel}>DISAHKAN OLEH:</Text>
-            <View style={{ height: 40 }} />
-            <View style={styles.signatureLine} />
-            <Text style={styles.signatureDetail}>Nama: {formData.disahkanOleh || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Jawatan: {formData.disahkanJawatan || '................................'}</Text>
-            <Text style={styles.signatureDetail}>Tarikh: {formData.disahkanTarikh ? formatDateDDMMYYYYMY(formData.disahkanTarikh) : '................................'}</Text>
+            <View style={styles.signatureBoxThird}>
+              <Text style={styles.signatureLabel}>DISEMAK OLEH:</Text>
+              <View style={{ height: 40 }} />
+              <View style={styles.signatureLine} />
+              <Text style={styles.signatureDetail}>Nama: {formData.disemakOleh || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Jawatan: {formData.disemakJawatan || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Tarikh: {formData.disemakTarikh ? formatDateDDMMYYYYMY(formData.disemakTarikh) : '................................'}</Text>
+            </View>
+
+            <View style={styles.signatureBoxThird}>
+              <Text style={styles.signatureLabel}>DISAHKAN OLEH:</Text>
+              <View style={{ height: 40 }} />
+              <View style={styles.signatureLine} />
+              <Text style={styles.signatureDetail}>Nama: {formData.disahkanOleh || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Jawatan: {formData.disahkanJawatan || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Tarikh: {formData.disahkanTarikh ? formatDateDDMMYYYYMY(formData.disahkanTarikh) : '................................'}</Text>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View style={styles.signatureSection} wrap={false}>
+            {/* Left: Disediakan Oleh */}
+            <View style={styles.signatureBox}>
+              <Text style={styles.signatureLabel}>DISEDIAKAN OLEH:</Text>
+              <View style={{ height: 40 }} />
+              <View style={styles.signatureLine} />
+              <Text style={styles.signatureDetail}>Nama: {formData.disediakanOleh || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Jawatan: {formData.jawatan || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Tarikh: {formatNowDDMMYYYYMY()}</Text>
+            </View>
+
+            {/* Right: Disahkan Oleh */}
+            <View style={styles.signatureBox}>
+              <Text style={styles.signatureLabel}>DISAHKAN OLEH:</Text>
+              <View style={{ height: 40 }} />
+              <View style={styles.signatureLine} />
+              <Text style={styles.signatureDetail}>Nama: {formData.disahkanOleh || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Jawatan: {formData.disahkanJawatan || '................................'}</Text>
+              <Text style={styles.signatureDetail}>Tarikh: {formData.disahkanTarikh ? formatDateDDMMYYYYMY(formData.disahkanTarikh) : '................................'}</Text>
+            </View>
+          </View>
+        )}
 
         {/* Footer */}
         <View style={styles.footer}>

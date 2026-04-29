@@ -57,7 +57,7 @@ const buildIsoDate = (year: string, month: string, day: string) => {
   return `${year}-${month}-${day}`;
 };
 
-export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
+export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any, showDisemak?: boolean }> = ({ formData, handleInputChange, showDisemak = false }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
       <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
@@ -102,6 +102,47 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any 
         />
       </div>
     </div>
+
+    {showDisemak && (
+      <div className="mt-8 border-t border-gray-100 pt-8">
+        <h4 className="text-sm font-black text-zus-900 sentence-case">Disemak Oleh</h4>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500 sentence-case">Nama</label>
+            <input
+              type="text"
+              name="disemakOleh"
+              placeholder="Nama pegawai penyemak"
+              value={formData.disemakOleh || ''}
+              onChange={handleInputChange}
+              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500 sentence-case">Jawatan</label>
+            <input
+              type="text"
+              name="disemakJawatan"
+              placeholder="Jawatan pegawai penyemak"
+              value={formData.disemakJawatan || ''}
+              onChange={handleInputChange}
+              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500 sentence-case">Tarikh</label>
+            <input
+              type="date"
+              lang="en-GB"
+              name="disemakTarikh"
+              value={formData.disemakTarikh || ''}
+              onChange={handleInputChange}
+              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
+            />
+          </div>
+        </div>
+      </div>
+    )}
 
     <div className="mt-8 border-t border-gray-100 pt-8">
       <h4 className="text-sm font-black text-zus-900 sentence-case">Disahkan Oleh</h4>
