@@ -87,6 +87,18 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
     updateLawatan,
     removeLawatan
   } = useFormLogic(deptName, {
+    disediakanOleh: '',
+    jawatan: '',
+    disemakOleh: '',
+    disemakJawatan: '',
+    disemakTarikh: '',
+    disahkanOleh: '',
+    disahkanJawatan: '',
+    disahkanTarikh: '',
+    ringkasan: '',
+    isu: '',
+    cadangan: '',
+    lawatan: [],
     pr: {
       pembelianBukuBaharu: {
         bilangan: 0,
@@ -491,7 +503,7 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
       saveError={saveError}
       formData={formData}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} showDisemak />
       
       <div className="space-y-8 mt-8">
         <section className="rounded-[2rem] bg-[linear-gradient(135deg,#5b6cff_0%,#7c3aed_55%,#5b21b6_100%)] p-8 text-white shadow-xl">

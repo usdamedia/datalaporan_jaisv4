@@ -2863,7 +2863,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Signature Section */}
-        {isUkokoPerayaan ? (
+        {(isUkokoPerayaan || isUkokoPR || isUkokoPenerbitan) ? (
           <View style={styles.signatureSection} wrap={false}>
             <View style={styles.signatureBoxThird}>
               <Text style={styles.signatureLabel}>DISEDIAKAN OLEH:</Text>

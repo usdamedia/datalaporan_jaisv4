@@ -25,6 +25,18 @@ const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = 
     removeLawatan,
     updateLawatan
   } = useFormLogic(deptName, {
+    disediakanOleh: '',
+    jawatan: '',
+    disemakOleh: '',
+    disemakJawatan: '',
+    disemakTarikh: '',
+    disahkanOleh: '',
+    disahkanJawatan: '',
+    disahkanTarikh: '',
+    ringkasan: '',
+    isu: '',
+    cadangan: '',
+    lawatan: [],
     penerbitan: {
       senaraiPenerbitan: []
     }
@@ -82,7 +94,7 @@ const UkokoPenerbitanForm: React.FC<{ deptName: string; onBack: () => void }> = 
       saveError={saveError}
       formData={formData}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} showDisemak />
 
       {/* Summary Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
