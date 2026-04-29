@@ -205,7 +205,9 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           placeholder="Nyatakan pencapaian utama bahagian anda..."
           value={formData.ringkasan}
           onChange={handleInputChange}
-          className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
+          ref={(element) => autoGrowTextarea(element)}
+          onInput={(event) => autoGrowTextarea(event.currentTarget)}
+          className="w-full min-h-32 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
         ></textarea>
       </div>
 
@@ -217,10 +219,12 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           <textarea 
             name="isu"
             rows={3}
-            placeholder="Isu yang dihadapi..."
-            value={formData.isu}
-            onChange={handleInputChange}
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
+          placeholder="Isu yang dihadapi..."
+          value={formData.isu}
+          onChange={handleInputChange}
+            ref={(element) => autoGrowTextarea(element)}
+            onInput={(event) => autoGrowTextarea(event.currentTarget)}
+            className="w-full min-h-28 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
           ></textarea>
         </div>
         <div className="space-y-2">
@@ -230,10 +234,12 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           <textarea 
             name="cadangan"
             rows={3}
-            placeholder="Cadangan untuk 2026..."
-            value={formData.cadangan}
-            onChange={handleInputChange}
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
+          placeholder="Cadangan untuk 2026..."
+          value={formData.cadangan}
+          onChange={handleInputChange}
+            ref={(element) => autoGrowTextarea(element)}
+            onInput={(event) => autoGrowTextarea(event.currentTarget)}
+            className="w-full min-h-28 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
           ></textarea>
         </div>
       </div>
