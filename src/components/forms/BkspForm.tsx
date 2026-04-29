@@ -26,6 +26,7 @@ const PENAGIHAN_LAIN_LAIN_ALIASES = [
   PENAGIHAN_LAIN_LAIN_CATEGORY.toLowerCase(),
   'masalah penagihan lain-lain',
 ];
+const BKSP_VERIFIED_DATA_VERSION = 'bksp-verified-2025-20260429';
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const hasSeededVerifiedDataRef = useRef(false);
@@ -68,24 +69,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
 
   useEffect(() => {
     if (hasSeededVerifiedDataRef.current) return;
-
-    const hasAnyBkspValue = [
-      ...(formData.bksp?.permohonan || []),
-      ...(formData.bksp?.pegawai || []),
-      ...(formData.bksp?.puncaKrisis || []),
-    ].some((item: any) => toNonNegativeInt(item.value) > 0)
-      || toNonNegativeInt(formData.bksp?.statistik?.kaunselingSyarie) > 0
-      || toNonNegativeInt(formData.bksp?.statistik?.psikologi) > 0
-      || toNonNegativeInt(formData.bksp?.statusKes?.diterima) > 0
-      || toNonNegativeInt(formData.bksp?.statusKes?.diselesaikan) > 0;
-
-    const hasNarrative = Boolean(
-      formData.ringkasan?.trim() ||
-      formData.isu?.trim() ||
-      formData.cadangan?.trim()
-    );
-
-    if (hasAnyBkspValue || hasNarrative) return;
+    if (formData.bksp?.verifiedDataVersion === BKSP_VERIFIED_DATA_VERSION) return;
 
     hasSeededVerifiedDataRef.current = true;
     setFormData((prev: any) => ({
@@ -100,19 +84,10 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
         statistik: BKSP_2025_VERIFIED.statistik,
         statusKes: BKSP_2025_VERIFIED.statusKes,
         puncaKrisis: BKSP_2025_VERIFIED.puncaKrisis,
+        verifiedDataVersion: BKSP_VERIFIED_DATA_VERSION,
       }
     }));
-  }, [
-    formData.bksp?.permohonan,
-    formData.bksp?.pegawai,
-    formData.bksp?.puncaKrisis,
-    formData.bksp?.statistik,
-    formData.bksp?.statusKes,
-    formData.ringkasan,
-    formData.isu,
-    formData.cadangan,
-    setFormData
-  ]);
+  }, [formData.bksp?.verifiedDataVersion, setFormData]);
 
   useEffect(() => {
     const puncaKrisis = formData.bksp?.puncaKrisis;
