@@ -24,15 +24,6 @@ interface DakwahFormProps {
 
 const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const isUnitAlQuran = deptName.toUpperCase().includes('AL-QURAN');
-  const mediaSosialLockedItems = [
-    { key: 'fb', label: 'FB', value: DAKWAH_2025_MEDIA_CURRENT.sosial.fb },
-    { key: 'ig', label: 'IG', value: DAKWAH_2025_MEDIA_CURRENT.sosial.ig },
-    { key: 'tiktok', label: 'TikTok', value: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok },
-    { key: 'kiswa', label: 'KISWA', value: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa },
-    { key: 'tvs', label: 'TVS', value: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs },
-    { key: 'poster', label: 'Poster', value: DAKWAH_2025_MEDIA_CURRENT.sosial.poster },
-    { key: 'video', label: 'Video', value: DAKWAH_2025_MEDIA_CURRENT.sosial.video },
-  ] as const;
 
   const initialState = {
     tarikh: getTodayIsoMY(),
@@ -50,13 +41,14 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
       mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
       mediaSosial: {
-        fb: DAKWAH_2025_MEDIA_CURRENT.sosial.fb,
-        ig: DAKWAH_2025_MEDIA_CURRENT.sosial.ig,
-        tiktok: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok,
-        kiswa: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa,
-        tvs: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs,
-        poster: DAKWAH_2025_MEDIA_CURRENT.sosial.poster,
-        video: DAKWAH_2025_MEDIA_CURRENT.sosial.video,
+        fb: '',
+        ig: '',
+        tiktok: '',
+        youtube: '',
+        kiswa: '',
+        tvs: '',
+        poster: '',
+        video: '',
       },
       alQuran: {
         pusatPemuliaan: [],
@@ -97,26 +89,18 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
     }));
   };
 
-  React.useEffect(() => {
+  const handleMediaSosialChange = (field: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
       dakwah: {
         ...prev.dakwah,
-        mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
-        mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
         mediaSosial: {
           ...(prev.dakwah.mediaSosial || {}),
-          fb: DAKWAH_2025_MEDIA_CURRENT.sosial.fb,
-          ig: DAKWAH_2025_MEDIA_CURRENT.sosial.ig,
-          tiktok: DAKWAH_2025_MEDIA_CURRENT.sosial.tiktok,
-          kiswa: DAKWAH_2025_MEDIA_CURRENT.sosial.kiswa,
-          tvs: DAKWAH_2025_MEDIA_CURRENT.sosial.tvs,
-          poster: DAKWAH_2025_MEDIA_CURRENT.sosial.poster,
-          video: DAKWAH_2025_MEDIA_CURRENT.sosial.video,
-        },
-      },
+          [field]: keepNumericInputDraft(value)
+        }
+      }
     }));
-  }, [setFormData]);
+  };
 
   const handleDivisionChange = (listField: string, index: number, field: string, value: any) => {
     setFormData((prev: any) => {
@@ -199,8 +183,11 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
   const totalPusatAlQuran2025 = (formData.dakwah.alQuran?.pusatPemuliaan || []).filter(
     (item: { lokasi?: string; bahagian?: string }) => item?.lokasi?.trim() || item?.bahagian?.trim()
   ).length;
-  const totalMediaSosial2025 = mediaSosialLockedItems.reduce((sum, item) => sum + item.value, 0);
-  const totalDakwahMedia2025 = DAKWAH_2025_MEDIA_CURRENT.radio + DAKWAH_2025_MEDIA_CURRENT.internet + totalMediaSosial2025;
+
+  const ms = formData.dakwah.mediaSosial || {};
+  const totalPlatform = (Number(ms.fb) || 0) + (Number(ms.ig) || 0) + (Number(ms.tiktok) || 0) + (Number(ms.youtube) || 0);
+  const totalInternet = (Number(ms.kiswa) || 0) + (Number(ms.tvs) || 0);
+  const totalKandungan = (Number(ms.poster) || 0) + (Number(ms.video) || 0);
 
   return (
     <FormLayout
@@ -503,84 +490,140 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       </section>
 
       {/* Dakwah Melalui Media */}
-      <section className="overflow-hidden rounded-2xl border border-[#f2d9be] bg-white shadow-sm md:rounded-3xl">
-        <div className="border-b border-[#f2d9be] bg-gradient-to-r from-[#fff7ed] via-[#fffaf4] to-[#fffdf8] px-6 py-6 md:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ffedd5] text-[#c2410c]">
-                <Radio className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-lg font-black text-zus-900">Dakwah Melalui Media (2025)</h3>
-                <p className="text-sm font-medium text-slate-600">Data 2025 disediakan untuk rujukan rasmi.</p>
-              </div>
-            </div>
-            <div className="inline-flex items-center gap-2 self-start rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-emerald-700">
-              <FileCheck className="h-4 w-4" />
-              Data 2025
-            </div>
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
+            <Radio className="w-5 h-5" />
           </div>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-[#f4dfc6] bg-white px-4 py-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Radio</p>
-              <p className="mt-1 text-3xl font-black text-slate-900">{DAKWAH_2025_MEDIA_CURRENT.radio}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-500">Rujukan 2024: {DAKWAH_2024_REFERENCE.media.radio}</p>
-            </div>
-            <div className="rounded-2xl border border-[#f4dfc6] bg-white px-4 py-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Internet</p>
-              <p className="mt-1 text-3xl font-black text-slate-900">{DAKWAH_2025_MEDIA_CURRENT.internet}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-500">Rujukan 2024: {DAKWAH_2024_REFERENCE.media.internet}</p>
-            </div>
-            <div className="rounded-2xl border border-[#f4dfc6] bg-[#fff8ef] px-4 py-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Jumlah Keseluruhan</p>
-              <p className="mt-1 text-3xl font-black text-[#9a3412]">{totalDakwahMedia2025}</p>
-              <p className="mt-2 text-xs font-semibold text-slate-500">Radio + Internet + Media Sosial</p>
-            </div>
+          <div>
+            <h3 className="text-lg font-bold text-zus-900">Medium Media Sosial</h3>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 via-white to-amber-50 px-6 py-6 md:px-8">
-          <div className="flex flex-col gap-4 border-b border-orange-100 pb-5 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h4 className="text-sm font-black uppercase tracking-[0.18em] text-orange-900">Medium Media Sosial (Sekiranya Ada)</h4>
-              <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-orange-900/70">
-                Nilai 2025 dipaparkan untuk rujukan sahaja. Pengguna tidak boleh ubah data ini.
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-orange-100 bg-white/90 p-3 text-center">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Platform</p>
-                <p className="mt-1 text-lg font-black text-slate-800">{mediaSosialLockedItems.length}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* JUMLAH PLATFORM */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
+              JUMLAH PLATFORM
+            </h4>
+            <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Facebook</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.fb ?? ''}
+                  onChange={(e) => handleMediaSosialChange('fb', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
               </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Jumlah</p>
-                <p className="mt-1 text-lg font-black text-orange-700">{totalMediaSosial2025}</p>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Instagram</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.ig ?? ''}
+                  onChange={(e) => handleMediaSosialChange('ig', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
               </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Tahun</p>
-                <p className="mt-1 text-lg font-black text-slate-800">2025</p>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Tiktok</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.tiktok ?? ''}
+                  onChange={(e) => handleMediaSosialChange('tiktok', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Youtube</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.youtube ?? ''}
+                  onChange={(e) => handleMediaSosialChange('youtube', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-200 grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-black text-gray-800">TOTAL</label>
+                <div className="w-24 p-2 bg-orange-50 text-orange-700 rounded-lg text-xs font-black text-center">
+                  {totalPlatform}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {mediaSosialLockedItems.map((item) => (
-              <div key={item.key} className="rounded-[1.5rem] border border-orange-100 bg-white p-4 shadow-[0_10px_26px_rgba(249,115,22,0.08)]">
-                <div className="flex items-center justify-between gap-3">
-                  <label className="text-xs font-black uppercase tracking-widest text-slate-600">{item.label}</label>
-                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700">
-                    2025
-                  </span>
-                </div>
-                <div className="mt-3 rounded-2xl border border-orange-100 bg-orange-50/40 px-4 py-3 text-center">
-                  <p className="text-2xl font-black leading-none text-slate-900">
-                    {formData.dakwah.mediaSosial?.[item.key] ?? item.value}
-                  </p>
-                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Jumlah</p>
+          {/* INTERNET */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
+              Internet
+            </h4>
+            <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Kiswa</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.kiswa ?? ''}
+                  onChange={(e) => handleMediaSosialChange('kiswa', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">TVS</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.tvs ?? ''}
+                  onChange={(e) => handleMediaSosialChange('tvs', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-200 grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-black text-gray-800">TOTAL</label>
+                <div className="w-24 p-2 bg-orange-50 text-orange-700 rounded-lg text-xs font-black text-center">
+                  {totalInternet}
                 </div>
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* JENIS BAHAN KANDUNGAN DIBUAT 2025 */}
+          <div className="space-y-4">
+            <h4 className="text-sm font-extrabold text-zus-900 flex items-center gap-2">
+              Jenis Bahan Kandungan
+            </h4>
+            <div className="space-y-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Poster</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.poster ?? ''}
+                  onChange={(e) => handleMediaSosialChange('poster', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-bold text-gray-500">Video</label>
+                <input 
+                  type="number"
+                  value={formData.dakwah.mediaSosial?.video ?? ''}
+                  onChange={(e) => handleMediaSosialChange('video', e.target.value)}
+                  className="w-24 p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-orange-500/20 outline-none"
+                  placeholder="0"
+                />
+              </div>
+              <div className="pt-3 border-t border-gray-200 grid grid-cols-[1fr_auto] items-center gap-4">
+                <label className="text-xs font-black text-gray-800">TOTAL</label>
+                <div className="w-24 p-2 bg-orange-50 text-orange-700 rounded-lg text-xs font-black text-center">
+                  {totalKandungan}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

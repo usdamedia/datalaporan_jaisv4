@@ -56,6 +56,7 @@ export const DAKWAH_2025_MEDIA_CURRENT = {
     fb: 222,
     ig: 29,
     tiktok: 18,
+    youtube: 0,
     kiswa: 12,
     tvs: 25,
     poster: 242,
