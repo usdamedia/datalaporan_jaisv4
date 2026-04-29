@@ -138,35 +138,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
     }
   }, [formData.leadership?.panelHR?.biasa, formData.leadership?.panelHR?.khas, isPentadbiran]);
 
-  // Auto-calculate percentageBelanja for Finance
-  useEffect(() => {
-    if (isFinance) {
-      const yearData = formData.finance?.financeYears?.[0] || { lulus: '', belanja: '' };
-      const lulus = parseFloat(yearData.lulus) || 0;
-      const belanja = parseFloat(yearData.belanja) || 0;
-      
-      if (lulus > 0) {
-        const percentage = ((belanja / lulus) * 100).toFixed(2);
-        if (percentage !== formData.finance?.percentageBelanja) {
-          setFormData((prev: any) => ({
-            ...prev,
-            finance: {
-              ...prev.finance,
-              percentageBelanja: percentage
-            }
-          }));
-        }
-      } else if (formData.finance?.percentageBelanja !== '') {
-        setFormData((prev: any) => ({
-          ...prev,
-          finance: {
-            ...prev.finance,
-            percentageBelanja: ''
-          }
-        }));
-      }
-    }
-  }, [formData.finance?.financeYears?.[0]?.lulus, formData.finance?.financeYears?.[0]?.belanja, isFinance]);
+  // Auto-calculate percentageBelanja for Finance has been removed so users can manually input the value.
 
   const updateLeadershipField = (field: string, value: string, subField?: string) => {
     setFormData((prev: any) => {

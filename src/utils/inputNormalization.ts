@@ -14,14 +14,6 @@ export const toNonNegativeFloat = (value: unknown) => {
 };
 
 const normalizeLeafValue = (value: unknown): unknown => {
-  if (typeof value === 'number' && value === 0) {
-    return '';
-  }
-
-  if (value === '0') {
-    return '';
-  }
-
   return value;
 };
 

@@ -21,7 +21,7 @@ interface BkspFormProps {
   onBack: () => void;
 }
 
-const BKSP_VERIFIED_DATA_VERSION = 'bksp-verified-2025-20260429-v2';
+const BKSP_VERIFIED_DATA_VERSION = 'bksp-verified-2025-20260429-v3';
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const hasSeededVerifiedDataRef = useRef(false);

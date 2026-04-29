@@ -416,6 +416,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
   const isBPDS = deptName.includes('BPDS') || deptName.includes('Pendakwaan');
   const isHR = deptName.includes('HR & Latihan');
   const isPentadbiran = targetName.includes('Pentadbiran');
+  const isKualiti = targetName.includes('Kualiti');
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
   const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
   const bkspPuncaKrisisData = (formData.bksp?.puncaKrisis || [])
@@ -519,8 +520,8 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
       value: formData.integriti?.bilProgramIntegriti || INTEGRITI_2025_CURRENT.tadbirUrus.program,
     },
   ];
-  const shouldRenderBasicInfo = !isIntegriti;
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan);
+  const shouldRenderBasicInfo = !(isIntegriti || isKualiti);
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isKualiti);
 
   return (
     <Document>
@@ -2728,6 +2729,24 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         </View>
         )}
 
+        {isKualiti && (
+          <>
+            <View style={styles.section} wrap={false}>
+              <Text style={styles.sectionTitle}>Isu dan Cabaran Unit</Text>
+              <View style={styles.narrativeBox}>
+                <Text style={styles.narrativeText}>{formData.isu || 'Tiada maklumat disediakan.'}</Text>
+              </View>
+            </View>
+
+            <View style={styles.section} wrap={false}>
+              <Text style={styles.sectionTitle}>Cadangan Penambahbaikan / Way Forward Unit</Text>
+              <View style={styles.narrativeBox}>
+                <Text style={styles.narrativeText}>{formData.cadangan || 'Tiada maklumat disediakan.'}</Text>
+              </View>
+            </View>
+          </>
+        )}
+
         {isUkokoPenerbitan && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Penerbitan JAIS 2025</Text>
@@ -2789,7 +2808,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {/* Lawatan */}
-        {shouldRenderCommonNarrative && formData.lawatan && formData.lawatan.length > 0 && (
+        {(shouldRenderCommonNarrative || isKualiti) && formData.lawatan && formData.lawatan.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
             <View style={styles.table}>

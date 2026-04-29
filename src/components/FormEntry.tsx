@@ -18,6 +18,7 @@ import DhqcForm from './forms/DhqcForm';
 import BkskForm from './forms/BkskForm';
 import GenericForm from './forms/GenericForm';
 import IntegritiForm from './forms/IntegritiForm';
+import QualityForm from './forms/QualityForm';
 
 interface FormEntryProps {
   deptName: string;
@@ -31,6 +32,9 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
   
   // Explicitly handle BPPS sub-units first to avoid conflict with BPNP/BPP check
   if (normalizedDeptName.includes('BPPS')) {
+    if (normalizedDeptName.includes('KUALITI')) {
+      return <QualityForm deptName={deptName} onBack={onBack} />;
+    }
     if (normalizedDeptName.includes('HR')) {
       return <HrForm deptName={deptName} onBack={onBack} />;
     }

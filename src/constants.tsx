@@ -374,7 +374,8 @@ export const BKSP_2025_VERIFIED = {
     { name: 'Campur Tangan Keluarga Isteri', value: 99 },
     { name: 'Gangguan Spiritual', value: 81 },
     { name: 'Ingin Berpoligami', value: 68 },
-    { name: 'Enggan Bermadu', value: 11 }
+    { name: 'Enggan Bermadu', value: 11 },
+    { name: 'Masalah Penagihan Lain-Lain', value: 0 }
   ],
   ringkasan: `1. Laporan Keseluruhan Sarawak
 Perkhidmatan runding cara dilaksanakan secara meluas di 12 bahagian & daerah Sarawak. Bahagian dengan permohonan tertinggi adalah:

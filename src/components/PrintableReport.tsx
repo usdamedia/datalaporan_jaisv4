@@ -57,6 +57,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
   const isUPP = deptName.includes('UPP');
   const isBKSK = deptName.includes('BKSK') || deptName.includes('SAUDARA KITA');
   const isPentadbiran = targetName.includes('Pentadbiran');
+  const isKualiti = targetName.includes('Kualiti');
   const isFinance = targetName.includes('Kewangan') || targetName.includes('Akaun');
   const bphPermohonanTotal = Object.values(formData.bph?.sphm?.permohonanSkim || {}).reduce((a: number, b: any) => a + (parseInt(b) || 0), 0) || (parseInt(formData.bph?.sphm?.permohonan) || 0);
   const bkspPuncaKrisisData = (formData.bksp?.puncaKrisis || [])
@@ -104,7 +105,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
     paibSarikei: 'PAIB Sarikei',
     paibSibu: 'PAIB Sibu',
   };
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan);
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isKualiti);
   const bpnpKajian2025 = (formData.bpnp?.kajianList || []).map(normalizeKajianReportEntry);
   const bpnpPenulisan2025 = (formData.bpnp?.penulisanList || []).map(normalizePenulisanCompetitionReportEntry);
   const bpnpKajian2024 = BPNP_2024_REFERENCE.kajian.map((kajian) => normalizeKajianReportEntry(kajian));
@@ -2708,6 +2709,27 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       </div>
       )}
 
+      {isKualiti && (
+        <div className="mt-8 grid grid-cols-2 gap-8">
+          <div className="space-y-2">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Isu dan Cabaran Unit
+            </h3>
+            <p className="text-xs text-gray-700 leading-relaxed text-justify">
+              {formData.isu || 'Tiada maklumat disediakan.'}
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
+              Cadangan Penambahbaikan / Way Forward Unit
+            </h3>
+            <p className="text-xs text-gray-700 leading-relaxed text-justify">
+              {formData.cadangan || 'Tiada maklumat disediakan.'}
+            </p>
+          </div>
+        </div>
+      )}
+
       {isUkokoPenerbitan && (
         <div className="space-y-8 mb-8">
           <div className="p-6 bg-indigo-900 text-white rounded-3xl flex justify-between items-center border-b-4 border-indigo-700">
@@ -2762,7 +2784,7 @@ const PrintableReport: React.FC<PrintableReportProps> = ({ deptName, formData })
       )}
 
       {/* Lawatan Section */}
-      {(shouldRenderCommonNarrative || isUkokoPenerbitan) && formData.lawatan && formData.lawatan.length > 0 && (
+      {(shouldRenderCommonNarrative || isUkokoPenerbitan || isKualiti) && formData.lawatan && formData.lawatan.length > 0 && (
         <div className="mt-8 space-y-4">
           <h3 className="text-sm font-black text-zus-900 uppercase border-l-4 border-zus-gold pl-2">
             Rekod Lawatan / Penandaarasan
