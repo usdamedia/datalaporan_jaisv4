@@ -520,7 +520,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
     },
   ];
   const shouldRenderBasicInfo = !isIntegriti;
-  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan || isIntegriti);
+  const shouldRenderCommonNarrative = !(isUkokoPR || isUkokoPerayaan || isUkokoPenerbitan);
 
   return (
     <Document>

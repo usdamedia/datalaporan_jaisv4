@@ -21,7 +21,11 @@ interface BkspFormProps {
   onBack: () => void;
 }
 
-const PENAGIHAN_LAIN_LAIN_CATEGORY = 'Masalah Penagihan Lain-Lain';
+const PENAGIHAN_LAIN_LAIN_CATEGORY = 'Masalah Penagihan Lain - lain';
+const PENAGIHAN_LAIN_LAIN_ALIASES = [
+  PENAGIHAN_LAIN_LAIN_CATEGORY.toLowerCase(),
+  'masalah penagihan lain-lain',
+];
 
 const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
   const initialState = {
@@ -65,11 +69,24 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
     const puncaKrisis = formData.bksp?.puncaKrisis;
     if (!Array.isArray(puncaKrisis)) return;
 
-    const hasPenagihanLainLain = puncaKrisis.some(
-      (item: any) => item.name?.trim().toLowerCase() === PENAGIHAN_LAIN_LAIN_CATEGORY.toLowerCase()
+    const penagihanIndex = puncaKrisis.findIndex((item: any) =>
+      PENAGIHAN_LAIN_LAIN_ALIASES.includes(item.name?.trim().toLowerCase())
     );
 
-    if (hasPenagihanLainLain) return;
+    if (penagihanIndex >= 0) {
+      if (puncaKrisis[penagihanIndex].name === PENAGIHAN_LAIN_LAIN_CATEGORY) return;
+
+      setFormData((prev: any) => ({
+        ...prev,
+        bksp: {
+          ...prev.bksp,
+          puncaKrisis: (prev.bksp?.puncaKrisis || []).map((item: any, index: number) =>
+            index === penagihanIndex ? { ...item, name: PENAGIHAN_LAIN_LAIN_CATEGORY } : item
+          ),
+        },
+      }));
+      return;
+    }
 
     setFormData((prev: any) => ({
       ...prev,

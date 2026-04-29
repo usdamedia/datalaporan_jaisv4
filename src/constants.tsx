@@ -313,7 +313,7 @@ export const BKSP_2024_REFERENCE = {
     "Masalah Agama", "Masalah Judi", "Tidak Taat", "Lain-lain", "Masalah Arak",
     "Campur Tangan Keluarga Suami", "Keluar Rumah Tanpa Izin", "Masalah Seksual",
     "Campur Tangan Keluarga Isteri", "Ingin Berpoligami", "Gangguan Spiritual", "Enggan Bermadu",
-    "Masalah Penagihan Lain-Lain"
+    "Masalah Penagihan Lain - lain"
   ]
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import { FileText, ShieldCheck, Video } from 'lucide-react';
 import FormLayout from './FormLayout';
+import { BasicInfoSection, LawatanSection, NarrativeSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import { INTEGRITI_2025_CURRENT } from '../../constants';
 import { keepNumericInputDraft } from '../../utils/inputNormalization';
@@ -57,10 +58,26 @@ const REFERENCE_ROWS = [
 ] as const;
 
 const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
-  const { formData, setFormData, handleSave, isSaving, isAutoSaving, showSuccess, saveError } = useFormLogic(deptName, {
+  const {
+    formData,
+    setFormData,
+    handleInputChange,
+    handleSave,
+    addLawatan,
+    removeLawatan,
+    updateLawatan,
+    isSaving,
+    isAutoSaving,
+    showSuccess,
+    saveError
+  } = useFormLogic(deptName, {
     tarikh: getTodayIsoMY(),
     disediakanOleh: '',
     jawatan: '',
+    ringkasan: '',
+    isu: '',
+    cadangan: '',
+    lawatan: [],
     integriti: {
       bilMesyuaratTatakelola: INTEGRITI_2025_CURRENT.tadbirUrus.mesyuarat,
       bilVideoIntegriti: INTEGRITI_2025_CURRENT.multimedia.video,
@@ -116,6 +133,8 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
       saveError={saveError}
       formData={formData}
     >
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+
       <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0f2b46] via-[#114f61] to-[#1d7669] text-white shadow-[0_25px_70px_rgba(17,79,97,0.22)]">
         <div className="grid gap-8 px-6 py-8 md:px-8 xl:grid-cols-[1.35fr_0.85fr]">
           <div>
@@ -224,6 +243,17 @@ const IntegritiForm: React.FC<IntegritiFormProps> = ({ deptName, onBack }) => {
           </div>
         </div>
       </section>
+
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+
+      <LawatanSection
+        formData={formData}
+        addLawatan={addLawatan}
+        removeLawatan={removeLawatan}
+        updateLawatan={updateLawatan}
+        handleSave={handleSave}
+        isSaving={isSaving}
+      />
     </FormLayout>
   );
 };
