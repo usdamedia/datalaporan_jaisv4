@@ -699,7 +699,8 @@ export const BPH_2025_REFERENCE = {
 export const BPKS_2024_REFERENCE = {
   statistik: {
     btam: 219,
-    rondaan: 279
+    rondaan: 279,
+    operasi: 0
   },
   pegawai: {
     ibuPejabat: 12,

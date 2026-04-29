@@ -28,7 +28,8 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     bpks: {
       statistik: {
         btam: '',
-        rondaan: ''
+        rondaan: '',
+        operasi: ''
       },
       pegawai: {
         ibuPejabat: '',
@@ -185,13 +186,26 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   </td>
                 </tr>
                 <tr className="border-t border-teal-100">
-                  <td className="px-4 py-3 font-semibold text-gray-800">Rondaan & Operasi</td>
+                  <td className="px-4 py-3 font-semibold text-gray-800">Rondaan</td>
                   <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.rondaan}</td>
                   <td className="px-4 py-3">
                     <input
                       type="number"
                       value={formData.bpks.statistik.rondaan}
                       onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'rondaan', e.target.value)}
+                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
+                      placeholder="0"
+                    />
+                  </td>
+                </tr>
+                <tr className="border-t border-teal-100">
+                  <td className="px-4 py-3 font-semibold text-gray-800">Operasi</td>
+                  <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.operasi}</td>
+                  <td className="px-4 py-3">
+                    <input
+                      type="number"
+                      value={formData.bpks.statistik.operasi}
+                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'operasi', e.target.value)}
                       className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
                       placeholder="0"
                     />
@@ -210,7 +224,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <p className="text-teal-100 text-sm mb-6">
             Peningkatan keberkesanan operasi melalui maklumat awal awam (BTAM).
           </p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
               <p className="text-[10px] uppercase tracking-wider font-bold text-teal-300 mb-1">BTAM 2025</p>
               <p className="text-2xl font-black">{formData.bpks.statistik.btam || 0}</p>
@@ -218,6 +232,10 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
               <p className="text-[10px] uppercase tracking-wider font-bold text-teal-300 mb-1">Rondaan 2025</p>
               <p className="text-2xl font-black">{formData.bpks.statistik.rondaan || 0}</p>
+            </div>
+            <div className="bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
+              <p className="text-[10px] uppercase tracking-wider font-bold text-teal-300 mb-1">Operasi 2025</p>
+              <p className="text-2xl font-black">{formData.bpks.statistik.operasi || 0}</p>
             </div>
           </div>
         </div>
