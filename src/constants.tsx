@@ -593,7 +593,8 @@ export const BPPI_2024_REFERENCE = {
     { name: "SK (A) MIS Miri", value: 658 },
     { name: "SK (A) MIS Lawas", value: 517 },
     { name: "SMK (A) Tun Ahmad Zaidi", value: 716 },
-    { name: "SMK Pesantren Abdul Taib Mahmud", value: 492 }
+    { name: "SMK Pesantren Abdul Taib Mahmud", value: 492 },
+    { name: "SRAMOR", value: 0 }
   ],
   kafa: {
     pelajar: 69429,

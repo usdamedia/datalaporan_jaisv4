@@ -57,7 +57,7 @@ export const DEPARTMENTS: Department[] = [
   { id: '16', name: 'DHQC - Darul Hana Quranic Centre', active: true },
   { id: '11', name: 'Bahagian Kemajuan Saudara Kita BKSK', active: true },
   { id: '8', name: 'Bahagian Pengukuhan Pendidikan Islam BPPI', active: true },
-  { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: false },
+  { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: true },
   { id: '12-new', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP (NEW)', active: true },
   {
     id: '9',

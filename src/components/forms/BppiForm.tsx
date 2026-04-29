@@ -74,6 +74,28 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
     updateLawatan
   } = useFormLogic(deptName, initialState);
 
+  // Sync enrolmenMIS array with reference to ensure new schools like SRAMOR are added
+  useEffect(() => {
+    if (formData.bppi?.enrolmenMIS) {
+      if (formData.bppi.enrolmenMIS.length !== BPPI_2024_REFERENCE.enrolmenMIS.length) {
+        setFormData((prev: any) => {
+          const currentData = prev.bppi.enrolmenMIS || [];
+          const newArray = BPPI_2024_REFERENCE.enrolmenMIS.map((refItem) => {
+            const existing = currentData.find((d: any) => d.name === refItem.name);
+            return existing ? existing : { name: refItem.name, value: '' };
+          });
+          return {
+            ...prev,
+            bppi: {
+              ...prev.bppi,
+              enrolmenMIS: newArray
+            }
+          };
+        });
+      }
+    }
+  }, [formData.bppi?.enrolmenMIS?.length, setFormData]);
+
   // Auto-sum Institusi
   const institusiTotals = useMemo(() => {
     const misTotal = (parseInt(formData.bppi?.institusi?.mis?.rendah) || 0) + 
