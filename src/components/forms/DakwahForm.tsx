@@ -46,6 +46,7 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
       progJais2025: 0,
       progAgensi2025: 0,
       tauliahAktif2025: 0,
+      tauliahSeluruhSarawak2025: 0,
       mediaRadio2025: DAKWAH_2025_MEDIA_CURRENT.radio,
       mediaInternet2025: DAKWAH_2025_MEDIA_CURRENT.internet,
       mediaSosial: {
@@ -442,6 +443,21 @@ const DakwahForm: React.FC<DakwahFormProps> = ({ deptName, onBack }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+          {/* Tambahan Seluruh Sarawak */}
+          <div className="grid grid-cols-3 items-center gap-4 py-2 border-b border-gray-50 bg-emerald-50/50 rounded-lg px-2">
+            <label className="text-xs font-bold text-emerald-800 uppercase">Seluruh Sarawak</label>
+            <div className="text-center text-[10px] font-bold text-gray-400 bg-white py-1 rounded-md border border-gray-100">
+              2024: {DAKWAH_2024_REFERENCE.tauliahDikeluarkan.seluruhSarawak}
+            </div>
+            <input 
+              type="number"
+              value={formData.dakwah.tauliahSeluruhSarawak2025}
+              onChange={(e) => handleDakwahChange('tauliahSeluruhSarawak2025', keepNumericInputDraft(e.target.value))}
+              className="p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-emerald-500/20 outline-none"
+              placeholder="0"
+            />
+          </div>
+
           {formData.dakwah.tauliahDivisions.map((div: any, idx: number) => (
             <div key={div.name} className="grid grid-cols-3 items-center gap-4 py-2 border-b border-gray-50 last:border-0">
               <label className="text-xs font-bold text-gray-500">{div.name}</label>
