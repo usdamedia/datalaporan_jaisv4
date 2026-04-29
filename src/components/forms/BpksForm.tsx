@@ -575,8 +575,6 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <Scale className="absolute -bottom-4 -right-4 w-32 h-32 text-teal-200/50 group-hover:scale-110 transition-transform duration-500" />
           </div>
         </div>
-          </div>
-        </div>
       </div>
 
       <NarrativeSection formData={formData} handleInputChange={handleInputChange} />

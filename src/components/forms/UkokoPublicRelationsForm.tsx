@@ -970,7 +970,6 @@ const UkokoPublicRelationsForm: React.FC<{ deptName: string; onBack: () => void 
             </table>
           </div>
         </section>
-        </section>
       </div>
 
       <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
