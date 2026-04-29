@@ -606,7 +606,7 @@ const BppsForm: React.FC<BppsFormProps> = ({ deptName, onBack }) => {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   <tr>
-                    <td className="px-4 py-3 text-xs font-black text-slate-900">Pengurusan Aset Alih</td>
+                    <td className="px-4 py-3 text-xs font-black text-slate-900">Pengurusan Aset Alih Kerajaan</td>
                     <td className="px-4 py-3 text-center text-xs font-black text-slate-500">{LEADERSHIP_2024_REFERENCE.aset}</td>
                     <td className="px-4 py-3"><input type="number" value={leadership.aset} onChange={(e) => updateLeadershipField('aset', e.target.value)} className="w-full max-w-[140px] p-2.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-500 outline-none font-bold text-sm" placeholder="0" /></td>
                   </tr>

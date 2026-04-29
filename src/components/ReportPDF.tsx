@@ -2374,7 +2374,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.leadership.perhimpunan.total}</Text></View>
                 </View>
                 <View style={styles.tableRow}>
-                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Pengurusan Aset Alih</Text></View>
+                  <View style={[styles.tableCell, { width: '40%' }]}><Text>Pengurusan Aset Alih Kerajaan</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{LEADERSHIP_2024_REFERENCE.aset}</Text></View>
                   <View style={[styles.tableCell, styles.tableCellCenter, { width: '30%' }]}><Text>{formData.leadership.aset}</Text></View>
                 </View>
