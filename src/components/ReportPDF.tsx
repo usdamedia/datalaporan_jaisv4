@@ -583,7 +583,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Grid Kemaskini 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -627,7 +627,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>Senarai Kajian dan Kaji Selidik Dihasilkan (2025)</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -645,7 +645,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>{`Rujukan Data 2024 (Jumlah: ${bpnpPenulisan2024.length})`}</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -665,7 +665,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>Senarai Pemenang Pertandingan Penulisan Ilmiah (2025)</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -708,7 +708,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>Statistik Aktiviti & Operasi (2025)</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -744,7 +744,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             {/* Data Management Dashboard Section */}
             {isBpnStrategik && formData.bpnp.dataManagement && (
               <>
-              <View style={styles.section}>
+              <View style={styles.section} wrap={false}>
                 <Text style={styles.sectionTitle}>Pelan Strategik Jabatan</Text>
                 <View style={styles.table} wrap={false}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
@@ -766,7 +766,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
               </View>
 
-              <View style={styles.section}>
+              <View style={styles.section} wrap={false}>
                 <Text style={styles.sectionTitle}>Rancangan Operasi Tahunan</Text>
                 <View style={styles.table} wrap={false}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
@@ -788,7 +788,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 </View>
               </View>
 
-              <View style={styles.section}>
+              <View style={styles.section} wrap={false}>
                 <Text style={styles.sectionTitle}>Data Strategik</Text>
                 <View style={styles.table} wrap={false}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
@@ -825,7 +825,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* UPP Specific Data */}
         {isUPP && formData.upp && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Status Projek Masjid Mengikut Bahagian</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -845,7 +845,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Status Projek Sekolah Agama</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -868,7 +868,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BKIM Specific Data */}
         {isBKIM && formData.bkim && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Statistik Fasiliti & Perjawatan</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -919,7 +919,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Tanah Perkuburan & Penarafan Bintang</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -980,7 +980,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pecahan Mengikut Bahagian (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1034,7 +1034,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
           <>
             {isDakwahUnitAlQuran ? (
               <>
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>Unit Al-Quran: Statistik Debu (2025)</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1055,7 +1055,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                   </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap={false}>
                   <Text style={styles.sectionTitle}>Unit Al-Quran: Pusat Pemuliaan Al-Quran</Text>
                   <View style={styles.table} wrap={false}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1101,7 +1101,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               <View style={styles.row}><Text style={styles.label}>Reel:</Text><Text style={styles.value}>{formData.dakwah.mediaSosial?.reel ?? DAKWAH_2025_MEDIA_CURRENT.sosial.reel}</Text></View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pecahan Tauliah Mengikut Bahagian</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1117,7 +1117,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pecahan Guru Asing Mengikut Bahagian</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1142,7 +1142,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {isBKSP && formData.bksp && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Permohonan Runding Cara (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1160,7 +1160,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pegawai Runding Cara (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1178,7 +1178,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Statistik Program & Status Kes (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1209,7 +1209,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Punca Krisis (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1259,7 +1259,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BPDS Specific Data */}
         {isBPDS && formData.bpds && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kertas Siasatan & Pendaftaran Kes (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1280,7 +1280,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Kes Selesai Mengikut Bahagian (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1298,7 +1298,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Penggubalan Kaedah (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1327,7 +1327,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Program / Aktiviti (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1346,7 +1346,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BKKI Data */}
         {isBKKI && formData.stats && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Statistik Utama Munakahat 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1387,7 +1387,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Jadual Pendaftar & Jurunikah 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1421,7 +1421,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BPH Data */}
         {isBPH && formData.bph && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Statistik SPHM 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1442,7 +1442,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Hasil Pemantauan 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={styles.tableRow}>
@@ -1478,7 +1478,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               ))}
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Program & Aktiviti 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={styles.tableRow}>
@@ -1505,7 +1505,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BPKS Data */}
         {isBPKS && formData.bpks && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Statistik Operasi 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1526,7 +1526,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Sumber Manusia 2025</Text>
               <View style={[styles.table, { backgroundColor: '#0D9488' }]}>
                 <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
@@ -1536,7 +1536,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Borang 5 Didaftar 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1558,7 +1558,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pecahan Kategori & Kertas Siasatan</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1579,7 +1579,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <View style={[styles.table, { backgroundColor: '#f8fafc', borderLeftWidth: 4, borderLeftColor: '#0D9488' }]}>
                 <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
                   <View style={[styles.tableCell, { width: '70%' }]}><Text style={{ fontWeight: 'bold', color: '#0D9488' }}>JUMLAH PROGRAM / AKTIVITI</Text></View>
@@ -1593,7 +1593,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* UKOKO Data */}
         {isUkokoPerayaan && formData.ukoko && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Laporan Perayaan Islam & Majlis Kesyukuran 2025</Text>
               <View style={[styles.table, { backgroundColor: '#064e3b', borderLeftWidth: 4, borderLeftColor: '#c5a065' }]}>
                 <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
@@ -1603,7 +1603,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Senarai Perayaan Islam 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1623,7 +1623,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Senarai Majlis Kesyukuran 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1687,7 +1687,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Ringkasan Aduan & Sumber</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1710,7 +1710,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Aduan Mengikut Kategori</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1740,7 +1740,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Aduan Mengikut Bahagian / PAIB</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1770,7 +1770,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Maklum Balas Pelanggan</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1817,7 +1817,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* DHQC Data */}
         {isDHQC && formData.dhqc && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Laporan Darul Hana Quran Centre (DHQC) 2025</Text>
               <View style={[styles.table, { backgroundColor: '#0a1e3b' }]}>
                 <View style={styles.tableRow}>
@@ -1827,7 +1827,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Penyelia GAQMIS</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1845,7 +1845,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Hakim Tilawah</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1867,7 +1867,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Komponen B: Guru Al-Quran & Qari/Qariah</Text>
               <View style={styles.table}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -1940,7 +1940,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* UPP Data */}
         {isUPP && formData.upp && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Laporan Unit Pengurusan Projek (UPP) 2025</Text>
               <View style={[styles.table, { backgroundColor: '#0d9488' }]}>
                 <View style={styles.tableRow}>
@@ -1986,7 +1986,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pembangunan Masjid, Surau & Perkuburan</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2006,7 +2006,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Pembangunan Sekolah (SABK & SMKA)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2086,7 +2086,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
                 ],
               },
             ].map((section) => (
-              <View key={section.title} style={styles.section}>
+              <View key={section.title} style={styles.section} wrap={false}>
                 <Text style={styles.sectionTitle}>{section.title}</Text>
                 <View style={styles.table} wrap={false}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2120,7 +2120,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* BPPI Data */}
         {isBPPI && formData.bppi && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>1. Institusi Pendidikan Islam 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2167,7 +2167,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>2. Enrolmen Pelajar Sekolah Agama MIS 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2190,7 +2190,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>3. Kelas al-Quran dan Fardu Ain (KAFA)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2246,7 +2246,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>4. Kelas Agama Dewasa (KAD) 2025</Text>
               <View style={styles.row}>
                 <Text style={styles.label}>Bilangan Guru (Lelaki):</Text>
@@ -2287,7 +2287,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* Finance Data */}
         {isFinance && formData.finance && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Bajet & Belanjawan 2025</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2329,7 +2329,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
               </View>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Naziran & Inspektorat Perbendaharaan</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2352,7 +2352,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         {/* Pentadbiran Leadership Data */}
         {isPentadbiran && formData.leadership && (
           <>
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>Unit Pentadbiran - Kepimpinan (2025)</Text>
               <View style={styles.table} wrap={false}>
                 <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2671,7 +2671,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
             </View>
 
             {formData.latihan && (
-              <View style={styles.section} break>
+              <View style={styles.section} break wrap={false}>
                 <Text style={styles.sectionTitle}>Latihan Sumber Manusia (2025)</Text>
                 <View style={styles.row}>
                   <Text style={styles.label}>Jumlah Latihan:</Text>
@@ -2766,7 +2766,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {isUkokoPenerbitan && (
-          <View style={styles.section}>
+          <View style={styles.section} wrap={false}>
             <Text style={styles.sectionTitle}>Penerbitan JAIS 2025</Text>
             <View style={[styles.infoCard, { backgroundColor: '#312e81', borderColor: '#312e81', marginBottom: 12 }]}>
               <Text style={[styles.infoCardLabel, { color: '#c7d2fe' }]}>Jumlah Penerbitan 2025</Text>
@@ -2798,7 +2798,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
         )}
 
         {isUkokoPenerbitan && formData.lawatan && formData.lawatan.length > 0 && (
-          <View style={styles.section}>
+          <View style={styles.section} wrap={false}>
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
             <View style={styles.table} wrap={false}>
               <View style={[styles.tableRow, styles.tableHeader]}>
@@ -2821,7 +2821,7 @@ const ReportPDF: React.FC<ReportPDFProps> = ({ deptName, formData }) => {
 
         {/* Lawatan */}
         {(shouldRenderCommonNarrative || isKualiti) && formData.lawatan && formData.lawatan.length > 0 && (
-          <View style={styles.section}>
+          <View style={styles.section} wrap={false}>
             <Text style={styles.sectionTitle}>Rekod Lawatan</Text>
             <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
