@@ -251,11 +251,11 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
               <table className="w-full text-sm text-left">
                 <thead>
                   <tr className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">
-                    <th className="px-4 py-3">Nama Majlis</th>
-                    <th className="px-4 py-3">Tarikh</th>
-                    <th className="px-4 py-3">Tuan Rumah</th>
-                    <th className="px-4 py-3">Bil. Mesyuarat</th>
-                    <th className="px-4 py-3 text-right">Tindakan</th>
+                    <th className="px-4 py-3 w-[40%]">Nama Majlis</th>
+                    <th className="px-4 py-3 w-40">Tarikh</th>
+                    <th className="px-4 py-3 w-56">Tuan Rumah</th>
+                    <th className="px-4 py-3 w-36">Bil. Mesyuarat</th>
+                    <th className="px-4 py-3 w-24 text-right">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -353,16 +353,16 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                 <tbody className="divide-y divide-gray-50">
                   {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
                     <tr key={idx} className="group hover:bg-teal-50/30 transition-colors">
-                      <td className="px-4 py-4">
-                        <input
-                          type="text"
+                      <td className="px-4 py-4 align-top">
+                        <textarea
                           value={event.nama}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'nama', e.target.value)}
                           placeholder="Nama Majlis..."
-                          className="w-full bg-transparent border-none focus:ring-0 text-sm font-bold text-gray-700 placeholder:text-gray-300"
+                          rows={2}
+                          className="w-full min-w-[22rem] resize-none overflow-hidden bg-transparent border-none focus:ring-0 text-sm font-bold leading-snug text-gray-700 placeholder:text-gray-300 whitespace-normal break-words"
                         />
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 align-top">
                         <input
                           type="date"
                           lang="en-GB"
@@ -371,7 +371,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600"
                         />
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 align-top">
                         <select
                           value={event.tuanRumah}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'tuanRumah', e.target.value)}
@@ -381,7 +381,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           {SARAWAK_DIVISIONS.map(d => <option key={d} value={d}>{d}</option>)}
                         </select>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4 align-top">
                         <input
                           type="number"
                           value={event.mesyuarat}
@@ -390,7 +390,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           className="w-16 bg-transparent border-none focus:ring-0 text-sm font-black text-teal-600"
                         />
                       </td>
-                      <td className="px-4 py-4 text-right">
+                      <td className="px-4 py-4 text-right align-top">
                         <button
                           onClick={() => removeEvent('majlisKesyukuran', idx)}
                           className="p-2 text-gray-300 hover:text-red-500 transition-colors"
