@@ -50,7 +50,7 @@ export const DEPARTMENTS: Department[] = [
     ],
   },
   { id: '3', name: 'Bahagian Kemajuan Institusi Masjid BKIM', active: true },
-  { id: '5', name: 'Bahagian Penguatkuasaan Syariah BPKS', active: true },
+  { id: '5', name: 'Bahagian Penguatkuasaan Syariah BPKS', active: true, completed: true },
   { id: '7', name: 'Bahagian Kemajuan Keluarga Islam BKKI', active: true },
   { id: '6', name: 'Bahagian Pengurusan Halal BPH', active: true, completed: true },
   { id: '14', name: 'Bahagian Pendakwaan Syariah BPDS', active: true, completed: true },

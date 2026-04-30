@@ -8,13 +8,17 @@ import {
   TrendingUp,
   MapPin,
   Scale,
-  AlertCircle
+  AlertCircle,
+  ShieldCheck,
+  Info
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { ResponsiveContainer, Tooltip, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
-import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
+import { LawatanSection } from './CommonSections';
 import { BPKS_2024_REFERENCE } from '../../constants';
+
+const RO = "w-full bg-emerald-50/50 border border-emerald-100 rounded-xl px-4 py-2.5 text-sm font-black text-teal-800 cursor-default";
 
 const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const {
@@ -143,19 +147,6 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const formatLabel = (value: string) => value.replace(/([A-Z])/g, ' $1').trim();
   const pegawaiLocations = Object.keys(formData.bpks.pegawai) as string[];
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }: any) => {
-    const RADIAN = Math.PI / 180;
-    const radius = outerRadius + 28;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    if (!value) return null;
-    return (
-      <text x={x} y={y} fill="#134E4A" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={12} fontWeight={800}>
-        {name}: {value}
-      </text>
-    );
-  };
-
   const customTooltipStyle = { borderRadius: '14px', border: '1px solid #ccfbf1', boxShadow: '0 10px 30px rgba(13,148,136,0.10)', fontSize: '12px', fontWeight: 700 };
 
   return (
@@ -168,8 +159,28 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      readOnly={true}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Verified Banner */}
+      <section className="bg-gradient-to-r from-emerald-50 via-white to-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck className="w-6 h-6" /></div>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Data Telah Disahkan & Diverifikasi</h3>
+            <p className="text-sm text-emerald-700 font-medium mt-1">Bahagian Penguatkuasaan Syariah (BPKS) telah menyelesaikan proses pengesahan data. Borang ini hanya boleh dilihat sahaja.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maklumat Asas (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600"><Info className="w-5 h-5" /></div><h3 className="text-lg font-bold text-gray-900">Maklumat Asas</h3></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Tarikh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.tarikh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Disediakan Oleh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.disediakanOleh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Jawatan</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.jawatan || '-'}</div></div>
+        </div>
+      </section>
       
       {/* 1. Statistik Ringkasan */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -198,39 +209,21 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <td className="px-4 py-3 font-semibold text-gray-800">BTAM Diterima</td>
                   <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.btam}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bpks.statistik.btam}
-                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'btam', e.target.value)}
-                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                      placeholder="0"
-                    />
+                    <div className={RO}>{formData.bpks.statistik.btam || '-'}</div>
                   </td>
                 </tr>
                 <tr className="border-t border-teal-100">
                   <td className="px-4 py-3 font-semibold text-gray-800">Rondaan</td>
                   <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.rondaan}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bpks.statistik.rondaan}
-                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'rondaan', e.target.value)}
-                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                      placeholder="0"
-                    />
+                    <div className={RO}>{formData.bpks.statistik.rondaan || '-'}</div>
                   </td>
                 </tr>
                 <tr className="border-t border-teal-100">
                   <td className="px-4 py-3 font-semibold text-gray-800">Operasi</td>
                   <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.statistik.operasi}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bpks.statistik.operasi}
-                      onChange={(e) => handleNestedInputChange('bpks', 'statistik', 'operasi', e.target.value)}
-                      className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                      placeholder="0"
-                    />
+                    <div className={RO}>{formData.bpks.statistik.operasi || '-'}</div>
                   </td>
                 </tr>
               </tbody>
@@ -308,19 +301,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               {pegawaiLocations.map((loc) => (
                 <label key={`input-${loc}`} className="flex items-center justify-between gap-4 px-5 py-3.5">
                   <span className="text-sm font-bold text-slate-700">{formatLabel(loc)}</span>
-                  <input
-                    type="number"
-                    value={formData.bpks.pegawai[loc]}
-                    onChange={(e) => {
-                      const newPegawai = { ...formData.bpks.pegawai, [loc]: e.target.value };
-                      setFormData((prev: any) => ({
-                        ...prev,
-                        bpks: { ...prev.bpks, pegawai: newPegawai }
-                      }));
-                    }}
-                    className="w-28 rounded-xl border border-teal-100 bg-teal-50 px-3 py-2 text-right text-sm font-black text-slate-900 outline-none transition-all focus:border-teal-400 focus:ring-2 focus:ring-teal-100"
-                    placeholder="0"
-                  />
+                  <div className="w-28 rounded-xl border border-emerald-100 bg-emerald-50/50 px-3 py-2 text-right text-sm font-black text-slate-900">{formData.bpks.pegawai[loc] || '-'}</div>
                 </label>
               ))}
             </div>
@@ -358,22 +339,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       {BPKS_2024_REFERENCE.borang5.bahagian[div as keyof typeof BPKS_2024_REFERENCE.borang5.bahagian] || 0}
                     </td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.borang5.bahagian[div]}
-                        onChange={(e) => {
-                          const newBahagian = { ...formData.bpks.borang5.bahagian, [div]: e.target.value };
-                          setFormData((prev: any) => ({
-                            ...prev,
-                            bpks: {
-                              ...prev.bpks,
-                              borang5: { ...prev.bpks.borang5, bahagian: newBahagian }
-                            }
-                          }));
-                        }}
-                        className="w-full bg-gray-50 border-none rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.borang5.bahagian[div] || '-'}</div>
                     </td>
                   </tr>
                 ))}
@@ -400,26 +366,14 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <td className="px-4 py-3 font-semibold text-gray-800">Matrimoni</td>
                     <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.borang5.kategori.matrimoni}</td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.borang5.kategori.matrimoni}
-                        onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'matrimoni', e.target.value)}
-                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.borang5.kategori.matrimoni || '-'}</div>
                     </td>
                   </tr>
                   <tr className="border-t border-teal-100">
                     <td className="px-4 py-3 font-semibold text-gray-800">Jenayah Syariah</td>
                     <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.borang5.kategori.jenayahSyariah}</td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.borang5.kategori.jenayahSyariah}
-                        onChange={(e) => handleDeepNestedInputChange('bpks', 'borang5', 'kategori', 'jenayahSyariah', e.target.value)}
-                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 shadow-sm"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.borang5.kategori.jenayahSyariah || '-'}</div>
                     </td>
                   </tr>
                 </tbody>
@@ -447,37 +401,32 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Chart */}
-          <div className="flex-1 min-h-[280px]">
+          {/* Bar Chart */}
+          <div className="flex-1 min-h-[260px] rounded-2xl border border-teal-100 bg-gradient-to-br from-teal-50/30 via-white to-white p-4">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={borang5ChartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={4}
-                  dataKey="value"
-                  label={renderCustomLabel}
-                  labelLine={{ stroke: '#99f6e4', strokeWidth: 1 }}
-                >
+              <BarChart data={borang5ChartData} layout="horizontal" margin={{ top: 16, right: 12, left: 12, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccfbf1" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 800, fill: '#134E4A' }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#99f6e4' }} />
+                <Tooltip contentStyle={customTooltipStyle} cursor={{ fill: '#f0fdfa' }} />
+                <Bar dataKey="value" name="Jumlah" radius={[10, 10, 0, 0]} barSize={60}>
                   {borang5ChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="#fff" strokeWidth={3} />
+                    <Cell key={`b5-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
-                </Pie>
-                <Tooltip contentStyle={customTooltipStyle} />
-                <Legend
-                  verticalAlign="bottom"
-                  height={40}
-                  iconType="circle"
-                  formatter={(value: string) => <span style={{ color: '#134E4A', fontWeight: 800, fontSize: '11px' }}>{value}</span>}
-                />
-              </PieChart>
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Total + Validation */}
+          {/* Legend + Total */}
+          <div className="mt-4 flex items-center justify-center gap-6">
+            {borang5ChartData.map((item, idx) => (
+              <div key={item.name} className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx] }} />
+                <span className="text-xs font-black text-teal-900">{item.name}: <span className="text-teal-600">{item.value}</span></span>
+              </div>
+            ))}
+          </div>
           <div className={`mt-4 p-4 rounded-2xl text-center ${isBorang5Valid ? 'bg-teal-50 border border-teal-100' : 'bg-amber-50 border border-amber-200'}`}>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Jumlah Keseluruhan</p>
             <p className="text-3xl font-black text-teal-600">{totalBorang5Bahagian}</p>
@@ -519,26 +468,14 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <td className="px-4 py-3 font-semibold text-gray-800">Matrimoni</td>
                     <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.kertasSiasatan.matrimoni}</td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.kertasSiasatan.matrimoni}
-                        onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'matrimoni', e.target.value)}
-                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.kertasSiasatan.matrimoni || '-'}</div>
                     </td>
                   </tr>
                   <tr className="border-t border-teal-100">
                     <td className="px-4 py-3 font-semibold text-gray-800">Jenayah Syariah</td>
                     <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.kertasSiasatan.jenayahSyariah}</td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.kertasSiasatan.jenayahSyariah}
-                        onChange={(e) => handleNestedInputChange('bpks', 'kertasSiasatan', 'jenayahSyariah', e.target.value)}
-                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.kertasSiasatan.jenayahSyariah || '-'}</div>
                     </td>
                   </tr>
                 </tbody>
@@ -601,13 +538,7 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <td className="px-4 py-3 font-semibold text-gray-800">Jumlah Program / Aktiviti</td>
                     <td className="px-4 py-3 text-center font-black text-teal-700">{BPKS_2024_REFERENCE.aktiviti.total}</td>
                     <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        value={formData.bpks.aktiviti.total}
-                        onChange={(e) => handleNestedInputChange('bpks', 'aktiviti', 'total', e.target.value)}
-                        className="w-full bg-gray-50 border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 transition-all"
-                        placeholder="0"
-                      />
+                      <div className={RO}>{formData.bpks.aktiviti.total || '-'}</div>
                     </td>
                   </tr>
                 </tbody>
@@ -631,15 +562,24 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
       </div>
 
-      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Ringkasan & Analisis (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600"><FileText className="w-5 h-5" /></div><h3 className="text-lg font-bold text-gray-900">Ringkasan & Analisis</h3></div>
+        <div className="space-y-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Ringkasan pencapaian utama</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.ringkasan || '-'}</div></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Isu dan cabaran</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.isu || '-'}</div></div>
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Cadangan penambahbaikan</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.cadangan || '-'}</div></div>
+          </div>
+        </div>
+      </section>
       
       <LawatanSection 
         formData={formData} 
-        addLawatan={addLawatan} 
-        removeLawatan={removeLawatan} 
-        updateLawatan={updateLawatan} 
-        handleSave={handleSave}
-        isSaving={isSaving}
+        addLawatan={() => {}} 
+        removeLawatan={() => {}} 
+        updateLawatan={() => {}} 
+        readOnly
       />
     </FormLayout>
   );
