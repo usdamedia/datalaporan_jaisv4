@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import FormLayout from './FormLayout';
-import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
+import { LawatanSection } from './CommonSections';
+import { ShieldCheck, Info, FileText } from 'lucide-react';
 import { useFormLogic } from './useFormLogic';
 import { BPPI_2024_REFERENCE } from '../../constants';
 import { 
@@ -13,6 +14,9 @@ import {
   MapPin,
   Calculator
 } from 'lucide-react';
+
+const RO_CLASS = "w-full max-w-[130px] p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs font-black text-center text-zus-900 cursor-default";
+const RO_SM = "w-20 p-1.5 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs font-black text-center text-zus-900 cursor-default";
 
 interface BppiFormProps {
   deptName: string;
@@ -188,8 +192,27 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
   if (!formData.bppi) return null;
 
   return (
-    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} isAutoSaving={isAutoSaving} showSuccess={showSuccess} saveError={saveError} formData={formData}>
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+    <FormLayout deptName={deptName} onBack={onBack} onSave={handleSave} isSaving={isSaving} isAutoSaving={isAutoSaving} showSuccess={showSuccess} saveError={saveError} formData={formData} readOnly={true}>
+      {/* Verified Banner */}
+      <section className="bg-gradient-to-r from-emerald-50 via-white to-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck className="w-6 h-6" /></div>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Data Telah Disahkan & Diverifikasi</h3>
+            <p className="text-sm text-emerald-700 font-medium mt-1">Bahagian Pengukuhan Pendidikan Islam (BPPI) telah menyelesaikan proses pengesahan data. Borang ini hanya boleh dilihat sahaja.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maklumat Asas (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm mt-8">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600"><Info className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Maklumat Asas</h3></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Tarikh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.tarikh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Disediakan Oleh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.disediakanOleh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Jawatan</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.jawatan || '-'}</div></div>
+        </div>
+      </section>
 
       <div className="space-y-8 animate-fade-in mt-8">
         {/* 1. Institusi Pendidikan Islam */}
@@ -217,14 +240,14 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                         <td className="px-4 py-3 text-xs font-bold text-gray-600">Sekolah Rendah</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.institusi.mis.rendah}</td>
                         <td className="px-4 py-3">
-                          <input type="number" value={formData.bppi.institusi.mis.rendah} onChange={(e) => updateBppi(['institusi', 'mis', 'rendah'], e.target.value)} className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" />
+                          <div className={RO_CLASS}>{formData.bppi.institusi.mis.rendah || '-'}</div>
                         </td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 text-xs font-bold text-gray-600">Sekolah Menengah</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.institusi.mis.menengah}</td>
                         <td className="px-4 py-3">
-                          <input type="number" value={formData.bppi.institusi.mis.menengah} onChange={(e) => updateBppi(['institusi', 'mis', 'menengah'], e.target.value)} className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" />
+                          <div className={RO_CLASS}>{formData.bppi.institusi.mis.menengah || '-'}</div>
                         </td>
                       </tr>
                       <tr className="bg-zus-900/5">
@@ -269,7 +292,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-600">{item.label}</td>
                           <td className="px-4 py-3 text-center text-[10px] font-black text-gray-500">{item.ref}</td>
                           <td className="px-4 py-3">
-                            <input type="number" value={formData.bppi.institusi.ipip[item.field]} onChange={(e) => updateBppi(['institusi', 'ipip', item.field], e.target.value)} className="w-full p-1.5 bg-gray-50 border border-gray-200 rounded text-xs font-bold text-center focus:ring-1 focus:ring-zus-gold/20 outline-none" />
+                            <div className="w-full p-1.5 bg-emerald-50/50 border border-emerald-100 rounded text-xs font-black text-center text-zus-900 cursor-default">{formData.bppi.institusi.ipip[item.field] || '-'}</div>
                           </td>
                         </tr>
                       ))}
@@ -318,13 +341,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                       <td className="px-4 py-3 text-[10px] font-black text-zus-900 uppercase leading-tight">{school.name}</td>
                       <td className="px-4 py-3 text-center text-[10px] font-black text-gray-500">{BPPI_2024_REFERENCE.enrolmenMIS[idx].value}</td>
                       <td className="px-4 py-3">
-                        <input
-                          type="number"
-                          value={school.value}
-                          onChange={(e) => updateArrayItem(['enrolmenMIS'], idx, 'value', e.target.value)}
-                          className="w-full max-w-[130px] p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none"
-                          placeholder="0"
-                        />
+                        <div className={RO_CLASS}>{school.value || '-'}</div>
                       </td>
                     </tr>
                   ))}
@@ -377,7 +394,7 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 text-xs font-black text-blue-900">{item.label}</td>
                   <td className="px-4 py-3 text-center text-xs font-black text-blue-500">{item.ref.toLocaleString()}</td>
                   <td className="px-4 py-3">
-                    <input type="number" value={formData.bppi.kafa[item.field]} onChange={(e) => updateBppi(['kafa', item.field], e.target.value)} className="w-full max-w-[130px] p-2 bg-white border border-blue-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <div className={RO_CLASS}>{formData.bppi.kafa[item.field] || '-'}</div>
                   </td>
                 </tr>
               ))}
@@ -404,14 +421,14 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                       <td className="px-4 py-3 text-xs font-black text-amber-900">Bilangan Calon</td>
                       <td className="px-4 py-3 text-center text-xs font-black text-amber-600">{BPPI_2024_REFERENCE.kafa.upkk.calon.toLocaleString()}</td>
                       <td className="px-4 py-3">
-                        <input type="number" value={formData.bppi.kafa.upkk.calon} onChange={(e) => updateUpkkSummary('calon', e.target.value)} className="w-full p-2 bg-white border border-amber-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-amber-500 outline-none" />
+                        <div className={RO_CLASS}>{formData.bppi.kafa.upkk.calon || '-'}</div>
                       </td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 text-xs font-black text-amber-900">Gred Purata Skor (GPS)</td>
                       <td className="px-4 py-3 text-center text-xs font-black text-amber-600">{BPPI_2024_REFERENCE.kafa.upkk.gps}</td>
                       <td className="px-4 py-3">
-                        <input type="text" value={formData.bppi.kafa.upkk.gps} onChange={(e) => updateUpkkSummary('gps', e.target.value)} className="w-full p-2 bg-white border border-amber-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-amber-500 outline-none" placeholder="0.00" />
+                        <div className={RO_CLASS}>{formData.bppi.kafa.upkk.gps || '-'}</div>
                       </td>
                     </tr>
                   </tbody>
@@ -422,14 +439,6 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
             <div className="bg-white border border-amber-100 rounded-2xl p-4 space-y-4">
               <div className="flex items-center justify-between gap-4">
                 <h4 className="text-[10px] font-black text-amber-900 uppercase">Trend Tahunan UPKK (2019 - 2025)</h4>
-                <button
-                  type="button"
-                  onClick={() => handleSave()}
-                  disabled={isSaving}
-                  className="rounded-lg bg-amber-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isSaving ? 'Sila Tekan Butang Simpan Draf' : 'Simpan Trend'}
-                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
@@ -441,46 +450,13 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {formData.bppi.kafa.trendUPKK.map((t: any, idx: number) => {
-                      const calonEditable = t.year === '2024' || t.year === '2025';
-                      const gpsEditable = t.year === '2024' || t.year === '2025';
-
-                      return (
+                    {formData.bppi.kafa.trendUPKK.map((t: any, idx: number) => (
                       <tr key={t.year} className="border-b border-amber-50 last:border-0">
                         <td className="py-2 text-[10px] font-bold text-zus-900">{t.year}</td>
-                        <td className="py-2">
-                          <input
-                            type="number"
-                            value={t.calon}
-                            onChange={(e) => updateUpkkTrend(idx, 'calon', e.target.value)}
-                            readOnly={!calonEditable}
-                            disabled={!calonEditable}
-                            className={`w-full p-1 rounded text-[10px] font-bold text-center outline-none ${
-                              calonEditable
-                                ? 'bg-white border border-amber-200 focus:ring-1 focus:ring-amber-500'
-                                : 'bg-amber-50 border border-amber-100 text-amber-900/80 cursor-not-allowed'
-                            }`}
-                          />
-                        </td>
-                        <td className="py-2">
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={t.gps}
-                            onChange={(e) => updateUpkkTrend(idx, 'gps', e.target.value)}
-                            readOnly={!gpsEditable}
-                            disabled={!gpsEditable}
-                            className={`w-full p-1 rounded text-[10px] font-bold text-center outline-none ${
-                              gpsEditable
-                                ? 'bg-white border border-amber-200 focus:ring-1 focus:ring-amber-500'
-                                : 'bg-amber-50 border border-amber-100 text-amber-900/80 cursor-not-allowed'
-                            }`}
-                            placeholder="0.00"
-                          />
-                        </td>
+                        <td className="py-2"><div className="w-full p-1 rounded bg-amber-50 border border-amber-100 text-[10px] font-bold text-center text-amber-900/80">{t.calon || '-'}</div></td>
+                        <td className="py-2"><div className="w-full p-1 rounded bg-amber-50 border border-amber-100 text-[10px] font-bold text-center text-amber-900/80">{t.gps || '-'}</div></td>
                       </tr>
-                      );
-                    })}
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -511,12 +487,12 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                       <tr>
                         <td className="px-4 py-3 text-xs font-bold text-gray-600">Lelaki</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.kad.guru.lelaki}</td>
-                        <td className="px-4 py-3"><input type="number" value={formData.bppi.kad.guruLelaki} onChange={(e) => updateBppi(['kad', 'guruLelaki'], e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                        <td className="px-4 py-3"><div className={RO_CLASS}>{formData.bppi.kad.guruLelaki || '-'}</div></td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 text-xs font-bold text-gray-600">Wanita</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.kad.guru.wanita}</td>
-                        <td className="px-4 py-3"><input type="number" value={formData.bppi.kad.guruWanita} onChange={(e) => updateBppi(['kad', 'guruWanita'], e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                        <td className="px-4 py-3"><div className={RO_CLASS}>{formData.bppi.kad.guruWanita || '-'}</div></td>
                       </tr>
                     </tbody>
                   </table>
@@ -566,9 +542,9 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
                         </div>
                       </td>
                       <td className="p-4 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.kad.pecahan[idx].kelas}</td>
-                      <td className="p-4 text-center"><input type="number" value={p.kelas} onChange={(e) => updateArrayItem(['kad', 'pecahan'], idx, 'kelas', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                      <td className="p-4 text-center"><div className={RO_SM}>{p.kelas || '-'}</div></td>
                       <td className="p-4 text-center text-xs font-black text-gray-500">{BPPI_2024_REFERENCE.kad.pecahan[idx].pelajar}</td>
-                      <td className="p-4 text-center"><input type="number" value={p.pelajar} onChange={(e) => updateArrayItem(['kad', 'pecahan'], idx, 'pelajar', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                      <td className="p-4 text-center"><div className={RO_SM}>{p.pelajar || '-'}</div></td>
                     </tr>
                   ))}
                 </tbody>
@@ -577,15 +553,24 @@ const BppiForm: React.FC<BppiFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+        {/* Ringkasan & Analisis (Read-Only) */}
+        <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+          <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600"><FileText className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Ringkasan & Analisis</h3></div>
+          <div className="space-y-6">
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Ringkasan pencapaian utama unit tahun 2025</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.ringkasan || '-'}</div></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Isu dan cabaran unit</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.isu || '-'}</div></div>
+              <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Cadangan penambahbaikan</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.cadangan || '-'}</div></div>
+            </div>
+          </div>
+        </section>
         
         <LawatanSection 
           formData={formData} 
-          addLawatan={addLawatan} 
-          removeLawatan={removeLawatan} 
-          updateLawatan={updateLawatan} 
-          handleSave={handleSave}
-          isSaving={isSaving}
+          addLawatan={() => {}} 
+          removeLawatan={() => {}} 
+          updateLawatan={() => {}} 
+          readOnly
         />
       </div>
     </FormLayout>
