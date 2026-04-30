@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import FormLayout from './FormLayout';
-import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
+import { LawatanSection } from './CommonSections';
+import { ShieldCheck, FileText } from 'lucide-react';
 import { useFormLogic } from './useFormLogic';
 import { BKKI_2024_REFERENCE } from '../../constants';
 import { keepNumericInputDraft } from '../../utils/inputNormalization';
@@ -15,6 +16,9 @@ import {
   Calculator,
   Info
 } from 'lucide-react';
+
+const RO = "w-full p-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl font-black text-sm cursor-default";
+const RO_SM = "w-16 mx-auto block p-1.5 bg-emerald-50/50 border border-emerald-100 rounded-lg text-center text-xs font-black cursor-default";
 
 interface BkkiFormProps {
   deptName: string;
@@ -133,8 +137,28 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      readOnly={true}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Verified Banner */}
+      <section className="bg-gradient-to-r from-emerald-50 via-white to-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck className="w-6 h-6" /></div>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Data Telah Disahkan & Diverifikasi</h3>
+            <p className="text-sm text-emerald-700 font-medium mt-1">Bahagian Kemajuan Keluarga Islam (BKKI) telah menyelesaikan proses pengesahan data. Borang ini hanya boleh dilihat sahaja.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maklumat Asas (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600"><Info className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Maklumat Asas</h3></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Tarikh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.tarikh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Disediakan Oleh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.disediakanOleh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Jawatan</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.jawatan || '-'}</div></div>
+        </div>
+      </section>
 
       {/* Statistik Utama Section */}
       <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
@@ -170,13 +194,7 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 font-semibold text-zus-900">{item.label}</td>
                   <td className="px-4 py-3 text-center font-black text-gray-700">{item.ref}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.stats[item.key as keyof typeof formData.stats]}
-                      onChange={(e) => updateStat(item.key, e.target.value)}
-                      className="w-full p-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none font-bold text-sm"
-                      placeholder="0"
-                    />
+                    <div className={RO}>{formData.stats[item.key as keyof typeof formData.stats] || '-'}</div>
                   </td>
                 </tr>
               ))}
@@ -214,51 +232,11 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
               {formData.registrarTable.map((row: any, idx: number) => (
                 <tr key={row.region} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-3 px-4 font-bold text-zus-900 text-xs">{row.region}</td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={row.kpncr}
-                      onChange={(e) => updateRegistrar(idx, 'kpncr', e.target.value)}
-                      className="w-16 mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-center text-xs font-bold focus:ring-2 focus:ring-teal-500 outline-none"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={row.pncr}
-                      onChange={(e) => updateRegistrar(idx, 'pncr', e.target.value)}
-                      className="w-16 mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-center text-xs font-bold focus:ring-2 focus:ring-teal-500 outline-none"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={row.tpncr}
-                      onChange={(e) => updateRegistrar(idx, 'tpncr', e.target.value)}
-                      className="w-16 mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-center text-xs font-bold focus:ring-2 focus:ring-teal-500 outline-none"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={row.ppncr}
-                      onChange={(e) => updateRegistrar(idx, 'ppncr', e.target.value)}
-                      className="w-16 mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-center text-xs font-bold focus:ring-2 focus:ring-teal-500 outline-none"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={row.jurunikah}
-                      onChange={(e) => updateRegistrar(idx, 'jurunikah', e.target.value)}
-                      className="w-16 mx-auto block p-1.5 bg-white border border-gray-200 rounded-lg text-center text-xs font-bold focus:ring-2 focus:ring-teal-500 outline-none"
-                      placeholder="0"
-                    />
-                  </td>
+                  <td className="py-3 px-2"><div className={RO_SM}>{row.kpncr || '-'}</div></td>
+                  <td className="py-3 px-2"><div className={RO_SM}>{row.pncr || '-'}</div></td>
+                  <td className="py-3 px-2"><div className={RO_SM}>{row.tpncr || '-'}</div></td>
+                  <td className="py-3 px-2"><div className={RO_SM}>{row.ppncr || '-'}</div></td>
+                  <td className="py-3 px-2"><div className={RO_SM}>{row.jurunikah || '-'}</div></td>
                   <td className="py-3 px-4 text-center font-black text-teal-700 bg-teal-50/30 text-sm">
                     {tableWithTotals.rows[idx].total}
                   </td>
@@ -311,15 +289,24 @@ const BkkiForm: React.FC<BkkiFormProps> = ({ deptName, onBack }) => {
         </div>
       </section>
 
-      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Ringkasan & Analisis (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600"><FileText className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Ringkasan & Analisis</h3></div>
+        <div className="space-y-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Ringkasan pencapaian utama</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.ringkasan || '-'}</div></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Isu dan cabaran</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.isu || '-'}</div></div>
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Cadangan penambahbaikan</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.cadangan || '-'}</div></div>
+          </div>
+        </div>
+      </section>
       
       <LawatanSection 
         formData={formData} 
-        addLawatan={addLawatan} 
-        removeLawatan={removeLawatan} 
-        updateLawatan={updateLawatan} 
-        handleSave={handleSave}
-        isSaving={isSaving}
+        addLawatan={() => {}} 
+        removeLawatan={() => {}} 
+        updateLawatan={() => {}} 
+        readOnly
       />
     </FormLayout>
   );
