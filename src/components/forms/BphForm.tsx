@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import FormLayout from './FormLayout';
-import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
+import { LawatanSection } from './CommonSections';
 import { useFormLogic } from './useFormLogic';
 import { BPH_2024_REFERENCE, BPH_2025_REFERENCE } from '../../constants';
 import { 
@@ -404,9 +404,47 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      readOnly={true}
     >
       <div>
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Verified Banner */}
+      <section className="bg-gradient-to-r from-emerald-50 via-white to-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 md:p-8 shadow-sm mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+            <ShieldCheck className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Data Telah Disahkan & Diverifikasi</h3>
+            <p className="text-sm text-emerald-700 font-medium mt-1">
+              Bahagian Pengurusan Halal (BPH) telah menyelesaikan proses pengesahan data. Borang ini hanya boleh dilihat sahaja.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maklumat Asas (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+            <Info className="w-5 h-5" />
+          </div>
+          <h3 className="text-lg font-bold text-zus-900">Maklumat Asas</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500">Tarikh Laporan</label>
+            <div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.tarikh || '-'}</div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500">Disediakan Oleh</label>
+            <div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.disediakanOleh || '-'}</div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-500">Jawatan</label>
+            <div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.jawatan || '-'}</div>
+          </div>
+        </div>
+      </section>
 
       <div className="mt-8 space-y-8 animate-fade-in px-4 md:px-8">
         {/* 1. SPHM Section */}
@@ -637,24 +675,18 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
                         <td className="px-4 py-3 text-xs font-bold text-gray-700">Kes Penguatkuasaan</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPH_2024_REFERENCE.penguatkuasaan}</td>
                         <td className="px-4 py-3">
-                          <input
-                            type="number"
-                            value={formData.bph.penguatkuasaan}
-                            onChange={(e) => updateBph(['penguatkuasaan'], e.target.value)}
-                            className="w-full max-w-[120px] p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none"
-                          />
+                          <div className="w-full max-w-[120px] p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs font-black text-center text-zus-900 cursor-default">
+                            {formData.bph.penguatkuasaan || '-'}
+                          </div>
                         </td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 text-xs font-bold text-gray-700">Jumlah Aduan Diterima</td>
                         <td className="px-4 py-3 text-center text-xs font-black text-gray-500">{BPH_2024_REFERENCE.aduan}</td>
                         <td className="px-4 py-3">
-                          <input
-                            type="number"
-                            value={formData.bph.aduan}
-                            onChange={(e) => updateBph(['aduan'], e.target.value)}
-                            className="w-full max-w-[120px] p-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-olive-500 outline-none"
-                          />
+                          <div className="w-full max-w-[120px] p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs font-black text-center text-zus-900 cursor-default">
+                            {formData.bph.aduan || '-'}
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -777,15 +809,43 @@ const BphForm: React.FC<BphFormProps> = ({ deptName, onBack }) => {
           </div>
         </section>
 
-        <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+        {/* Ringkasan & Analisis (Read-Only) */}
+        <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+          <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
+            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
+              <FileText className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-zus-900">Ringkasan & Analisis</h3>
+          </div>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-500">Ringkasan pencapaian utama unit tahun 2025</label>
+              <div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">
+                {formData.ringkasan || '-'}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500">Isu dan cabaran unit</label>
+                <div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">
+                  {formData.isu || '-'}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-500">Cadangan penambahbaikan / way forward unit</label>
+                <div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">
+                  {formData.cadangan || '-'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         
         <LawatanSection 
           formData={formData} 
-          addLawatan={addLawatan} 
-          removeLawatan={removeLawatan} 
-          updateLawatan={updateLawatan} 
-          handleSave={handleSave}
-          isSaving={isSaving}
+          addLawatan={() => {}} 
+          removeLawatan={() => {}} 
+          updateLawatan={() => {}} 
           readOnly
         />
       </div>

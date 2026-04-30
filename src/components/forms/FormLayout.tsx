@@ -18,6 +18,7 @@ interface FormLayoutProps {
   formData: any;
   getExportState?: () => PdfExportState;
   hideExportButton?: boolean;
+  readOnly?: boolean;
   children: React.ReactNode;
 }
 
@@ -44,6 +45,7 @@ const FormLayout: React.FC<FormLayoutProps> = ({
   formData,
   getExportState,
   hideExportButton,
+  readOnly = false,
   children 
 }) => {
   const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -152,39 +154,49 @@ const FormLayout: React.FC<FormLayoutProps> = ({
           </p>
         </div>
 
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:gap-4 sm:flex-row xl:justify-end">
-          <button
-            onClick={onSave}
-            disabled={isSaving}
-            className="flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] bg-zus-900 px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
-          >
-            {isSaving ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              <Save className="w-6 h-6" />
-            )}
-            Simpan Draf
-          </button>
-
-          {!hideExportButton && (
+        {readOnly ? (
+          <div className="flex w-full items-center gap-3 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-emerald-100 px-5 py-3 shadow-sm sm:w-auto sm:px-6 sm:py-4">
+            <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" />
+            <div>
+              <p className="text-sm font-black text-emerald-900">Data Telah Disahkan</p>
+              <p className="text-[11px] font-medium text-emerald-700">Borang ini telah diverifikasi dan dikunci daripada pengeditan.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:gap-4 sm:flex-row xl:justify-end">
             <button
-              onClick={handleExportPdf}
-              disabled={isExportingPdf}
-              className={`flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
-                isExportingPdf 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'border border-gray-200 bg-white text-zus-900 hover:border-zus-gold hover:bg-slate-50'
-              }`}
+              onClick={onSave}
+              disabled={isSaving}
+              className="flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] bg-zus-900 px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-base font-black text-white shadow-[0_18px_40px_rgba(15,35,64,0.18)] transition-all hover:bg-zus-800 active:scale-[0.98] disabled:opacity-70"
             >
-              {isExportingPdf ? (
-                <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
+              {isSaving ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                <FileDown className="w-6 h-6" />
+                <Save className="w-6 h-6" />
               )}
-              {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
+              Simpan Draf
             </button>
-          )}
-        </div>
+
+            {!hideExportButton && (
+              <button
+                onClick={handleExportPdf}
+                disabled={isExportingPdf}
+                className={`flex w-full sm:w-auto sm:min-w-[224px] items-center justify-center gap-3 rounded-[1.2rem] px-5 py-3 text-sm sm:gap-4 sm:rounded-[1.35rem] sm:px-8 sm:py-4 sm:text-lg font-black shadow-[0_12px_30px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] ${
+                  isExportingPdf 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                    : 'border border-gray-200 bg-white text-zus-900 hover:border-zus-gold hover:bg-slate-50'
+                }`}
+              >
+                {isExportingPdf ? (
+                  <div className="w-4 h-4 border-2 border-zus-900/30 border-t-zus-900 rounded-full animate-spin"></div>
+                ) : (
+                  <FileDown className="w-6 h-6" />
+                )}
+                {isExportingPdf ? 'Menjana PDF...' : 'Export PDF'}
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Error Notification */}
