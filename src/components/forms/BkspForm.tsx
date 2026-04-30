@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { getTodayIsoMY } from '../../utils/dateFormat';
-import { Heart, Users, BarChart3, CheckSquare, Activity, Info } from 'lucide-react';
+import { Heart, Users, BarChart3, Activity, Info, ShieldCheck, FileText } from 'lucide-react';
 import { BKSP_2024_REFERENCE, BKSP_2025_VERIFIED } from '../../constants';
 import FormLayout from './FormLayout';
-import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
+import { LawatanSection } from './CommonSections';
+
+const RO = "w-full p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-sm font-black text-pink-700 cursor-default";
+const RO_SM = "w-20 p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-sm font-black text-pink-700 cursor-default";
 import { useFormLogic } from './useFormLogic';
 import { keepNumericInputDraft, toNonNegativeInt } from '../../utils/inputNormalization';
 import {
@@ -163,8 +166,28 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      readOnly={true}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Verified Banner */}
+      <section className="bg-gradient-to-r from-emerald-50 via-white to-emerald-50 border-2 border-emerald-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck className="w-6 h-6" /></div>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Data Telah Disahkan & Diverifikasi</h3>
+            <p className="text-sm text-emerald-700 font-medium mt-1">Bahagian Kaunseling Syarie & Pembangunan Psikologi (BKSPP) telah menyelesaikan proses pengesahan data. Borang ini hanya boleh dilihat sahaja.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Maklumat Asas (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600"><Info className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Maklumat Asas</h3></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Tarikh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.tarikh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Disediakan Oleh</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.disediakanOleh || '-'}</div></div>
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Jawatan</label><div className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-900">{formData.jawatan || '-'}</div></div>
+        </div>
+      </section>
 
       {/* Permohonan Runding Cara */}
       <section className="bg-white border border-pink-100 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
@@ -195,12 +218,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 font-semibold text-zus-900">{item.name}</td>
                   <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.permohonan[idx].value}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={item.value}
-                      onChange={(e) => handleBkspChange('permohonan', idx, e.target.value)}
-                      className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                    />
+                    <div className={RO}>{item.value || '-'}</div>
                   </td>
                 </tr>
               ))}
@@ -238,12 +256,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 font-semibold text-zus-900">{item.name}</td>
                   <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.pegawai[idx].value}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={item.value}
-                      onChange={(e) => handleBkspChange('pegawai', idx, e.target.value)}
-                      className="w-full p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                    />
+                    <div className={RO}>{item.value || '-'}</div>
                   </td>
                 </tr>
               ))}
@@ -282,24 +295,14 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 font-semibold text-zus-900">Kaunseling Syarie</td>
                   <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statistik.kaunselingSyarie}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bksp.statistik.kaunselingSyarie}
-                      onChange={(e) => handleStatistikChange('kaunselingSyarie', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                    />
+                    <div className={RO}>{formData.bksp.statistik.kaunselingSyarie || '-'}</div>
                   </td>
                 </tr>
                 <tr className="border-t border-pink-100">
                   <td className="px-4 py-3 font-semibold text-zus-900">Psikologi</td>
                   <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statistik.psikologi}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bksp.statistik.psikologi}
-                      onChange={(e) => handleStatistikChange('psikologi', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                    />
+                    <div className={RO}>{formData.bksp.statistik.psikologi || '-'}</div>
                   </td>
                 </tr>
               </tbody>
@@ -330,24 +333,14 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
                   <td className="px-4 py-3 font-semibold text-zus-900">Kes Diterima</td>
                   <td className="px-4 py-3 text-center font-black text-pink-700">{BKSP_2024_REFERENCE.statusKes.diterima}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bksp.statusKes.diterima}
-                      onChange={(e) => handleStatusKesChange('diterima', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-pink-200 rounded-xl text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                    />
+                    <div className={RO}>{formData.bksp.statusKes.diterima || '-'}</div>
                   </td>
                 </tr>
                 <tr className="border-t border-pink-100">
                   <td className="px-4 py-3 font-semibold text-zus-900">Kes Diselesaikan</td>
                   <td className="px-4 py-3 text-center font-black text-emerald-700">{BKSP_2024_REFERENCE.statusKes.diselesaikan}</td>
                   <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      value={formData.bksp.statusKes.diselesaikan}
-                      onChange={(e) => handleStatusKesChange('diselesaikan', e.target.value)}
-                      className="w-full p-2.5 bg-white border border-emerald-200 rounded-xl text-sm font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500/20 outline-none"
-                    />
+                    <div className="w-full p-2 bg-emerald-50/50 border border-emerald-100 rounded-lg text-sm font-black text-emerald-700 cursor-default">{formData.bksp.statusKes.diselesaikan || '-'}</div>
                   </td>
                 </tr>
               </tbody>
@@ -371,13 +364,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
               <div className="flex-1">
                 <span className="text-xs font-bold text-pink-900">{item.name}</span>
               </div>
-              <input 
-                type="number"
-                value={item.value}
-                onChange={(e) => handleBkspChange('puncaKrisis', idx, e.target.value)}
-                className="w-20 p-2 bg-white border border-pink-200 rounded-lg text-sm font-bold text-pink-700 focus:ring-2 focus:ring-pink-500/20 outline-none"
-                placeholder="0"
-              />
+              <div className={RO_SM}>{item.value || '-'}</div>
             </div>
           ))}
         </div>
@@ -435,44 +422,7 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
             </div>
           )}
         </div>
-        
-        <div className="mt-8 pt-6 border-t border-pink-50 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input 
-              id="new-category-input"
-              type="text"
-              placeholder="Tambah kategori baru..."
-              className="flex-1 p-3 bg-white border border-pink-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-pink-500/20 outline-none"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const input = e.currentTarget;
-                  addPuncaKrisis(input.value);
-                  input.value = '';
-                }
-              }}
-            />
-            <button 
-              onClick={() => {
-                const input = document.getElementById('new-category-input') as HTMLInputElement;
-                addPuncaKrisis(input.value);
-                input.value = '';
-              }}
-              className="px-6 py-3 bg-pink-100 text-pink-700 rounded-xl text-sm font-black hover:bg-pink-200 transition-colors"
-            >
-              Tambah Kategori
-            </button>
-          </div>
 
-          <div className="flex justify-end">
-            <button 
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-2 px-8 py-3 bg-pink-600 text-white rounded-xl text-sm font-black hover:bg-pink-700 transition-all shadow-lg shadow-pink-200 active:scale-95 disabled:opacity-50"
-            >
-              {isSaving ? 'Sila Tekan Butang Simpan Draf' : 'Simpan Bahagian Ini'}
-            </button>
-          </div>
-        </div>
 
         <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-500 shrink-0" />
@@ -482,14 +432,23 @@ const BkspForm: React.FC<BkspFormProps> = ({ deptName, onBack }) => {
         </div>
       </section>
 
-      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      {/* Ringkasan & Analisis (Read-Only) */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4"><div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600"><FileText className="w-5 h-5" /></div><h3 className="text-lg font-bold text-zus-900">Ringkasan & Analisis</h3></div>
+        <div className="space-y-6">
+          <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Ringkasan pencapaian utama</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.ringkasan || '-'}</div></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Isu dan cabaran</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.isu || '-'}</div></div>
+            <div className="space-y-2"><label className="text-xs font-bold text-gray-500">Cadangan penambahbaikan</label><div className="w-full min-h-20 p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-800 whitespace-pre-wrap">{formData.cadangan || '-'}</div></div>
+          </div>
+        </div>
+      </section>
       <LawatanSection 
         formData={formData} 
-        addLawatan={addLawatan} 
-        removeLawatan={removeLawatan} 
-        updateLawatan={updateLawatan} 
-        handleSave={handleSave}
-        isSaving={isSaving}
+        addLawatan={() => {}} 
+        removeLawatan={() => {}} 
+        updateLawatan={() => {}} 
+        readOnly
       />
     </FormLayout>
   );

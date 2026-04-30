@@ -58,7 +58,7 @@ export const DEPARTMENTS: Department[] = [
   { id: '11', name: 'Bahagian Kemajuan Saudara Kita BKSK', active: true },
   { id: '8', name: 'Bahagian Pengukuhan Pendidikan Islam BPPI', active: true, completed: true },
   { id: '12', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP', active: false },
-  { id: '12-new', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP (NEW)', active: true },
+  { id: '12-new', name: 'Bahagian Kaunseling Syarie & Pembangunan Psikologi BKSPP (NEW)', active: true, completed: true },
   {
     id: '9',
     name: 'Unit Komunikasi Korporat UKOKO',
