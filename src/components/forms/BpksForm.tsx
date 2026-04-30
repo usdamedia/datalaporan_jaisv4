@@ -10,7 +10,7 @@ import {
   Scale,
   AlertCircle
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import FormLayout from './FormLayout';
 import { useFormLogic } from './useFormLogic';
 import { BasicInfoSection, NarrativeSection, LawatanSection } from './CommonSections';
@@ -139,9 +139,24 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     { name: 'Jenayah Syariah', value: parseInt(formData.bpks.kertasSiasatan.jenayahSyariah) || 0 }
   ];
 
-  const COLORS = ['#0D9488', '#2DD4BF']; // Teal 600, Teal 400
+  const COLORS = ['#0D9488', '#2DD4BF', '#134E4A', '#5EEAD4'];
   const formatLabel = (value: string) => value.replace(/([A-Z])/g, ' $1').trim();
   const pegawaiLocations = Object.keys(formData.bpks.pegawai) as string[];
+
+  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name }: any) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 28;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    if (!value) return null;
+    return (
+      <text x={x} y={y} fill="#134E4A" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize={12} fontWeight={800}>
+        {name}: {value}
+      </text>
+    );
+  };
+
+  const customTooltipStyle = { borderRadius: '14px', border: '1px solid #ccfbf1', boxShadow: '0 10px 30px rgba(13,148,136,0.10)', fontSize: '12px', fontWeight: 700 };
 
   return (
     <FormLayout
@@ -415,31 +430,63 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </div>
 
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-teal-100 flex flex-col">
-          <h3 className="text-lg font-bold text-gray-900 mb-6">Visualisasi Borang 5</h3>
-          <div className="flex-1 min-h-[300px]">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-teal-50 rounded-xl text-teal-600"><TrendingUp className="w-5 h-5" /></div>
+            <h3 className="text-lg font-bold text-gray-900">Visualisasi Borang 5</h3>
+          </div>
+
+          {/* Stat Cards */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="p-4 bg-teal-50 rounded-2xl border border-teal-100 text-center">
+              <p className="text-[10px] font-black uppercase tracking-widest text-teal-600 mb-1">Matrimoni</p>
+              <p className="text-2xl font-black text-teal-900">{parseInt(formData.bpks.borang5.kategori.matrimoni) || 0}</p>
+            </div>
+            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-center">
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-1">Jenayah Syariah</p>
+              <p className="text-2xl font-black text-emerald-900">{parseInt(formData.bpks.borang5.kategori.jenayahSyariah) || 0}</p>
+            </div>
+          </div>
+
+          {/* Chart */}
+          <div className="flex-1 min-h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={borang5ChartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
+                  innerRadius={55}
+                  outerRadius={85}
+                  paddingAngle={4}
                   dataKey="value"
+                  label={renderCustomLabel}
+                  labelLine={{ stroke: '#99f6e4', strokeWidth: 1 }}
                 >
                   {borang5ChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="#fff" strokeWidth={3} />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Tooltip contentStyle={customTooltipStyle} />
+                <Legend
+                  verticalAlign="bottom"
+                  height={40}
+                  iconType="circle"
+                  formatter={(value: string) => <span style={{ color: '#134E4A', fontWeight: 800, fontSize: '11px' }}>{value}</span>}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-4 p-4 bg-gray-50 rounded-2xl text-center">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Jumlah Keseluruhan</p>
+
+          {/* Total + Validation */}
+          <div className={`mt-4 p-4 rounded-2xl text-center ${isBorang5Valid ? 'bg-teal-50 border border-teal-100' : 'bg-amber-50 border border-amber-200'}`}>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Jumlah Keseluruhan</p>
             <p className="text-3xl font-black text-teal-600">{totalBorang5Bahagian}</p>
+            {!isBorang5Valid && totalBorang5Kategori > 0 && (
+              <div className="mt-2 flex items-center justify-center gap-1.5 text-amber-700">
+                <AlertCircle className="w-3.5 h-3.5" />
+                <p className="text-[10px] font-bold">Jumlah bahagian ({totalBorang5Bahagian}) ≠ kategori ({totalBorang5Kategori})</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -498,25 +545,32 @@ const BpksForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </table>
             </div>
 
-            <div className="h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={ipChartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={60}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {ipChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+            {/* Chart - Horizontal Bar for better readability */}
+            <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-teal-50/30 via-white to-white p-5">
+              <p className="text-[10px] font-black uppercase tracking-widest text-teal-600 mb-4">Pecahan Kategori I.P</p>
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={ipChartData} layout="horizontal" margin={{ top: 16, right: 12, left: 12, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ccfbf1" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 800, fill: '#134E4A' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#5EEAD4' }} />
+                    <Tooltip contentStyle={customTooltipStyle} cursor={{ fill: '#f0fdfa' }} />
+                    <Bar dataKey="value" name="Jumlah" radius={[8, 8, 0, 0]} fill="#0D9488">
+                      {ipChartData.map((entry, index) => (
+                        <Cell key={`bar-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="mt-4 flex items-center justify-center gap-6">
+                {ipChartData.map((item, idx) => (
+                  <div key={item.name} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx] }} />
+                    <span className="text-xs font-black text-teal-900">{item.name}: <span className="text-teal-600">{item.value}</span></span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
