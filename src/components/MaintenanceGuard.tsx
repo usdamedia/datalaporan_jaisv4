@@ -6,8 +6,10 @@ interface MaintenanceGuardProps {
 }
 
 const MaintenanceGuard: React.FC<MaintenanceGuardProps> = ({ children }) => {
-  // Set to true to bypass login/maintenance page. Set to false to re-enable.
-  const [isAdmin, setIsAdmin] = useState<boolean>(true); 
+  // Set MAINTENANCE_MODE_ENABLED to true to show the maintenance page.
+  // When false, the app loads normally without requiring login.
+  const MAINTENANCE_MODE_ENABLED = false;
+  const [isAdmin, setIsAdmin] = useState<boolean>(!MAINTENANCE_MODE_ENABLED);
   const [password, setPassword] = useState('');
   const [showLogin, setShowLogin] = useState(false);
   const [error, setError] = useState('');

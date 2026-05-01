@@ -57,7 +57,7 @@ const buildIsoDate = (year: string, month: string, day: string) => {
   return `${year}-${month}-${day}`;
 };
 
-export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any, showDisemak?: boolean }> = ({ formData, handleInputChange, showDisemak = false }) => (
+export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any, showDisemak?: boolean, readOnly?: boolean }> = ({ formData, handleInputChange, showDisemak = false, readOnly = false }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
       <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
@@ -85,6 +85,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
           placeholder="Nama pegawai"
           value={formData.disediakanOleh}
           onChange={handleInputChange}
+          readOnly={readOnly}
           className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
         />
       </div>
@@ -98,6 +99,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
           placeholder="Jawatan pegawai"
           value={formData.jawatan}
           onChange={handleInputChange}
+          readOnly={readOnly}
           className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
         />
       </div>
@@ -115,6 +117,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
               placeholder="Nama pegawai penyemak"
               value={formData.disemakOleh || ''}
               onChange={handleInputChange}
+              readOnly={readOnly}
               className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
             />
           </div>
@@ -126,6 +129,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
               placeholder="Jawatan pegawai penyemak"
               value={formData.disemakJawatan || ''}
               onChange={handleInputChange}
+              readOnly={readOnly}
               className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
             />
           </div>
@@ -137,6 +141,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
               name="disemakTarikh"
               value={formData.disemakTarikh || ''}
               onChange={handleInputChange}
+              disabled={readOnly}
               className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
             />
           </div>
@@ -155,6 +160,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
             placeholder="Nama penyemak / penyelaras"
             value={formData.disahkanOleh || ''}
             onChange={handleInputChange}
+            readOnly={readOnly}
             className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
           />
         </div>
@@ -166,6 +172,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
             placeholder="Jawatan pegawai pengesah"
             value={formData.disahkanJawatan || ''}
             onChange={handleInputChange}
+            readOnly={readOnly}
             className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
           />
         </div>
@@ -177,6 +184,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
             name="disahkanTarikh"
             value={formData.disahkanTarikh || ''}
             onChange={handleInputChange}
+            disabled={readOnly}
             className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium"
           />
         </div>
@@ -185,7 +193,7 @@ export const BasicInfoSection: React.FC<{ formData: any, handleInputChange: any,
   </section>
 );
 
-export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any }> = ({ formData, handleInputChange }) => (
+export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any, readOnly?: boolean }> = ({ formData, handleInputChange, readOnly = false }) => (
   <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
     <div className="flex items-center gap-4 mb-8 border-b border-gray-100 pb-4">
       <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600">
@@ -205,6 +213,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           placeholder="Nyatakan pencapaian utama bahagian anda..."
           value={formData.ringkasan}
           onChange={handleInputChange}
+          readOnly={readOnly}
           ref={(element) => autoGrowTextarea(element)}
           onInput={(event) => autoGrowTextarea(event.currentTarget)}
           className="w-full min-h-32 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
@@ -222,6 +231,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           placeholder="Isu yang dihadapi..."
           value={formData.isu}
           onChange={handleInputChange}
+          readOnly={readOnly}
             ref={(element) => autoGrowTextarea(element)}
             onInput={(event) => autoGrowTextarea(event.currentTarget)}
             className="w-full min-h-28 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"
@@ -237,6 +247,7 @@ export const NarrativeSection: React.FC<{ formData: any, handleInputChange: any 
           placeholder="Cadangan untuk 2026..."
           value={formData.cadangan}
           onChange={handleInputChange}
+          readOnly={readOnly}
             ref={(element) => autoGrowTextarea(element)}
             onInput={(event) => autoGrowTextarea(event.currentTarget)}
             className="w-full min-h-28 overflow-hidden p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-zus-gold/20 focus:border-zus-gold outline-none transition-all text-sm font-medium resize-none"

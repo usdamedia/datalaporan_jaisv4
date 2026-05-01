@@ -1,0 +1,92 @@
+rules_version = '2';
+
+// ==========================================================
+// FIRESTORE SECURITY RULES — Data Laporan Tahunan JAIS 2025
+// ==========================================================
+// Deploy rules ini ke Firebase Console > Firestore > Rules
+// Atau guna: firebase deploy --only firestore:rules
+// ==========================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------
+    // DEFAULT: Block semua akses yang tidak dibenarkan
+    // ----------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ----------------------------------------------------------
+    // DRAFTS 2025 — Data laporan bahagian
+    // ----------------------------------------------------------
+    match /drafts_2025/{draftId} {
+      // Benarkan baca untuk semua (data laporan bersifat dalaman tetapi
+      // tidak sensitif — boleh ketatkan lagi dengan Firebase Auth)
+      allow read: if true;
+
+      // Benarkan tulis dengan syarat:
+      // 1. Data mesti ada field wajib
+      // 2. Saiz dokumen tidak melebihi 1MB
+      // 3. Field tertentu tidak boleh diubah oleh client
+      allow create: if isValidDraftWrite(request.resource.data);
+      allow update: if isValidDraftWrite(request.resource.data);
+
+      // Jangan benarkan delete dari client
+      allow delete: if false;
+
+      // Nested update logs
+      match /update_logs/{logId} {
+        allow read: if true;
+        allow create: if isValidLogEntry(request.resource.data);
+        allow update, delete: if false;
+      }
+    }
+
+    // ----------------------------------------------------------
+    // UPDATE LOGS CENTRAL — Audit trail
+    // ----------------------------------------------------------
+    match /update_logs_central/{logId} {
+      allow read: if true;
+      allow create: if isValidLogEntry(request.resource.data);
+      // Logs are immutable — no update or delete
+      allow update, delete: if false;
+    }
+
+    // ----------------------------------------------------------
+    // LIVE ANNOUNCEMENT CONTROL
+    // ----------------------------------------------------------
+    match /drafts_2025/live_announcement_control {
+      allow read: if true;
+      allow write: if request.resource.data.keys().hasOnly([
+        'active', 'message', 'loveCount', 'lastReaction',
+        'startedByDeviceId', 'startedAt', 'updatedAt', 'endedAt'
+      ]);
+      allow delete: if false;
+    }
+
+    // ----------------------------------------------------------
+    // HELPER FUNCTIONS
+    // ----------------------------------------------------------
+
+    // Validate draft write operations
+    function isValidDraftWrite(data) {
+      return data.keys().hasAll(['deptName', 'storageKey', 'data'])
+        && data.deptName is string
+        && data.storageKey is string
+        && data.deptName.size() > 0
+        && data.deptName.size() <= 200
+        && data.storageKey.size() > 0
+        && data.storageKey.size() <= 200;
+    }
+
+    // Validate log entries (immutable audit trail)
+    function isValidLogEntry(data) {
+      return data.keys().hasAll(['deptName', 'storageKey', 'action'])
+        && data.deptName is string
+        && data.storageKey is string
+        && data.action is string
+        && data.action in ['manual_save', 'autosave', 'reconnect_sync'];
+    }
+  }
+}

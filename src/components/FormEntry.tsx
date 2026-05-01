@@ -70,10 +70,10 @@ const FormEntry: React.FC<FormEntryProps> = ({ deptName, onBack }) => {
       return <UkokoPublicRelationsForm deptName={deptName} onBack={onBack} />;
     }
     if (normalizedDeptName.includes('PENGURUSAN ACARA')) {
-      return <UkokoForm deptName={deptName} onBack={onBack} />;
+      return <UkokoForm deptName={deptName} onBack={onBack} readOnly />;
     }
     if (normalizedDeptName.includes('PENERBITAN')) {
-      return <UkokoPenerbitanForm deptName={deptName} onBack={onBack} />;
+      return <UkokoPenerbitanForm deptName={deptName} onBack={onBack} readOnly />;
     }
     return <UkokoForm deptName={deptName} onBack={onBack} />;
   }

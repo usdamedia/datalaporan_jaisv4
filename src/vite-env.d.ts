@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_ADMIN_PASSWORD?: string;
+  readonly VITE_TRACKER_PASSWORD?: string;
 }
 
 interface ImportMeta {

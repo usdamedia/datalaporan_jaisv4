@@ -19,7 +19,7 @@ import { Department, SubUnit } from './types';
 import { X, ChevronRight, MousePointerClick, FileText, Save, FileCheck, Info, Cpu, CheckCircle2, BarChart3, LayoutList, Sparkles, Search, CalendarDays } from 'lucide-react';
 
 const NAVIGATION_STORAGE_KEY = 'jais_active_navigation_2025';
-const PROGRESS_TRACKER_PASSWORD = 'bpnpj@is2026';
+const PROGRESS_TRACKER_PASSWORD = import.meta.env.VITE_TRACKER_PASSWORD || '';
 
 export default function App() {
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
@@ -383,6 +383,11 @@ export default function App() {
   };
 
   const handleOpenProgressTracker = () => {
+    if (!PROGRESS_TRACKER_PASSWORD) {
+      window.alert('Kata laluan Progress Tracker belum dikonfigurasi. Sila tetapkan VITE_TRACKER_PASSWORD.');
+      return;
+    }
+
     const enteredPassword = window.prompt('Masukkan kata laluan untuk akses Progress Tracker:');
     if (enteredPassword === null) return;
 
@@ -391,8 +396,8 @@ export default function App() {
       return;
     }
 
-	    setShowProgressTracker(true);
-	  };
+    setShowProgressTracker(true);
+  };
 	  
 	  // Title for Form Entry
   const formTitle = selectedSubUnit 

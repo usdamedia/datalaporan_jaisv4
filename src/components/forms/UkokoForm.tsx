@@ -15,7 +15,7 @@ import { useFormLogic } from './useFormLogic';
 import { getTodayIsoMY } from '../../utils/dateFormat';
 import { SARAWAK_DIVISIONS, UKOKO_2024_REFERENCE } from '../../constants';
 
-const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptName, onBack }) => {
+const UkokoForm: React.FC<{ deptName: string; onBack: () => void; readOnly?: boolean }> = ({ deptName, onBack, readOnly = false }) => {
   const {
     formData,
     setFormData,
@@ -116,8 +116,9 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       showSuccess={showSuccess}
       saveError={saveError}
       formData={formData}
+      readOnly={readOnly}
     >
-      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} showDisemak />
+      <BasicInfoSection formData={formData} handleInputChange={handleInputChange} showDisemak readOnly={readOnly} />
 
       {/* Summary Header */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -141,7 +142,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
         </div>
 
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-emerald-100 flex items-center gap-4">
-          <div className="p-4 bg-teal-50 rounded-2xl text-teal-600">
+          <div className="p-4 bg-emerald-50 rounded-2xl text-emerald-600">
             <Calendar className="w-8 h-8" />
           </div>
           <div>
@@ -162,13 +163,15 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
             </div>
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Senarai Perayaan Islam</h3>
           </div>
-          <button
-            onClick={() => addEvent('perayaanIslam')}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-sm"
-          >
-            <Plus className="w-4 h-4" />
-            TAMBAH ACARA
-          </button>
+          {!readOnly && (
+            <button
+              onClick={() => addEvent('perayaanIslam')}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-sm"
+            >
+              <Plus className="w-4 h-4" />
+              TAMBAH ACARA
+            </button>
+          )}
         </div>
         
         <div className="p-6">
@@ -195,6 +198,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                         <textarea
                           value={event.nama}
                           onChange={(e) => updateEvent('perayaanIslam', idx, 'nama', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="Nama Majlis..."
                           rows={2}
                           className="w-full min-w-[22rem] resize-none overflow-hidden bg-transparent border-none focus:ring-0 text-sm font-bold leading-snug text-gray-700 placeholder:text-gray-300 whitespace-normal break-words"
@@ -206,6 +210,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           lang="en-GB"
                           value={event.tarikh}
                           onChange={(e) => updateEvent('perayaanIslam', idx, 'tarikh', e.target.value)}
+                          disabled={readOnly}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600"
                         />
                       </td>
@@ -213,6 +218,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                         <select
                           value={event.tuanRumah}
                           onChange={(e) => updateEvent('perayaanIslam', idx, 'tuanRumah', e.target.value)}
+                          disabled={readOnly}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600 font-medium"
                         >
                           <option value="">Pilih Bahagian</option>
@@ -224,17 +230,20 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           type="number"
                           value={event.mesyuarat}
                           onChange={(e) => updateEvent('perayaanIslam', idx, 'mesyuarat', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="0"
                           className="w-16 bg-transparent border-none focus:ring-0 text-sm font-black text-emerald-600"
                         />
                       </td>
                       <td className="px-4 py-4 text-right align-top">
-                        <button
-                          onClick={() => removeEvent('perayaanIslam', idx)}
-                          className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {!readOnly && (
+                          <button
+                            onClick={() => removeEvent('perayaanIslam', idx)}
+                            className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -246,21 +255,23 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       </div>
 
       {/* Majlis Kesyukuran Section */}
-      <div className="bg-white rounded-3xl shadow-sm border border-teal-100 overflow-hidden">
-        <div className="p-6 border-b border-teal-50 flex items-center justify-between bg-teal-50/30">
+      <div className="bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden">
+        <div className="p-6 border-b border-emerald-50 flex items-center justify-between bg-emerald-50/30">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-teal-600 rounded-xl text-white">
+            <div className="p-2 bg-emerald-600 rounded-xl text-white">
               <Users className="w-5 h-5" />
             </div>
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Senarai Majlis Kesyukuran</h3>
           </div>
-          <button
-            onClick={() => addEvent('majlisKesyukuran')}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-xl text-xs font-bold hover:bg-teal-700 transition-all shadow-sm"
-          >
-            <Plus className="w-4 h-4" />
-            TAMBAH MAJLIS
-          </button>
+          {!readOnly && (
+            <button
+              onClick={() => addEvent('majlisKesyukuran')}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-sm"
+            >
+              <Plus className="w-4 h-4" />
+              TAMBAH MAJLIS
+            </button>
+          )}
         </div>
         
         <div className="p-6">
@@ -282,11 +293,12 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {formData.ukoko.majlisKesyukuran.map((event: any, idx: number) => (
-                    <tr key={idx} className="group hover:bg-teal-50/30 transition-colors">
+                    <tr key={idx} className="group hover:bg-emerald-50/30 transition-colors">
                       <td className="px-4 py-4 align-top">
                         <textarea
                           value={event.nama}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'nama', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="Nama Majlis..."
                           rows={2}
                           className="w-full min-w-[22rem] resize-none overflow-hidden bg-transparent border-none focus:ring-0 text-sm font-bold leading-snug text-gray-700 placeholder:text-gray-300 whitespace-normal break-words"
@@ -298,6 +310,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           lang="en-GB"
                           value={event.tarikh}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'tarikh', e.target.value)}
+                          disabled={readOnly}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600"
                         />
                       </td>
@@ -305,6 +318,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                         <select
                           value={event.tuanRumah}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'tuanRumah', e.target.value)}
+                          disabled={readOnly}
                           className="bg-transparent border-none focus:ring-0 text-sm text-gray-600 font-medium"
                         >
                           <option value="">Pilih Bahagian</option>
@@ -316,17 +330,20 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           type="number"
                           value={event.mesyuarat}
                           onChange={(e) => updateEvent('majlisKesyukuran', idx, 'mesyuarat', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="0"
-                          className="w-16 bg-transparent border-none focus:ring-0 text-sm font-black text-teal-600"
+                          className="w-16 bg-transparent border-none focus:ring-0 text-sm font-black text-emerald-600"
                         />
                       </td>
                       <td className="px-4 py-4 text-right align-top">
-                        <button
-                          onClick={() => removeEvent('majlisKesyukuran', idx)}
-                          className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {!readOnly && (
+                          <button
+                            onClick={() => removeEvent('majlisKesyukuran', idx)}
+                            className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -338,21 +355,23 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
       </div>
 
       {/* Penyertaan Luar Section */}
-      <div className="bg-white rounded-3xl shadow-sm border border-blue-100 overflow-hidden mb-8">
-        <div className="p-6 border-b border-blue-50 flex items-center justify-between bg-blue-50/30">
+      <div className="bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden mb-8">
+        <div className="p-6 border-b border-emerald-50 flex items-center justify-between bg-emerald-50/30">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-xl text-white">
+            <div className="p-2 bg-emerald-600 rounded-xl text-white">
               <MapPin className="w-5 h-5" />
             </div>
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Senarai Penyertaan Luar</h3>
           </div>
-          <button
-            onClick={() => addEvent('penyertaanLuar')}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-sm"
-          >
-            <Plus className="w-4 h-4" />
-            TAMBAH PENYERTAAN
-          </button>
+          {!readOnly && (
+            <button
+              onClick={() => addEvent('penyertaanLuar')}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-sm"
+            >
+              <Plus className="w-4 h-4" />
+              TAMBAH PENYERTAAN
+            </button>
+          )}
         </div>
         
         <div className="p-6">
@@ -373,12 +392,13 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {formData.ukoko.penyertaanLuar.map((event: any, idx: number) => (
-                    <tr key={idx} className="group hover:bg-blue-50/30 transition-colors">
+                    <tr key={idx} className="group hover:bg-emerald-50/30 transition-colors">
                       <td className="px-4 py-4">
                         <input
                           type="text"
                           value={event.nama}
                           onChange={(e) => updateEvent('penyertaanLuar', idx, 'nama', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="Nama Penyertaan..."
                           className="w-full bg-transparent border-none focus:ring-0 text-sm font-bold text-gray-700 placeholder:text-gray-300"
                         />
@@ -389,6 +409,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           lang="en-GB"
                           value={event.tarikh}
                           onChange={(e) => updateEvent('penyertaanLuar', idx, 'tarikh', e.target.value)}
+                          disabled={readOnly}
                           className="w-full bg-transparent border-none focus:ring-0 text-sm text-gray-600"
                         />
                       </td>
@@ -397,17 +418,20 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
                           type="text"
                           value={event.lokasi}
                           onChange={(e) => updateEvent('penyertaanLuar', idx, 'lokasi', e.target.value)}
+                          readOnly={readOnly}
                           placeholder="Lokasi..."
                           className="w-full bg-transparent border-none focus:ring-0 text-sm text-gray-600"
                         />
                       </td>
                       <td className="px-4 py-4 text-right">
-                        <button
-                          onClick={() => removeEvent('penyertaanLuar', idx)}
-                          className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {!readOnly && (
+                          <button
+                            onClick={() => removeEvent('penyertaanLuar', idx)}
+                            className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -425,7 +449,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
         </div>
       )}
 
-      <NarrativeSection formData={formData} handleInputChange={handleInputChange} />
+      <NarrativeSection formData={formData} handleInputChange={handleInputChange} readOnly={readOnly} />
       <LawatanSection 
         formData={formData} 
         addLawatan={addLawatan} 
@@ -433,6 +457,7 @@ const UkokoForm: React.FC<{ deptName: string; onBack: () => void }> = ({ deptNam
         updateLawatan={updateLawatan} 
         handleSave={handleSave}
         isSaving={isSaving}
+        readOnly={readOnly}
       />
     </FormLayout>
   );
