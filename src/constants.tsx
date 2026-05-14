@@ -98,11 +98,11 @@ export const BKIM_2024_REFERENCE = {
     musolla: 45
   },
   perjawatan: {
-    imam1: 1468,
-    imam2: 1630,
-    imam3: 361,
-    bilal: 345,
-    marbot: 46
+    imam1: 361,
+    imam2: 345,
+    imam3: 46,
+    bilal: 350,
+    marbot: 366
   },
   kubur: {
     mis: 40,
