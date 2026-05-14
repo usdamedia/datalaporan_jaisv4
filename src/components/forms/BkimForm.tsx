@@ -22,6 +22,7 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
     cadangan: '',
     lawatan: [],
     bkim: {
+      programAktiviti: 0,
       bilMasjid: 0,
       bilSurau: 0,
       bilMusolla: 0,
@@ -42,7 +43,6 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
       star0: 0,
       bkimDivisions: SARAWAK_DIVISIONS.map(name => ({
         name,
-        program: 0,
         guruTakmir: 0,
         lak: 0
       }))
@@ -130,22 +130,53 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
     >
       <BasicInfoSection formData={formData} handleInputChange={handleInputChange} />
 
-      {/* BKIM Specific: Fasiliti & Perjawatan */}
-      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
+      {/* BKIM Specific: Program / Aktiviti */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6">
+        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+            <Star className="w-5 h-5" />
+          </div>
+          <h3 className="text-lg font-bold text-zus-900">Program / Aktiviti</h3>
+        </div>
+        {renderReferenceTable('Program / Aktiviti', [
+          { label: 'Jumlah Program / Aktiviti', field: 'programAktiviti', ref: BKIM_2024_REFERENCE.programAktiviti },
+        ])}
+      </section>
+
+      {/* Bento 2: Masjid, Surau dan Musolla */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6">
         <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
           <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
             <Building2 className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold text-zus-900">Fasiliti & Perjawatan</h3>
+          <h3 className="text-lg font-bold text-zus-900">Masjid, Surau dan Musolla</h3>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {renderReferenceTable('Bilangan Fasiliti', [
             { label: 'Masjid', field: 'bilMasjid', ref: BKIM_2024_REFERENCE.fasiliti.masjid },
             { label: 'Surau', field: 'bilSurau', ref: BKIM_2024_REFERENCE.fasiliti.surau },
             { label: 'Musolla', field: 'bilMusolla', ref: BKIM_2024_REFERENCE.fasiliti.musolla },
           ])}
+          {renderReferenceTable('Penarafan Bintang', [
+            { label: '5 Bintang', field: 'star5', ref: BKIM_2024_REFERENCE.bintang.star5 },
+            { label: '4 Bintang', field: 'star4', ref: BKIM_2024_REFERENCE.bintang.star4 },
+            { label: '3 Bintang', field: 'star3', ref: BKIM_2024_REFERENCE.bintang.star3 },
+            { label: '2 Bintang', field: 'star2', ref: BKIM_2024_REFERENCE.bintang.star2 },
+            { label: '1 Bintang', field: 'star1', ref: BKIM_2024_REFERENCE.bintang.star1 },
+            { label: 'Tiada Bintang', field: 'star0', ref: BKIM_2024_REFERENCE.bintang.star0 },
+          ])}
+        </div>
+      </section>
 
+      {/* Bento 3: Pegawai Masjid */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6">
+        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600">
+            <Building2 className="w-5 h-5" />
+          </div>
+          <h3 className="text-lg font-bold text-zus-900">Pegawai Masjid</h3>
+        </div>
+        <div className="max-w-2xl">
           {renderReferenceTable('Pegawai Masjid', [
             { label: 'Imam I', field: 'imam1', ref: BKIM_2024_REFERENCE.perjawatan.imam1 },
             { label: 'Imam II', field: 'imam2', ref: BKIM_2024_REFERENCE.perjawatan.imam2 },
@@ -156,74 +187,78 @@ const BkimForm: React.FC<BkimFormProps> = ({ deptName, onBack }) => {
         </div>
       </section>
 
-      {/* BKIM Specific: Tanah Perkuburan & Penarafan */}
-      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-2">
-              <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-600">
-                <MapPin className="w-4 h-4" />
-              </div>
-              <h3 className="text-md font-bold text-zus-900">Tanah Perkuburan</h3>
-            </div>
-            {renderReferenceTable('Tanah Perkuburan', [
-              { label: 'MIS', field: 'kuburMis', ref: BKIM_2024_REFERENCE.kubur.mis },
-              { label: 'Tanah Kerajaan', field: 'kuburKerajaan', ref: BKIM_2024_REFERENCE.kubur.kerajaan },
-              { label: 'LAK', field: 'kuburLak', ref: BKIM_2024_REFERENCE.kubur.lak },
-              { label: 'Lain-Lain', field: 'kuburLain', ref: BKIM_2024_REFERENCE.kubur.lain },
-            ])}
+      {/* Bento 4: Tanah Perkuburan */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6">
+        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+            <MapPin className="w-5 h-5" />
           </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-2">
-              <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center text-yellow-600">
-                <Star className="w-4 h-4" />
-              </div>
-              <h3 className="text-md font-bold text-zus-900">Penarafan Bintang</h3>
-            </div>
-            {renderReferenceTable('Penarafan Bintang', [
-              { label: '5 Bintang', field: 'star5', ref: BKIM_2024_REFERENCE.bintang.star5 },
-              { label: '4 Bintang', field: 'star4', ref: BKIM_2024_REFERENCE.bintang.star4 },
-              { label: '3 Bintang', field: 'star3', ref: BKIM_2024_REFERENCE.bintang.star3 },
-              { label: '2 Bintang', field: 'star2', ref: BKIM_2024_REFERENCE.bintang.star2 },
-              { label: '1 Bintang', field: 'star1', ref: BKIM_2024_REFERENCE.bintang.star1 },
-              { label: 'Tiada Bintang', field: 'star0', ref: BKIM_2024_REFERENCE.bintang.star0 },
-            ])}
-          </div>
+          <h3 className="text-lg font-bold text-zus-900">Tanah Perkuburan</h3>
+        </div>
+        <div className="max-w-2xl">
+          {renderReferenceTable('Tanah Perkuburan', [
+            { label: 'MIS', field: 'kuburMis', ref: BKIM_2024_REFERENCE.kubur.mis },
+            { label: 'Tanah Kerajaan', field: 'kuburKerajaan', ref: BKIM_2024_REFERENCE.kubur.kerajaan },
+            { label: 'LAK', field: 'kuburLak', ref: BKIM_2024_REFERENCE.kubur.lak },
+            { label: 'Lain-Lain', field: 'kuburLain', ref: BKIM_2024_REFERENCE.kubur.lain },
+          ])}
         </div>
       </section>
 
-      {/* BKIM Specific: Division Table */}
-      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm overflow-x-auto">
+      {/* Bento 5: Guru Takmir */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6 overflow-x-auto">
         <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
           <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
             <MapPin className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold text-zus-900">Pecahan Mengikut Bahagian (2025)</h3>
+          <h3 className="text-lg font-bold text-zus-900">Guru Takmir Mengikut Bahagian</h3>
         </div>
-
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-50 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest border-b border-gray-100">
               <th className="p-4">Bahagian</th>
-              <th className="p-4 text-center">Program/Aktiviti Rujukan 2024</th>
-              <th className="p-4 text-center">Program/Aktiviti Input 2025</th>
               <th className="p-4 text-center">Guru Takmir Rujukan 2024</th>
               <th className="p-4 text-center">Guru Takmir Input 2025</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {formData.bkim.bkimDivisions.map((div: any, idx: number) => (
+              <tr key={`takmir-${div.name}`} className="hover:bg-slate-50/50 transition-colors">
+                <td className="p-4 text-xs font-bold text-zus-900">{div.name}</td>
+                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.guruTakmir || 0}</td>
+                <td className="p-4 text-center">
+                  <input type="number" value={div.guruTakmir} onChange={(e) => handleBkimDivisionChange(idx, 'guruTakmir', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Bento 6: Lembaga Amanah Khairat */}
+      <section className="bg-white border border-gray-200 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-sm mb-6 overflow-x-auto">
+        <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+          <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+            <MapPin className="w-5 h-5" />
+          </div>
+          <h3 className="text-lg font-bold text-zus-900">Lembaga Amanah Khairat Mengikut Bahagian</h3>
+        </div>
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-gray-50 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest border-b border-gray-100">
+              <th className="p-4">Bahagian</th>
               <th className="p-4 text-center">LAK Rujukan 2024</th>
               <th className="p-4 text-center">LAK Input 2025</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {formData.bkim.bkimDivisions.map((div: any, idx: number) => (
-              <tr key={div.name} className="hover:bg-slate-50/50 transition-colors">
+              <tr key={`lak-${div.name}`} className="hover:bg-slate-50/50 transition-colors">
                 <td className="p-4 text-xs font-bold text-zus-900">{div.name}</td>
-                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.program || 0}</td>
-                <td className="p-4 text-center"><input type="number" value={div.program} onChange={(e) => handleBkimDivisionChange(idx, 'program', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
-                <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.guruTakmir || 0}</td>
-                <td className="p-4 text-center"><input type="number" value={div.guruTakmir} onChange={(e) => handleBkimDivisionChange(idx, 'guruTakmir', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
                 <td className="p-4 text-center text-xs font-black text-gray-500">{BKIM_2024_REFERENCE.divisions[idx]?.lak || 0}</td>
-                <td className="p-4 text-center"><input type="number" value={div.lak} onChange={(e) => handleBkimDivisionChange(idx, 'lak', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" /></td>
+                <td className="p-4 text-center">
+                  <input type="number" value={div.lak} onChange={(e) => handleBkimDivisionChange(idx, 'lak', e.target.value)} className="w-20 p-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-center focus:ring-2 focus:ring-zus-gold/20 outline-none" />
+                </td>
               </tr>
             ))}
           </tbody>

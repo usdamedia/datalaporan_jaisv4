@@ -120,19 +120,20 @@ export const BKIM_2024_REFERENCE = {
     star0: 158,
     total: 473
   },
+  programAktiviti: 124,
   divisions: [
-    { name: 'Kuching', program: 124, guruTakmir: 42, lak: 8 },
-    { name: 'Samarahan', program: 108, guruTakmir: 22, lak: 11 },
-    { name: 'Serian', program: 56, guruTakmir: 9, lak: 3 },
-    { name: 'Sri Aman', program: 11, guruTakmir: 1, lak: 4 },
-    { name: 'Betong', program: 12, guruTakmir: 8, lak: 14 },
-    { name: 'Sarikei', program: 41, guruTakmir: 11, lak: 3 },
-    { name: 'Sibu', program: 7, guruTakmir: 3, lak: 3 },
-    { name: 'Mukah', program: 16, guruTakmir: 4, lak: 9 },
-    { name: 'Kapit', program: 34, guruTakmir: 14, lak: 8 },
-    { name: 'Bintulu', program: 6, guruTakmir: 3, lak: 0 },
-    { name: 'Miri', program: 19, guruTakmir: 3, lak: 0 },
-    { name: 'Limbang', program: 33, guruTakmir: 9, lak: 55 }
+    { name: 'Kuching', guruTakmir: 42, lak: 22 },
+    { name: 'Samarahan', guruTakmir: 22, lak: 9 },
+    { name: 'Serian', guruTakmir: 9, lak: 1 },
+    { name: 'Sri Aman', guruTakmir: 1, lak: 8 },
+    { name: 'Betong', guruTakmir: 8, lak: 11 },
+    { name: 'Sarikei', guruTakmir: 11, lak: 3 },
+    { name: 'Sibu', guruTakmir: 3, lak: 4 },
+    { name: 'Mukah', guruTakmir: 4, lak: 14 },
+    { name: 'Kapit', guruTakmir: 14, lak: 3 },
+    { name: 'Bintulu', guruTakmir: 3, lak: 3 },
+    { name: 'Miri', guruTakmir: 3, lak: 9 },
+    { name: 'Limbang', guruTakmir: 9, lak: 8 }
   ]
 };
 
