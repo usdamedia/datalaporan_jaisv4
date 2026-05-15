@@ -23,11 +23,12 @@ export const DEPARTMENTS: Department[] = [
     id: '1',
     name: 'Bahagian Pentadbiran & Pengurusan Sumber BPPS',
     active: true,
+    completed: true,
     subUnits: [
-      { id: 'bpps-pentadbiran', name: 'Unit Pentadbiran', active: true },
-      { id: 'bpps-akaun', name: 'Unit Akaun', active: true },
+      { id: 'bpps-pentadbiran', name: 'Unit Pentadbiran', active: true, completed: true },
+      { id: 'bpps-akaun', name: 'Unit Akaun', active: true, completed: true },
       { id: 'bpps-hr', name: 'Unit HR & Latihan', active: true, completed: true },
-      { id: 'bpps-kualiti', name: 'Unit Kualiti', active: true },
+      { id: 'bpps-kualiti', name: 'Unit Kualiti', active: true, completed: true },
     ],
   },
   {
@@ -63,10 +64,11 @@ export const DEPARTMENTS: Department[] = [
     id: '9',
     name: 'Unit Komunikasi Korporat UKOKO',
     active: true,
+    completed: true,
     subUnits: [
-      { id: 'ukoko-pr', name: 'Unit Komunikasi dan Pusat Sumber (UKPS)', active: true },
-      { id: 'ukoko-perayaan', name: 'Unit Pengurusan Acara', active: true },
-      { id: 'ukoko-penerbitan', name: 'Unit Penerbitan', active: true },
+      { id: 'ukoko-pr', name: 'Unit Komunikasi dan Pusat Sumber (UKPS)', active: true, completed: true },
+      { id: 'ukoko-perayaan', name: 'Unit Pengurusan Acara', active: true, completed: true },
+      { id: 'ukoko-penerbitan', name: 'Unit Penerbitan', active: true, completed: true },
     ],
   },
 ];
